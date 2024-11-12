@@ -1,0 +1,72 @@
+<div class="reports acc_statement_box no-pad-bot">
+  <div class="sports-bets">
+    <div class="row">
+      <app-reports-input (valueChange)='dateInputValues($event)' [filters]="filters"></app-reports-input>
+      <div class="col s12 p-1" style="position: relative;">
+        <div class="section_bg_box table_result_sec">
+          <div class="no-more-tables">
+            <table class="table-borderless table-hover">
+              <thead>
+                <tr>
+                  <th class="text-left">{{ "marketname" | translate }}</th>
+                  <th class="text-center">{{ "betid" | translate }}</th>
+                  <th class="text-center">{{ "marketid" | translate }}</th>
+                  <th class="text-center">{{ "runnername" | translate }}</th>
+                  <th class="text-center">{{ "side" | translate }}</th>
+                  <th class="text-center">{{ "price" | translate }}</th>
+                  <th class="text-center">{{ "size" | translate }}</th>
+                  <th class="text-center">{{ "placeddate" | translate }}</th>
+                  <th class="text-center">{{ "ipaddress" | translate }}</th>
+                </tr>
+              </thead>
+              <tbody class="xg-bet">
+                <div class="pre-loader" *ngIf="showLoader">
+                  <app-preloader></app-preloader>
+                </div>
+                <tr *ngFor="let sportsBet of betsToShow" [ngClass]="sportsBet.side === 'BACK' ? 'back' : 'lay'">
+                  <td [attr.data-title]="'marketname' | translate" class="text-left">
+                    {{ sportsBet?.marketName }}
+                  </td>
+                  <td [attr.data-title]="'betid' | translate" class="text-center">
+                    {{ sportsBet?.betId }}
+                  </td>
+                  <td [attr.data-title]="'marketid' | translate" class="text-center">
+                    {{ sportsBet?.marketId }}
+                  </td>
+                  <!-- <td [attr.data-title]="'matchid' | translate" class="text-center">
+                    not available
+                  </td> -->
+                  <td [attr.data-title]="'runnername' | translate" class="text-center">
+                    {{ sportsBet?.runnerName }}
+                  </td>
+                  <td [attr.data-title]="'side' | translate" class="text-center">
+                    {{ sportsBet?.side }}
+                  </td>
+                  <td [attr.data-title]="'price' | translate" class="text-center">
+                    {{ sportsBet?.orderPrice }}
+                  </td>
+                  <td [attr.data-title]="'size' | translate" class="text-center">
+                    {{ sportsBet?.orderSize ? (sportsBet.orderSize | roundoff) : sportsBet?.orderSize}}
+                  </td>
+                  <td [attr.data-title]="'placeddate' | translate" class="text-center">
+                    {{ sportsBet?.placedDate | date: 'dd/MM/yyyy HH:mm a' }}
+                  </td>
+                  <td [attr.data-title]="'ipaddress' | translate" class="text-center">
+                    <input type="button" [attr.id]="sportsBet?.betId"
+                      (click)="GetIpAddress(sportsBet?.marketId,sportsBet?.betId,'SPORTS')"
+                      value="{{'getipaddress'|translate}}">
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <app-reports-custom-pagination *ngIf="!showLoader" (pageChange)="loadPage($event)" [totalPages]="totalPages"
+              [currentPage]="currentPage"></app-reports-custom-pagination>
+          </div>
+        </div>
+        <div class="text-center" *ngIf="sportsBets.length<1 && !showLoader" style="color: white;">
+          <b>{{"no_data_found" | translate}}</b>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

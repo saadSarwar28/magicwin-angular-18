@@ -1,0 +1,89 @@
+<div class="casino-container">
+  <app-casino-banners></app-casino-banners>
+  <app-casino-search></app-casino-search>
+  <app-casino-popular></app-casino-popular>
+  <div class="total-games sm-fs-11" *ngIf="gameNameData">
+    <span>Home > All Casino > {{setProperName(gameNameData.charAt(0) + gameNameData.slice(1).toLowerCase())}}</span>
+    <span>Total: {{ totalNumberofGames }} Games</span>
+  </div>
+  <div *ngIf="loading" class="preloader-wrapper">
+    <!-- <app-skelton-loader [loaderType]="'casinoLoader'"></app-skelton-loader> -->
+  </div>
+  <div class="games-container" *ngFor="let group of games">
+    <div class="games-header">
+      <h2 class="sm-fs-14">{{ setGameName(group.group) }}</h2>
+      <a class="see-more d-flex gap-1 align-items-center pointer sm-fs-13" *ngIf="isAllGames"
+        (click)="routeCustomLink(group)">
+        See More Games
+        <i class="bi bi-chevron-down fs-16"></i>
+      </a>
+    </div>
+    <div class="games-list custom-scrollbar " [ngStyle]="{
+             'flex-wrap': isAllGames || isIndianGames || isLightening ? 'nowrap' : 'wrap',
+             'overflow-x': isAllGames || isIndianGames || isLightening ? 'auto' : 'unset',
+             'justify-content': isAllGames || isIndianGames || isLightening ? 'flex-start' : 'center'
+             }">
+      <div class="game-card" *ngFor="let game of group.data">
+        <div class="login-button-container" *ngIf="!isLoggedIn">
+          <button class="login-button" (click)="routeToGame(game)">
+            {{game.haveDemo ? ("playdemo" | translate) : ("login" | translate)}}
+          </button>
+        </div>
+        <div class="login-button-container" *ngIf="isLoggedIn">
+          <button (click)="routeToGame(game)" class="login-button">{{"playnow" | translate}}</button>
+        </div>
+        <img [src]="game.imgLink ? game.imgLink : gameLoader" onerror="this.onerror=null; src=gameLoader" />
+        <div class="d-none d-md-flex">
+          <div class="game-info w-100">
+            <span class="category">{{game.gameType}}</span>
+            <h3 class="title  sm-fs-13">{{game.GameName |translate}}</h3>
+            <span class="provider">{{game.PROVIDERS}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="games-container-mobile" *ngFor="let group of games; let groupIndex = index">
+    <div class="games-header">
+      <h2 class="sm-fs-14">{{ setGameName(group.group) }}</h2>
+      <a class="see-more pointer sm-fs-13" *ngIf="isAllGames || isIndianGames"
+        (click)="routeCustomLinkMobile(group, groupIndex)">
+        See More Games
+        <i class="bi bi-chevron-down fs-16"></i>
+
+      </a>
+    </div>
+    <div class="games-list custom-scrollbar pb-2" [ngStyle]="{
+             'flex-wrap': !openDivs.includes(groupIndex) ? 'nowrap' : 'wrap',
+             'overflow-x': !openDivs.includes(groupIndex) ? 'auto' : 'unset',
+             'justify-content': !openDivs.includes(groupIndex) ? 'flex-start' : 'space-evenly'
+             }">
+      <div class="game-card" *ngFor="let game of group.data" (click)="routeToGame(game)">
+        <img [src]="game.imgLink ? game.imgLink : gameLoader" onerror="this.onerror=null; src=gameLoader" />
+        <div class="game-info w-100">
+          <span class="category">{{game.gameType}}</span>
+          <h3 class="title  sm-fs-13">{{game.GameName |translate}}</h3>
+          <span class="provider">{{game.PROVIDERS}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="no-data-found d-flex justify-content-center w-100   my-1" *ngIf="games && games.length == 0">No
+    Data Found
+  </div>
+  <div class="footer-cont" *ngIf="footers && footers.length > 0">
+    <div class="header-title">
+      <span class="sm-fs-13">Providers</span>
+      <div class="see-all-view" routerLink="/casino/providers">
+        <span class="sm-fs-13">See More</span>
+        <i class="bi bi-chevron-down fs-16"></i>
+
+      </div>
+    </div>
+    <div class="card-casino-footer custom-scrollbar">
+      <div *ngFor="let footer of footers" class="card-casino-footer-cont" (click)="routeToLink(footer.link)">
+        <div class="card-header-casino"><img [src]="bannerCdn + '/banners/' + footer.id + '.png'" /></div>
+      </div>
+    </div>
+  </div>
+</div>

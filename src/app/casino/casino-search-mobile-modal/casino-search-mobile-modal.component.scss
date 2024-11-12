@@ -1,0 +1,320 @@
+.modal-body {
+  margin-top: 20px;
+  height: 100vh;
+  .filters {
+    display: flex;
+    gap: 7px;
+    img {
+      height: 14px;
+    }
+    .back {
+      margin-top: 0px;
+      width: 37px;
+      height: 37px;
+      background: var(--formControlBg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 27px;
+    }
+    .search-box {
+      position: relative;
+      width: 85%;
+      display: flex;
+      justify-content: center;
+      .icon {
+        position: absolute;
+        top: 7px;
+        right: 14px;
+        svg {
+          height: 21px;
+          width: 16px;
+        }
+      }
+    }
+    .btn-default {
+      border-radius: 4.156px;
+      background: var(--formControlBg);
+      height: 35px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      img {
+        height: 20px;
+      }
+    }
+  }
+  .nav-tab {
+    display: flex;
+    justify-content: center;
+
+    ul {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+      margin-bottom: 4px;
+      gap: 8px;
+      list-style: none;
+      li {
+        padding: 7px 10px;
+        border-radius: 5px;
+        width: fit-content;
+        border: 1px solid var(--casinoFilterItemBorderClr);
+        background: var(--casinoFilterItemBg);
+        color: var(--casinoFilterItemClr);
+        text-align: center;
+        font-family: "Poppins";
+        font-size: 13px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        text-decoration: none;
+        a {
+          color: var(--casinoFilterItemClr);
+        }
+      }
+      .active-item {
+        border: 1px solid var(--casinoFilterItemActiveBg);
+        background: var(--casinoFilterItemActiveBg);
+        a {
+          color: var(--casinoFilterItemActiveClr);
+        }
+      }
+    }
+  }
+  .provider {
+    .flex-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+      align-items: center;
+    }
+    .provider-card {
+      height: 110px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 13px;
+      padding: 0px 9px;
+      border: 1px solid var(--casinoFilterItemBorderClr);
+      border-radius: 5px;
+      img {
+        width: 132px;
+        height: 86px;
+      }
+    }
+  }
+  .game-types {
+    margin-top: 30px;
+    .flex-container {
+      .heading {
+        font-family: "Poppins";
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        margin-bottom: 13px;
+        color: var(--filter-popup-heading-clr);
+      }
+      .items {
+        display: flex;
+        gap: 7px;
+        flex-wrap: wrap;
+        height: 126px;
+        overflow: hidden;
+      }
+      .item {
+        padding: 7px 10px;
+        border-radius: 5px;
+        width: fit-content;
+        border: 1px solid var(--casinoFilterItemBorderClr);
+        background: var(--casinoFilterItemBg);
+        color: var(--casinoFilterItemClr);
+        text-align: center;
+        font-family: "Poppins";
+        font-size: 13px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+      }
+      .active-item {
+        border: 1px solid var(--casinoFilterItemActiveBg);
+        background: var(--casinoFilterItemActiveBg);
+        color: var(--casinoFilterItemActiveClr);
+      }
+      .game-types {
+        display: flex;
+        gap: 7px;
+        flex-wrap: wrap;
+      }
+      .see-more {
+        color: var(--casino-modal-see-more);
+        text-align: center;
+        font-family: "Poppins";
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        margin-top: 15px;
+        display: flex;
+        justify-content: center;
+        gap: 7px;
+        align-items: center;
+        .bi-chevron-down {
+          color: var(--casino-modal-see-more);
+        }
+      }
+      .heightAuto {
+        height: 100% !important;
+        overflow: auto;
+      }
+    }
+  }
+}
+
+a:hover {
+  cursor: pointer;
+  color: var(--casino-modal-provider-clr) !important;
+}
+
+.parent-wrapper {
+  min-height: calc(100vh - 90px);
+  color: var(--casino-modal-provider-clr);
+  margin-bottom: 45px;
+  padding: 3px;
+}
+
+.favourite {
+  cursor: pointer;
+}
+.container-wrapper-casino {
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.main-container-casino {
+  width: 100vw;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px;
+  gap: 8px;
+  margin-top: 10px;
+  align-items: center;
+  justify-content: center;
+  /* min-height: calc(100vh - 165px); */
+}
+
+.card-casino {
+  border-radius: 5px;
+  max-height: -webkit-fit-content;
+  max-height: -moz-fit-content;
+  max-height: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2px;
+  height: 100%;
+  width: 48%;
+  margin-bottom: 15px;
+}
+.card-casino p {
+  margin: 0;
+}
+
+.card-header-casino p {
+  margin: 5px 0;
+  text-align: center;
+}
+
+.main-container-casino .card-header-casino {
+  width: 100%;
+}
+
+.main-container-casino .card-header-casino img {
+  width: 100%;
+  display: block;
+  margin: auto;
+  height: 33vw;
+  border-radius: 5%;
+}
+
+.game-text {
+  font-weight: 500;
+}
+
+.footer-cont .button-casino {
+  min-width: unset;
+}
+
+.card-casino-footer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 5px;
+}
+
+.c-wrap {
+  height: 100%;
+  flex: 1;
+  padding-bottom: 60px;
+}
+
+@media screen and (min-width: 589px) {
+  .main-container-casino {
+    .card-casino {
+      width: 30% !important;
+    }
+    .card-header-casino {
+      img {
+        height: 25vw;
+      }
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .modal-body {
+    .provider {
+      .provider-card {
+        img {
+          width: 115px;
+        }
+      }
+    }
+  }
+}
+
+.image-containerz {
+  justify-content: space-between;
+}
+
+.imagez {
+  position: relative;
+}
+
+.imagez img {
+  width: 100%;
+  height: auto;
+}
+
+.provider_name {
+  color: var(--casino-modal-provider-clr);
+  text-align: center;
+  font-family: "Poppins";
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+.games_style_add {
+  bottom: -19px;
+}

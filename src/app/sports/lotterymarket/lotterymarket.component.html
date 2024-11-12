@@ -1,0 +1,66 @@
+<ng-container *ngIf="lotteryData && lotteryData && lotteryData.length > 0">
+  <div class="lottery mt-2 ">
+    <div class="d-flex justify-content-between">
+      <div class="menu border-0 sport-name sm-fs-13 fs-lap-13 pl-0 me-2">
+        Lottery
+      </div>
+      <div class="collaspe-icon me-2">
+        <div class="icon pointer" (click)="collapseLottery()" style="font-size: 26px;"> {{lotteryCollapse ?
+          "-" :
+          "+"}} </div>
+      </div>
+    </div>
+
+    <div class="lottery-container mt-2 mb-3 position-relative">
+      <ng-container *ngFor="let lotteryMdata of lotteryData; let i = index">
+
+        <div class="lottery-header p-2">
+          <span class="sm-fs-13 fs-lap-13">{{ lotteryMdata.marketName }}</span>
+          <span class="sm-fs-13" *ngIf="lotteryMdata.liability"
+            [ngClass]="lotteryMdata.liability > 0 ? 'text-success' : 'liabilityClr'">
+            Lib: {{ lotteryMdata.liability }}
+          </span>
+          <div class="d-flex align-content-center gap-2 align-items-center">
+            <button class="rate-button sm-fs-13"> Rate {{lotteryMdata.runners[0].backOdds}}</button>
+            <div class="pointer collaspe-icon" style="font-size: 26px;" (click)="collapseMarket(lotteryMdata)">
+              {{lotteryMdata.collapse
+              ?
+              "+" : "-"}} </div>
+          </div>
+        </div>
+        <div class="lottery-numbers position-relative mb-3" *ngIf="!lotteryMdata.collapse">
+          <div class="market-overlay position-absolute   d-flex justify-content-center align-items-center sm-fs-12"
+            *ngIf="lotteryMdata.statusName !== 'OPEN'">
+            <span [class.liabilityClr]="lotteryMdata.statusName == 'SUSPENDED'">
+              {{ lotteryMdata.statusName | translate }}
+            </span>
+          </div>
+          <div *ngIf="placeBetMarketId == lotteryMdata.marketId"
+            class="market-overlay position-absolute bg-theme  d-flex justify-content-center align-items-center sm-fs-14">
+            <img [src]="siteLoader" height="100px" alt="Loading..." />
+          </div>
+          <ng-container *ngFor="let runner of lotteryMdata.runners| orderbyrunner : 'sortPeriority';let i = index ">
+            <div class="align-items-center d-flex flex-column gap-1 "
+              (click)=" placebetLottery(lotteryMdata, runner,'back',  runner?.backOdds, lotteryMdata.marketId)">
+
+              <div class="back desktop-odds align-items-center d-flex flex-column odds-item">
+                {{ runner?.selectionName }}
+              </div>
+              <span class="fs-14 sm-fs-13 " *ngIf="runner.position"
+                [ngClass]="runner.position > 0 ? 'text-success' : 'liabilityClr'">
+                {{ runner.position | trunc }}
+              </span>
+            </div>
+          </ng-container>
+        </div>
+        <div *ngIf="lotteryMdata.betslip">
+          <app-partial-betslip [r]="lotteryMdata.betslip"
+            (valueChange)="lotteryBetStatus($event)"></app-partial-betslip>
+        </div>
+      </ng-container>
+
+    </div>
+
+  </div>
+
+</ng-container>

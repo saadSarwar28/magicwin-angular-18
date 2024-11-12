@@ -1,0 +1,16 @@
+<div class="filters">
+  <div class="search-box">
+    <input type="text" placeholder="Search Game" class="form-control" (click)="openSearchModal()">
+    <button class="btn btn-default">Search</button>
+  </div>
+</div>
+<ul class="popular-tab">
+  <li
+    *ngFor="let item of casinosArr"
+    routerLinkActive="active"
+    [routerLink]="item.link"
+  >
+    <img height="22" [src]="cdnSportsLanding + 'banners/' + item.id + '.png'"/>
+    <a class="type-heading"> {{item.text|translate}}</a>
+  </li>
+</ul>

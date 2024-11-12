@@ -1,0 +1,76 @@
+.mybets-modal-compo {
+  .header {
+    .bi-x-lg {
+      margin-top: -14px;
+    }
+    h1 {
+      color: var(--mybetsModalHeadingClr);
+      background: var(--main-bg);
+      padding: 7px 17px 5px 4px;
+      border-top-right-radius: 50px;
+      display: flex;
+      align-items: center;
+    }
+  }
+  .table {
+    margin-bottom: 5px;
+  }
+  .matched-bets {
+    max-height: 154px;
+    overflow: hidden;
+  }
+  .my-bets-modal-close-icon-clr {
+    color: var(--my-bets-modal-close-icon-clr);
+  }
+  .matched-bets-headings {
+    color: var(--matched-bets-modal-headings-clr);
+  }
+  .heightAuto {
+    max-height: 100% !important;
+    height: 100% !important;
+    overflow: auto;
+  }
+
+  .see-more {
+    color: var(--mybetsSeeMoreClr) !important;
+    text-align: center;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 7px;
+    align-items: center;
+    img {
+      height: 9px;
+    }
+  }
+  .market-see-more {
+    margin-bottom: 100px;
+  }
+  .my-market-table {
+    padding: 0px 0px 0px 0px;
+    border-radius: 2px;
+    height: 170px;
+    overflow: hidden;
+    td,
+    th {
+      text-align: center;
+    }
+  }
+  td,
+  th {
+    padding: 2px 5px;
+    display: table-cell;
+    text-align: left;
+    border-radius: 0;
+    font-weight: 400;
+    font-size: 11px !important;
+    color: var(--mybetsModalTableClr);
+    p {
+      margin-bottom: 0px !important;
+    }
+  }
+}

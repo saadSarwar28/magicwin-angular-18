@@ -1,0 +1,170 @@
+.inplay_matches_box {
+  background: #ffffff;
+  padding: 0px;
+}
+.card-header .row {
+  display: flex;
+  align-items: center;
+}
+.match_card_heading {
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  font-weight: 500;
+  width: 116px;
+}
+
+.heading {
+  color: #19233c;
+  width: auto;
+  white-space: nowrap;
+}
+
+.flag {
+  width: 16px;
+  height: 10px;
+  margin: 0;
+  margin-left: 3px;
+}
+
+.races-head {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  /* padding: 0px 2px; */
+  width: 116px !important;
+  position: absolute;
+  height: 100%;
+  left: 0;
+  z-index: 20;
+  /* background-color: #111526 !important; */
+  background-color: #dfe5ef;
+}
+
+.race-img,
+.flag_logo {
+  width: 15px;
+  height: 14px !important;
+  background-repeat: no-repeat;
+  background-size: 16px auto;
+  display: block;
+  margin: 0;
+}
+.flag_logo {
+  background-size: 13px auto !important;
+}
+
+.race-details {
+  font-size: 11px;
+  line-height: normal;
+  color: #000000;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 2px 1px;
+}
+.arrow-right {
+  width: 0;
+  height: 0;
+  border-top: 17px solid #505463;
+  border-bottom: 17px solid #505463;
+  border-left: 17px solid #111526;
+  position: relative;
+  z-index: 20;
+  margin-left: 100px;
+}
+.race-details span {
+  height: 13px;
+  /* text-align: center; */
+}
+
+.city {
+  /*  */
+  font-weight: 400;
+  /* font-style: normal; */
+  font-size: 13px;
+  line-height: normal;
+  color: #707d9b;
+  text-transform: uppercase;
+  display: inline-block;
+  margin: auto;
+}
+
+.time {
+  display: block;
+}
+
+.races-outer {
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+}
+.races-inner {
+  overflow: auto;
+  width: 200%;
+  display: flex;
+}
+
+.next-race-container .next-races-card {
+  background-color: #dfe5ef;
+  margin: 0px 0.5px;
+  padding: 2px 5px 2px 4px;
+}
+.next-race-container {
+  overflow: scroll;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.next-races-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+}
+.next-races-card:hover {
+  background-color: #bac6de;
+  cursor: pointer;
+}
+.category {
+  background: #27ab69;
+  border-radius: 6px;
+  padding: 0px;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: normal;
+  color: #ffffff;
+  height: 26px;
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.comingup-time {
+  font-size: 11px;
+  display: block;
+}
+
+.races-card {
+  cursor: pointer;
+}
+
+.races-head {
+  background-color: #dfe5ef;
+}
+
+.status {
+  font-size: 12px;
+  line-height: normal;
+  color: #707d9b;
+  text-align: center;
+}

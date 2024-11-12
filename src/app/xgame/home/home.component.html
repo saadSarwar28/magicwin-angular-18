@@ -1,0 +1,33 @@
+<div class="xghome-wrapper">
+  <div class="container container-fluid cards-wrapper">
+    <div class="card-container" *ngFor="let game of exchangeGames" [routerLink]="'xgame/detail/'+game.channelId">
+      <div class="image-container">
+        <div class="img-overflow">
+          <img [src]="'https://dqqdyv927mezc.cloudfront.net/ssexch/web/images/xg-games/'+game.gameName+'-'+game.channelId+'.png'">
+
+          <!-- <img src="https://dqqdyv927mezc.cloudfront.net/ssexch/web/images/vectors/card-1.png"> -->
+        </div>
+        <div class="card-content d-flex flex-row justify-content-between align-items-center">
+          <div class="d-flex align-items-center">
+            <span class="card-desc">{{game.gameName|translate}} </span>
+          </div>
+          <div class="right-content">
+            <span *ngIf="!game.isStandard"
+            class="turbo-pill">{{'turbo'|translate}}</span>
+
+            <!-- <div class="d-flex flex-row"> -->
+              <!-- <button *ngIf='game.isStandard' class="play-button" [routerLink]="'/'+game.routerLink">
+                {{'play'|translate}} {{'standard' |translate}}
+              </button>
+              <button *ngIf='!game.isStandard' class="play-button" [routerLink]="'/'+game.routerLink">
+                {{'play'|translate}} {{'turbo' |translate}}
+              </button> -->
+            <!-- </div> -->
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

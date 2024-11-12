@@ -1,0 +1,29 @@
+<div class="modal-dialog  ">
+  <div class="modal-content ">
+    <div class="modal-header">
+      <h6 class="modal-title sm-fs-13 pt-2 pb-2 fs-15 ">{{data.marketName}} {{'bookposition' |
+        translate}}
+      </h6>
+      <button type="button" class="modal-close-btn btn-close" (click)="closeModal()">
+        <i class="bi bi-x-lg fs-16"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <table class="table ">
+        <thead>
+          <tr class="text-center">
+            <th class="sm-fs-13 fs-14 " scope="col">{{'runs' | translate}}</th>
+            <th class="sm-fs-13 fs-14 " scope="col">{{'position' | translate}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="text-center" *ngFor="let i of positions">
+            <td class="sm-fs-13 ">{{i.position}}</td>
+            <td class="sm-fs-13  " [ngClass]="i.position2 >= 0 ? 'text-success' : 'liabilityClr'">
+              {{i.position2}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

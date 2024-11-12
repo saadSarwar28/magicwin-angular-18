@@ -1,0 +1,30 @@
+.score-wrapper {
+  border-radius: 3px;
+  background: url("https://iriscdn.b-cdn.net/kheloyar/clientweb/images/tennisScoreCardBG.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: 2px;
+  height: 130px;
+}
+
+.score-wrapper > table {
+  border-spacing: 0;
+  border-collapse: collapse;
+  border-style: hidden;
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 0 !important;
+  background: transparent !important;
+}
+td {
+  background: transparent !important;
+}
+td > span {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.match-details > td > span {
+  font-size: 10px;
+}

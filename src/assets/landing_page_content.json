@@ -1,0 +1,103 @@
+{
+  "data": [
+    {
+      "title": "sports",
+      "routerLink": "/sports",
+      "imagePath": "https://cms.kheloyaar.net/assets/images/sportsimg.png",
+      "alt": "Sports",
+      "options": [
+        {
+          "routerLink": "/sports/sportsbyid/4",
+          "imagePath": "https://iriscdn.b-cdn.net/kheloyar/Thumbnails/Cricket.png",
+          "title": "cricket"
+        },
+        {
+          "routerLink": "/sports/sportsbyid/1",
+          "imagePath": "https://iriscdn.b-cdn.net/kheloyar/Thumbnails/Football.png",
+          "title": "football"
+        },
+        {
+          "routerLink": "/sports/sportsbyid/2",
+          "imagePath": "https://iriscdn.b-cdn.net/kheloyar/Thumbnails/Tennis.png",
+          "title": "tennis"
+        },
+        {
+          "routerLink": "/sports/raceschedule/4339/ALL",
+          "imagePath": "https://iriscdn.b-cdn.net/kheloyar/Thumbnails/Cricket.png",
+          "title": "greyhoundracing"
+        },
+        {
+          "routerLink": "/sports/raceschedule/7/ALL",
+          "imagePath": "https://iriscdn.b-cdn.net/kheloyar/Thumbnails/Cricket.png",
+          "title": "horseracing"
+        }
+      ]
+    },
+    {
+      "title": "Games",
+      "routerLink": "/casinos",
+      "imagePath": "https://cms.kheloyaar.net/assets/images/casino1.png",
+      "options": [
+        {
+          "routerLink": "/casinos/catagory/LOTTERY",
+          "imagePath": "https://iriscdn.b-cdn.net/kheloyar/Thumbnails/Lottery Games.png",
+          "title": "lottery-games"
+        },
+        {
+          "routerLink": "/casinos/catagory/INSTANTWIN",
+          "imagePath": "https://iriscdn.b-cdn.net/kheloyar/Thumbnails/Instant Win.png",
+          "title": "Instant_Win"
+        },
+        {
+          "routerLink": "/casinos/catagory/SLOT",
+          "imagePath": "https://iriscdn.b-cdn.net/kheloyar/Thumbnails/Slot.png",
+          "title": "slotgames"
+        }
+      ]
+    },
+    {
+      "title": "srl",
+      "routerLink": "function()",
+      "imagePath": "https://cms.kheloyaar.net/assets/images/slicon.png",
+      "options": [
+        {
+          "routerLink": "function()",
+          "imagePath": "https://iriscdn.b-cdn.net/kheloyar/Thumbnails/Cricket-SRL.png",
+          "title": "cricket_srl"
+        },
+        {
+          "routerLink": "function()",
+          "imagePath": "https://iriscdn.b-cdn.net/kheloyar/Thumbnails/Football-SRL.png",
+          "title": "football_srl"
+        },
+        {
+          "routerLink": "function()",
+          "imagePath": "https://iriscdn.b-cdn.net/kheloyar/Thumbnails/Tennis-SRL.png",
+          "title": "tennis_srl"
+        }
+      ]
+    },
+    {
+      "title": "casino",
+      "routerLink": "/casinos",
+      "imagePath": "https://cms.kheloyaar.net/assets/images/casino1.png",
+      "options": [
+        {
+          "routerLink": "/casinos",
+          "imagePath": "https://iriscdn.b-cdn.net/kheloyar/Thumbnails/Casino.png",
+          "title": "casino"
+        },
+        {
+          "routerLink": "/casinos/catagory/INSTANTWIN",
+          "imagePath": "https://iriscdn.b-cdn.net/kheloyar/Thumbnails/Instant Win.png",
+          "title": "Instant_Win"
+        },
+        {
+          "routerLink": "/casinos/catagory/SLOT",
+          "imagePath": "https://iriscdn.b-cdn.net/kheloyar/Thumbnails/Slot.png",
+          "title": "slotgames"
+        }
+      ]
+    }
+  ]
+}

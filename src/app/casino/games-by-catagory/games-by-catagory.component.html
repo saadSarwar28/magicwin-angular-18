@@ -1,0 +1,92 @@
+<app-casino-filters></app-casino-filters>
+<div class="total-games">
+  <span>Home > All Casino >
+    {{
+    setProperName(
+    gameNameData.charAt(0) + gameNameData.slice(1).toLowerCase()
+    )
+    }}</span>
+  <span>Total: {{ totalNumberofGames }} Games</span>
+</div>
+<div class="loader" *ngIf="loading">
+  <!-- <app-preloader></app-preloader> -->
+</div>
+<div class="parent-wrapper container-wrapper-casino" *ngIf="!loading">
+  <div class="c-wrap" *ngIf="data?.length > 0">
+    <!-- <ul ngbNav #nav="ngbNav" class="nav-tabs">
+      <li ngbNavItem>
+        <ng-template ngbNavContent>
+          <div class="main-container-casino">
+            <ng-container *ngFor="let games of data">
+              <div *ngFor="let game of games.data" (click)="routeToGame(game)" class="card-casino">
+                <div class="card-header-casino" [ngClass]="
+                    game.imgLoad !== true ? 'img-container-loader' : ''
+                  ">
+                  <div class="image-containerz">
+                    <div class="imagez">
+                      <img (load)="loadImage(game)" [hidden]="game.imgLoad != true" [defaultImage]="defaultImage"
+                        [customObservable]="scrollAndSearch$" [lazyLoad]="game.imgLink" alt="" />
+                      <div class="games_style_add" [ngClass]="
+                          (game.haveDemo && !isLoggedIn) || game?.minMax
+                            ? ''
+                            : 'flex_justify'
+                        ">
+                        <span class="provider_name provider_ext">{{
+                          game.PROVIDERS === "IC" ? "Aura" : game.PROVIDERS
+                          }}</span>
+                      </div>
+                    </div>
+                    <div class="favourite_container" *ngIf="isLoggedIn && isShowFavourite">
+                      <i class="bi bi-heart favourite" [ngClass]="{'red': isFavorite(game.GameCode)}"
+                        (click)="toggleFavourite(game);$event.stopPropagation()">
+                      </i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </ng-template>
+      </li>
+    </ul> -->
+    <!-- <div [ngbNavOutlet]="nav"></div> -->
+  </div>
+
+  <div class="footer-cont">
+    <div class="header-title">
+      <span>Providers</span>
+      <div class="see-all-view" routerLink="/casino/providers">
+        <span>See More</span>
+        <i class="bi bi-chevron-down fs-16"></i>
+      </div>
+    </div>
+    <div class="card-casino-footer casino-images-scroll">
+      <div class="card-casino-footer-cont" (click)="routeToLobby('QTC', 'EVO-roulette')">
+        <div class="card-header-casino">
+          <img src="https://iriscdn.b-cdn.net/landing/img/EVOF.png" />
+        </div>
+      </div>
+      <div class="card-casino-footer-cont" (click)="routeToLobby('IC')">
+        <div class="card-header-casino">
+          <img src="https://iriscdn.b-cdn.net/kheloyar/landingpagenew/ProvidersWebp/auraGaming.jpg" />
+        </div>
+      </div>
+      <div class="card-casino-footer-cont" (click)="routeToLobby('QTC', 'EZU-roulette')">
+        <div class="card-header-casino">
+          <img src="https://iriscdn.b-cdn.net/landing/img/EzugiF.png" />
+        </div>
+      </div>
+      <div class="card-casino-footer-cont" (click)="routeToLobby('QTC')">
+        <div class="card-header-casino">
+          <img src="https://iriscdn.b-cdn.net/landing/img/QtechF.png" />
+        </div>
+      </div>
+      <div *ngIf="showVS" class="card-casino-footer-cont" (click)="navigateToVirtualSports()">
+        <div class="card-header-casino">
+          <img style="width: 132px; height: 90px"
+            src="https://iriscdn.b-cdn.net/magicwin.games/icon/VirtualSports.png" />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

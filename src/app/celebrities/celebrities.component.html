@@ -1,0 +1,44 @@
+<ng-container *ngIf="landingVideos && landingVideos.length > 0">
+  <div class="celebrities-compo">
+    <div
+      class="celebrities-header rounded d-flex bg-tab align-items-center gap-2"
+    >
+      <img
+        class="ms-2"
+        [src]="cdnUrl + 'kheloyar/WhiteIcons/endors.svg'"
+        width="24px;"
+        alt="Celebrities"
+      />
+      <h1 class="fs-15   mb-0 sm-fs-13">
+        {{ "Celebrities" | translate }}
+      </h1>
+    </div>
+    <ul class="videos-content custom-scrollbar" *ngIf="isMagicwin">
+      <li *ngFor="let data of landingVideos[0].data">
+        <iframe
+          class="iframe-video"
+          [src]="data?.link | safe"
+          frameborder="0"
+          allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+        ></iframe>
+      </li>
+    </ul>
+    <ul class="videos-content player-content" *ngIf="!isMagicwin">
+      <li class="1" *ngFor="let data of landingVideos[0].data">
+        <div class="celebrities-video">
+          <app-video-player
+            [options]="{
+              autoplay: false,
+              controls: true,
+              fluid: true,
+              responsive: true,
+              poster: cdnSportsLanding + 'banners/' + data?.id + '.png',
+              sources: [{ src: data?.link, type: 'video/mp4' }]
+            }"
+          >
+          </app-video-player>
+        </div>
+      </li>
+    </ul>
+  </div>
+</ng-container>

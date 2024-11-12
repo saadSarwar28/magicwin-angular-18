@@ -1,0 +1,204 @@
+<div class="signup-component">
+  <div class="container d-flex justify-content-center align-items-center mt-5 mb-5 min-vh-100s">
+    <div class="card p-4 sm-p-1 shadow-lg">
+      <div class="submit-overlay" *ngIf="showLoader">
+        <div class="spinner-border text-light" role="status">
+        </div>
+      </div>
+      <!-- <div class="submit-overlay" *ngIf="showOtpForm">
+      </div> -->
+
+      <div class="text-center">
+        <img [src]="siteLogo" routerLink="/home" [alt]="sitename" class="mb-3 siteLogo sm-mb-0 pointer " />
+      </div>
+      <div class="whatsapp-banner pointer" *ngIf="isShowWhatsappSignupPage">
+        <img (click)="forWhatsapp()" src="https://iriscdn.b-cdn.net/kheloyar/whatsapp-mobile.svg" alt="" />
+      </div>
+      <h5 class="text-center mb-3 "> {{ "createSelfAccount" | translate }}</h5>
+      <p class="text-center sm-fs-14">{{ "fillform" | translate }}</p>
+      <form [formGroup]="signupForm" (ngSubmit)="showOtpPopup()" autocomplete="off">
+        <div class="mb-3 position-relative">
+          <label for="username" class="form-label d-none">Username</label>
+          <input type="text" id="username" (input)="removeSpacesInput('username',$event)" autocomplete="off"
+            formControlName="username" class="form-control" placeholder="Username" />
+          <div class="input-icon">
+            <i class="bi bi-check-lg text-success"
+              *ngIf="!username?.errors?.usernameTaken && !username?.errors?.required"></i>
+            <i class="bi bi-x-lg text-white bg-danger" *ngIf="username?.errors?.usernameTaken"></i>
+          </div>
+
+          <div class="err-msg mt-2" *ngIf="username?.invalid && username?.dirty || username?.touched">
+            <div *ngIf="username?.errors?.usernameTaken">
+              Username is already exit.
+            </div>
+            <div *ngIf="username?.errors?.specialCharacter">
+              {{ "usernamespecialChar" | translate }}
+            </div>
+            <div *ngIf="username?.errors?.required">
+              {{ "usernameisrequired" | translate }}
+            </div>
+            <div *ngIf="username?.errors?.maxlength">
+              {{ "maximumlength30characters" | translate }}
+            </div>
+            <div *ngIf="username?.errors?.minlength">
+              {{ "minimumlength5characters" | translate }}
+            </div>
+          </div>
+          <div class="text-theme spinner fs-13" *ngIf="username?.errors?.checking">Checking username availablity...
+          </div>
+        </div>
+
+        <div class="mb-3 position-relative">
+          <label for="phone" class="form-label d-none">Phone</label>
+          <div class="input-group position-relative">
+            <ngx-mat-intl-tel-input role="presentation" id="input-type-tele" autocomplete="new-phoneNumber"
+              [onlyCountries]="['pk', 'bd', 'in']" [preferredCountries]="[specificCountry]" [enablePlaceholder]="true"
+              [enableSearch]="false" name="phone" describedBy="phoneInput"
+              (countryChanged)="methodForCountryCode($event)" formControlName="phoneNumber">
+            </ngx-mat-intl-tel-input>
+            <div class="phone-available">
+              <!--  -->
+              <i class="bi bi-check-lg text-success"
+                *ngIf="!phoneNumber?.errors?.phoneNumberTaken && OTP?.errors?.otpRequired && !phoneNumber?.errors?.validatePhoneNumber"></i>
+              <i class="bi bi-x-lg text-white bg-danger"
+                *ngIf="phoneNumber?.errors?.phoneNumberTaken || phoneNumber?.errors?.phoneNumberTaken "></i>
+            </div>
+            <div *ngIf="phoneNumber?.invalid && (phoneNumber?.dirty || phoneNumber?.touched)" class="err-msg mt-2">
+              <div *ngIf="phoneNumber?.errors?.required">
+                Phone number is required.
+              </div>
+              <div *ngIf="phoneNumber?.errors?.validatePhoneNumber">
+                Invalid phone number.
+              </div>
+              <div *ngIf="phoneNumber?.errors?.phoneNumberTaken">
+                Phone number already registered.
+              </div>
+            </div>
+            <div class="text-theme spinner  fs-13" *ngIf="phoneNumber?.errors?.checking">Checking Phone availablity...
+            </div>
+            <!-- <div *ngIf="!phoneNumber?.errors?.checking" class="loader-dots">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div> -->
+          </div>
+        </div>
+
+        <div class="mb-3 position-relative">
+          <label for="password" class="form-label d-none">Password</label>
+          <input type="password" id="password" autocomplete="off" (input)="removeSpacesInput('password',$event)"
+            formControlName="password" [type]="passwordShow.passwordIcon ? 'text' : 'password'" minlength="8"
+            [placeholder]="'password' | translate" class="form-control" />
+          <div class="input-icon">
+            <i [ngClass]="passwordShow.passwordIcon ? 'bi bi-eye' : 'bi bi-eye-slash'"
+              (click)="passwordShow.passwordIcon = !passwordShow.passwordIcon"></i>
+          </div>
+          <div class="err-msg mt-2" *ngIf="password?.invalid && (password?.dirty || password?.touched)">
+            <div *ngIf="password?.errors?.required">
+              {{ "Password is required." | translate }}
+            </div>
+            <div *ngIf="password?.errors?.minlength" class="err-msg">
+              {{ "Password must be 8 characters long." | translate }}
+            </div>
+          </div>
+        </div>
+        <div class="mb-3 position-relative">
+          <label for="confirmPassword" class="form-label d-none">Confirm Password</label>
+          <input type="password" id="confirmPassword" autocomplete="off"
+            (input)="removeSpacesInput('confirmPassword',$event)"
+            [type]="passwordShow.confPasswordIcon ? 'text' : 'password'" minlength="8" formControlName="confirmPassword"
+            class="form-control" placeholder="Confirm Password" />
+          <div class="input-icon">
+            <i [ngClass]="passwordShow.confPasswordIcon ? 'bi bi-eye' : 'bi bi-eye-slash'"
+              (click)="passwordShow.confPasswordIcon = !passwordShow.confPasswordIcon"></i>
+          </div>
+
+          <div class="err-msg mt-2"
+            *ngIf="confirmPassword?.invalid && (confirmPassword?.dirty || confirmPassword?.touched)">
+            <div *ngIf="confirmPassword?.errors?.required">
+              {{ "confirmpasswordreq" | translate }}
+            </div>
+            <div *ngIf="confirmPassword?.errors?.passwordMismatch">
+              {{ "confirmpasswordnotmatched" | translate }}
+            </div>
+          </div>
+        </div>
+
+        <div class="form-check mb-3">
+          <input type="checkbox" id="ageCheck" formControlName="ageCheck" class="form-check-input " />
+          <label for="ageCheck" class="form-check-label sm-fs-14">{{ "iam18" | translate }}</label>
+          <div class="err-msg mt-2" *ngIf="ageCheck?.invalid &&  (ageCheck?.dirty || ageCheck?.touched) ">
+            {{ "agepolicy" | translate }}
+          </div>
+        </div>
+
+        <div class="form-check mb-3">
+          <input type="checkbox" id="termsCheck" formControlName="termsCheck" class="form-check-input" />
+          <label for="termsCheck" class="form-check-label sm-fs-14">
+            I accept all the <a class="text-theme pointer" (click)="openTermsModal()">Terms & Conditions</a>
+          </label>
+          <div class="err-msg mt-2" *ngIf="termsCheck?.invalid &&  (termsCheck?.dirty || termsCheck?.touched)">
+            {{ "accepttermstoproceed" | translate }}
+          </div>
+        </div>
+
+        <div class="d-grid">
+          <button type="submit" [disabled]="signupForm.invalid"
+            class="btn btn-theme border-0 sm-fs-14">Register</button>
+        </div>
+      </form>
+      <div class="text-center mt-3 sm-fs-14 mb-2">
+        Already have an account? <a class="text-theme pointer" (click)="loginModal()">Log In</a>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="fade otp-modal" data-bs-backdrop="static" [ngClass]="showOtpForm ? 'modal show' : ''"
+    [style.display]="showOtpForm ? 'block' : 'none'" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+
+        <div class="modal-header border-0 pb-0">
+          <p class="modal-title">{{ "OTP Verification" | translate }}</p>
+          <button type="button" class="btn-close" (click)="showOtpForm = false;">
+            <i class="bi bi-x"></i>
+          </button>
+
+        </div>
+        <div class="modal-body">
+          <div class="submit-overlay" *ngIf="showLoader">
+            <div class="spinner-border text-light" role="status">
+            </div>
+          </div>
+          <p>We have sent you SMS with 4 digits verification code
+            (OTP).</p>
+          <form [formGroup]="otpForm" (ngSubmit)="onSubmit()">
+            <div class="container-fluid text-center">
+              <p class="text-end timeRemaining" *ngIf="timer > 0"> {{ "Time Remaining" | translate
+                }} : <span class="liabilityClr"> {{timer}}</span> </p>
+              <div class="row">
+                <div class="form-group col" *ngFor="let otpInput of otpFormInput; index as i">
+                  <input #otpFormRow type="number" formControlName="{{ otpInput }}" required maxlength="1"
+                    class="form-control text-center " maxlength="1" (keyup)="otpKeyUpEvent($event, i)" />
+                </div>
+              </div>
+              <div class="form-group text-end mt-3" *ngIf="timer < 1">
+                <a class="theme-color fw-medium pointer" (click)="resendOtp()">
+                  {{ "Resend OTP" | translate }}</a>
+              </div>
+              <div class="form-group text-start mt-3 err-msg" *ngIf="otpResponse.message">
+                {{ otpResponse.message}}
+              </div>
+              <button type="submit" class="btn submit-otp mt-3 btn-theme w-100" data-bs-dismiss="modal"
+                aria-label="Close">
+                {{ "Confirm OTP" | translate }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

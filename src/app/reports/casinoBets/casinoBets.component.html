@@ -1,0 +1,105 @@
+<div class="reports acc_statement_box no-pad-bot">
+  <div class="reports p-1">
+    <div class="row">
+      <div class="page_top_area col s12 p-0" style="position: relative">
+        <app-reports-input
+          (valueChange)="dateInputValues($event)"
+          [filters]="filters"
+          [startDateRequired]="'No'"
+        ></app-reports-input>
+        <div class="section_bg_box table_result_sec">
+          <div class="no-more-tables">
+            <table class="table-borderless table-hover">
+              <thead>
+                <tr>
+                  <th class="text-left">{{ "gamecode" | translate }}</th>
+                  <th class="text-center">{{ "gamename" | translate }}</th>
+                  <th class="text-center">{{ "roundid" | translate }}</th>
+                  <th class="text-center">{{ "runnername" | translate }}</th>
+                  <th class="text-center">{{ "side" | translate }}</th>
+                  <th class="text-center">{{ "price" | translate }}</th>
+                  <th class="text-center">{{ "size" | translate }}</th>
+                  <th class="text-center">{{ "placeddate" | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <div class="pre-loader" *ngIf="showLoader">
+                  <app-preloader></app-preloader>
+                </div>
+                <tr
+                  *ngFor="let CasinoOrder of betsToShow"
+                  [ngClass]="CasinoOrder.side === 'Back' ? 'back' : 'lay'"
+                >
+                  <td
+                    [attr.data-title]="'marketname' | translate"
+                    class="text-center"
+                  >
+                    {{ CasinoOrder?.gameCode }}
+                  </td>
+                  <td [attr.data-title]="'id' | translate" class="text-center">
+                    {{ CasinoOrder?.gameName }}
+                  </td>
+                  <td
+                    [attr.data-title]="'marketid' | translate"
+                    class="text-center"
+                  >
+                    {{ CasinoOrder?.roundID }}
+                  </td>
+                  <td
+                    [attr.data-title]="'matchid' | translate"
+                    class="text-center"
+                  >
+                    {{ CasinoOrder?.runnerName }}
+                  </td>
+                  <!-- <td [attr.data-title]="'runnername' | translate" class="text-center">{{CasinoOrder?.runnerName}}</td> -->
+                  <td
+                    [attr.data-title]="'side' | translate"
+                    class="text-center"
+                  >
+                    {{ CasinoOrder?.side }}
+                  </td>
+                  <td
+                    [attr.data-title]="'price' | translate"
+                    class="text-center"
+                  >
+                    {{ CasinoOrder?.price }}
+                  </td>
+                  <td
+                    [attr.data-title]="'size' | translate"
+                    class="text-center"
+                  >
+                    {{ CasinoOrder?.size }}
+                  </td>
+                  <td
+                    [attr.data-title]="'placeddate' | translate"
+                    class="text-center"
+                  >
+                    {{ CasinoOrder?.placeDate | date }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <app-reports-custom-pagination
+              *ngIf="!showLoader && betsToShow.length > 0"
+              [ngStyle]="{
+                'margin-top': betsToShow.length < 2 ? 'auto' : 'initial'
+              }"
+              (pageChange)="loadPage($event)"
+              [currentPage]="currentPage"
+              [totalPages]="totalPages"
+            ></app-reports-custom-pagination>
+          </div>
+          <div
+            *ngIf="casinoBets.length < 1 && !showLoader"
+            style="
+              color: var(--reports-account-statment-td-clr);
+              text-align: center;
+            "
+          >
+            <b>{{ "no_data_found" | translate }}</b>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

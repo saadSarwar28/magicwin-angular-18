@@ -1,0 +1,116 @@
+<div class="search-body">
+  <div class="search-bar d-flex d-md-none">
+    <div (click)="openSearchModalMobile()" class="form-control">Game Name</div>
+    <button *ngIf="showFiltersButton" class="filters-button" (click)="showFiltersModal()">
+      <img class="casino-filter-icon" src="https://iriscdn.b-cdn.net/kheloyar/casinosNew/filter-icon.svg" alt="">
+    </button>
+  </div>
+  <div class="search-bar d-none d-md-flex">
+    <input type="text" id="search-input" #searchInput [(ngModel)]="searchTerm" (input)="filterData($event)"
+      placeholder="Game Name" class="form-control">
+    <button class="cancel-button" (click)="searchTerm = '';filteredData = []">Cancel</button>
+    <button *ngIf="showFiltersButton" class="filters-button" (click)="showFiltersModal()">
+      <img class="casino-filter-icon" src="https://iriscdn.b-cdn.net/kheloyar/casinosNew/filter-icon.svg" alt="">
+    </button>
+  </div>
+
+  <div class="search-results-container">
+    <div *ngIf="filteredData && filteredData.length > 0" class="search-result">
+      <span>Search Result</span>
+      <div>About <span class="result-count">{{gamesCount.toFixed(0)}}</span> results</div>
+    </div>
+    <div class="games-container " *ngFor="let games of filteredData;let index = index">
+      <div class="games-header">
+        <h2 class="sm-fs-15">{{ setGameName(games.group) }}</h2>
+      </div>
+      <div class="games-list custom-scrollbar pb-2" *ngIf="games && games.data.length > 0">
+        <div class="game-card pointer" *ngFor="let game of games.data" (click)="routeToGame(game)">
+          <div class="login-button-container" *ngIf="!isLoggedIn">
+            <button class="login-button" (click)="routeToGame(game)">
+              {{game.haveDemo ? ("playdemo" | translate) : ("login" | translate)}}
+            </button>
+          </div>
+          <div class="login-button-container" *ngIf="isLoggedIn">
+            <button (click)="routeToGame(game)" class="login-button">{{"playnow" | translate}}</button>
+          </div>
+          <img [src]="game.imgLink ? game.imgLink : gameLoader" onerror="this.onerror=null; src=gameLoader" />
+          <div class="d-md-flex">
+            <div class="game-info w-100">
+              <span class="category">{{game.gameType}}</span>
+              <h3 class="title  sm-fs-13">{{game.GameName |translate}}</h3>
+              <span class="provider">{{game.PROVIDERS}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--  <div *ngIf="filteredData && filteredData.length <= 0">-->
+  <!--    <div class="nav-tab">-->
+  <!--      <ul>-->
+  <!--        <li [ngClass]="selected == i ? 'active-item' : '' " *ngFor="let item of nav_items; let i = index"-->
+  <!--            (click)="selected = i">-->
+  <!--          <a class="nav-link">-->
+  <!--            {{item}}</a>-->
+  <!--        </li>-->
+  <!--      </ul>-->
+  <!--    </div>-->
+  <!--    <div class="provider" *ngIf="selected == 0">-->
+  <!--      <div class="flex-container">-->
+  <!--        <div class="provider-card" (click)="routeToLobby('QTC','EVO-roulette')">-->
+  <!--          <img src="https://cdn.urexch.com/landing/img/EVOF.png">-->
+  <!--        </div>-->
+  <!--        <div class="provider-card" (click)="routeToLobby('IC')">-->
+  <!--          <img src="https://iriscdn.b-cdn.net/kheloyar/landingpagenew/ProvidersWebp/auraGaming.jpg">-->
+  <!--        </div>-->
+  <!--      </div>-->
+  <!--      <div class="flex-container">-->
+  <!--        &lt;!&ndash; <div class="provider-card" (click)="routeToLobby('SSC')">-->
+  <!--            <div class="card-header-casino">-->
+  <!--              <img src="https://cdn.urexch.com/landing/img/SuperSpadeF.png">-->
+  <!--            </div>-->
+  <!--          </div> &ndash;&gt;-->
+  <!--        <div class="provider-card" (click)="routeToLobby('QTC','EZU-roulette')">-->
+  <!--          <img src="https://cdn.urexch.com/landing/img/EzugiF.png">-->
+  <!--        </div>-->
+  <!--        <div class="provider-card" (click)="routeToLobby('QTC')">-->
+  <!--          <img src="https://cdn.urexch.com/landing/img/QtechF.png">-->
+  <!--        </div>-->
+  <!--      </div>-->
+  <!--      <div class="flex-container">-->
+  <!--        &lt;!&ndash; <div class="provider-card" routerLink="/games">-->
+  <!--            <div class="card-header-casino">-->
+  <!--              <img src="https://cdn.urexch.com/landing/img/betfair_transparent.png">-->
+
+  <!--            </div>-->
+  <!--          </div> &ndash;&gt;-->
+  <!--        <div *ngIf="showVS" class="provider-card" (click)="navigateToVirtualSports()">-->
+  <!--          <img style="width: 132px;-->
+  <!--              height: 90px;" src="https://iriscdn.b-cdn.net/magicwin.games/icon/VirtualSports.png">-->
+
+  <!--        </div>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--    <div class="game-types" *ngIf="selected == 1">-->
+  <!--      <div class="flex-container">-->
+  <!--        <div class="heading">-->
+  <!--          Game Types-->
+  <!--        </div>-->
+  <!--        <div class="items" [ngClass]="toggleCasinoPro ? '': 'heightAuto' ">-->
+  <!--          <div class="item active-item">-->
+  <!--            All-->
+  <!--          </div>-->
+  <!--          <div class="item " *ngFor="let pro of casinosArr" (click)="routeToGameLink(pro.routerLink)">-->
+  <!--            {{pro.name | translate}}-->
+  <!--          </div>-->
+  <!--        </div>-->
+  <!--        <div class="see-more" *ngIf="casinosArr.length>10" (click)="toggleCasinoPro = !toggleCasinoPro">-->
+  <!--          <span>{{toggleCasinoPro ? 'Show More' : 'See Less'}}</span>-->
+  <!--          <img src="https://iriscdn.b-cdn.net/kheloyar/casinosNew/see-more-arrow.svg" alt="image"-->
+  <!--               [style.transform]="'rotate(' + (!toggleCasinoPro ? '180deg' : '0deg') + ')'">-->
+  <!--        </div>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--  </div>-->
+</div>
+<!--<app-casino-search-mobile-modal class="search-modal-container"></app-casino-search-mobile-modal>-->

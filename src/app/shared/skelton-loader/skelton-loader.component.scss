@@ -1,0 +1,242 @@
+.d-none {
+  display: none;
+}
+
+.skeleton-all-menues {
+  display: flex;
+  gap: 8px; /* Adjust for spacing between flags */
+  margin-bottom: 10px; /* Space between rows */
+  .skeleton-nav-item {
+    width: 70px; /* Adjust width to mimic flag size */
+    height: 50px; /* Adjust height to mimic flag size */
+  }
+}
+
+.sidebar-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  .skeleton-menu {
+    width: 100%;
+    height: 20px; /* Adjust height as per your requirement */
+  }
+}
+.banners-skeleton-loader {
+  display: flex;
+  gap: 10px;
+  .skeleton-banner {
+    width: 32%;
+    height: 250px; /* Adjust height as per your requirement */
+  }
+}
+
+.casino-nav-skeleton {
+  display: flex;
+  gap: 5px;
+  width: 100%;
+  .nav-skeleton {
+    width: 100%; /* Adjust width for 4 cards per row */
+    height: 45px; /* Adjust height according to the original card */
+  }
+}
+
+.top-popular-skeleton {
+  display: flex;
+  gap: 5px;
+  width: 100%;
+  .skeleton-popular-card {
+    width: 100%; /* Adjust width for 4 cards per row */
+    height: 100px; /* Adjust height according to the original card */
+  }
+}
+
+.sportsLoading {
+  .skeleton-score-odds {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .skeleton-score {
+    width: 40px;
+    height: 40px;
+  }
+  .team-name-sm {
+    flex-grow: 1;
+    width: 100%;
+    height: 20px;
+  }
+  .skeleton-team-name {
+    flex-grow: 1;
+    height: 40px;
+  }
+  .skeleton-odds {
+    width: 65px;
+    height: 46px;
+  }
+}
+
+.marketLoading {
+  .skeleton-score-odds {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .skeleton-score {
+    width: 40px;
+    height: 40px;
+  }
+  .team-name-sm {
+    flex-grow: 1;
+    width: 100%;
+    height: 20px;
+  }
+  .skeleton-team-name {
+    flex-grow: 1;
+    height: 30px;
+  }
+  .skeleton-odds {
+    width: 65px;
+    height: 46px;
+    border-radius: 4px !important;
+  }
+  .skeleton-back-lay {
+    width: 65px;
+    height: 20px;
+  }
+  .skeleton-match-odds-title {
+    width: 100px;
+    height: 46px;
+    border-top-right-radius: 50px;
+  }
+  .skeleton-cashout-btn {
+    width: 100px;
+    height: 46px;
+    border-radius: 31.906px;
+  }
+}
+.skeleton-mybets-box {
+  width: 100%;
+  height: 200px;
+}
+
+.skeleton-games-cards-container {
+  padding: 14px 3px;
+  .skeleton-see-more {
+    width: 80px;
+    height: 20px;
+    margin-bottom: 10px;
+  }
+  .skeleton-title {
+    width: 150px;
+    height: 20px;
+  }
+  .skeleton-game-cards {
+    display: flex;
+    gap: 10px;
+    .skeleton-game-item {
+      width: 100%;
+      height: 200px;
+    }
+  }
+}
+.skeleton-casino-cards-container {
+  padding: 14px 3px;
+  .skeleton-see-more {
+    width: 80px;
+    height: 20px;
+    margin-bottom: 10px;
+  }
+  .skeleton-title {
+    width: 150px;
+    height: 20px;
+  }
+  .skeleton-game-cards {
+    display: flex;
+    gap: 10px;
+    .skeleton-game-item {
+      width: 100%;
+      height: 200px;
+    }
+  }
+}
+
+.skeleton-menu-container {
+  display: flex;
+  gap: 8px; /* Adjust for spacing between flags */
+  margin-bottom: 10px; /* Space between rows */
+  .skeleton-menu-item {
+    width: 70px; /* Adjust width to mimic flag size */
+    height: 50px; /* Adjust height to mimic flag size */
+    border-radius: 4px !important; /* Optional, for rounded corners */
+  }
+}
+
+.skeleton-item {
+  background: var(--skeltonLoaderBg);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 8px; /* Optional, for rounded corners */
+}
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@media (min-width: 992px) {
+  .d-lg-flex {
+    display: flex;
+  }
+}
+@media (min-width: 768px) {
+  .d-md-block {
+    display: block;
+  }
+}
+
+@media (max-width: 768px) {
+  .d-lg-flex {
+    display: none !important;
+  }
+  .skeleton-banner {
+    height: 200px !important;
+  }
+  .marketLoading {
+    .skeleton-team-name {
+      flex-grow: 1;
+      height: 30px;
+    }
+    .skeleton-odds {
+      width: 53px !important;
+      height: 38px !important;
+    }
+    .skeleton-match-odds-title {
+      width: 100px;
+      height: 46px;
+      border-top-right-radius: 50px;
+    }
+    .skeleton-cashout-btn {
+      width: 80px;
+      height: 32.264px;
+      border-radius: 31.906px;
+    }
+  }
+  .skeleton-games-cards-container {
+    .skeleton-game-cards {
+      .skeleton-game-item {
+        width: 100%;
+        height: 150px !important;
+      }
+    }
+  }
+  .skeleton-casino-cards-container {
+    .skeleton-game-cards {
+      .skeleton-game-item {
+        height: 160px !important;
+      }
+    }
+  }
+}

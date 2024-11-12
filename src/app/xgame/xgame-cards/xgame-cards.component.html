@@ -1,0 +1,419 @@
+<div class="mt-2 plr-18 ">
+  <div class="game-nav d-md-flex d-none">
+    <div class="xg-name w-30">
+      <div>
+        {{ gameData.name | translate }}
+      </div>
+      <div class="game-id">
+        {{ "gameid" | translate }}: <span class="game-id-color">{{ gameData.game.id }}</span>
+      </div>
+    </div>
+
+    <div class="w-30">
+      <div class="rounds" *ngIf="type == 'Player'">
+        <div class="round-info  d-flex align-items-center">
+          <p class="round">{{ "round" | translate }}</p>
+          <div class="progress-items">
+            <div [ngClass]="{ active: gameData.game.round === 1 }" class="progress-dot"></div>
+            <div [ngClass]="{ active: gameData.game.round === 2 }" class="progress-dot"></div>
+            <div [ngClass]="{ active: gameData.game.round === 3 }" class="progress-dot"></div>
+            <div [ngClass]="{ active: gameData.game.round === 4 }" class="progress-dot"></div>
+            <div [ngClass]="{ active: gameData.game.round === 5 }" class="progress-dot"></div>
+            <div [ngClass]="{ active: gameData.game.round === 6 }" class="progress-dot"></div>
+            <div [ngClass]="{ active: gameData.game.round === 7 }" class="progress-dot"></div>
+          </div>
+        </div>
+      </div>
+      <div class=" round-info hand-info game-header d-flex align-items-center" *ngIf="type == 'Hand'">
+        <p [ngClass]="gameData.game.round==1?'round active':'round'">{{'deal'|translate}}</p>
+        <p [ngClass]="gameData.game.round==2?'round active':'round'">{{'preflop'|translate}}</p>
+        <p [ngClass]="gameData.game.round==3?'round active':'round'">{{'flop'|translate}}</p>
+        <p [ngClass]="gameData.game.round==4?'round active':'round'">{{'turn'|translate}}</p>
+        <p [ngClass]="gameData.game.round==5?'round active':'round'">{{'river'|translate}}</p>
+      </div>
+    </div>
+    <div class="w-30">
+      <div class="game-info-links">
+        <button class="btn info-btn help" (click)="openScrollableContent(help)">{{
+          "help" | translate
+          }}</button>
+        <button class="btn info-btn rules" (click)="openScrollableContent(rules)">{{
+          "rules" | translate
+          }}</button>
+        <button class="btn info-btn results" (click)="GetResult(result)">{{ "results" | translate }}</button>
+      </div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="games-nav d-md-none d-flex">
+      <div class="game-green-head ">
+        <div>
+          {{ "gameid" | translate }}: <span class="game-id-color">{{ gameData.game.id }}</span>
+        </div>
+        <div class="text-center">
+          {{ gameData.name | translate }}
+        </div>
+        <div class="game-green-links">
+          <a (click)="openScrollableContent(help)">{{'help'|translate}}</a>
+          <a (click)="openScrollableContent(rules)">{{'rules'|translate}}</a>
+          <a (click)="GetResult(result)">{{'results'|translate}}</a>
+        </div>
+      </div>
+    </div>
+    <div class="round-info  d-flex align-items-center d-md-none " *ngIf="type == 'Player'">
+      <p class="round">{{ "round" | translate }}</p>
+      <div class="progress-items">
+        <div [ngClass]="{ active: gameData.game.round === 1 }" class="progress-dot"></div>
+        <div [ngClass]="{ active: gameData.game.round === 2 }" class="progress-dot"></div>
+        <div [ngClass]="{ active: gameData.game.round === 3 }" class="progress-dot"></div>
+        <div [ngClass]="{ active: gameData.game.round === 4 }" class="progress-dot"></div>
+        <div [ngClass]="{ active: gameData.game.round === 5 }" class="progress-dot"></div>
+        <div [ngClass]="{ active: gameData.game.round === 6 }" class="progress-dot"></div>
+        <div [ngClass]="{ active: gameData.game.round === 7 }" class="progress-dot"></div>
+      </div>
+    </div>
+
+    <div class=" hand-info game-header  d-flex align-items-center d-md-none" *ngIf="type == 'Hand'">
+      <p [ngClass]="gameData.game.round==1?'round active':'round'">{{'deal'|translate}}</p>
+      <p [ngClass]="gameData.game.round==2?'round active':'round'">{{'preflop'|translate}}</p>
+      <p [ngClass]="gameData.game.round==3?'round active':'round'">{{'flop'|translate}}</p>
+      <p [ngClass]="gameData.game.round==4?'round active':'round'">{{'turn'|translate}}</p>
+      <p [ngClass]="gameData.game.round==5?'round active':'round'">{{'river'|translate}}</p>
+    </div>
+    <div class="cards-display d-flex justify-content-center">
+      <div class="cards-now ">
+        <div class="dealer">
+          <div class="player-turn text-align-center">
+            {{ "dealer" | translate }}
+          </div>
+        </div>
+        <ng-container *ngFor="
+        let i of  gameData.game.gameData.objects | filterCards : 'Dealer'
+      ">
+          <div class="card-content mx-auto d-flex justify-content-center">
+
+            <div class="table_box_card_cl xgcard-container" *ngFor="
+          let card of i.properties ">
+              <img [class]="'card'+card.value" src="{{cdnUrl}}/xgcards/{{
+                  card.value
+                }}.svg" alt="{{ card.properties }}" />
+            </div>
+
+          </div>
+          <div class="points" *ngIf="type === 'Player'">
+            <div class="points-turn text-align-center" *ngIf="i.description.length>0">
+              {{i.description }}
+
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      <div>
+      </div>
+    </div>
+    <div class="xg-progress">
+      <span class="xgprogress-bar" [ngStyle]="{
+          width: gameData.game.bettingWindowPercentageComplete + '%'
+        }"></span>
+    </div>
+    <div class="hands-info d-flex justify-content-center align-items-center gap-5">
+      <div class="cards-display" *ngFor="let i of gameData.game.gameData.objects | filterCards : ''">
+        <div class="cards-now">
+          <div class="dealer">
+            <div class="player-turn  text-align-center">
+              {{ i.name | SpaceBtwnNum }}
+              <span [ngClass]="{
+                  winner:(i.status | filterCardStatus)== 'WINNER',
+                  loser:(i.status | filterCardStatus )== 'LOSER'
+              }"> {{(i.status | filterCardStatus)
+                }}</span>
+            </div>
+            <!-- <div class="fs-12 d-md-none d-flex justify-content-between">
+              <span>  {{ i.name | SpaceBtwnNum }}</span>
+
+              <span [ngClass]="{
+                 winner:(i.status | filterCardStatus)== 'WINNER',
+                 loser:(i.status | filterCardStatus )== 'LOSER'
+             }"> {{(i.status | filterCardStatus)
+               }}</span>
+            </div> -->
+          </div>
+          <div class="card-content mx-auto d-flex justify-content-center">
+            <div class="table_box_card_cl xgcard-container" *ngFor="
+            let card of i.properties ">
+              <img [class]="'card'+card.value" src="{{cdnUrl}}/xgcards/{{
+              card.value
+            }}.svg" />
+            </div>
+          </div>
+          <div class="points " [ngClass]="type === 'Hand'? 'hand-points' : ''">
+            <div class="points-turn text-align-center" *ngIf="i.description.length>0">
+              {{i.description }}
+            </div>
+          </div>
+          <!-- <div class="d-md-none d-flex text-align-center" *ngIf="i.description.length>0">
+            {{i.description  }}
+          </div> -->
+        </div>
+        <div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<ng-template #help let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">{{ "help" | translate }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true"><i class="bi bi-x-lg"></i></span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="help-container">
+      <h2 class="help-h2">{{ "whatisexchangeblackjack" | translate }}</h2>
+      <hr class="hr" />
+      <p>
+        {{ "descriptionofexchangeblackjack" | translate }}
+      </p>
+      <p>
+        {{ "exchangeblackjackbenefits1" | translate }}
+      </p>
+      <p>
+        {{ "exchangeblackjackbenefits2" | translate }}<br />
+        {{ "exchangeblackjackbenefits3" | translate }}
+      </p>
+      <br />
+      <h2 class="help-h2">{{ "whataredecimalodds" | translate }}</h2>
+      <hr class="hr" />
+      <p>{{ "decimaloddsdescription" | translate }}</p>
+      <br />
+      <div class="row">
+        <div class="col-sm-2">
+          <button class="button-back">
+            <div class="btn-small covrtfrstchild">2.10</div>
+            <div class="btn-bottom">$17000</div>
+          </button>
+        </div>
+        <div class="col-sm-8">
+          <table cellspacing="0" cellpadding="2" border="0" width="100%">
+            <tbody>
+              <tr>
+                <td class="GlobalTableHeaderBackground" align="center" width="33%">
+                  &nbsp;&nbsp;&nbsp;{{
+                  "fractional" | translate
+                  }}&nbsp;&nbsp;&nbsp;
+                </td>
+                <td class="GlobalTableHeaderBackground" align="center" width="33%">
+                  &nbsp;&nbsp;&nbsp;{{
+                  "decimal" | translate
+                  }}&nbsp;&nbsp;&nbsp;
+                </td>
+                <td class="GlobalTableHeaderBackground" align="center" width="33%">
+                  &nbsp;&nbsp;&nbsp;{{
+                  "american" | translate
+                  }}&nbsp;&nbsp;&nbsp;
+                </td>
+              </tr>
+              <tr>
+                <td class="GlobalTableCell" align="center">11/10</td>
+                <td class="GlobalTableCell" align="center">2.10</td>
+                <td class="GlobalTableCell" align="center">110</td>
+              </tr>
+              <tr>
+                <td class="GlobalTableCell" align="center">1/1</td>
+                <td class="GlobalTableCell" align="center">2.00</td>
+                <td class="GlobalTableCell" align="center">-100</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <h2 class="help-h2">{{ "whatistheamountavailable" | translate }}</h2>
+      <hr class="hr" />
+      <div class="row">
+        <div class="col-4">
+          <button class="button-back">
+            <div class="btn-small">2.10</div>
+            <div class="btn-bottom covrtfrstchild">$17000</div>
+          </button>
+        </div>
+        <div class="col-8">
+          <p>
+            {{ "amountavailabledescription" | translate }}
+          </p>
+        </div>
+      </div>
+      <h2 class="help-h2">{{ "whatisbacking" | translate }}</h2>
+      <hr class="hr" />
+      <div class="row">
+        <div class="col-4">
+          <button class="button-back">
+            <div class="btn-small">2.10</div>
+            <div class="btn-bottom">$17000</div>
+          </button>
+        </div>
+        <div class="col-8">
+          <p>
+            {{ "backbetsdesciption" | translate }}
+          </p>
+        </div>
+      </div>
+      <h2 class="help-h2">{{ "whatislaying" | translate }}</h2>
+      <hr class="hr" />
+      <div class="row">
+        <div class="col-4">
+          <button class="button-lay">
+            <div class="btn-small">2.12</div>
+            <div class="btn-bottom">$17000</div>
+          </button>
+        </div>
+        <div class="col-8">
+          <p>
+            {{ "laysidedescription" | translate }}
+          </p>
+        </div>
+      </div>
+      <h2 class="help-h2">{{ "howaretheoddsordered" | translate }}</h2>
+      <hr class="hr" />
+      <p>
+        {{ "oddsdescription" | translate }}
+      </p>
+      <div class="row">
+        <div class="col-12">
+          <button class="button-simple">
+            <div class="btn-small">2.06</div>
+            <div class="btn-bottom">$1120</div>
+          </button>
+          <button class="button-simple">
+            <div class="btn-small">2.08</div>
+            <div class="btn-bottom">$1820</div>
+          </button>
+          <button class="button-back">
+            <div class="btn-small">2.10</div>
+            <div class="btn-bottom">$94</div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #rules let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">{{ "rules" | translate }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true"><i class="bi bi-x-lg"></i></span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="help-container rules">
+      <h2 class="rules-head-h2">
+        {{ "anynumberofwinners" | translate }}
+      </h2>
+      <br />
+      <span class="rules-head-p">
+        {{ "totalmatchedsofar" | translate
+        }}<span style="color: white">USD1,0</span> </span><br />
+      <span class="rules-head-p">{{ "commissiononthismarket" | translate }} </span><span>4%</span><br />
+      <h2 class="help-h2">{{ "betfairexchangeblackjack" | translate }}</h2>
+      <hr class="hr" />
+      <h2 class="help-h2">{{ "houserules" | translate }}</h2>
+      <ol>
+        <li>{{ "infinitedeck" | translate }}</li>
+        <li>{{ "nosplittingdoublingorsurrender" | translate }}</li>
+        <li>{{ "dealersitsonsoft17" | translate }}</li>
+        <li>
+          {{ "handrankings" | translate }}
+          <ol>
+            <li>{{ "fivecardcharlie" | translate }}</li>
+            <li>{{ "blackjack" | translate }}</li>
+            <li>{{ "highestpointsvalue" | translate }}</li>
+          </ol>
+        </li>
+        <li>{{ "customisedplayerlogic" | translate }}</li>
+      </ol>
+
+      <h2 class="help-h2">{{ "exoticselections" | translate }}</h2>
+      <p class="dark-t">
+        {{ "bettingselectionheading" | translate }}
+      </p>
+      <ol>
+        <li>{{ "bettingselection1" | translate }}</li>
+        <li>{{ "bettingselection2" | translate }}</li>
+        <li>{{ "bettingselection3" | translate }}</li>
+        <li>{{ "bettingselection4" | translate }}</li>
+      </ol>
+      <h2 class="help-h2">{{ "earlysettlement" | translate }}</h2>
+      <p class="dark-t">
+        {{ "blackjackdescription1" | translate }}
+      </p>
+      <h2 class="help-h2">{{ "gameflow" | translate }}</h2>
+      <p class="dark-t">
+        {{ "thisgameisbasedonthecasinogameofblackjack" | translate }}
+        <br />
+        {{ "blackjackdescription2" | translate }}
+        <br />
+        {{ "blackjackdescription3" | translate }}
+        <br />
+        {{ "blackjackdescription4" | translate }}
+        <br />
+        {{ "blackjackdescription5" | translate }}
+        <br />
+        {{ "blackjackdescription6" | translate }}
+      </p>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #result let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">
+      {{ this.gameResult.name.replaceAll(" ", "").toLowerCase() | translate }}
+    </h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true"><i class="bi bi-x-lg"></i></span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <!-- <nav ngbNav #navr="ngbNav" class="nav-tabs">
+      <ng-container ngbNavItem *ngFor="let g of gameResult.games.games">
+        <a ngbNavLink>{{ g.gameStartDate | date: "mm:ss" }}</a>
+        <ng-template ngbNavContent>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">{{ "name" | translate }}</th>
+                <th>{{ "description" | translate }}</th>
+                <th scope="col">{{ "status" | translate }}</th>
+                <th scope="col">{{ "card" | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let r of g.gameData.objects">
+                <td>
+                  {{ r.name.replaceAll(" ", "").toLowerCase() | translate }}
+                </td>
+                <td>{{ r.description }}</td>
+                <td>
+                  {{ r.status.replaceAll("_", "").toUpperCase() | translate }}
+                </td>
+                <td class="two-card-images">
+                  <div class="table_box_card_cl xgcard-container" *ngFor="let card of r.properties">
+                    <img class="xgame_card" [class]="'card'+card.value"
+                      style="height: 30px; max-width: 50px; margin: 0px 0px" src="{{cdnUrl}}/xgcards/{{
+                        card.value
+                      }}.svg" />
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </ng-template>
+      </ng-container>
+    </nav> -->
+
+    <!-- <div [ngbNavOutlet]="navr" class="mt-2"></div> -->
+  </div>
+</ng-template>

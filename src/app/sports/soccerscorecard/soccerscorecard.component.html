@@ -1,0 +1,27 @@
+
+<div class="white-box" *ngIf="timeLineData">
+  <div class="teams-score">
+    <p>{{team1}}</p>
+    <span>{{team1Score}} : {{team2Score}}</span>
+    <p>{{team2}}</p>
+  </div>
+  <div class="teams-score ">
+    <p class="timeline">Timer : {{data.timeElapsed}}'</p>
+  </div>
+  <div class="progress-wrapper">
+    <div *ngFor="let details of matchDetails">
+      <div *ngIf="details.type !== 'KickOff'" [ngClass]="[(details.type !== 'KickOff') ? details.type : '', details.team?details.team:'']"
+        [style]="{'left':details.matchTime +'%'}" >
+        <i *ngIf="details.type === 'Goal'" class="fas fa-futbol" style="vertical-align: 0.875em;"></i>
+        <ng-template #matchThings>{{details.teamName}} got <b>{{details.type}}</b> {{'at' | translate}} <b>{{details.matchTime}}'</b>
+        </ng-template>
+      </div>
+    </div>
+
+    <div class="match-progress">
+
+      <span class="progress-bar" [style]="{'width' : timeLineData.timeElapsed + 10 + '%'}">
+      </span>
+    </div>
+  </div>
+</div>

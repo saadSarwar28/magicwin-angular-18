@@ -1,0 +1,15 @@
+.coming-up {
+  text-align: left;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 700;
+  color: var(--comingUpTextClr);
+  padding: 4px 5px;
+}
+@media (max-width: 550px) {
+  .sportsById-component {
+    .tab-container .tabs .menu {
+      padding: 0 !important;
+    }
+  }
+}

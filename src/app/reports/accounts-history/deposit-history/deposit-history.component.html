@@ -1,0 +1,64 @@
+<div class="inner_top_area_Sec acc_statement_box no-pad-bot">
+  <!--  <div class="container">-->
+  <!--    <div class="row">-->
+  <div class="col s12" style="position: relative;">
+    <div class="submit-messages" *ngIf="showLoader">
+      <div class="text-center">
+        <img [src]="siteLoader" height="100" alt="Loading..." />
+      </div>
+    </div>
+    <div class="section_bg_box table_result_sec" *ngIf="!showLoader">
+      <div class="no-more-tables">
+        <table class="table table-responsive">
+          <thead>
+            <tr>
+              <th class="text-center">{{"amount"|translate}}</th>
+              <th class="text-center">{{"uploaddate"|translate}}</th>
+              <th class="text-center">{{"verified"|translate}}</th>
+              <th class="text-center">{{"file"|translate}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let withDrawRequest of depositRequests">
+              <td [attr.data-title]="'requestedamount' | translate" class="text-center ">
+                {{withDrawRequest?.amount}}</td>
+              <td [attr.data-title]="'requestedtime' | translate" class="text-center ">
+                {{withDrawRequest?.uploadDate | date:'short'}}</td>
+              <!-- <td [attr.data-title]="'status' | translate" class="text-center ">
+                <span [ngClass]="
+                          withDrawRequest.status == 'REJECTED'
+                            ? 'debit'
+                            : withDrawRequest.status == 'ACCEPTED'
+                            ? 'debit'
+                            : 'pending-status'
+                        ">
+                  {{ withDrawRequest?.status }}
+                </span>
+              </td> -->
+              <td [attr.data-title]="'status' | translate" class="text-center  d-flex justify-content-center">
+                <span class="badge_custom_styling" [ngClass]="{
+                          'badge bg-success ': withDrawRequest?.status=='ACCEPTED',
+                          'badge bg-secondary': withDrawRequest?.status=='PENDING',
+                          'badge bg-danger': withDrawRequest?.status=='REJECTED'
+                          }">
+                  {{withDrawRequest?.status}}
+                </span>
+              </td>
+              <td [attr.data-title]="'file' | translate" class="text-center  imageInTable">
+                <img style="width: 35px;height: 35px;" [src]="withDrawRequest?.file">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div *ngIf="depositRequests.length == 0 && !showLoader">
+          <div colspan="12" style="padding-left: 0px !important;">
+            <p class="no-data" style="text-align: center;">{{ 'norecord' | translate }}</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!--    </div>-->
+  <!--  </div>-->
+</div>

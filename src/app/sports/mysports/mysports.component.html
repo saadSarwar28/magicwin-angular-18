@@ -1,0 +1,18 @@
+<div class="main-container">
+  <button
+    class="nav-btn"
+    [class.active-bar]="activeButton === 0"
+    (click)="activeButton = 0"
+  >
+    Current Sports
+  </button>
+  <button
+    class="nav-btn"
+    [class.active-bar]="activeButton === 1"
+    (click)="activeButton = 1"
+  >
+    Fav Casino
+  </button>
+</div>
+<app-current-sports *ngIf="activeButton === 0"> </app-current-sports>
+<app-fav-casino *ngIf="activeButton === 1"> </app-fav-casino>

@@ -1,0 +1,95 @@
+.white-box {
+  height: 160px;
+  background: url(https://iriscdn.b-cdn.net/kheloyar/clientweb/images/soccerScoreCardBG.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  text-align: center;
+  border-radius: 2px;
+  padding: 37px;
+  margin-top: 3px;
+  margin-right: 3px;
+}
+
+.teams-score {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.teams-score p {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: normal;
+  color: #fff;
+  padding: 0px;
+  margin: 0px;
+}
+
+.teams-score span {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: normal;
+  margin: 0px 5px;
+  color: #eef1f7;
+}
+
+.match-progress {
+  width: 100%;
+  margin-top: 15px;
+  height: 8px;
+  background: #faf9ff;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  display: block;
+  height: 100%;
+  background: #b2e59c;
+  background-size: 300% 100%;
+  justify-content: flex-end;
+}
+
+.progress-wrapper {
+  position: relative;
+}
+
+.teams-score .timeline {
+  margin-top: 5px;
+}
+
+.YellowCard {
+  width: 8px;
+  height: 12px;
+  background: #ffc102;
+  position: absolute;
+
+  box-shadow: 1px 1px black;
+}
+
+.RedCard {
+  width: 8px;
+  height: 12px;
+  background: red;
+  position: absolute;
+
+  box-shadow: 1px 1px black;
+}
+
+.Goal {
+  width: 16px;
+  height: 16px;
+  border-radius: 10px;
+  position: absolute;
+}
+
+.away {
+  top: 6px;
+}
+
+.home {
+  top: -11px;
+}

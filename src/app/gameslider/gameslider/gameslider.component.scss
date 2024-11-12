@@ -1,0 +1,33 @@
+.slider-img,
+.icon {
+  cursor: pointer;
+}
+
+::ng-deep {
+  .owl-prev {
+    position: absolute !important;
+    left: -18px !important;
+    top: 38% !important;
+    transform: rotate(180deg) !important;
+  }
+  .owl-next {
+    position: absolute !important;
+    right: -21px !important;
+    top: 38% !important;
+  }
+
+  .slider-game {
+    .owl-theme .owl-nav [class*="owl-"] {
+      padding: 7px 12px 10px 12px !important;
+      background: var(--slider-btn-bg-clr) !important;
+      border-radius: 50% !important;
+    }
+
+    @media (max-width: 992px) {
+      .owl-prev,
+      .owl-next {
+        display: none !important;
+      }
+    } 
+  }
+}

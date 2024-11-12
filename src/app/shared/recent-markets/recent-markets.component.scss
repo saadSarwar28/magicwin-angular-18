@@ -1,0 +1,45 @@
+.modal-overlays {
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: transparent !important;
+  z-index: 9999;
+  transition: height 0.3s ease-out;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  overflow: unset !important;
+}
+
+.conatiner-mod {
+  overscroll-behavior: contain;
+  transition: all 0.5s ease-in-out;
+  display: block !important;
+  width: 100% !important;
+  padding: 0px !important;
+  margin-top: auto !important;
+  margin-bottom: 50px;
+  overflow: auto;
+  border: 0 !important;
+  outline: 0 !important;
+  background: var(--cardBg);
+}
+
+.back-button-image {
+  width: 20px;
+  margin-left: 5px;
+  margin-top: 5px;
+}
+
+.recent-market-name {
+  display: block;
+  color: white;
+  padding: 10px 5px;
+}
+
+.no-markets {
+  display: block;
+  color: white;
+  padding: 10px 3px;
+  text-align: center;
+}

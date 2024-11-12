@@ -1,0 +1,43 @@
+.lottery {
+  .collaspe-icon {
+    color: var(--lottery-collaspe-icon-clr);
+  }
+  .menu {
+    display: inline;
+    padding: 11px 30px 8px 9px;
+    align-items: center;
+    gap: 10px;
+    color: var(--lottery-heading-clr);
+    font-weight: 400;
+  }
+  .lottery-container {
+    background: var(--lottery-container-bg);
+    border-radius: 5px;
+    max-width: 100%;
+
+    .lottery-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--lottery-header-clr);
+
+      border-top: 4px solid var(--lottery-container-border-top-clr);
+      .rate-button {
+        background: var(--lottery-rate-btn-bg);
+        border: none;
+        border-radius: 3px;
+        padding: 5px 10px;
+        color: var(--lottery-rate-btn-clr);
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+    }
+
+    .lottery-numbers {
+      display: flex;
+      justify-content: space-around;
+      padding: 10px;
+      border-radius: 5px;
+    }
+  }
+}

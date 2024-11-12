@@ -1,0 +1,20 @@
+.main-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  .nav-btn {
+    padding: 5px 20px;
+    border-radius: 5px;
+    border: 1px solid #4f5267;
+    background: var(--cardBg);
+    color: white;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 500;
+  }
+  .active-bar {
+    background: #00e66c;
+    color: black;
+    border: 1px solid #00e66c;
+  }
+}

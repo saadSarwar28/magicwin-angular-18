@@ -1,0 +1,50 @@
+<div class="white-box" *ngIf="timeLineData">
+  <div class="teams-score">
+    <div class="team-score">
+      <p>{{team1}}</p>
+      <table>
+        <tr>
+          <th>{{'quarter'|translate}}</th>
+          <th>1</th>
+          <th>2</th>
+          <th>3</th>
+          <th>4</th>
+          <th>{{'totalsports'|translate}}</th>
+        </tr>
+        <tr>
+          <th>{{'score'|translate}}</th>
+          <td>{{data.score.home.quarterByQuarter[0]}}</td>
+          <td>{{data.score.home.quarterByQuarter[1]}}</td>
+          <td>{{data.score.home.quarterByQuarter[2]}}</td>
+          <td>{{data.score.home.quarterByQuarter[3]}}</td>
+          <td>{{team1Score}}</td>
+        </tr>
+      </table>
+    </div>
+    <div class="team-score">
+      <span>VS</span>
+      <span class="timeline">{{data.timeElapsed}} '</span>
+    </div>
+    <div class="team-score">
+      <p>{{team2}}</p>
+      <table>
+        <tr>
+          <th>{{'quarter'|translate}}</th>
+          <th>1</th>
+          <th>2</th>
+          <th>3</th>
+          <th>4</th>
+          <th>{{'totalsports'|translate}}</th>
+        </tr>
+        <tr>
+          <td>{{'score'|translate}}</td>
+          <td>{{data.score.away.quarterByQuarter[0]}}</td>
+          <td>{{data.score.away.quarterByQuarter[1]}}</td>
+          <td>{{data.score.away.quarterByQuarter[2]}}</td>
+          <td>{{data.score.away.quarterByQuarter[3]}}</td>
+          <td>{{team2Score}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>

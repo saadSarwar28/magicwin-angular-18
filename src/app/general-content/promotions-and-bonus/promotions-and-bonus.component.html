@@ -1,0 +1,19 @@
+<!-- <div class="default-carousel">
+  <owl-carousel-o [options]="customOptions" #carousel>
+    <ng-container>
+      <ng-container *ngFor="let img of images; let i = index">
+        <ng-template carouselSlide>
+          <div class="slide">
+            <img [src]="img.path" alt="">
+          </div>
+        </ng-template>
+      </ng-container>
+    </ng-container>
+  </owl-carousel-o>
+</div> -->
+<div class="images-wrapper">
+  <div class="inner-wrapper" >
+    <img *ngFor="let image of images" [src]="image?.path">
+  </div>
+
+</div>

@@ -1,0 +1,407 @@
+<div class="page_top_area col s12 " style="position: relative">
+  <div class="submit-message new_ky_loader" *ngIf="showLoader">
+    <div class="loader-img-cont">
+      <!-- <app-preloader></app-preloader> -->
+    </div>
+  </div>
+  <div class="inner_top_area_Sec acc_statement_box no-pad-bot container">
+    <div class="section_bg_box" id="v-pills-tabContent">
+      <div class="tab-pane show active acc-stat-box" id="v-pills-stack" role="tabpanel"
+        aria-labelledby="v-pills-stack-tab"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container withdraw ">
+  <h5 class="text-center mb-2 sm-fs-17 "> {{ selectedTab === 'add' ? "Add Payment Methods" : "Withdraw Request " |
+    translate }}
+  </h5>
+  <div class="note_wrapper">
+    <ng-container *ngIf="selectedTab !== 'add'">
+      <ul class="withdraw-text-list" [innerHTML]="withDrawText | safeHTML"></ul>
+    </ng-container>
+    <ng-container *ngIf="selectedTab === 'add'">
+      <ul class="withdraw-text-list" [innerHTML]="withdrawAdd | safeHTML"></ul>
+    </ng-container>
+  </div>
+  <div class="depositTabsWrapper" style="padding-top: 20px" *ngIf="showPinOptions && showPin == 1">
+    <div (click)="openChangePinModal()" class="resetpinbox pointer">
+      <span>CLICK HERE TO RESET WITHDRAW PIN</span>
+    </div>
+  </div>
+  <div class="depositTabsWrapper">
+    <div class="d-flex box ">
+      <a class="option position-relative sm-fs-14" (click)="changeTab('add')"
+        [ngClass]="selectedTab === 'existing' ? '' : 'activeTab'">
+        <div>
+          {{ "Add Account" | translate }}
+        </div>
+      </a>
+      <a class="option position-relative sm-fs-14" (click)="changeTab('existing')"
+        [ngClass]="selectedTab === 'add' ? '' : 'activeTab'">
+        <div>
+          {{ "Existing Account" | translate }}
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <ng-container *ngIf="selectedTab === 'add'">
+    <form [formGroup]=" bankAccountForm" (ngSubmit)="submit()">
+      <div class="row" style="justify-content: space-around">
+        <div class="col-md-12  mb-2">
+          <div class="form-group ">
+            <label for="PaymentOption">
+              {{ "PaymentOptions" | translate }}
+            </label>
+            <select id="PaymentOption" formControlName="type" class="form-control">
+              <option *ngFor="let type of paymentOptions; let i = index" [ngValue]="type.value">
+                {{ type.value | translate }}
+              </option>
+            </select>
+          </div>
+          <div *ngIf="type?.invalid && (type?.dirty || type?.touched)" class="err-msg">
+            <div *ngIf="type?.errors?.required">
+              {{ "paymentOptionrequired" | translate }}
+            </div>
+            <div *ngIf="type?.errors?.error">{{ type?.errors?.error }}</div>
+            <div *ngIf="type?.errors?.invalid">{{ type?.errors?.invalid }}</div>
+          </div>
+        </div>
+        <div class="col-md-12  mb-2">
+          <div class="form-group">
+            <label for="holdername">
+              {{ "Holder Name" | translate }}
+            </label>
+            <input id="holdername" class="form-control ssssss" type="text" formControlName="accountHolderName"
+              appAlphabeticOnly [appNumericMaxlength]="20" placeholder="{{ 'Holder Name' | translate }}" />
+          </div>
+          <div *ngIf="
+              accountHolderName?.invalid &&
+              (accountHolderName?.dirty || accountHolderName?.touched)
+            " class="err-msg">
+            <div *ngIf="accountHolderName?.errors?.required">
+              {{ "accholdernamereq" | translate }}
+            </div>
+            <div *ngIf="accountHolderName?.errors?.error">
+              {{ accountHolderName?.errors?.error }}
+            </div>
+            <div *ngIf="accountHolderName?.errors?.invalid">
+              {{ accountHolderName?.errors?.invalid }}
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12  mb-2">
+          <div class="row m-0">
+            <div class="col-md-9 col-sm-12 pl-0">
+              <div class="form-group">
+                <label for="bankname">
+                  {{ "bankname" | translate }}
+                </label>
+                <input id="bankname" type="text" formControlName="bankName" class="form-control"
+                  placeholder="{{ 'bankname' | translate }}" [maxlength]="20" />
+              </div>
+              <div class="form-control" *ngIf="
+                  bankName?.invalid && (bankName?.dirty || bankName?.touched)
+                " class="err-msg">
+                <div *ngIf="bankName?.errors?.required">
+                  {{ "banknamerequired" | translate }}
+                </div>
+                <div *ngIf="bankName?.errors?.error">
+                  {{ bankName?.errors?.error }}
+                </div>
+                <div *ngIf="bankName?.errors?.invalid">
+                  {{ bankName?.errors?.invalid }}
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-12 pr">
+              <div class="form-group">
+                <label for="branchName">
+                  {{ "Branch" | translate }}
+                </label>
+                <input id="branchName" class="form-control" placeholder="{{ 'branchname' | translate }}" type="text"
+                  [maxlength]="20" formControlName="branchName" />
+              </div>
+              <div *ngIf="
+                  branchName?.invalid &&
+                  (branchName?.dirty || branchName?.touched)
+                " class="err-msg">
+                <div *ngIf="branchName?.errors?.required">{{'branchnamerequired'|translate}}</div>
+                <div *ngIf="branchName?.errors?.error">
+                  {{ branchName?.errors?.error }}
+                </div>
+                <div *ngIf="branchName?.errors?.invalid">
+                  {{ branchName?.errors?.invalid }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12  mb-2">
+          <div class="form-group">
+            <label for="accountNo">
+              {{ "accountNo" | translate }}
+            </label>
+            <input id="accountNo" (input)="onInputChange($event)" type="text"
+              placeholder="{{ 'accountNo' | translate }}" class="form-control" [appNumericMaxlength]="20"
+              formControlName="accountNumber" />
+          </div>
+          <div *ngIf="
+              accountNumber?.invalid &&
+              (accountNumber?.dirty || accountNumber?.touched)
+            " class="err-msg">
+            <div *ngIf="accountNumber?.errors?.required">
+              {{ "accnorequired" | translate }}
+            </div>
+            <div *ngIf="accountNumber?.errors?.error">
+              {{ accountNumber?.errors?.error }}
+            </div>
+            <div *ngIf="
+                accountNumber?.errors?.minLength &&
+                !accountNumber?.errors?.required
+              ">
+              {{
+              "Please enter minimum 5
+              digit." | translate
+              }}
+            </div>
+            <div *ngIf="accountNumber?.errors?.invalid">
+              {{ accountNumber?.errors?.invalid }}
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12  mb-2">
+          <div class="form-group">
+            <label for="ibnifsccode">
+              {{ "ibnifsccode" | translate }}
+            </label>
+            <input id="ibnifsccode" class="form-control" placeholder="{{ 'ibnifsccode' | translate }}" type="text"
+              formControlName="ifscCode" [appNumericMaxlength]="20" />
+          </div>
+          <div *ngIf="ifscCode?.invalid && (ifscCode?.dirty || ifscCode?.touched)" class="err-msg">
+            <div *ngIf="ifscCode?.errors?.required">
+              {{ "ifscrequired" | translate }}
+            </div>
+            <div *ngIf="ifscCode?.errors?.minLength && !ifscCode?.errors?.required">
+              {{ "Please enter minimum 5 digit." | translate }}
+            </div>
+            <div *ngIf="ifscCode?.errors?.error">
+              {{ ifscCode?.errors?.error }}
+            </div>
+            <div *ngIf="ifscCode?.errors?.invalid">
+              {{ ifscCode?.errors?.invalid }}
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12  mb-2" *ngIf="showPinOptions">
+          <div class="form-group">
+            <span class="d-flex-label d-flex justify-content-between">
+              <label for="WithdrawPIN">
+                {{ "Withdraw PIN" | translate }}
+              </label>
+              <label *ngIf="showPin == 0" (click)="openCreatePinModal()" class="pointer" style="color: var(--main-clr)">
+                {{ "Create Pin" | translate }}
+              </label>
+            </span>
+            <input id="WithdrawPIN" class="form-control" placeholder="{{ 'Enter your pin here' | translate }}"
+              type="text" formControlName="withdrawPin" [maxlength]="20" />
+          </div>
+          <div *ngIf="
+              withdrawPin?.invalid &&
+              (withdrawPin?.dirty || withdrawPin?.touched)
+            " class="err-msg">
+            <div *ngIf="withdrawPin?.errors?.required">
+              {{ "WithdrawPin" | translate }}
+            </div>
+            <div *ngIf="
+                withdrawPin?.errors?.minLength && !withdrawPin?.errors?.required
+              ">
+              {{ "Please enter minimum 5 digit." | translate }}
+            </div>
+            <div *ngIf="withdrawPin?.errors?.error">
+              {{ withdrawPin?.errors?.error }}
+            </div>
+            <div *ngIf="withdrawPin?.errors?.invalid">
+              {{ withdrawPin?.errors?.invalid }}
+            </div>
+          </div>
+        </div>
+
+        <div class="add-account-btn mt-1">
+          <button type="submit" [disabled]="bankAccountForm.invalid" class="btn submit-btn">
+            {{ "submit" | translate }}
+          </button>
+        </div>
+      </div>
+    </form>
+    <table class="table table-responsive">
+      <thead>
+        <tr>
+          <th class="text-center">{{ "accountnumber" | translate }}</th>
+          <th class="text-center">{{ "accountholdername" | translate }}</th>
+          <th class="text-center">{{ "ibnifsccode" | translate }}</th>
+          <th class="text-center">{{ "bankname" | translate }}</th>
+          <th class="text-center">{{ "branchname" | translate }}</th>
+          <th class="text-center">{{ "PaymentOption" | translate }}</th>
+          <th class="text-center">{{ "Delete" | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let bank of existingBankAccounts">
+          <td [attr.data-title]="'accountnumber' | translate" class="text-center">
+            {{ bank?.accountNo }}
+          </td>
+          <td [attr.data-title]="'accountholdername' | translate" class="text-center">
+            {{ bank?.accountHolderName }}
+          </td>
+          <td [attr.data-title]="'ibnifsccode' | translate" class="text-center">
+            {{ bank?.iFSCCode }}
+          </td>
+          <td [attr.data-title]="'bankname' | translate" class="text-center">
+            {{ bank?.bankName }}
+          </td>
+          <td [attr.data-title]="'branchname' | translate" class="text-center">
+            {{ bank?.branchName }}
+          </td>
+          <td [attr.data-title]="'PaymentOption' | translate" class="text-center">
+            {{ bank?.type }}
+          </td>
+          <td [attr.data-title]="'Delete' | translate" class="text-center">
+            <div class="text-center d-flex justify-content-end">
+              <button type="submit" class="btn btn-danger fs-14 sm-fs-14" (click)="onDeleteAccount(bank?.accountNo)">
+                {{ "Delete" | translate }}
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </ng-container>
+  <ng-container *ngIf="selectedTab === 'existing'">
+    <div class="row ">
+      <div class=" custom-scrollbar">
+        <div class=" scroll  p-2">
+          <div class="card m-3 sm-fs-13" [ngClass]="selectedAccount.accountNo === bank.accountNo ? 'zoom' : ''"
+            *ngFor="let bank of existingBankAccounts; let index = index" (click)="selectAccount(bank)">
+            <div class="selected">
+              <img [src]="
+                selectedAccount.accountNo === bank.accountNo
+                  ? 'https://iriscdn.b-cdn.net/kheloyar/web/yellow-tick.svg'
+                  : 'https://iriscdn.b-cdn.net/kheloyar/web/tick.svg'
+              " />
+            </div>
+            <p>{{ bank.accountHolderName }}</p>
+            <p>{{ bank.accountNo }}</p>
+            <p>{{ bank.bankName }}</p>
+          </div>
+        </div>
+      </div>
+
+      <ng-container *ngIf="existingBankAccounts.length > 0">
+        <form [formGroup]="withDrawForm" (ngSubmit)="onSubmitWithDraw()">
+          <div class="row withDrawSection justify-content-center mt-4">
+            <!-- <h1>{{'currentbalance'|translate}}: {{paymentDetails?.balance}}</h1> -->
+            <div class="col-md-12  mb-2">
+              <div class="form-group">
+                <label for="account">
+                  {{ "Account Number" | translate }}
+                </label>
+                <input id="account" readonly class="form-control" formControlName="account"
+                  placeholder="{{ 'account' | translate }}" type="number" [appNumericMaxlength]="12" />
+              </div>
+              <div *ngIf="account?.invalid && (account?.dirty || account?.touched)" class="err-msg">
+                <div *ngIf="account?.errors?.required">
+                  {{ "accountrequired" | translate }}
+                </div>
+                <div *ngIf="account?.errors?.error">
+                  {{ account?.errors?.error }}
+                </div>
+                <div *ngIf="account?.errors?.invalid">
+                  {{ account?.errors?.invalid }}
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12  mb-2">
+              <div class="form-group">
+                <label for="holdername">
+                  {{ "Account Name" | translate }}
+                </label>
+                <input id="holdername" formControlName="accountHolder" readonly class="form-control" type="text"
+                  placeholder="{{ 'Account Namer' | translate }}" />
+              </div>
+            </div>
+            <div class="col-md-12  mb-2">
+              <div class="form-group">
+                <label for="amount">
+                  {{ "amount" | translate }}
+                </label>
+                <input id="amount" [min]="minimumWithdrawalLimit" class="form-control" formControlName="amount"
+                  placeholder="{{ 'amount' | translate }}" type="number" [appNumericMaxlength]="12" />
+              </div>
+              <div *ngIf="amount?.invalid && (amount?.dirty || amount?.touched)" class="err-msg">
+                <div *ngIf="amount?.errors?.required">
+                  {{ "amountrequired" | translate }}
+                </div>
+                <div *ngIf="amount?.errors?.error">
+                  {{ amount?.errors?.error }}
+                </div>
+                <div *ngIf="amount?.errors?.invalid">
+                  {{ amount?.errors?.invalid }}
+                </div>
+                <div *ngIf="amount?.errors?.min">
+                  Minimum withdraw limit is {{ minimumWithdrawalLimit }}
+                </div>
+              </div>
+            </div>
+
+            <div class="amount-buttons mb-2 mt-2">
+              <button type="button" class="btn accounts-btn ml-0 margin-10"
+                [ngClass]="i == activeAmount ? 'activeAmout' : ''" *ngFor="let i of withDrawAmounts; let index = index"
+                (click)="
+                  withDrawForm.controls.amount.setValue(i); activeAmount = i
+                ">
+                {{ i }}
+              </button>
+            </div>
+            <div class="add-account-btn mt-2">
+              <button type="submit" [disabled]="withDrawForm.invalid" class="btn submit-btn">
+                {{ "withdraw" | translate }}
+              </button>
+            </div>
+          </div>
+        </form>
+      </ng-container>
+      <table class="table table-responsive">
+        <thead>
+          <tr>
+            <th class="text-center">{{ "Transaction No" | translate }}</th>
+            <th class="text-center">{{ "Amount" | translate }}</th>
+            <th class="text-center">{{ "Status" | translate }}</th>
+            <th class="text-center">{{ "Date & Time" | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let withDraw of withDraws">
+            <td [attr.data-title]="'Transaction No' | translate" class="text-center">
+              {{ withDraw?.requestId }}
+            </td>
+            <td [attr.data-title]="'Amount' | translate" class="text-center">
+              {{ withDraw?.amount }}
+            </td>
+            <td [attr.data-title]="'Status' | translate" class="text-center"
+              [ngClass]="withDraw?.status == 'Approved' ? 'credit' : 'debit'">
+              {{ withDraw?.status }}
+            </td>
+            <td [attr.data-title]="'Date & Time' | translate" class="text-center">
+              {{ withDraw?.requestTime | date : "short" }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </ng-container>
+</div>

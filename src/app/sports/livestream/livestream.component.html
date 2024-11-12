@@ -1,0 +1,61 @@
+<div class="section inner_top_area_Sec live_stream_section no-pad-bot setCustomMinHeight">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="live_stream_toggle_header">
+          <div class="twenty_four_title">&nbsp;<i class="bi bi-tv tv-icon"></i> {{'livestream'|translate}}</div>
+          <div class="cancel_button_styling" *ngIf="toggleLiveShow" (click)="toggleLiveTV()"><i class="bi bi-x-lg"></i>
+          </div>
+        </div>
+        <div *ngIf="safeUrl" class="live_stream_video">
+          <iframe [src]="safeUrl | safe" id="playerframe">
+          </iframe>
+        </div>
+        <div *ngIf="!safeUrl && !toggleLiveShow" class="live_stream">
+          <h6>{{"selectaStream"|translate}}</h6>
+        </div>
+        <div class="live_stream_teams" *ngIf="teamName">
+          {{teamName?.split("v")[0]}} <span>vs</span> {{teamName?.split("vs")[1]}}
+        </div>
+        <div class="toggle_dropdown_box">
+          <span class="inplay-text">
+            <h5><i class="bi bi-stopwatch"></i> {{'inplaymatches'|translate}}</h5>
+          </span>
+          <ul class="collapsible" data-collapsible="expandable">
+            <!-- <pre>{{data | json}}</pre> -->
+            <li *ngFor="let item of data;let i=index" class="coll-items">
+              <div class="collapsible-header">
+                <span class="sports-icon" [ngClass]="'sports' + item.id"></span>
+                <span>
+                  {{item.name |translate}}
+                </span>
+                <img class="material-icons right" src="/assets/css/material-icons/arrow_drop_down.svg">
+              </div>
+              <div class="collapsible-body">
+                <div class="live_toggle_content" *ngFor="let childdata of item?.childs">
+                  <div class="toggle_sml_title" [routerLink]="'/sports/competitionsmarkets/'+childdata.id">
+                    {{childdata.name}}</div>
+                  <div class="live_tgl_inn_box" *ngFor="let subchild of childdata?.childs">
+                    <span>
+                      {{subchild?.name?.split("v")[0]}} <span class="vs-team"
+                        style="color: #97a0b7 !important;">vs</span> {{subchild?.name?.split("v")[1]}}
+                    </span>
+                    <div class="stream-links">
+
+                      <button class="stream" (click)="getStream(subchild.channelId, ip)"
+                        [id]="subchild.channel">{{'watchonline'|translate}}</button>
+                      <button class="dets"
+                        [routerLink]="'/sports/eventmarkets/' + subchild.id">{{'matchdetails'|translate}}</button>
+                    </div>
+                    <span class="badge red white-text" data-badge-caption="LIVE" *ngIf=""></span>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div style="clear: both"></div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,286 @@
+.parent-wrapper {
+  min-height: calc(100vh - 90px);
+  background: var(--innerPagesBg);
+  margin-bottom: 45px;
+  padding: 3px;
+}
+.container-wrapper-casino {
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.favourite {
+  cursor: pointer;
+}
+.total-games {
+  padding: 5px 10px;
+
+  span {
+    color: var(--casino-name-list-clr);
+  }
+}
+
+.main-container {
+  padding: 10px;
+}
+.main-container-casino {
+  //width: 100vw;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-casino {
+  border-radius: 5px;
+  max-height: -webkit-fit-content;
+  max-height: -moz-fit-content;
+  max-height: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2px;
+  height: 100%;
+  width: 48%;
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.card-casino p {
+  margin: 0;
+}
+
+.footer-cont p {
+  font-size: 16px;
+  text-transform: uppercase;
+  margin: 0;
+}
+.footer-cont .card-casino {
+  min-height: unset;
+  min-width: unset;
+  width: 25% !important;
+  height: 100%;
+}
+
+.card-casino:hover {
+  cursor: pointer;
+}
+.footer-cont .card-casino .card-header-casino {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.footer-cont .card-header-casino img {
+  width: 100%;
+  max-width: 135px;
+  // height: 70px;
+  border-radius: 6px;
+}
+.card-header-casino p {
+  margin: 5px 0;
+  text-align: center;
+}
+.game-desc {
+  height: 31px;
+  padding: 5px 5px 2px 5px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+
+  p {
+    text-align: left;
+    color: var(--casino-name-list-clr);
+    margin: 0px;
+    text-transform: uppercase;
+    font-size: 12.5px;
+    font-weight: 600;
+  }
+
+  .more {
+    // margin-top: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+.main-container-casino .card-header-casino {
+  width: 100%;
+}
+
+.main-container-casino .card-header-casino img {
+  width: 100%;
+  display: block;
+  margin: auto;
+
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.game-info {
+  padding: 10px;
+  background: var(--scasino-cardDesBg);
+  border-radius: 0px 0px 15px 15px;
+
+  .category {
+    display: block;
+    font-size: 12px;
+    color: var(--casino-category-provider-clr);
+    margin-bottom: 5px;
+  }
+
+  .title {
+    font-size: 16px;
+    font-weight: 500;
+    margin: 5px 0;
+    color: var(--casino-game-name-clr);
+  }
+
+  .provider {
+    font-size: 12px;
+    color: var(--casino-category-provider-clr);
+  }
+}
+
+.game-text {
+  font-weight: 500;
+}
+
+@media only screen and (max-width: 1279px) {
+  .in-flex {
+    display: block !important;
+  }
+}
+.c-wrap {
+  height: 100%;
+  flex: 1;
+}
+
+.login-button-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+  background: var(--game-card-overlayBg);
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  z-index: 1;
+  border-radius: 15px;
+
+  .login-button {
+    padding: 0.375rem 0.75rem;
+    background: var(--casino-login-button-bg);
+    cursor: pointer;
+    color: var(--casino-login-button-clr);
+    font-size: 16px;
+    text-transform: uppercase;
+    font-weight: 600;
+    border: 2px solid var(--casino-login-button-border-clr);
+    border-radius: 5px;
+  }
+
+  .login-button:hover {
+    background: var(--casino-login-button-hover-bg);
+    border: 2px solid var(--casino-login-button-hover-border-clr);
+    color: var(--casino-login-button-hover-clr);
+  }
+}
+
+.login-button-container:hover {
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .card-header-casino {
+    img {
+      border-radius: 10px !important;
+    }
+  }
+
+  .login-button-container {
+    display: none !important;
+  }
+
+  .main-container {
+    padding: 5px 0px 60px 0px;
+  }
+  .total-games {
+    span {
+      font-size: 10px;
+    }
+  }
+}
+
+@media screen and (min-width: 589px) {
+  .main-container-casino .card-casino {
+    width: 30%;
+  }
+  .card-casino-footer-cont {
+    .card-header-casino {
+      img {
+        height: unset;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .main-container-casino .card-casino {
+    width: 16%;
+  }
+}
+
+.footer-cont .card-header-casino {
+  background: var(--casino-footer-card-bg);
+  border-radius: 6px;
+  width: 100%;
+  max-width: 135px;
+  height: 91px;
+  display: flex;
+}
+
+.image-containerz {
+  justify-content: space-between;
+}
+
+.imagez {
+  position: relative;
+}
+
+.imagez img {
+  width: 100%;
+  height: auto;
+  max-height: 205px;
+  object-fit: fill;
+}
+
+.provider_name {
+  color:var(--casino-category-provider-clr);
+  text-align: center;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.games_style_add {
+  bottom: -19px;
+}
+.see-all-view {
+  color: var(--casino-see-more-clr);
+  .bi-chevron-down {
+    color: var(--casino-see-more-icon-clr);
+  }
+}

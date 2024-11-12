@@ -1,0 +1,91 @@
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BackendService } from 'src/app/services/backend.service';
+import { StorageService } from 'src/app/services/storage.service';
+@Component({
+  selector: 'app-raceschedule',
+  templateUrl: './raceSchedule.component.html',
+  styleUrls: ['./raceSchedule.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Default
+})
+export class RaceScheduleComponent implements OnInit {
+  sportsId: string = "";
+  active = 0;
+  activeTab: number = 0;
+  type: string = "";
+  racingSchedule: any;
+  selectedIndex = 0;
+  sportsType: string = "";
+  constructor(private storageService: StorageService, private route: ActivatedRoute, private router: Router, private backendService: BackendService) {
+
+  }
+  activeIndex: any;
+  selectedData: any = {};
+  isOpen(index: number, data: any) {
+    this.selectedData = data;
+    this.racingSchedule[this.selectedIndex].childs.forEach((element, ind) => {
+      if (index == ind) {
+        element.toggle = !element.toggle;
+        this.activeIndex = element.toggle ? index : null;
+      } else {
+        element.toggle = false;
+      }
+    });
+  }
+
+  ngOnInit(): void {
+    this.route.params.subscribe(p => {
+      this.type = p.id1;
+      if (this.router.url.includes('horse-racing')) {
+        this.sportsType = "Horse Racing";
+        this.sportsId = '7';
+      } else {
+        this.sportsType = "Greyhound Racing";
+        this.sportsId = '4339';
+      }
+      if (this.type.toUpperCase() == "TODAY") {
+        this.sportsType += " Today's Card";
+      }
+
+      this.checkPathandLoaddata();
+
+    });
+  }
+  changeIndex(d: string) {
+    this.selectedIndex = this.racingSchedule.findIndex((x: any) => x.date == d);
+  }
+  checkPathandLoaddata() {
+    let arr = ["7", "4339"]
+    let types = ["ALL", "TODAY"];
+    if (arr.some(x => x === this.sportsId)) {
+      if (types.some(x => x === this.type?.toUpperCase())) {
+        this.LoadRaceData();
+      } else {
+        this.router.navigate(['/sports/notfound']);
+      }
+    } else {
+      this.router.navigate(['/sports/notfound']);
+    }
+  }
+
+  LoadRaceData() {
+    this.backendService.raceschedule(this.type.toUpperCase(), parseInt(this.sportsId), "RaceScheduleComponent").then((resp) => {
+      if (resp && resp.length > 0) {
+        this.racingSchedule = resp;
+        this.isOpen(0, this.racingSchedule[this.selectedIndex]?.childs[0])
+      }
+      else {
+        this.racingSchedule = undefined
+      }
+    }).catch(err => {
+      if (err.status == 401) {
+        this.storageService.secureStorage.removeItem('token');
+        window.location.href = window.location.origin
+      } else {
+        console.log(err)
+      }
+    });;
+  }
+
+}
+

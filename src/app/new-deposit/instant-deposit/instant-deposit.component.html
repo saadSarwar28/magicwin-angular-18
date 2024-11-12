@@ -1,0 +1,31 @@
+<div class="instant-deposit">
+  <div class="mt-4">
+    <div class="d-flex flex-column instant-container justify-content-center position-relative">
+      <div *ngIf="showLoader"
+        class="overlay position-absolute z-2 d-flex justify-content-center align-items-center sm-fs-14">
+        <img [src]="siteLoader" height="100px" alt="Loading..." />
+      </div>
+      <form [formGroup]="paymentForm" (ngSubmit)="makepaymentNew()">
+        <div class="form-group">
+          <label class="info-text mb-1 sm-fs-14">{{"selectamount"|translate}}</label>
+          <input formControlName="payment" class="form-control" type="number" name="deposit_amount"
+            [placeholder]="'amount' | translate" autocomplete="off">
+          <div class="err-msg mt-1" *ngIf="payment?.invalid && (payment?.dirty || payment?.touched)">
+            {{"fieldrequired"|translate}}
+          </div>
+        </div>
+        <div class="amount-buttons mt-3">
+          <button type="button" class="btn btn-amount sm-fs-14"
+            [ngClass]="paymentForm.controls.payment.value == item ? 'activeAmout' : ''"
+            *ngFor="let item of depositDrawAmounts" (click)="paymentForm.controls.payment.setValue(item)">
+            <i *ngIf="instantSign">₹&nbsp;</i> {{item}}
+          </button>
+        </div>
+        <div class="text-center mt-3">
+          <button type="submit" class="btn btn-theme w-50">{{'submit' | translate}}</button>
+        </div>
+      </form>
+      <div class="info-text mt-3 sm-fs-14">{{"needhelp"|translate}}</div>
+    </div>
+  </div>
+</div>

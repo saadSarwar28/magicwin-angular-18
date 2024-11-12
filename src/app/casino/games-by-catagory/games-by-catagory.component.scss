@@ -1,0 +1,222 @@
+.parent-wrapper {
+  min-height: calc(100vh - 90px);
+  background: var(--innerPagesBg);
+  color: var(--whiteTxt);
+  margin-bottom: 45px;
+  padding: 3px;
+}
+.container-wrapper-casino {
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  /* background-position: center center; */
+  background-size: cover;
+  background: var(--innerPagesBg);
+  // margin-top: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.main-container-casino {
+  width: 100vw;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+  align-items: center;
+  justify-content: center;
+  /* min-height: calc(100vh - 165px); */
+}
+
+.card-casino {
+  border-radius: 5px;
+  max-height: -webkit-fit-content;
+  max-height: -moz-fit-content;
+  max-height: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2px;
+  height: 100%;
+  width: 48%;
+  margin-bottom: 15px;
+}
+
+.favourite {
+  cursor: pointer;
+}
+.card-casino p {
+  margin: 0;
+}
+.footer-cont {
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 5px;
+  width: 100%;
+}
+.footer-cont p {
+  font-size: 16px;
+  text-transform: uppercase;
+  margin: 0;
+}
+.footer-cont .card-casino {
+  min-height: unset;
+  min-width: unset;
+  height: 100%;
+}
+.footer-cont .card-casino .card-header-casino {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.footer-cont .card-header-casino img {
+  width: 100%;
+  border-radius: 6px;
+}
+.card-header-casino p {
+  margin: 5px 0;
+  text-align: center;
+}
+.game-desc {
+  height: 31px;
+  padding: 5px 5px 2px 5px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  p {
+    text-align: left;
+    color: var(--casino-category-text-white);
+    margin: 0px;
+    text-transform: uppercase;
+    font-size: 12.5px;
+    font-weight: 600;
+  }
+
+  .details {
+    font-size: 12px;
+    color: var(--casino-category-text-secondary);
+
+    font-weight: 400;
+    span {
+      font-size: 11px;
+    }
+    span.demo {
+      color: var(--casino-category-demo-color);
+      border: 1px solid var(--casino-category-demo-border);
+      padding: 0px 3px;
+      border-radius: 17px;
+      font-size: 10px;
+    }
+  }
+  .more {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+.main-container-casino .card-header-casino {
+  width: 100%;
+}
+
+.main-container-casino .card-header-casino img {
+  width: 100%;
+  display: block;
+  margin: auto;
+  height: 33vw;
+  border-radius: 5%;
+}
+
+.button-casino {
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-width: 140px;
+}
+
+.game-text {
+  font-weight: 500;
+}
+
+.footer-cont .button-casino {
+  min-width: unset;
+}
+
+@media only screen and (max-width: 1279px) {
+  .in-flex {
+    display: block !important;
+  }
+}
+.c-wrap {
+  height: 100%;
+  flex: 1;
+}
+
+@media screen and (min-width: 589px) {
+  .main-container-casino {
+    .card-casino {
+      width: 30% !important;
+    }
+    .card-header-casino {
+      img {
+        height: 25vw;
+      }
+    }
+  }
+}
+.footer-cont .card-header-casino {
+  background: var(--casino-category-footer-color);
+  border-radius: 6px;
+  width: 100%;
+  max-width: 135px;
+  height: 91px;
+  display: flex;
+}
+
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.loader img {
+  width: 100px;
+  height: 100px;
+}
+.image-containerz {
+  justify-content: space-between;
+  position: relative;
+}
+
+.imagez {
+  position: relative;
+}
+
+.imagez img {
+  width: 100%;
+  height: auto;
+}
+
+.provider_name {
+  color: var(--whiteTxt);
+  text-align: center;
+
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.games_style_add {
+  bottom: -19px;
+}
+.tab-content {
+  background: unset !important;
+}

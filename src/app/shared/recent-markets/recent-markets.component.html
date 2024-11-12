@@ -1,0 +1,19 @@
+<div class="header-top">
+  <!-- <img (click)="closeModal()" src="https://iriscdn.b-cdn.net/kheloyar/menuItemsNew/back.svg" /> -->
+  <div class="back-button d-flex justify-content-center align-content-center" (click)="closeModal()">
+    <img class="back-button-image" src="https://iriscdn.b-cdn.net/kheloyar/menuItems/Back.svg" alt="Back"/>
+  </div>
+  <!-- <img src="https://iriscdn.b-cdn.net/kheloyar/menuItemsNew/logodp.svg" /> -->
+</div>
+<div>
+  <div class="modal-overlays bgimg">
+    <div class="conatiner-mod">
+      <div *ngFor="let item of data">
+        <span class="recent-market-name" (click)="routeToMarket(item.route)">{{item.name}}</span>
+      </div>
+      <div *ngIf="data.length == 0">
+        <span class="no-markets">No markets yet</span>
+      </div>
+    </div>
+  </div>
+</div>

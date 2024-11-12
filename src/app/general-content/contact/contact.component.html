@@ -1,0 +1,97 @@
+<div class="content-wrapper " style="max-width: 1000px;" *ngIf="currentRoute == 'about-us'">
+  <header class="text-center mb-2">
+    <h3>About Us</h3>
+  </header>
+  <section id="intro">
+    <h5>{{sitename}}: Premier Indian Online Betting Platform</h5>
+    <p>{{sitename}} is a premier Indian online betting platform with a distinguished history of providing exceptional
+      experiences for sports enthusiasts. We offer a comprehensive range of betting options, coupled with attractive
+      bonuses, to elevate your online sports betting & <a routerLink="/casinos/INDGames">casino</a> journey.</p>
+    <p>With a specific focus on cricket, {{sitename}} delivers an immersive platform designed to enhance the thrill of
+      the game. Our users have the opportunity to wager on their preferred teams and matches while potentially reaping
+      substantial rewards based on their sports knowledge and intuition.</p>
+    <p>As a trusted and reliable <a routerLink="/sports">online sportsbook</a>, {{sitename}} is committed to providing a
+      superior platform that
+      allows players to connect with their favorite sport games on a deeper level.</p>
+  </section>
+  <section id="why-play">
+    <h5>WHY PLAY WITH US?</h5>
+    <p>
+      We have taken the time to design a site that is mobile-friendly and appealing to younger players. When you open an
+      account with {{sitename}}, you will enjoy many advantages and can instantly start playing your favorite games from
+      the palm of your hand. If you are considering <a routerLink="/user/signup">signing up</a>, check out the super
+      benefits to being a member here at
+      {{sitename}}.
+
+    </p>
+    <ul>
+      <li><strong>Safe and Secure Access:</strong> You will enjoy secure connections and player protection and will also
+        be playing games that are tested by a third party to ensure fairness.</li>
+      <li><strong>Multiple Payment Options:</strong> Fund and manage your account with the most popular methods
+        including Net Banking, Google Pay, and PayTM.</li>
+      <li><strong>Great Welcome Bonus:</strong> Get rewarded with a handsome match bonus when you make your first
+        deposit with us at {{sitename}}</li>
+      <li><strong>Game Variety:</strong> We offer titles from multiple providers and always add new releases to keep
+        things exciting.</li>
+      <li><strong>Professional Support:</strong> You can trust our customer support team to be available at all times
+        and offer fast and friendly assistance. Have a question? The support team has the answer!</li>
+    </ul>
+  </section>
+  <section id="mobile-experience">
+    <h5>Top Notch Mobile Experience</h5>
+    <p>At {{sitename}}, you can take your gambling experience with you. We have designed a solid mobile platform that is
+      compatible with all devices. Whether you play on an Android, iOS, or other smartphone or tablet, you will always
+      have instant access to top games, great promos, and {{sitename}} casino services.</p>
+    <p>Our focus is on providing an entertaining and rewarding mobile experience in India. At {{sitename}} Casino, you
+      will have 24-hour access to hundreds of slots, table games, video poker, live games, and more. Our mobile casino
+      delivers perfect audio, powerful graphics, and smooth gameplay with every title supported.</p>
+  </section>
+  <section id="safety">
+    <h5>Your Safety Comes First</h5>
+    <p>Not only do we provide you with exciting games and super payout opportunities, but we make sure this is all done
+      safely. As a member of {{sitename}}.net, you can be sure that all of your information is stored securely and is
+      never used for any other reason than account management and promotional offers.</p>
+    <p>We are a fully licensed and regulated casino with a valid license from the Government of Curacao. We meet all
+      industry standards and have strict policies in place in regard to safe and responsible gambling. We are operated
+      by Tagus Media Americas, registered in Curacao and {{sitename}} always adheres to local gambling laws to ensure
+      you
+      are always safe.</p>
+    <p>As a mobile gambler, you will be able to securely access games and services using any device and will also be
+      able to conduct transactions. All payments are processed through SSL encryption software to offer an enhanced
+      layer of security for all real money players.</p>
+  </section>
+  <section id="safety">
+    <p>&copy; 2024 {{sitename}}. All rights reserved.</p>
+  </section>
+</div>
+<div class="content-wrapper mb-5">
+  <div class="whatsapp_banner" *ngIf="showContactUsBanner">
+    <img (click)="forWhatsapp()" src="{{cdnUrl}}kheloyar/WhiteIcons/WhatsAppbanner.png" />
+  </div>
+  <div class=" text-center"><span class="text-center   fs-16 mt-2 ">Contact Us</span></div>
+  <div class="d-flex flex-column mt-3">
+    <div class="d-flex sm-flex-column  justify-content-center justify-content-between gap-2 sm-fs-13">
+      <a [href]="'mailto:' + email" class="bg-tab w-100 p-3 rounded d-flex gap-2  ">
+        <img class="filter-img" src="{{ cdnUrl }}kheloyar/WhiteIcons/EmailContact.svg" />
+        <span class="email contact-us-btn">{{ email }}</span>
+      </a>
+      <div class="bg-tab rounded w-100 p-3 d-flex gap-2   sm-fs-13 pointer" (click)="forWhatsapp()">
+        <img class="filter-img" src="{{ cdnUrl }}kheloyar/WhiteIcons/WhatsappContact.svg" />
+        <span class="contact-us-btn">Customer Support</span>
+      </div>
+    </div>
+    <div class="address_contact  mt-3 mb-3">
+      <img class="filter-img" src="{{ cdnUrl }}kheloyar/WhiteIcons/LocationContact.svg" />
+      <span class="sm-fs-13 ">
+        {{contactDetails}}
+      </span>
+    </div>
+
+  </div>
+  <div>
+    <div class="d-flex justify-content-center ">
+      <a class="d-flex mx-1" *ngFor="let item of socialData.data" [href]="item.link"><img [alt]="item.text"
+          [src]="cdnSportsLanding + 'banners/' + item.id + '.png'" class="social2" /></a>
+    </div>
+  </div>
+</div>

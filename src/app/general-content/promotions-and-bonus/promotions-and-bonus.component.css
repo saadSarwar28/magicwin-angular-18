@@ -1,0 +1,24 @@
+.images-wrapper {
+  /* padding: 52px 1px 0px 1px; */
+  display: flex;
+}
+
+.images-wrapper img {
+  width: 200px;
+  height: auto;
+}
+
+.images-wrapper .inner-wrapper {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin: 5px;
+
+}
+
+.images-wrapper .inner-wrapper img {
+  width: 48%;
+  height: auto;
+  margin: 2px 2px;
+  border: 2px solid;
+}

@@ -1,0 +1,17 @@
+<div class="i-container marginTopToShowProductsTab" id="iframe-content">
+  <iframe id="iframe-casino"
+    [ngClass]="winOrMob === 'Win32' ? 'androidHeight' : PlatformOS == 'Android' ? 'mobAndroid' : 'iOSheight'"
+    [src]=" iframeurl ? (iframeurl | safe) : null" width="100%" (load)="iframeurl ? loadIframe() : null"></iframe>
+  <div *ngIf="showMsg">
+    <span class="error-message-casino" *ngIf="isGameError">Error: {{showMsg}}</span>
+    <span class="error-message-casino" *ngIf="!isGameError">{{showMsg}}</span>
+    <span class="error-message-support">Please contact support</span>
+  </div>
+  <div class="loader" *ngIf="!iframeLoad">
+    <!-- <img src="{{cdnUrl}}ssexch/mob/assets/images/preloader.svg" alt=""> -->
+    <!-- <app-preloader></app-preloader> -->
+  </div>
+</div>
+
+<div *ngIf="showWhatsapp">
+</div>

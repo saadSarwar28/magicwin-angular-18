@@ -1,0 +1,17 @@
+<div class="container">
+    <div class="col-md-12 deposit-pad-mob">
+        <div class="st_blog_detail withdraw_section">
+            <div class="st_featured_thumb">
+                <div class="depositTabsWrapper">
+                    <div routerLinkActive="activeTab" [routerLink]="['/reports/history/withdraw-history']" class="st_hd1">
+                        <span style="right: 6px;">{{"withdrawalrequests"|translate}}</span>
+                    </div>
+                    <div routerLinkActive="activeTab" [routerLink]="['/reports/history/deposit-history']" class="st_hd1">
+                        <span>{{"depositrequests"|translate}}</span>
+                    </div>
+                </div>
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </div>
+</div>

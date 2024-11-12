@@ -1,0 +1,52 @@
+<div class="reports acc_statement_box no-pad-bot">
+  <div class="fancy-report p-1">
+    <div class="row">
+      <div class="col s12 p-0" style="position: relative;">
+        <app-reports-input (valueChange)='dateInputValues($event)' [filters]="filters"></app-reports-input>
+        <div class="section_bg_box table_result_sec">
+          <div class="no-more-tables">
+            <table class="table-borderless table-hover">
+              <thead>
+                <tr>
+                  <th class="text-center">{{'marketid'|translate}}</th>
+                  <th class="text-left">{{'marketname'|translate}}</th>
+                  <th class="text-center">{{'runnername'|translate}}</th>
+                  <th class="text-center">{{'side'|translate}}</th>
+                  <th class="text-center">{{'price'|translate}}</th>
+                  <th class="text-center">{{'size'|translate}}</th>
+                  <th class="text-center">{{'placeddate'|translate}}</th>
+                  <th class="text-center">{{'ipaddress'|translate}}</th>
+                </tr>
+              </thead>
+              <tbody class="xg-bet">
+                <div class="pre-loader" *ngIf="showLoader">
+                  <app-preloader></app-preloader>
+                </div>
+                <tr *ngFor="let xgBet of betsToShow" [ngClass]="xgBet.side === 'BACK' ? 'back' : 'lay'">
+                  <td class="text-center" [attr.data-title]="'marketid' | translate">{{xgBet?.marketId}}</td>
+                  <td class="text-left" [attr.data-title]="'marketname' | translate">{{xgBet?.marketName}}</td>
+                  <td class="text-center" [attr.data-title]="'runnername' | translate">{{xgBet?.runnerName}}</td>
+                  <td class="text-center" [attr.data-title]="'side' | translate">{{xgBet?.side}}</td>
+                  <td class="text-center" [attr.data-title]="'price' | translate">{{xgBet?.orderPrice }}</td>
+                  <td class="text-center" [attr.data-title]="'size' | translate">{{xgBet?.orderSize}}</td>
+                  <td class="text-center" [attr.data-title]="'placeddate' | translate">{{xgBet?.placedDate |
+                    date:'dd/MM/yyyy, hh:mm:ss a'}}</td>
+                  <td class="text-center" [attr.data-title]="'ipaddress' | translate">
+                    <input type="button" [attr.id]="xgBet?.betId"
+                      (click)="GetIpAddress(xgBet?.marketId,xgBet?.betId,'XG')" value="Get IP Address">
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <app-reports-custom-pagination *ngIf="!showLoader && betsToShow.length > 0" (pageChange)="loadPage($event)"
+              [totalPages]="totalPages" [currentPage]="currentPage"></app-reports-custom-pagination>
+            <div class="text-center" *ngIf="fancyBets.length<1 && !showLoader" style="color: white">
+              <b>{{"no_data_found" | translate}}</b>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

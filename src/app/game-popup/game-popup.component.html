@@ -1,0 +1,25 @@
+<div class="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="close-button" (click)="closeModal()">
+        <img src="https://iriscdn.b-cdn.net/ssexch/mob/assets/images/CancelModal.svg">
+      </div>
+
+      <div class="modal-body">
+        <iframe id="iframe-casino" [src]=" iframeurl ? (iframeurl | safe) : null" width="100%"
+          (load)="iframeurl ? loadIframe() : null"></iframe>
+
+        <div class="loader" *ngIf="!iframeLoad || showMsg">
+          <div *ngIf="showMsg">
+            <span class="error-message-casino" *ngIf="isGameError">Error: {{showMsg}}</span>
+            <span class="error-message-casino" *ngIf="!isGameError">{{showMsg}}</span>
+            <span class="error-message-support">Please contact support</span>
+          </div>
+          <div class="loader-icon" *ngIf="!iframeLoad">
+            <!-- <app-preloader></app-preloader> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,7 @@
+<ul class="popular-tab custom-scrollbar">
+  <ng-container *ngFor="let item of navLinks">
+    <li routerLinkActive="active" [routerLink]="item.routerLink" class="fs-16 sm-fs-14" *ngIf="item.isShow">
+      {{item.name|translate}}
+    </li>
+  </ng-container>
+</ul>

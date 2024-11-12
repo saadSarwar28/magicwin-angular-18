@@ -1,0 +1,243 @@
+<!-- <div class="site-loader d-flex justify-content-center vh-40 mt-5" *ngIf="!data">
+  <img [src]="siteLoader" alt="Site_loader" height="120px" />
+</div> -->
+<div class="site-loader  mt-5" *ngIf="!data">
+  <div class="row gx-0">
+    <div class="col-lg-8">
+      <app-skelton-loader [loaderType]="'marketLoading'"></app-skelton-loader>
+    </div>
+    <div class="col-lg-4">
+      <app-skelton-loader [loaderType]="'myBets'"></app-skelton-loader>
+    </div>
+  </div>
+</div>
+<div class="row gx-0">
+  <div class="col-lg-8 ">
+    <div class="mb-1" *ngIf="data">
+      <container-element [ngSwitch]="data.id" *ngIf="!matchId && dataInBetFairScoreCard">
+        <app-soccerscorecard (valueChange)="dataInBetFairScoreCard=$event" *ngSwitchCase="'1'"
+          [evtid]="data.competition.event.id" [mktName]="data.competition.event.name" [eventTypeid]="data.id"
+          [status]="data.competition.event.markets[0].status"></app-soccerscorecard>
+        <app-basketballscorecard (valueChange)="dataInBetFairScoreCard=$event" *ngSwitchCase="'7522'"
+          [evtid]="data.competition.event.id" [mktName]="data.competition.event.name" [eventTypeid]="data.id"
+          [status]="data.competition.event.markets[0].status"></app-basketballscorecard>
+        <app-tennisscorecard *ngSwitchCase="'2'" [evtid]="data.competition.event.id"
+          [mktName]="data.competition.event.name" [eventTypeid]="data.id"
+          [status]="data.competition.event.markets[0].status"></app-tennisscorecard>
+        <ng-template *ngSwitchDefault>
+          {{ data.name }} / {{ data.competition.name }} /
+          {{ data.competition.event.name }}
+        </ng-template>
+      </container-element>
+      <div class="matches_box_area" style="margin-bottom: 5px;" *ngIf="matchId && lmtUrl && displayLMT">
+        <iframe id="stats" *ngIf="lmtUrl" [src]="lmtUrl | safe" width="100%" style="border: none; overflow: hidden"
+          scrolling="0" sandbox="allow-forms allow-same-origin allow-scripts"></iframe>
+      </div>
+      <div class="d-lg-none" *ngIf="
+      (showStreamAgent && isLoggedIn && showStreamOnBalance) ||
+      (isShowStreamMobile && showStreamAgent && isLoggedIn)
+    ">
+        <app-stream [eventId]="eventId" *ngIf="data?.competition?.event?.markets[0]?.inplay == true"></app-stream>
+      </div>
+      <div class="position-relative">
+
+        <div class="landing-page pt-0 mb-0 cricket-component">
+
+          <div>
+            <ng-container *ngFor="let m of data.competition.event.markets; let i = index">
+              <div class="position-relative">
+                <div class="tab-container cricket-pages-tabs p-0 mt-2 mb-1">
+                  <ng-container *ngIf="i == 0">
+                    <div class="event-market-breadcrum d-flex justify-content-between align-items-center">
+                      <div class="breadcrum-item mb-0 sm-fs-11 fs-lap-13">
+                        <span class="  pointer" [routerLink]="'/'">{{
+                          "Home" | translate
+                          }}</span> >
+                        <span class="   pointer" [routerLink]="'/sports/' + data.name.toLowerCase()">{{
+                          data.name | translate
+                          }}</span>
+                        >
+                        <span class="  pointer" (click)="routeToTournament(data)">{{
+                          data.competition.name
+                          }}</span>
+                        >
+                        <span class="fw-500">{{ data.competition.event.name |
+                          translate
+                          }}</span>
+                      </div>
+                      <!-- <div class="match-time-detail d-flex sm-fs-11 fs-lap-13 me-3 " *ngIf="!data.inplay">
+                        <div class="starttime   align-items-center ms-1">
+                          {{ "matched" | translate }}:
+                          <span>{{ m.totalMatched }}</span>
+                        </div>
+                      </div> -->
+                    </div>
+                    <div class="match-time-detail d-flex  mt-1  ms-1" *ngIf="!data.inplay">
+                      <span class="starttime fs-lap-12 sm-fs-12 align-items-center ">{{ "starttime" | translate }}:
+                        {{ m.marketStartTime | date : "short" }}</span>
+                      <div class=" time-remaining fs-lap-12 sm-fs-12  align-items-center ms-3">
+                        <app-timeremaining [timeRemaining]="m.marketStartTime"></app-timeremaining>
+                      </div>
+                    </div>
+                  </ng-container>
+
+                  <div class="tabs bg-transparent mt-4 d-flex mb-0">
+                    <div class="d-flex align-items-center">
+                      <div class="d-flex sm-flex-column">
+                        <div class="menu border-0 sport-name pl-0 me-3 fs-lap-13">
+                          {{ m.marketName }}
+                        </div>
+                        <div class="d-flex align-items-center sm-fs-11 fs-lap-13 me-3 min-max  mt-1" *ngIf="
+                data.competition &&
+                data.competition.event &&
+                data.competition.event.markets &&
+                data.competition.event.markets.length > 0
+              ">
+                          Min: {{ m?.minSettings | shortennum }} | Max:
+                          {{ m?.maxSettings * localMarketRate | shortennum }}
+                        </div>
+                      </div>
+
+                      <ng-container *ngIf="showCashout">
+                        <button
+                          class="btn d-flex justify-content-center align-items-center cashout ms-3 fs-lap-12 sm-fs-11"
+                          *ngIf="
+                m.runners.length < 3 &&
+                m.description.bettingType == 'ODDS'
+              " (click)="openCashout(m)">
+                          Cashout
+                        </button>
+                      </ng-container>
+                      <div class="d-flex lib-text align-items-center  fs-lap-12 sm-fs-10 liability ms-md-3 ms-1"
+                        *ngIf="m.liability">
+                        {{ "Lib" | translate }} :
+                        <span class="liabilityClr ms-1"> {{ m.liability | roundoff}}</span>
+                      </div>
+                    </div>
+                    <div class="d-flex match-card lay-back-heading justify-content-end position-relative"
+                      *ngIf="i == 0">
+                      <div class="odds-container">
+                        <app-oddsbutton [cssClass]="'transparnt-odd desktop-odds text-back fs-lap-13'"
+                          [price]="'Back'"></app-oddsbutton>
+                        <app-oddsbutton [cssClass]="'transparnt-odd desktop-odds text-lay fs-lap-13'"
+                          [price]="'Lay'"></app-oddsbutton>
+                      </div>
+
+                    </div>
+                    <div class="remove-market " *ngIf="m.description?.marketType != 'MATCH_ODDS'">
+                      <i class="bi bi-x-lg liabilityClr pointer" (click)="removeFromMarkets(m)"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="position-relative">
+                  <div *ngIf="oneClickBetObj[m.marketName]"
+                    class="market-overlay position-absolute bg-theme z-2 d-flex justify-content-center align-items-center sm-fs-14">
+                    <img [src]="siteLoader" height="100px" alt="Loading..." />
+                  </div>
+                  <div
+                    class="market-overlay position-absolute bg-theme  d-flex justify-content-center align-items-center sm-fs-14"
+                    *ngIf="m.status !== 'OPEN'" [class.liabilityClr]="m.status == 'SUSPENDED' || m.status == 'CLOSED'">
+                    {{ m.status | translate }}
+                  </div>
+                  <ng-container *ngFor="let r of m.runners | orderbyrunner : 'sortPriority';let i = index">
+                    <div
+                      class="match-card position-relative align-items-center flex-row market-bg px-2 pt-2 pb-2 border-0 mb-1 ">
+                      <div class="match-info w-100  d-flex align-items-center">
+                        <div class="match-teams w-100 d-flex ms-2  ">
+                          <div class="d-flex justify-content-between w-100">
+                            <span class="fs-lap-13"> {{ r.runnerName | translate }}</span>
+                            <div class="me-2 fs-lap-13">
+                              <span *ngIf="r.position" [ngClass]="r.position >= 0 ? 'text-success' : 'liabilityClr'">{{
+                                r.position |
+                                roundoff
+                                }}</span>
+                              <span class="ms-1" *ngIf="r.whatIf !== null && r.whatIf !== undefined"
+                                [ngClass]="r.whatIf !== null && r.whatIf >= 0 ? 'text-success' : 'liabilityClr'">=>
+                                {{r.whatIf
+                                |
+                                roundoff}}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="odds-container position-relative">
+                        <div
+                          class="market-overlay position-absolute bg-theme z-1  d-flex justify-content-center align-items-center sm-fs-14"
+                          *ngIf="r.status && r.status != 'ACTIVE'">
+                          <span [class.liabilityClr]="r.status == 'LOSER'">{{ r.status }}</span>
+                        </div>
+                        <!-- <div class="d-none d-md-flex lap-d-none">
+                          <app-oddsbutton [price]="r.lastPriceTraded" [size]="r.totalMatched"
+                            cssClass="transparnt-odd desktop-odds "></app-oddsbutton>
+                        </div> -->
+                        <div class="d-none d-md-flex lap-d-none">
+                          <app-oddsbutton [cssClass]="'lay-light desktop-odds'" (click)="
+                    placebet(m, r, 'back', r.back[2]?.price)
+                  " [price]="r.back[2].price == 0 ? ' ' : r.back[2].price" [size]="r.back[2]?.size"></app-oddsbutton>
+                        </div>
+                        <div class="d-none d-md-flex ">
+                          <app-oddsbutton [cssClass]="'lay-light desktop-odds'" (click)="
+                      placebet(m, r, 'back', r.back[1]?.price)
+                    " [price]="r.back[1].price == 0 ? ' ' : r.back[1].price" [size]="r.back[1]?.size"></app-oddsbutton>
+                        </div>
+                        <app-oddsbutton [cssClass]="'back desktop-odds'" (click)="
+                  placebet(m, r, 'back', r.back[0]?.price)
+                " [price]="r.back[0]?.price == 0 ? ' ' : r.back[0]?.price" [size]="r.back[0]?.size"></app-oddsbutton>
+
+                        <app-oddsbutton [cssClass]="'lay desktop-odds'" (click)="
+                  placebet(m, r, 'lay', r.lay[0]?.price)
+                " [price]="r.lay[0].price == 0 ? ' ' : r.lay[0].price" [size]="r.lay[0]?.size"></app-oddsbutton>
+                        <div class="d-none d-md-flex ">
+                          <app-oddsbutton [cssClass]="'back-light desktop-odds'" (click)="
+                      placebet(m, r, 'lay', r.lay[1].price)
+                    " [price]="r.lay[1].price == 0 ? ' ' : r.lay[1].price" [size]="r.lay[1]?.size"></app-oddsbutton>
+                        </div>
+                        <div class="d-none d-md-flex lap-d-none">
+                          <app-oddsbutton [cssClass]="'back-light desktop-odds'" (click)="
+                        placebet(m, r, 'lay', r.lay[2].price)
+                      " [price]="r.lay[2].price == 0 ? ' ' : r.lay[2].price" [size]="r.lay[2]?.size"></app-oddsbutton>
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngIf="r.betslip && m.status == 'OPEN'">
+                      <app-partial-betslip [r]="r.betslip" (valueChange)="BetPlacedStatus($event)"
+                        (whatIfFigure)="calculateWhatIf($event)"></app-partial-betslip>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngIf="m.betslip && m.cashout">
+                    <app-cashout-betslip [market]="m" (valueChange)="BetPlaceCashout($event)"></app-cashout-betslip>
+                  </ng-container>
+                </div>
+              </div>
+              <ng-container *ngIf="i == 0">
+                <ng-container *ngIf="winnerFancyEventMarkets">
+                  <app-bookmaker-data [fancyResponse]="fancyResponse" [eventId]="eventId"
+                    [bookMakerRate]="bookMakerRate" (loadBets)="LoadCurrentBets()"></app-bookmaker-data>
+                  <app-fancy-data [fancyResponse]="fancyResponse" [fancyRate]="fancyRate" [eventId]="eventId"
+                    (loadBets)="LoadCurrentBets()"></app-fancy-data>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </div>
+          <div class="other-markets mt-3 custom-scrollbar d-flex pb-2 ">
+            <div class="item pointer sm-fs-11 d-flex align-content-center gap-2"
+              *ngFor="let othermarket of otherMarkets" (click)="showOtherMarkerData(othermarket)">
+              <span><i class="bi bi-plus-lg justify-content-center align-items-center add-market rounded-1 d-flex "
+                  style="height: 20px;width: 22px;"></i></span> {{ othermarket?.marketName | translate }}
+              <span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <app-sports-book *ngIf="showSportsBook && sportsBooks.length > 0" appInView (visible)="onVisibilityChange($event)"
+        (betPlacedEvent)="SportsBookBetStatus($event)" [sportsBook]="sportsBooks" [matchId]="matchId"></app-sports-book>
+    </div>
+  </div>
+  <div class="col-lg-4 " *ngIf="data">
+    <app-stream class="d-lg-flex d-none" [eventId]="eventId" *ngIf="(data?.competition?.event?.markets[0]?.inplay == true && ((showStreamAgent && isLoggedIn && showStreamOnBalance) ||
+    (isShowStreamMobile && showStreamAgent && isLoggedIn)))"></app-stream>
+    <app-mybets [currentBets]="currentBets" (cancelBet)="cancelBets($event)" [eventId]="eventId"
+      (loadBets)="LoadCurrentBets()"></app-mybets>
+  </div>
+</div>
