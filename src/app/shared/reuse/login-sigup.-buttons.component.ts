@@ -2,15 +2,15 @@
 
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthenticateRequest } from 'src/app/models/models';
-import { _window, BackendService } from 'src/app/services/backend.service';
-import { GoogleAnalyticsService } from 'src/app/services/google-analytics.service';
-import { StorageService } from 'src/app/services/storage.service';
-import { ToastService } from 'src/app/services/toast.service';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
-import { UtillsService } from 'src/app/services/utills.service';
+import { AuthenticateRequest } from '../../models/models';
+import { _window, BackendService } from '../../services/backend.service';
+import { GoogleAnalyticsService } from '../../services/google-analytics.service';
+import { StorageService } from '../../services/storage.service';
+import { ToastService } from '../../services/toast.service';
+import { CheckAuthService } from '../../services/check-auth.service';
+import { UtillsService } from '../../services/utills.service';
 import { ReCaptchaV3Service } from 'ng-recaptcha';
-import { GenericService } from 'src/app/services/generic.service';
+import { GenericService } from '../../services/generic.service';
 
 @Component({
   selector: 'app-login-signup-buttons',
@@ -57,7 +57,7 @@ import { GenericService } from 'src/app/services/generic.service';
       margin-right: 11px;
       border-radius: 8px;
       border: 3px solid var(--demo-border-clr);
-      color: var(--demo-login-clr); 
+      color: var(--demo-login-clr);
       &:hover {
         background: var(--demo-login-bg);
       }
@@ -137,7 +137,7 @@ export class LoginSignButtonsComponent implements OnInit {
   isHideDemoOnApp: boolean = false
   hideDemoButton: boolean = false;
   isb2c: boolean = _window().isb2c;
-  isWhatsappLink: boolean = _window().isWhatsappLink  ?? false;
+  isWhatsappLink: boolean = _window().isWhatsappLink ?? false;
   isShowSignUp: boolean = _window().isShowSignUp ?? true;
   demoUser: any
   demoPass: any
@@ -189,7 +189,7 @@ export class LoginSignButtonsComponent implements OnInit {
       this.recaptchaV3Service.execute('importantAction').subscribe((token) => {
         if (this.demoUser && this.demoPass) {
           // this.showLoader = true;
-          let c;
+          let c: any;
           this.backendService
             .authenticate(
               new AuthenticateRequest(this.demoUser, this.demoPass, token),

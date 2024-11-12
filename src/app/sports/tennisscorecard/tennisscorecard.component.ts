@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, OnDestroy, ElementRef } from '@angular/core';
-import { _window, BackendService } from 'src/app/services/backend.service';
-import { ScoreCardTimerService } from 'src/app/services/timer.service';
+import { _window, BackendService } from '../../services/backend.service';
+import { ScoreCardTimerService } from '../../services/timer.service';
 
 
 @Component({

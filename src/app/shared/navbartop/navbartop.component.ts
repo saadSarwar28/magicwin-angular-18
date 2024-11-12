@@ -1,4 +1,4 @@
-import { StorageService } from 'src/app/services/storage.service';
+import { StorageService } from '../../services/storage.service';
 import {
   Component,
   EventEmitter, HostListener, Input,
@@ -8,10 +8,10 @@ import {
 // import * as M from 'materialize-css';
 import { NavigationEnd, Router, Event, NavigationStart } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
+import { CheckAuthService } from '../../services/check-auth.service';
 import { _window } from '../../services/backend.service';
-import { UtillsService } from 'src/app/services/utills.service';
-import { WalletService } from 'src/app/services/wallet.service';
+import { UtillsService } from '../../services/utills.service';
+import { WalletService } from '../../services/wallet.service';
 
 @Component({
   selector: 'navbartop',
@@ -133,7 +133,7 @@ export class NavbartopComponent implements OnInit {
     })
 
     if (this.isLogin) {
-      this.walletService.walletDetail.subscribe((res => {
+      this.walletService.walletDetail.subscribe(((res: any) => {
         if (res) {
           this.paymentDetails = res;
         }

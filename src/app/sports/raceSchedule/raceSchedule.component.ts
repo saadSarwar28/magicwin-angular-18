@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BackendService } from 'src/app/services/backend.service';
-import { StorageService } from 'src/app/services/storage.service';
+import { BackendService } from '../../services/backend.service';
+import { StorageService } from '../../services/storage.service';
 @Component({
   selector: 'app-raceschedule',
   templateUrl: './raceSchedule.component.html',
@@ -23,7 +23,7 @@ export class RaceScheduleComponent implements OnInit {
   selectedData: any = {};
   isOpen(index: number, data: any) {
     this.selectedData = data;
-    this.racingSchedule[this.selectedIndex].childs.forEach((element, ind) => {
+    this.racingSchedule[this.selectedIndex].childs.forEach((element: any, ind: any) => {
       if (index == ind) {
         element.toggle = !element.toggle;
         this.activeIndex = element.toggle ? index : null;
@@ -34,7 +34,7 @@ export class RaceScheduleComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.params.subscribe(p => {
+    this.route.params.subscribe((p: any) => {
       this.type = p.id1;
       if (this.router.url.includes('horse-racing')) {
         this.sportsType = "Horse Racing";

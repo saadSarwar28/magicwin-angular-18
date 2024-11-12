@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { _window } from 'src/app/services/backend.service';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
-import { GenericService } from 'src/app/services/generic.service';
-import { UtillsService } from 'src/app/services/utills.service';
+import { _window } from '../../services/backend.service';
+import { CheckAuthService } from '../../services/check-auth.service';
+import { GenericService } from '../../services/generic.service';
+import { UtillsService } from '../../services/utills.service';
 
 @Component({
   selector: 'app-popular-banners',
@@ -38,14 +38,14 @@ export class PopularBannersComponent implements OnInit {
     });
   }
 
-  routeToLink(item: any) { 
+  routeToLink(item: any) {
     if (
       !this.checkauthservice.IsLogin() &&
       item.link.includes('casino/detail')
     ) {
       this.genericService.openLoginModal();
     } else {
-      this.router.navigate([item.link]); 
+      this.router.navigate([item.link]);
     }
   }
 }

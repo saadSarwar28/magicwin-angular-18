@@ -1,6 +1,6 @@
 import { Component, ElementRef, Input, NgZone, OnChanges, OnInit, Renderer2, SimpleChanges, ViewChild, OnDestroy } from '@angular/core';
-import { _window } from 'src/app/services/backend.service';
-import { RemainingTimerService } from 'src/app/services/timer.service';
+import { _window } from '../../services/backend.service';
+import { RemainingTimerService } from '../../services/timer.service';
 
 
 @Component({

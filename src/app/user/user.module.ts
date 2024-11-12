@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { UserRoutingModule } from './user-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RecaptchaModule } from 'ng-recaptcha';
-import { NgxMatIntlTelInputModule } from 'ngx-mat-intl-tel-input';
+import { NgxMatIntlTelInputComponent } from 'ngx-mat-intl-tel-input';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { SignupComponent } from './signup/signup.component';
@@ -17,7 +17,7 @@ import { DirectiveModule } from '../directives/directive.module';
     SignupComponent,
   ],
   imports: [
-    NgxMatIntlTelInputModule,
+    NgxMatIntlTelInputComponent,
     CommonModule,
     UserRoutingModule,
     FormsModule,

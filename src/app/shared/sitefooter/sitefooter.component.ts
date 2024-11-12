@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router, Event } from '@angular/router';
-import { _window } from 'src/app/services/backend.service';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
+import { _window } from '../../services/backend.service';
+import { CheckAuthService } from '../../services/check-auth.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MenuitemsComponent } from '../menuitems/menuitems.component';
 import { ModalService } from '../services/modal.service';
-import { UtillsService } from 'src/app/services/utills.service';
+import { UtillsService } from '../../services/utills.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { GenericService } from "../../services/generic.service";
-import { MymarketsComponent } from 'src/app/sports/mymarkets/mymarkets.component';
+import { MymarketsComponent } from '../../sports/mymarkets/mymarkets.component';
 import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-sitefooter',
@@ -57,7 +57,7 @@ export class SitefooterComponent implements OnInit {
 
 
   isLogin: boolean = false;
-  configData;
+  configData: any;
   depositWpLink: boolean = false
   withDrawWpLink: boolean = false
   teleLinkBefore: string = ""
@@ -106,7 +106,7 @@ export class SitefooterComponent implements OnInit {
         }
       }
     })
-    this.utillsService.configData.subscribe((res => {
+    this.utillsService.configData.subscribe(((res: any) => {
       if (res) {
         this.configData = res;
         let depositLink = this.configData.find((item: any) => item.type === 'deposit');
@@ -124,7 +124,7 @@ export class SitefooterComponent implements OnInit {
         }
       }
     }))
-    this.utillsService.bannerData.subscribe((res => {
+    this.utillsService.bannerData.subscribe(((res: any) => {
       if (res) {
         let telegramLink = res.find((item: any) => item.type === 'TGB4');
         if (telegramLink && telegramLink.data && telegramLink.data.length > 0) {
@@ -219,13 +219,13 @@ export class SitefooterComponent implements OnInit {
     });
   }
 
-  routeToCasino(provider, gameId, bool) {
+  routeToCasino(provider: any, gameId: any, bool: any) {
     this.utillsService.routeToCasino(provider, gameId, bool, "", false, true)
   }
   closePopup() {
     this.openWhatsPopup = false
   }
-  hideShowSetting(event) {
+  hideShowSetting(event: any) {
     event.stopPropagation();
     this.openWhatsPopup = !this.openWhatsPopup;
   }

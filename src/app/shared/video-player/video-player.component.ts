@@ -24,7 +24,7 @@ export class VideoPlayerComponent implements OnInit, OnDestroy {
   @Input() height: string = ''
   @Input() endors: boolean = true
   id: string = ''
-  player: videojs.Player | undefined;
+  player: videojs.Player;
   constructor(
     private elementRef: ElementRef,
   ) { }

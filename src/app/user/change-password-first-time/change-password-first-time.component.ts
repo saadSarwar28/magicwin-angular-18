@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ChangePassword } from 'src/app/models/models';
-import { BackendService, _window } from 'src/app/services/backend.service';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
-import { StorageService } from 'src/app/services/storage.service';
-import { ToastService } from 'src/app/services/toast.service';
+import { ChangePassword } from '../../models/models';
+import { BackendService, _window } from '../../services/backend.service';
+import { CheckAuthService } from '../../services/check-auth.service';
+import { StorageService } from '../../services/storage.service';
+import { ToastService } from '../../services/toast.service';
 import { ReCaptchaV3Service } from 'ng-recaptcha';
-import { UtillsService } from 'src/app/services/utills.service';
+import { UtillsService } from '../../services/utills.service';
 @Component({
   selector: 'app-change-password-first-time',
   templateUrl: './change-password-first-time.component.html',
@@ -127,13 +127,13 @@ export class ChangePasswordFirstTimeComponent implements OnInit {
                   )
                 );
                 this.passwordForm.controls.new_pass.setValue(
-                  this.passwordForm.controls.new_pass.value.replaceAll(' ', '')
+                  this.passwordForm.controls.new_pass.value?.replaceAll(' ', '') || ''
                 );
                 this.reportsService
                   .changePassword_First(
                     new ChangePassword(
                       this.passwordForm.controls['current_pass'].value,
-                      this.passwordForm.controls['new_pass'].value,
+                      this.passwordForm.controls['new_pass'].value || '',
                       token
                     )
                   )

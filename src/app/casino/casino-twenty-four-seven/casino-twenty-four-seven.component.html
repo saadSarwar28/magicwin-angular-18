@@ -7,7 +7,7 @@
     <span>Total: {{ totalNumberofGames }} Games</span>
   </div>
   <div *ngIf="loading" class="preloader-wrapper">
-    <!-- <app-skelton-loader [loaderType]="'casinoLoader'"></app-skelton-loader> -->
+    <app-skelton-loader [loaderType]="'casinoLoader'"></app-skelton-loader>
   </div>
   <div class="games-container" *ngFor="let group of games">
     <div class="games-header">

@@ -13,8 +13,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthenticateRequest } from 'src/app/models/models';
-import { BackendService, _window } from 'src/app/services/backend.service';
+import { AuthenticateRequest } from '../../models/models';
+import { BackendService, _window } from '../../services/backend.service';
 import { StorageService } from '../../services/storage.service';
 import { DOCUMENT } from '@angular/common';
 import {
@@ -26,15 +26,14 @@ import {
   ScoreCardTimerService,
   ScoreTimerService,
   TimerService,
-} from 'src/app/services/timer.service';
-import { ToastService } from 'src/app/services/toast.service';
-import { GoogleAnalyticsService } from 'src/app/services/google-analytics.service';
-import axios from 'axios';
+} from '../../services/timer.service';
+import { ToastService } from '../../services/toast.service';
+import { GoogleAnalyticsService } from '../../services/google-analytics.service';
 import { Observable, Observer, fromEvent, merge } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ReCaptchaV3Service } from 'ng-recaptcha';
-import { UtillsService } from 'src/app/services/utills.service';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
+import { UtillsService } from '../../services/utills.service';
+import { CheckAuthService } from '../../services/check-auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { LoginTermsConditionComponent } from '../reuse/login-terms-condition';
 @Component({
@@ -152,7 +151,7 @@ export class LoginModalComponent implements OnInit {
     if (isb2c && isShowSignUp && !isWhatsappLink) {
       this.router.navigate(['/user/signup']);
     } else if (isWhatsappLink && isShowSignUp) {
-      this.utillsService.whatsappForCutomerSupprtOrId('WAB4'); 
+      this.utillsService.whatsappForCutomerSupprtOrId('WAB4');
     }
     this.closeLoginModal();
   }
@@ -169,13 +168,13 @@ export class LoginModalComponent implements OnInit {
     if (_window().ping) {
       axios
         .get(_window().ping)
-        .then((response) => {
+        .then((response: any) => {
           if (response && response.data) {
             this.noInternet = response.data == 'PONG' ? false : true;
             return;
           }
         })
-        .catch((error) => {
+        .catch((error: any) => {
           console.log(error);
         });
     }
@@ -258,7 +257,7 @@ export class LoginModalComponent implements OnInit {
     let fbtoken = localStorage.getItem('fbtoken');
     if (demoUser && demoPass) {
       this.showLoader = true;
-      let c;
+      let c: any;
       try {
         this.recaptchaV3Service
           .execute('importantAction')
@@ -349,7 +348,7 @@ export class LoginModalComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.loginForm.controls.password.value.includes('”')) {
+    if (this.loginForm.controls['password'].value.includes('”')) {
       this.loginForm.setErrors({ Invalid: 'Password in wrong format' });
       return;
     }
@@ -361,9 +360,9 @@ export class LoginModalComponent implements OnInit {
       return;
     }
     //Autofill Handling
-    if (this.loginForm.controls.username.value === '') {
+    if (this.loginForm.controls['username'].value === '') {
       if (this.elementRefInput?.nativeElement.value.length > 0) {
-        this.loginForm.controls.username.setValue(
+        this.loginForm.controls['username'].setValue(
           this.elementRefInput?.nativeElement.value
         );
       }
@@ -373,12 +372,12 @@ export class LoginModalComponent implements OnInit {
         if (token && token.length > 0) {
           if (this.loginForm.valid) {
             this.showLoader = true;
-            let c;
-            this.loginForm.controls.username.setValue(
-              this.loginForm.controls.username.value.replaceAll(' ', '')
+            let c: any;
+            this.loginForm.controls['username'].setValue(
+              this.loginForm.controls['username'].value.replaceAll(' ', '')
             );
-            this.loginForm.controls.password.setValue(
-              this.loginForm.controls.password.value.replaceAll(' ', '')
+            this.loginForm.controls['password'].setValue(
+              this.loginForm.controls['password'].value.replaceAll(' ', '')
             );
             let fbtoken = localStorage.getItem('fbtoken');
             this.backendService

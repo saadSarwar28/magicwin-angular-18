@@ -1,14 +1,14 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
-import { StorageService } from 'src/app/services/storage.service';
+import { CheckAuthService } from '../../services/check-auth.service';
+import { StorageService } from '../../services/storage.service';
 import { Router } from '@angular/router';
-import { _window } from 'src/app/services/backend.service';
+import { _window } from '../../services/backend.service';
 import { Meta } from '@angular/platform-browser';
-import { WalletTimerService } from 'src/app/services/timer.service';
-import { UtillsService } from 'src/app/services/utills.service';
+import { WalletTimerService } from '../../services/timer.service';
+import { UtillsService } from '../../services/utills.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { RecentMarketsComponent } from '../recent-markets/recent-markets.component';
-import { WalletService } from 'src/app/services/wallet.service';
+import { WalletService } from '../../services/wallet.service';
 
 @Component({
   selector: 'app-nav-setting',
@@ -37,7 +37,7 @@ export class NavSettingComponent implements OnInit {
   PGData: any;
   checkType: any;
   navigateValue: any;
-  paymentDetails;
+  paymentDetails: any;
   showOneClickOptions: boolean = false;
   constructor(
     private checkauthservice: CheckAuthService,
@@ -58,13 +58,13 @@ export class NavSettingComponent implements OnInit {
         ? false
         : this.storageService.secureStorage.getItem('OCB');
     this.utillsService.OCBEnabled.next(this.OCBEnabled);
-    this.utillsService.OCBEnabled.subscribe((bool) => {
+    this.utillsService.OCBEnabled.subscribe((bool: any) => {
       this.OCBEnabled = bool;
     });
     this.utillsService.configData.subscribe(() => {
       this.navigateValue = this.utillsService.depositLink
     })
-    this.walletService.walletDetail.subscribe((data) => {
+    this.walletService.walletDetail.subscribe((data: any) => {
       if (data) {
         this.paymentDetails = data
       }
@@ -107,7 +107,7 @@ export class NavSettingComponent implements OnInit {
     this.openSettingMenu = false;
   }
 
-  openOneClickBet(event) {
+  openOneClickBet(event: any) {
     event.stopPropagation();
     this.openOBC = !this.openOBC;
   }

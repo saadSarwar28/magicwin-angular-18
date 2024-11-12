@@ -5,16 +5,16 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
+import { CheckAuthService } from '../../services/check-auth.service';
 import { Router } from '@angular/router';
-import { BackendService, _window } from 'src/app/services/backend.service';
-import { StorageService } from 'src/app/services/storage.service';
+import { BackendService, _window } from '../../services/backend.service';
+import { StorageService } from '../../services/storage.service';
 import { Meta } from '@angular/platform-browser';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { UtillsService } from 'src/app/services/utills.service';
+import { UtillsService } from '../../services/utills.service';
 import { GenericService } from '../../services/generic.service';
-import { SettingsComponent } from 'src/app/settings/settings.component';
-import { WalletService } from 'src/app/services/wallet.service';
+import { SettingsComponent } from '../../settings/settings.component';
+import { WalletService } from '../../services/wallet.service';
 
 @Component({
   selector: 'app-menuitems',
@@ -95,7 +95,7 @@ export class MenuitemsComponent implements OnInit {
     this.bottomSheet.dismiss();
   }
 
-  routerLink(link, boolean) {
+  routerLink(link: any, boolean: any) {
     if (boolean) {
       if (!this.checkauthservice.IsLogin()) {
         this.openLoginModal();
@@ -109,7 +109,7 @@ export class MenuitemsComponent implements OnInit {
     }
   }
 
-  routeToLink(item) {
+  routeToLink(item: any) {
     if (
       !this.checkauthservice.IsLogin() &&
       item.link.includes('casino/detail')
@@ -179,7 +179,7 @@ export class MenuitemsComponent implements OnInit {
   }
 
   getPaymentDetail() {
-    this.walletService.walletDetail.subscribe((payment) => {
+    this.walletService.walletDetail.subscribe((payment: any) => {
       if (payment) {
         this.paymentDetails = payment;
       }
@@ -196,7 +196,7 @@ export class MenuitemsComponent implements OnInit {
         panelClass: 'menu-item-dialog', // Optional: for custom styles
       };
       const bottomSheetRef = this.bottomSheet.open(SettingsComponent, config);
-      bottomSheetRef.afterDismissed().subscribe(() => {});
+      bottomSheetRef.afterDismissed().subscribe(() => { });
     } else {
       this.openLoginModal();
     }

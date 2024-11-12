@@ -17,6 +17,6 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [BlogDetailComponent],
-  imports: [CommonModule, RouterModule.forChild(routes), SharedModule],
+  imports: [CommonModule, RouterModule.forChild(routes)],
 })
-export class BlogDetailModule {}
+export class BlogDetailModule { }

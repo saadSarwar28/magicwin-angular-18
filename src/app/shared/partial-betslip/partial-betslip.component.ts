@@ -1,5 +1,5 @@
 import { StorageService } from './../../services/storage.service';
-import { BackendService } from 'src/app/services/backend.service';
+import { BackendService } from '../../services/backend.service';
 import {
   Component,
   EventEmitter,
@@ -9,10 +9,10 @@ import {
   OnDestroy,
   AfterViewInit,
 } from '@angular/core';
-import { ToastService } from 'src/app/services/toast.service';
+import { ToastService } from '../../services/toast.service';
 import { TranslateService } from '@ngx-translate/core';
-import { _window } from 'src/app/services/backend.service';
-import { UtillsService } from 'src/app/services/utills.service';
+import { _window } from '../../services/backend.service';
+import { UtillsService } from '../../services/utills.service';
 @Component({
   selector: 'app-partial-betslip',
   templateUrl: './partial-betslip.component.html',
@@ -142,7 +142,7 @@ export class PartialBetslipComponent
     }
     this.calcPL(this.r.size)
   }
-  validateInput(event) {
+  validateInput(event: any) {
     // Get the key that was pressed
     const key = event.key;
 
@@ -207,7 +207,7 @@ export class PartialBetslipComponent
   }
   buttonValue: any;
   lastValue: any;
-  addValueToStack(value) {
+  addValueToStack(value: any) {
     if (_window().addPlusMinusBetSlip) {
       if (this.lastValue != value) {
         this.r.size += value;
@@ -286,11 +286,11 @@ export class PartialBetslipComponent
     this.whatIfcall(pl, this.r.selectionid, stakeValue, this.r.bType, this.r.marketId)
   }
   showWhatIF: boolean = true;
-  whatIfcall(pl,
-    selectionID,
-    stake,
-    bType,
-    marketId) {
+  whatIfcall(pl: any,
+    selectionID: any,
+    stake: any,
+    bType: any,
+    marketId: any) {
     if (this.showWhatIF) {
       this.whatIfFigure.emit({
         pl: pl,
@@ -342,7 +342,7 @@ export class PartialBetslipComponent
   }
 
 
-  catchError(err) {
+  catchError(err: any) {
     this.placingBet = false
     if (err && err.status && err.status == 401) {
       this.storageService.secureStorage.removeItem('token');
@@ -351,7 +351,7 @@ export class PartialBetslipComponent
     }
   }
 
-  betStatus(resp) {
+  betStatus(resp: any) {
     this.placingBet = false
     let betstatus = resp.status;
     const translatedResponse = resp.message || resp.response.message;

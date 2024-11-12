@@ -1,8 +1,8 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { _window } from '../../services/backend.service';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
-import { StorageService } from 'src/app/services/storage.service';
-import { UtillsService } from 'src/app/services/utills.service';
+import { CheckAuthService } from '../../services/check-auth.service';
+import { StorageService } from '../../services/storage.service';
+import { UtillsService } from '../../services/utills.service';
 @Component({
   selector: 'app-one-click-bet',
   templateUrl: './one-click-bet.component.html',

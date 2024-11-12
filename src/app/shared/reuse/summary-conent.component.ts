@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { _window } from 'src/app/services/backend.service';
+import { _window } from '../../services/backend.service';
 
 @Component({
   selector: 'app-summary-content',

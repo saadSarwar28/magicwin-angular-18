@@ -1,7 +1,6 @@
 
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import * as signalR from "@microsoft/signalr";
-import { environment } from 'src/environments/environment';
 import { BettingResponse, ClientParameters, ClientPosition, ClientWallet, CurrentBetsInput, LineLiablityMulti, MatchedUnmatched } from '../../models/models';
 import { BackendService, _window } from '../../services/backend.service';
 import { CheckAuthService } from '../../services/check-auth.service';
@@ -53,8 +52,6 @@ export class OtherracesComponent implements OnInit, OnDestroy {
   matchedUnmatched!: MatchedUnmatched;
   clientMatchSize: any;
   clientUnmatchSize: any;
-  private baseUrl: string = environment.apiurl;
-  apiUrl = this.baseUrl + _window().otherracesordersplaced;
   isCollapsedStates: boolean[] = [];
   betslip: any;
   isDataLoad: boolean = false

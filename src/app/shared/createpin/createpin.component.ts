@@ -1,12 +1,11 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { minLengthNumberValidator } from 'src/app/validators/minLengthValidator';
-import * as M from 'materialize-css';
-import { patternValidator } from 'src/app/validators/patternValidators';
-import { pinMatchValidator } from 'src/app/validators/pin-matchValidators';
-import { _window, BackendService } from 'src/app/services/backend.service';
+import { minLengthNumberValidator } from '../../validators/minLengthValidator';
+import { patternValidator } from '../../validators/patternValidators';
+import { pinMatchValidator } from '../../validators/pin-matchValidators';
+import { _window, BackendService } from '../../services/backend.service';
 import { ReCaptchaV3Service } from 'ng-recaptcha';
-import { ToastService } from 'src/app/services/toast.service';
+import { ToastService } from '../../services/toast.service';
 import { stat } from 'fs';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 

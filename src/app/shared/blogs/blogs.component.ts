@@ -1,6 +1,6 @@
 import { Component, OnInit, } from '@angular/core';
 import { Router } from '@angular/router';
-import { _window, BackendService } from 'src/app/services/backend.service';
+import { _window, BackendService } from '../../services/backend.service';
 
 @Component({
   selector: 'app-blogs',
@@ -33,7 +33,7 @@ export class BlogsComponent implements OnInit {
         this.loader = false;
       });
   }
-  routeToBlog(blogDetail) {
+  routeToBlog(blogDetail: any) {
     this.router.navigate([blogDetail.route]);
   }
 }

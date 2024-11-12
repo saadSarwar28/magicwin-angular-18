@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, } from '@angular/core';
-import { _window } from 'src/app/services/backend.service';
+import { _window } from '../../services/backend.service';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({

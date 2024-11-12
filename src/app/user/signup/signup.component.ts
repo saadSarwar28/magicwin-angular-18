@@ -20,8 +20,8 @@ import {
   BackendService,
   SignUpB2CModel,
   _window,
-} from 'src/app/services/backend.service';
-import { StorageService } from 'src/app/services/storage.service';
+} from '../../services/backend.service';
+import { StorageService } from '../../services/storage.service';
 import {
   FancytimerService,
   MarketTimerService,
@@ -31,22 +31,21 @@ import {
   ScoreCardTimerService,
   ScoreTimerService,
   TimerService,
-} from 'src/app/services/timer.service';
-import { ToastService } from 'src/app/services/toast.service';
-import { AuthenticateRequest } from 'src/app/models/models';
+} from '../../services/timer.service';
+import { ToastService } from '../../services/toast.service';
+import { AuthenticateRequest } from '../../models/models';
 import { ReCaptchaV3Service } from 'ng-recaptcha';
 import { Title } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
-import axios from 'axios';
 import { Observable, Observer, fromEvent, merge } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { usernameAvailabilityValidator } from 'src/app/validators/username-validator';
-import { phoneAvailabilityValidator } from 'src/app/validators/phone-number-validator';
-import { passwordMatchValidator } from 'src/app/validators/passwordMatchValidator';
-import { GenericService } from 'src/app/services/generic.service';
-import { SignupTermsConditionComponent } from 'src/app/shared/reuse/signup-terms-condition';
+import { usernameAvailabilityValidator } from '../../validators/username-validator';
+import { phoneAvailabilityValidator } from '../../validators/phone-number-validator';
+import { passwordMatchValidator } from '../../validators/passwordMatchValidator';
+import { GenericService } from '../../services/generic.service';
+import { SignupTermsConditionComponent } from '../../shared/reuse/signup-terms-condition';
 import { MatDialog } from '@angular/material/dialog';
-import { UtillsService } from 'src/app/services/utills.service';
+import { UtillsService } from '../../services/utills.service';
 
 @Component({
   selector: 'app-signup',
@@ -58,7 +57,7 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
   toasterMessage: any;
   showOtpForm: any = false;
   noInternet: any = false;
-  onlineStatus: boolean = true;
+  onlineStatus: any = true;
   whatsappText: any = 'Hello, I need an ID of kheloyar.net';
   reff: any;
   whatsAppPhoneNumber: any;
@@ -163,22 +162,22 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   isConnected() {
-    if (_window().ping) {
-      axios
-        .get(_window().ping)
-        .then((response) => {
-          if (response && response.data) {
-            this.noInternet = response.data == 'PONG' ? false : true;
-            return;
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
+    // if (_window().ping) {
+    //   axios
+    //     .get(_window().ping)
+    //     .then((response) => {
+    //       if (response && response.data) {
+    //         this.noInternet = response.data == 'PONG' ? false : true;
+    //         return;
+    //       }
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //     });
+    // }
   }
   createOnline() {
-    return merge<boolean>(
+    return merge<any>(
       fromEvent(window, 'offline').pipe(map(() => false)),
       fromEvent(window, 'online').pipe(map(() => true)),
       new Observable((sub: Observer<boolean>) => {
@@ -189,7 +188,7 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
 
-  removeSpacesInput(control, event: Event): void {
+  removeSpacesInput(control: any, event: Event): void {
     const input = event.target as HTMLInputElement;
     const cleanValue = input.value.replace(/\s+/g, ''); // Remove all spaces
     this.signupForm.get(control)?.setValue(cleanValue, { emitEvent: true }); // Update the form control value
@@ -344,7 +343,7 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  injectScript(h, o, t, j, a?, r?) {
+  injectScript(h: any, o: any, t: any, j: any, a?: any, r?: any) {
     h.hj =
       h.hj ||
       function () {
@@ -382,7 +381,7 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
     var d = new Date();
     var pastYear = d.getFullYear() - 18;
     d.setFullYear(pastYear);
-    this.signupForm.controls.dob.setValue(d);
+    this.signupForm.controls['dob'].setValue(d);
     let SignupOTPModal = new SignUpB2CModel(
       otp,
       this.countryCode?.value,
@@ -391,7 +390,7 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
       this.password?.value,
       this.phoneNumber?.value,
       this.email?.value,
-      this.signupForm.controls?.dob?.value,
+      this.signupForm.controls['dob'].value,
       '',
       null,
       null,

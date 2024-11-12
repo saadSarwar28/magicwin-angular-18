@@ -1,5 +1,5 @@
 import { StorageService } from './../../services/storage.service';
-import { BackendService } from 'src/app/services/backend.service';
+import { BackendService } from '../../services/backend.service';
 
 import {
   Component,
@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 
 import { Router } from '@angular/router';
-import { ToastService } from 'src/app/services/toast.service';
+import { ToastService } from '../../services/toast.service';
 import {
   BettingResponse,
   CurrentBetResp,
@@ -22,16 +22,15 @@ import {
   SportsBookModelSingle,
 } from '../../models/models';
 import { TranslateService } from '@ngx-translate/core';
-import { _window } from 'src/app/services/backend.service';
-import * as M from 'materialize-css';
-import { UtillsService } from 'src/app/services/utills.service';
+import { _window } from '../../services/backend.service';
+import { UtillsService } from '../../services/utills.service';
 @Component({
   selector: 'app-cashout-betslip',
   templateUrl: './cashout-betslip.component.html',
   styleUrls: ['./cashout-betslip.component.scss'],
 })
 export class CashoutBetslipComponent implements OnInit, AfterViewInit {
-  @Input() market;
+  @Input() market: any;
   fancyMarketSlip: boolean = false;
   parseFloat = parseFloat;
   ocb: any;
@@ -89,12 +88,12 @@ export class CashoutBetslipComponent implements OnInit, AfterViewInit {
     if (this.market && this.market.runners && this.market.runners.length < 3) {
       const initialValue = 0;
       const sumWithInitial = this.market.runners.reduce(
-        (accumulator, currentValue) => accumulator + currentValue.position,
+        (accumulator: any, currentValue: any) => accumulator + currentValue.position,
         initialValue
       );
       if (sumWithInitial != 0) {
         let data: any = [];
-        this.market.runners.forEach((element) => {
+        this.market.runners.forEach((element: any) => {
           data.push({
             runnerid: element.selectionId,
             position: element.position,
@@ -109,30 +108,30 @@ export class CashoutBetslipComponent implements OnInit, AfterViewInit {
             isFav: 0,
           });
         });
-        let faviourt;
+        let faviourt: any;
         if (data && data.length > 0) {
           if (this.bookmaker.includes(this.market.marketName)) {
             let backLay = this.market.runners.filter(
               (item: any) => item.backOdds == 0 && item.layOdds == 0
             );
             if (backLay && backLay.length > 0) {
-              faviourt = data.reduce((min, obj) =>
+              faviourt = data.reduce((min: any, obj: any) =>
                 obj['back'] > min['back'] ? obj : min
               );
             } else {
-              faviourt = data.reduce((min, obj) =>
+              faviourt = data.reduce((min: any, obj: any) =>
                 obj['back'] < min['back'] ? obj : min
               );
             }
           } else {
-            faviourt = data.reduce((min, obj) =>
+            faviourt = data.reduce((min: any, obj: any) =>
               obj['back'] < min['back'] ? obj : min
             );
           }
 
           let positionA = 0;
           let positionB = 0;
-          data.forEach((element) => {
+          data.forEach((element: any) => {
             if (element.runnerid == faviourt.runnerid) {
               element.isFav = 1;
               positionA = element.position;
@@ -159,7 +158,7 @@ export class CashoutBetslipComponent implements OnInit, AfterViewInit {
             this.market.betslip.price = faviourt.back;
             this.market.betslip.selectionid = faviourt.runnerid;
           } else {
-            data.forEach((x) => {
+            data.forEach((x: any) => {
               if (x.position == positionB) {
                 this.minimumBetSize = Math.round(
                   Math.abs(
@@ -237,7 +236,7 @@ export class CashoutBetslipComponent implements OnInit, AfterViewInit {
     }
     this.calcPL(this.market.betslip.size)
   }
-  validateInput(event) {
+  validateInput(event: any) {
     // Get the key that was pressed
     const key = event.key;
 
@@ -324,7 +323,7 @@ export class CashoutBetslipComponent implements OnInit, AfterViewInit {
   }
   buttonValue: any;
   lastValue: any;
-  addValueToStack(value) {
+  addValueToStack(value: any) {
     if (_window().addPlusMinusBetSlip) {
       if (this.lastValue != value) {
         this.market.betslip.size += value;
@@ -464,7 +463,7 @@ export class CashoutBetslipComponent implements OnInit, AfterViewInit {
 
   }
 
-  catchError(err) {
+  catchError(err: any) {
     this.placingBet = false
     if (err && err.status && err.status == 401) {
       this.storageService.secureStorage.removeItem('token');
@@ -473,7 +472,7 @@ export class CashoutBetslipComponent implements OnInit, AfterViewInit {
     }
   }
 
-  betStatus(resp) {
+  betStatus(resp: any) {
     this.placingBet = false
     let betstatus = resp.status;
     const translatedResponse = resp.message || resp.response.message;
@@ -684,7 +683,7 @@ export class CashoutBetslipComponent implements OnInit, AfterViewInit {
     }
     return this.toasterMessage;
   }
-  scrollToElement($element): void {
+  scrollToElement($element: any): void {
     $element.scrollIntoView({
       behavior: 'smooth',
       block: 'center',

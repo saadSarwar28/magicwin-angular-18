@@ -5,10 +5,10 @@ import {
   BackendService,
   CasinoRequest,
   _window,
-} from 'src/app/services/backend.service';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
-import { ToastService } from 'src/app/services/toast.service';
-import * as M from 'materialize-css';
+} from '../../services/backend.service';
+import { CheckAuthService } from '../../services/check-auth.service';
+import { ToastService } from '../../services/toast.service';
+
 
 @Component({
   selector: 'app-products-tab',
@@ -68,14 +68,13 @@ export class ProductsTabComponent implements OnInit {
 
   sidenavclose() {
     // console.warn('called');
-    if (this.navOpen) {
-      var elems = document.querySelector('#nav-mobile');
+    // if (this.navOpen) {
+    //   var elems = document.querySelector('#nav-mobile');
 
-      var instances = M.Sidenav.getInstance(elems);
+    //   var instances = M.Sidenav.getInstance(elems);
 
-      instances.close();
-      // this.navOpen = false;
-      //
-    }
+    //   instances.close();
+
+    // }
   }
 }

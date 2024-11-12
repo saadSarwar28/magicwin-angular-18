@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Inject, Input, OnInit } from '@angular/core';
-import { BackendService } from 'src/app/services/backend.service';
-import { ClientPosition, FancyMarketLiabilty } from 'src/app/models/models';
+import { BackendService } from '../../services/backend.service';
+import { ClientPosition, FancyMarketLiabilty } from '../../models/models';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 
 @Component({

@@ -2,14 +2,14 @@ import { DOCUMENT } from '@angular/common';
 import { Component, Inject, OnInit, Renderer2, ViewChildren } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { BackendService, _window } from 'src/app/services/backend.service';
-import { StorageService } from 'src/app/services/storage.service';
-import { FancytimerService, MarketTimerService, NewsTimerService, NextRaceTimerService, RemainingTimerService, ScoreCardTimerService, ScoreTimerService, TimerService } from 'src/app/services/timer.service';
-import { ToastService } from 'src/app/services/toast.service';
-import { AuthenticateRequest, } from 'src/app/models/models';
+import { BackendService, _window } from '../../services/backend.service';
+import { StorageService } from '../../services/storage.service';
+import { FancytimerService, MarketTimerService, NewsTimerService, NextRaceTimerService, RemainingTimerService, ScoreCardTimerService, ScoreTimerService, TimerService } from '../../services/timer.service';
+import { ToastService } from '../../services/toast.service';
+import { AuthenticateRequest, } from '../../models/models';
 import { ReCaptchaV3Service } from 'ng-recaptcha';
 import { TranslateService } from '@ngx-translate/core';
-import { GenericService } from 'src/app/services/generic.service';
+import { GenericService } from '../../services/generic.service';
 
 @Component({
   selector: 'app-forgot-password',
@@ -39,7 +39,7 @@ export class ForgotPasswordComponent implements OnInit {
   siteLogo: string = ''
 
   cdnUrl: any = 'https://iriscdn.b-cdn.net/';
-  specificCountry :string = 'in';
+  specificCountry: string = 'in';
 
   constructor(private signService: BackendService, private translate: TranslateService, private router: Router, @Inject(DOCUMENT) private document: Document,
     private recaptchaV3Service: ReCaptchaV3Service,
@@ -175,7 +175,7 @@ export class ForgotPasswordComponent implements OnInit {
 
   signinMethod() {
     let c: any
-    this.signService.authenticate(new AuthenticateRequest(this.signupForm.controls['username'].value, this.signupForm.controls['password'].value), c, "LoginComponent").then(resp => {
+    this.signService.authenticate(new AuthenticateRequest(String(this.signupForm.controls['username'].value), String(this.signupForm.controls['password'].value)), c, "LoginComponent").then(resp => {
       if (resp) {
         if (resp.code && resp.code != 200) {
           const translatedResponse = this.toasterTranslationMethod(resp.message);
@@ -291,12 +291,12 @@ export class ForgotPasswordComponent implements OnInit {
   }
   checkUserPhone() {
     this.requestIdForgotPassword = this.getUUID()
-    if (this.signupForm.controls.phoneNumber.errors?.required) {
+    if (this.signupForm.controls.phoneNumber.errors?.['required']) {
       const translatedResponse = this.toasterTranslationMethod("Phone Number is required");
       this.signupForm.controls['phoneNumber'].setErrors({ 'error': translatedResponse });
       return
     }
-    if (this.signupForm.controls.phoneNumber.errors?.validatePhoneNumber) {
+    if (this.signupForm.controls.phoneNumber.errors?.['validatePhoneNumber']) {
       const translatedResponse = this.toasterTranslationMethod("Please enter a valid phone number");
       this.signupForm.controls['phoneNumber'].setErrors({ 'error': translatedResponse });
       return

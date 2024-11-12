@@ -13,8 +13,8 @@ import {
   PopularSports,
   TodayRacesASSS,
   _window,
-} from 'src/app/services/backend.service';
-import { StorageService } from 'src/app/services/storage.service';
+} from '../../services/backend.service';
+import { StorageService } from '../../services/storage.service';
 import { Observable, Subscription } from 'rxjs';
 import {
   CustomMenu,
@@ -22,14 +22,14 @@ import {
   IMenu,
   Menu,
   RaceEvents,
-} from 'src/app/models/models';
+} from '../../models/models';
 import { FormControl } from '@angular/forms';
 import { DeviceDetectorService } from 'ngx-device-detector';
-import { ToastService } from 'src/app/services/toast.service';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
-import { UtillsService } from 'src/app/services/utills.service';
+import { ToastService } from '../../services/toast.service';
+import { CheckAuthService } from '../../services/check-auth.service';
+import { UtillsService } from '../../services/utills.service';
 import { SportsIdMapperService } from "../../services/sportsIdMapper.service";
-import { GenericService } from 'src/app/services/generic.service';
+import { GenericService } from '../../services/generic.service';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -146,7 +146,7 @@ export class SidebarComponent implements OnInit {
                           });
                           top.childs.push(a);
                           if (ch.childs && ch.childs.length > 0) {
-                            ch.childs.forEach((aa) => {
+                            ch.childs.forEach((aa: any) => {
                               let b: Menu = new Menu({
                                 id: aa.id,
                                 name: aa.name,
@@ -270,7 +270,7 @@ export class SidebarComponent implements OnInit {
     });
   }
   getSidebarData() {
-    this.utillsService.bannerData.subscribe((res => {
+    this.utillsService.bannerData.subscribe(((res: any) => {
       if (res) {
         this.sidebartop = this.utillsService.returnFormatedData(res, 'Sidebartop')
         this.SidebarCasino = this.utillsService.returnFormatedData(res, 'SidebarCasino')
@@ -555,7 +555,7 @@ export class SidebarComponent implements OnInit {
                   });
                   top.childs.push(a);
                   if (ch.childs && ch.childs.length > 0) {
-                    ch.childs.forEach((aa) => {
+                    ch.childs.forEach((aa: any) => {
                       let b: Menu = new Menu({
                         id: aa.id,
                         name: aa.name,
@@ -673,7 +673,7 @@ export class SidebarComponent implements OnInit {
             if (this.data[0].id == '1') {
               if (did) {
                 if (level == 'c') {
-                  let second = this.data[0].childs.filter((x) => x.id == did);
+                  let second = this.data[0].childs.filter((x: any) => x.id == did);
                   this.data[0].childs = second[0].childs;
                   let final = this.data[0].childs.filter(
                     (x: any) => x.id == m.id
@@ -681,8 +681,8 @@ export class SidebarComponent implements OnInit {
                   this.data[0].childs = final;
                   this.data[0].childs[0].childs = resp;
                   this.showLoader = false;
-                } else if (this.data[0].childs.map((x) => x.id).includes(did)) {
-                  let second = this.data[0].childs.filter((x) => x.id == did);
+                } else if (this.data[0].childs.map((x: any) => x.id).includes(did)) {
+                  let second = this.data[0].childs.filter((x: any) => x.id == did);
                   this.data[0].childs = second[0].childs;
                   let final = this.data[0].childs.filter(
                     (x: any) => x.id == m.id
@@ -699,7 +699,7 @@ export class SidebarComponent implements OnInit {
                   this.data[0].childs[0].childs[0].childs = resp;
                 } else if (this.data[0].childs.length > 1) {
                   this.data[0].childs = Array.from(
-                    this.data[0].childs.filter((x) => x.id == did)
+                    this.data[0].childs.filter((x: any) => x.id == did)
                   );
                   // this.data[0].childs[0].childs = this.data[0].childs[0].childs.filter((x:any) => x.id == m.id);
                   // this.data[0].childs[0].childs[0].childs=resp;
@@ -727,7 +727,7 @@ export class SidebarComponent implements OnInit {
               if (this.data.length == 1) {
                 if (this.data[0].childs.length > 1) {
                   this.data[0].childs = this.data[0].childs.filter(
-                    (x) => x.id == m.id
+                    (x: any) => x.id == m.id
                   );
                 }
                 this.data[0].childs[0].childs = resp;
@@ -747,7 +747,7 @@ export class SidebarComponent implements OnInit {
             if (this.data.length == 1) {
               if (this.data[0].childs.length > 1) {
                 this.data[0].childs = this.data[0].childs.filter(
-                  (x) => x.id == m.id
+                  (x: any) => x.id == m.id
                 );
               }
               this.data[0].childs[0].childs = resp;
@@ -766,7 +766,7 @@ export class SidebarComponent implements OnInit {
             if (did) {
               if (this.data[0].id == '1') {
                 if (this.data[0].childs) {
-                  var second = this.data[0].childs.filter((x) => x.id == did);
+                  var second = this.data[0].childs.filter((x: any) => x.id == did);
                   this.data[0].childs = second;
                   let last = this.data[0].childs[0].childs.filter(
                     (x: any) => x.id == m.id
@@ -779,7 +779,7 @@ export class SidebarComponent implements OnInit {
                 if (this.data.length == 1) {
                   if (this.data[0].childs.length > 1) {
                     this.data[0].childs = this.data[0].childs.filter(
-                      (x) => x.id == m.id
+                      (x: any) => x.id == m.id
                     );
                   }
                   this.data[0].childs[0].childs = resp;
@@ -790,7 +790,7 @@ export class SidebarComponent implements OnInit {
               if (this.data.length == 1) {
                 if (this.data[0].childs.length > 1) {
                   this.data[0].childs = this.data[0].childs.filter(
-                    (x) => x.id == m.id
+                    (x: any) => x.id == m.id
                   );
                 }
                 this.data[0].childs[0].childs = resp;
@@ -812,7 +812,7 @@ export class SidebarComponent implements OnInit {
             if (did) {
               if (this.data[0].id == '1') {
                 if (this.data[0].childs) {
-                  var second = this.data[0].childs.filter((x) => x.id == did);
+                  var second = this.data[0].childs.filter((x: any) => x.id == did);
                   this.data[0].childs = second[0].childs;
                   let last = this.data[0].childs.filter(
                     (x: any) => x.id == m.id
@@ -825,7 +825,7 @@ export class SidebarComponent implements OnInit {
                 if (this.data.length == 1) {
                   if (this.data[0].childs.length > 1) {
                     this.data[0].childs = this.data[0].childs.filter(
-                      (x) => x.id == m.id
+                      (x: any) => x.id == m.id
                     );
                   }
                   this.data[0].childs[0].childs = resp;
@@ -836,7 +836,7 @@ export class SidebarComponent implements OnInit {
               if (this.data.length == 1) {
                 if (this.data[0].childs.length > 1) {
                   this.data[0].childs = this.data[0].childs.filter(
-                    (x) => x.id == m.id
+                    (x: any) => x.id == m.id
                   );
                 }
                 this.data[0].childs[0].childs = resp;
@@ -855,7 +855,7 @@ export class SidebarComponent implements OnInit {
             if (this.data.length == 1) {
               if (this.data[0].childs.length != 1) {
                 this.data[0].childs = this.data[0].childs.filter(
-                  (x) => x.id == m.id
+                  (x: any) => x.id == m.id
                 );
                 this.data[0].childs[0].childs = resp;
                 this.showLoader = false;
@@ -999,7 +999,7 @@ export class SidebarComponent implements OnInit {
             if (this.data.length == 1) {
               if (this.data[0].childs.length != 1) {
                 this.data[0].childs = this.data[0].childs.filter(
-                  (x) => x.id == m.id
+                  (x: any) => x.id == m.id
                 );
                 this.data[0].childs[0].childs = resp;
                 this.showLoader = false;
@@ -1072,7 +1072,7 @@ export class SidebarComponent implements OnInit {
             if (this.data.length == 1) {
               if (this.data[0].childs.length != 1) {
                 this.data[0].childs = this.data[0].childs.filter(
-                  (x) => x.id == m.id
+                  (x: any) => x.id == m.id
                 );
                 this.data[0].childs[0].childs = resp;
                 this.showLoader = false;
@@ -1307,7 +1307,7 @@ export class SidebarComponent implements OnInit {
             if (this.data[0].id == '1') {
               if (did) {
                 if (level == 'c') {
-                  let second = this.data[0].childs.filter((x) => x.id == did);
+                  let second = this.data[0].childs.filter((x: any) => x.id == did);
                   this.data[0].childs = second[0].childs;
                   let final = this.data[0].childs.filter(
                     (x: any) => x.id == m.id
@@ -1315,8 +1315,8 @@ export class SidebarComponent implements OnInit {
                   this.data[0].childs = final;
                   this.data[0].childs[0].childs = resp;
                   this.showLoader = false;
-                } else if (this.data[0].childs.map((x) => x.id).includes(did)) {
-                  let second = this.data[0].childs.filter((x) => x.id == did);
+                } else if (this.data[0].childs.map((x: any) => x.id).includes(did)) {
+                  let second = this.data[0].childs.filter((x: any) => x.id == did);
                   this.data[0].childs = second[0].childs;
                   let final = this.data[0].childs.filter(
                     (x: any) => x.id == m.id
@@ -1333,7 +1333,7 @@ export class SidebarComponent implements OnInit {
                   this.data[0].childs[0].childs[0].childs = resp;
                 } else if (this.data[0].childs.length > 1) {
                   this.data[0].childs = Array.from(
-                    this.data[0].childs.filter((x) => x.id == did)
+                    this.data[0].childs.filter((x: any) => x.id == did)
                   );
                   // this.data[0].childs[0].childs = this.data[0].childs[0].childs.filter((x:any) => x.id == m.id);
                   // this.data[0].childs[0].childs[0].childs=resp;
@@ -1358,7 +1358,7 @@ export class SidebarComponent implements OnInit {
               if (this.data.length == 1) {
                 if (this.data[0].childs.length > 1) {
                   this.data[0].childs = this.data[0].childs.filter(
-                    (x) => x.id == m.id
+                    (x: any) => x.id == m.id
                   );
                 }
                 this.data[0].childs[0].childs = resp;
@@ -1378,7 +1378,7 @@ export class SidebarComponent implements OnInit {
             if (this.data.length == 1) {
               if (this.data[0].childs.length > 1) {
                 this.data[0].childs = this.data[0].childs.filter(
-                  (x) => x.id == m.id
+                  (x: any) => x.id == m.id
                 );
               }
               this.data[0].childs[0].childs = resp;
@@ -1398,7 +1398,7 @@ export class SidebarComponent implements OnInit {
             if (did) {
               if (this.data[0].id == '1') {
                 if (this.data[0].childs) {
-                  var second = this.data[0].childs.filter((x) => x.id == did);
+                  var second = this.data[0].childs.filter((x: any) => x.id == did);
                   this.data[0].childs = second;
                   let last = this.data[0].childs[0].childs.filter(
                     (x: any) => x.id == m.id
@@ -1411,7 +1411,7 @@ export class SidebarComponent implements OnInit {
                 if (this.data.length == 1) {
                   if (this.data[0].childs.length > 1) {
                     this.data[0].childs = this.data[0].childs.filter(
-                      (x) => x.id == m.id
+                      (x: any) => x.id == m.id
                     );
                   }
                   this.data[0].childs[0].childs = resp;
@@ -1422,7 +1422,7 @@ export class SidebarComponent implements OnInit {
               if (this.data.length == 1) {
                 if (this.data[0].childs.length > 1) {
                   this.data[0].childs = this.data[0].childs.filter(
-                    (x) => x.id == m.id
+                    (x: any) => x.id == m.id
                   );
                 }
                 this.data[0].childs[0].childs = resp;
@@ -1444,7 +1444,7 @@ export class SidebarComponent implements OnInit {
             if (did) {
               if (this.data[0].id == '1') {
                 if (this.data[0].childs) {
-                  var second = this.data[0].childs.filter((x) => x.id == did);
+                  var second = this.data[0].childs.filter((x: any) => x.id == did);
                   this.data[0].childs = second[0].childs;
                   let last = this.data[0].childs.filter(
                     (x: any) => x.id == m.id
@@ -1457,7 +1457,7 @@ export class SidebarComponent implements OnInit {
                 if (this.data.length == 1) {
                   if (this.data[0].childs.length > 1) {
                     this.data[0].childs = this.data[0].childs.filter(
-                      (x) => x.id == m.id
+                      (x: any) => x.id == m.id
                     );
                   }
                   this.data[0].childs[0].childs = resp;
@@ -1468,7 +1468,7 @@ export class SidebarComponent implements OnInit {
               if (this.data.length == 1) {
                 if (this.data[0].childs.length > 1) {
                   this.data[0].childs = this.data[0].childs.filter(
-                    (x) => x.id == m.id
+                    (x: any) => x.id == m.id
                   );
                 }
                 this.data[0].childs[0].childs = resp;
@@ -1487,7 +1487,7 @@ export class SidebarComponent implements OnInit {
             if (this.data.length == 1) {
               if (this.data[0].childs.length != 1) {
                 this.data[0].childs = this.data[0].childs.filter(
-                  (x) => x.id == m.id
+                  (x: any) => x.id == m.id
                 );
                 this.data[0].childs[0].childs = resp;
                 this.showLoader = false;
@@ -1630,7 +1630,7 @@ export class SidebarComponent implements OnInit {
             if (this.data.length == 1) {
               if (this.data[0].childs.length != 1) {
                 this.data[0].childs = this.data[0].childs.filter(
-                  (x) => x.id == m.id
+                  (x: any) => x.id == m.id
                 );
                 this.data[0].childs[0].childs = resp;
                 this.showLoader = false;
@@ -1703,7 +1703,7 @@ export class SidebarComponent implements OnInit {
             if (this.data.length == 1) {
               if (this.data[0].childs.length != 1) {
                 this.data[0].childs = this.data[0].childs.filter(
-                  (x) => x.id == m.id
+                  (x: any) => x.id == m.id
                 );
                 this.data[0].childs[0].childs = resp;
                 this.showLoader = false;

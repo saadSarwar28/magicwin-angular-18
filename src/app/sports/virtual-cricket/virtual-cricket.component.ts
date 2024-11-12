@@ -1,8 +1,8 @@
 import { Component, Input, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { _window } from 'src/app/services/backend.service';
-import { ScoreTimerService } from 'src/app/services/timer.service';
+import { _window } from '../../services/backend.service';
+import { ScoreTimerService } from '../../services/timer.service';
 import { Router } from '@angular/router';
-import { UtillsService } from 'src/app/services/utills.service';
+import { UtillsService } from '../../services/utills.service';
 
 @Component({
   selector: 'app-virtual-cricket',
@@ -39,7 +39,7 @@ export class VirtualCricketComponent implements OnInit, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.scoreData && this.scoreData.length > 0) {
-      this.scoreData.forEach((s) => {
+      this.scoreData.forEach((s: any) => {
         let m = this.virtual.filter(
           (x: any) => x.version == s.eventId
         );
@@ -52,7 +52,7 @@ export class VirtualCricketComponent implements OnInit, OnDestroy {
   }
 
   virtualEventIds = [];
-  routeToMarket(link) {
+  routeToMarket(link: any) {
     this.router.navigate([link]);
   }
 

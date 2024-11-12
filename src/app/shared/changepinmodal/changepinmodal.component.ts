@@ -10,12 +10,12 @@ import {
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ReCaptchaV3Service } from 'ng-recaptcha';
-import { _window, BackendService } from 'src/app/services/backend.service';
-import { ToastService } from 'src/app/services/toast.service';
-import { UtillsService } from 'src/app/services/utills.service';
-import { minLengthNumberValidator } from 'src/app/validators/minLengthValidator';
-import { patternValidator } from 'src/app/validators/patternValidators';
-import { pinMatchValidator } from 'src/app/validators/pin-matchValidators';
+import { _window, BackendService } from '../../services/backend.service';
+import { ToastService } from '../../services/toast.service';
+import { UtillsService } from '../../services/utills.service';
+import { minLengthNumberValidator } from '../../validators/minLengthValidator';
+import { patternValidator } from '../../validators/patternValidators';
+import { pinMatchValidator } from '../../validators/pin-matchValidators';
 
 @Component({
   selector: 'app-changepinmodal',

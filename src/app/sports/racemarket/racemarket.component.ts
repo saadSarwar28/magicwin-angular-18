@@ -1,6 +1,6 @@
 import {
   BackendService,
-} from 'src/app/services/backend.service';
+} from '../../services/backend.service';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -15,7 +15,7 @@ import {
   shortenLargeNumber,
 } from '../../services/shortenLargeNumber';
 import { StorageService } from '../../services/storage.service';
-import { ToastService } from 'src/app/services/toast.service';
+import { ToastService } from '../../services/toast.service';
 import {
   CurrentBets,
   MatchedUnmatched,
@@ -25,17 +25,17 @@ import {
   LineLiablityMulti,
   MarketCatalogueSS,
   MarketRunners,
-} from 'src/app/models/models';
+} from '../../models/models';
 import { TimerService } from '../../services/timer.service';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
+import { CheckAuthService } from '../../services/check-auth.service';
 import { _window } from '../../services/backend.service';
-import { UtillsService } from 'src/app/services/utills.service';
+import { UtillsService } from '../../services/utills.service';
 import { RecentMarketsService } from '../../services/recent-markets.service';
 import { DeviceDetectorService } from 'ngx-device-detector';
-import { GetStatusService } from 'src/app/services/get-status.service';
+import { GetStatusService } from '../../services/get-status.service';
 import { HttpClient } from "@angular/common/http";
-import { GenericService } from 'src/app/services/generic.service';
-import { WalletService } from 'src/app/services/wallet.service';
+import { GenericService } from '../../services/generic.service';
+import { WalletService } from '../../services/wallet.service';
 @Component({
   selector: 'app-racemarket',
   templateUrl: './racemarket.component.html',
@@ -103,7 +103,7 @@ export class RacemarketComponent implements OnInit, OnDestroy {
   showStreamAgent: boolean = false;
   isShowStreamMobile: boolean = false;
   deviceInfo: any;
-  uniformUrl:any = 'https://score.ssfun.in/SilkColours/';
+  uniformUrl: any = 'https://score.ssfun.in/SilkColours/';
   constructor(
     private checkauthservice: CheckAuthService,
     private route: ActivatedRoute,
@@ -144,7 +144,7 @@ export class RacemarketComponent implements OnInit, OnDestroy {
     if (_window().uniformUrl) {
       this.uniformUrl = _window().uniformUrl;
     }
-    this.route.params.subscribe((p) => {
+    this.route.params.subscribe((p: any) => {
       this.data = null;
       this.currentBets = [];
       this.sportsId = this.marketId = p.id.split('-')[p.id.split('-').length - 1];
@@ -178,7 +178,7 @@ export class RacemarketComponent implements OnInit, OnDestroy {
   }
 
   getNumberStyles(number: any): { backgroundColor: any, color: any } {
-    const styles = {
+    const styles: any = {
       1: { backgroundColor: '#ff0000', color: '#ffffff' },
       2: { backgroundColor: '#ffffff', color: '#000000' },
       3: { backgroundColor: '#0000ff', color: '#ffffff' },
@@ -278,7 +278,7 @@ export class RacemarketComponent implements OnInit, OnDestroy {
       this.eventId = this.data.event.id;
       this.eventType = resp?.eventType?.id;
       this.GetTV()
-      this.route.queryParams.subscribe((x) => {
+      this.route.queryParams.subscribe((x: any) => {
         if (x.bf) {
           this.data.isLocalMarket = 0;
         }
@@ -308,7 +308,7 @@ export class RacemarketComponent implements OnInit, OnDestroy {
     else {
       this.checkUserAgent();
     }
-    this.utillsService.ipaddress.subscribe((data) => {
+    this.utillsService.ipaddress.subscribe((data: any) => {
       if (data) {
         this.getIPAddress = data;
       }
@@ -583,7 +583,7 @@ export class RacemarketComponent implements OnInit, OnDestroy {
   GetClientParameters() {
     if (navigator.onLine == true && document.hidden == false) {
       if (this.checkauthservice.IsLogin()) {
-        this.checkauthservice.clientParameters.subscribe(clientParams => {
+        this.checkauthservice.clientParameters.subscribe((clientParams: any) => {
           if (clientParams) {
             this.cBuyRate = this.clientParams?.cBuyRate;
             this.cTotalShare =
@@ -739,8 +739,8 @@ export class RacemarketComponent implements OnInit, OnDestroy {
     }
   }
 
-  oneClickBetObj = {}
-  async placeOneClickBet(betslip) {
+  oneClickBetObj: any = {}
+  async placeOneClickBet(betslip: any) {
     let betSize = this.storageService.secureStorage.getItem('OCBSelectedVal');
     betslip.size = betSize
     try {
@@ -755,7 +755,7 @@ export class RacemarketComponent implements OnInit, OnDestroy {
 
   }
 
-  catchError(err) {
+  catchError(err: any) {
     if (err && err.status && err.status == 401) {
       this.storageService.secureStorage.removeItem('token');
       this.timerService.clearTimer();
@@ -765,7 +765,7 @@ export class RacemarketComponent implements OnInit, OnDestroy {
     }
   }
 
-  betStatus(resp, marketId) {
+  betStatus(resp: any, marketId: any) {
     let betstatus = resp.status;
     const message = resp.message || resp.response.message;
     if (betstatus) {

@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { RoutingStateService } from '../services/router-state.service';
 import { NavigationEnd, Router, } from '@angular/router';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
-import { _window } from 'src/app/services/backend.service';
+import { CheckAuthService } from '../../services/check-auth.service';
+import { _window } from '../../services/backend.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MenuitemsComponent } from '../menuitems/menuitems.component';
 import { Location } from '@angular/common';
-import { GetStatusService } from 'src/app/services/get-status.service';
-import { MybetsModalComponent } from 'src/app/mybets-modal/mybets-modal.component';
-import { UtillsService } from 'src/app/services/utills.service';
+import { GetStatusService } from '../../services/get-status.service';
+import { MybetsModalComponent } from '../../mybets-modal/mybets-modal.component';
+import { UtillsService } from '../../services/utills.service';
 import { MatDialog, } from '@angular/material/dialog';
-import { WalletService } from 'src/app/services/wallet.service';
+import { WalletService } from '../../services/wallet.service';
 
 @Component({
   selector: 'app-nav-bottom',
@@ -291,7 +291,7 @@ export class NavBottomComponent implements OnInit {
         this.currentBets = data.bets;
       }
     });
-    this.utillsService.bannerData.subscribe((res => {
+    this.utillsService.bannerData.subscribe(((res: any) => {
       if (res) {
         let mobSiteFooterMenu = this.utillsService.returnFormatedData(res, 'mobSiteFooterMenu');
         for (const element of mobSiteFooterMenu) {
@@ -337,7 +337,7 @@ export class NavBottomComponent implements OnInit {
   }
 
   loadBalance() {
-    this.walletService.walletDetail.subscribe((payment) => {
+    this.walletService.walletDetail.subscribe((payment: any) => {
       if (payment) {
         this.paymentDetails = payment;
       }
@@ -370,7 +370,7 @@ export class NavBottomComponent implements OnInit {
       }
       var site_footers = document.getElementsByClassName('site_footer');
       for (var i = 0; i < site_footers.length; i++) {
-        let ele;
+        let ele: any;
         ele = site_footers[i];
         if (ele) {
           ele.style.display = 'block';
@@ -398,7 +398,7 @@ export class NavBottomComponent implements OnInit {
     }
   }
 
-  backbtnHide(val?) {
+  backbtnHide(val?: any) {
     const button: any = document.getElementById('btn-content100');
     if (button) {
       button.classList.add('d-none');

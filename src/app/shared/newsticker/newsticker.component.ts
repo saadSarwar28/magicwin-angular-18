@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { BackendService, _window } from 'src/app/services/backend.service';
-import { StorageService } from 'src/app/services/storage.service';
+import { BackendService, _window } from '../../services/backend.service';
+import { StorageService } from '../../services/storage.service';
 import { UtillsService } from "../../services/utills.service";
 import { NewsTimerService } from "../../services/timer.service";
 

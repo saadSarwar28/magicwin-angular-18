@@ -1,13 +1,13 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, Inject, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { of } from 'rxjs';
-import { _window } from 'src/app/services/backend.service';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
-import { StorageService } from 'src/app/services/storage.service';
+import { _window } from '../../services/backend.service';
+import { CheckAuthService } from '../../services/check-auth.service';
+import { StorageService } from '../../services/storage.service';
 import videojs from 'video.js';
-import { ModalService } from 'src/app/shared/services/modal.service';
-import { VideoModalService } from 'src/app/shared/services/video-modal.service';
-import { UtillsService } from 'src/app/services/utills.service';
+import { ModalService } from '../../shared/services/modal.service';
+import { VideoModalService } from '../../shared/services/video-modal.service';
+import { UtillsService } from '../../services/utills.service';
 
 @Component({
   selector: 'app-video-modal',

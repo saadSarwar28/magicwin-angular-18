@@ -1,6 +1,6 @@
-import {Component, Input, OnInit,} from '@angular/core';
-import {_window} from 'src/app/services/backend.service';
-import {UtillsService} from 'src/app/services/utills.service';
+import { Component, Input, OnInit, } from '@angular/core';
+import { _window } from '../../services/backend.service';
+import { UtillsService } from '../../services/utills.service';
 
 @Component({
   selector: 'app-nav-menus',

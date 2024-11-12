@@ -1211,8 +1211,8 @@ export class BackendService {
    * @return Success
    */
   changePassword_First(
-    body: ChangePassword | undefined,
-    cancelToken?: CancelToken | undefined
+    body: ChangePassword,
+
   ): Promise<BettingResponse> {
     let url_ = this.baseUrl + '/exchangeapi/client/changepasswordfirst';
     url_ = url_.replace(/[?&]$/, '');
