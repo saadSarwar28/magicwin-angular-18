@@ -138,7 +138,7 @@ export class BackendService {
   ): Observable<BettingResponse> {
     let url = this.baseUrl + "/exchangeapi/client/changepassword";
     url = url.replace(/[?&]$/, "");
-    return this.http.post<BettingResponse>(url, body);
+    return this.http.post<BettingResponse>(url, JSON.stringify(body));
   }
 
   TvOnBookmaker(id: number): Observable<EventTv> {
@@ -178,7 +178,7 @@ export class BackendService {
   ): Observable<SignupWithOTPResponse> {
     let url_ = this.baseUrl + "/exchangeapi/client/signup";
     url_ = url_.replace(/[?&]$/, "");
-    return this.http.post<SignupWithOTPResponse>(url_, body);
+    return this.http.post<SignupWithOTPResponse>(url_, JSON.stringify(body));
   }
 
   // SignUpOTPRequest
@@ -188,7 +188,7 @@ export class BackendService {
   ): Observable<SignupWithOTPModal> {
     let url_ = this.baseUrl + "/exchangeapi/client/signupotp";
     url_ = url_.replace(/[?&]$/, "");
-    return this.http.post<SignupWithOTPModal>(url_, body);
+    return this.http.post<SignupWithOTPModal>(url_, JSON.stringify(body));
   }
 
   // SignUp Final Registration Step
@@ -198,7 +198,7 @@ export class BackendService {
   ): Observable<SignupModel> {
     let url_ = this.baseUrl + "/exchangeapi/client/signuprequest";
     url_ = url_.replace(/[?&]$/, "");
-    return this.http.post<SignupModel>(url_, body);
+    return this.http.post<SignupModel>(url_, JSON.stringify(body));
   }
 
   // Get payment Gateway
@@ -226,7 +226,7 @@ export class BackendService {
       url_ = this.baseUrl + requestUrl;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<CreatePaymentResp>(url_, body);
+    return this.http.post<CreatePaymentResp>(url_, JSON.stringify(body));
   }
 
   // Post Payment Gateway
@@ -297,7 +297,7 @@ export class BackendService {
   searchCasinoPost(body: any | undefined): Observable<any> {
     let url_ = this.baseUrl + "/exchangeapi/casino/games/search";
     url_ = url_.replace(/[?&]$/, "");
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   // Client KYC
@@ -340,7 +340,7 @@ export class BackendService {
   ): Observable<BettingResponse> {
     let url_ = this.baseUrl + "/exchangeapi/client/changepasswordfirst";
     url_ = url_.replace(/[?&]$/, "");
-    return this.http.post<BettingResponse>(url_, body);
+    return this.http.post<BettingResponse>(url_, JSON.stringify(body));
   }
 
   GetNews(): Observable<string> {
@@ -401,7 +401,7 @@ export class BackendService {
       url_ = url_.replace(/[?&]$/, "");
     }
 
-    return this.http.post<MatchedUnmatched>(url_, body);
+    return this.http.post<MatchedUnmatched>(url_, JSON.stringify(body));
   }
 
   /**
@@ -554,7 +554,7 @@ export class BackendService {
       url_ = url_.replace(/[?&]$/, "");
     }
 
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   /**
@@ -581,7 +581,7 @@ export class BackendService {
       url_ = url_.replace(/[?&]$/, "");
     }
 
-    return this.http.post<ClientPosition[]>(url_, body);
+    return this.http.post<ClientPosition[]>(url_, JSON.stringify(body));
   }
 
   /**
@@ -597,7 +597,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().clientpositionfancy;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<FancyMarketLiabilty>(url_, body);
+    return this.http.post<FancyMarketLiabilty>(url_, JSON.stringify(body));
   }
 
   /**
@@ -654,7 +654,7 @@ export class BackendService {
       url_ = url_.replace(/[?&]$/, "");
     }
 
-    return this.http.post<MatchedUnmatched>(url_, body);
+    return this.http.post<MatchedUnmatched>(url_, JSON.stringify(body));
   }
 
   /**
@@ -672,7 +672,7 @@ export class BackendService {
       url_ = url_.replace(/[?&]$/, "");
     }
 
-    return this.http.post<CurrentBets[]>(url_, body);
+    return this.http.post<CurrentBets[]>(url_, JSON.stringify(body));
   }
 
   /**
@@ -740,7 +740,7 @@ export class BackendService {
       url_ = url_.replace(/[?&]$/, "");
     }
 
-    return this.http.post<BettingResponse>(url_, body);
+    return this.http.post<BettingResponse>(url_, JSON.stringify(body));
   }
 
   FancyMarkets(id: number, from: String): Observable<AllFancyData> {
@@ -819,7 +819,7 @@ export class BackendService {
       url_ = url_.replace(/[?&]$/, "");
     }
 
-    return this.http.post<LineLiablityMulti[]>(url_, body);
+    return this.http.post<LineLiablityMulti[]>(url_, JSON.stringify(body));
   }
 
   /**
@@ -877,7 +877,7 @@ export class BackendService {
       url_ = url_.replace(/[?&]$/, "");
     }
 
-    return this.http.post<CurrentBets[]>(url_, body);
+    return this.http.post<CurrentBets[]>(url_, JSON.stringify(body));
   }
 
   /**
@@ -891,7 +891,7 @@ export class BackendService {
       url_ = url_.replace(/[?&]$/, "");
     }
 
-    return this.http.post<MarketDetail>(url_, body);
+    return this.http.post<MarketDetail>(url_, JSON.stringify(body));
   }
 
   /**
@@ -908,7 +908,7 @@ export class BackendService {
       url_ = url_.replace(/[?&]$/, "");
     }
 
-    return this.http.post<CustomMenu>(url_, body);
+    return this.http.post<CustomMenu>(url_, JSON.stringify(body));
   }
 
   GetPopularSports(): Observable<PopularSports> {
@@ -920,9 +920,9 @@ export class BackendService {
   otherRacesPost(body: any | undefined): Observable<any> {
     let url_ = this.baseUrl + this.BrowserService.getWindow().otherracesordersplaced;
     url_ = url_.replace(/[?&]$/, "");
-    const content_ = JSON.stringify(body);
+    const content_ = JSON.stringify(JSON.stringify(body));
 
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   /**
@@ -940,7 +940,7 @@ export class BackendService {
       url_ = url_.replace(/[?&]$/, "");
     }
 
-    return this.http.post<BettingResponse>(url_, body);
+    return this.http.post<BettingResponse>(url_, JSON.stringify(body));
   }
 
   searchMarkets_POST(query: string | undefined): Observable<SearchResult> {
@@ -974,7 +974,7 @@ export class BackendService {
       url_ = url_.replace(/[?&]$/, "");
     }
 
-    return this.http.post<ClientParameters>(url_, body);
+    return this.http.post<ClientParameters>(url_, JSON.stringify(body));
   }
 
   /**
@@ -1042,7 +1042,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().directmarketsbook;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<MarketBook[]>(url_, body);
+    return this.http.post<MarketBook[]>(url_, JSON.stringify(body));
   }
 
   marketsbook(
@@ -1054,7 +1054,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().marketsbook;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   /**
@@ -1071,7 +1071,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().cricketmarketsbook;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   /**
@@ -1107,7 +1107,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().directmarketsbook;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   /**
@@ -1121,7 +1121,7 @@ export class BackendService {
       url_ = this.BrowserService.getWindow().multiplescore;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   /**
@@ -1168,7 +1168,7 @@ export class BackendService {
   ): Observable<ExceptionResponse> {
     let url_ = this.baseUrl + "/exchangeapi/client/signup";
     url_ = url_.replace(/[?&]$/, "");
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   CheckUserNameAndPhone(
@@ -1178,7 +1178,7 @@ export class BackendService {
     let url_ = this.baseUrl + "/exchangeapi/client/checkusername";
     url_ = url_.replace(/[?&]$/, "");
 
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
   CheckUserPhone(
     username: string | undefined,
@@ -1186,7 +1186,7 @@ export class BackendService {
   ): Observable<PhoneNOResponse> {
     let url_ = this.baseUrl + "/exchangeapi/user/checkusername/v1";
     url_ = url_.replace(/[?&]$/, "");
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   RequestOTP(
@@ -1195,7 +1195,7 @@ export class BackendService {
   ): Observable<PhoneNOResponse> {
     let url_ = this.baseUrl + "/exchangeapi/user/requestotp";
     url_ = url_.replace(/[?&]$/, "");
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   /**
@@ -1297,7 +1297,7 @@ export class BackendService {
   sSCasino_POST(body: CasinoRequest | undefined): Observable<any> {
     let url_ = this.baseUrl + "/exchangeapi/client/sscasino";
     url_ = url_.replace(/[?&]$/, "");
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   /**
@@ -1565,7 +1565,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().marketdetail;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   /**
@@ -1624,7 +1624,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().matchunmatchxg;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   popularbyid(
@@ -1658,7 +1658,7 @@ export class BackendService {
       url_ = url_.replace(/[?&]$/, "");
     }
 
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   /**
@@ -1689,7 +1689,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().result;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   /**
@@ -1715,7 +1715,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().singlebook;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   /**
@@ -1732,7 +1732,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().cancelorders;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
   /**
    * order placed in exchange game
@@ -1748,7 +1748,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().ordersplacedxg;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   /**
@@ -1765,7 +1765,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().currentbetsxg;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   ClientPositionXgame(
@@ -1777,7 +1777,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().clientpositionxg;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   /**
@@ -1793,7 +1793,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().walletxg;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   /**
@@ -1805,7 +1805,7 @@ export class BackendService {
   ): Observable<ExceptionResponse> {
     let url_ = this.baseUrl + "/exchangeapi/client/signupwhitelabel";
     url_ = url_.replace(/[?&]$/, "");
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   // Single Screen Signup
@@ -1816,7 +1816,7 @@ export class BackendService {
   ): Observable<SignupWithOTPResponse> {
     let url_ = this.baseUrl + "/exchangeapi/client/checkusername";
     url_ = url_.replace(/[?&]$/, "");
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   authenticate(
@@ -1829,7 +1829,6 @@ export class BackendService {
     url_ = this.baseUrl + "/exchangeapi/user/authenticate";
     url_ = url_.replace(/[?&]$/, "");
 
-    const content_ = JSON.stringify(body);
     if (!otp) {
       const headers = new HttpHeaders()
         .set("Content-Type", "application/json")
@@ -1852,7 +1851,7 @@ export class BackendService {
         headers: headers,
       };
     }
-    return this.http.post<any>(url_, body, options_);
+    return this.http.post<any>(url_, JSON.stringify(body), options_);
   }
 
   /**
@@ -1868,7 +1867,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().changepassword;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   // Forgot Password Portion Starts
@@ -1878,7 +1877,7 @@ export class BackendService {
   ): Observable<ResetPasswordResponse> {
     let url_ = this.baseUrl + "/exchangeapi/client/getphonenumber";
     url_ = url_.replace(/[?&]$/, "");
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   Checkuserphone(
@@ -1888,7 +1887,7 @@ export class BackendService {
     let url_ = this.baseUrl + "/exchangeapi/client/checkuserphone";
     url_ = url_.replace(/[?&]$/, "");
 
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   Verifyotpphone(
@@ -1897,7 +1896,7 @@ export class BackendService {
   ): Observable<ResetPasswordResponse> {
     let url_ = this.baseUrl + "/exchangeapi/client/verifyotpphone";
     url_ = url_.replace(/[?&]$/, "");
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   Newpassword(
@@ -1906,7 +1905,7 @@ export class BackendService {
   ): Observable<ResetPasswordResponse> {
     let url_ = this.baseUrl + "/exchangeapi/client/newpassword";
     url_ = url_.replace(/[?&]$/, "");
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   // Forgot Password Portion Ends
@@ -1924,7 +1923,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().accountstatement;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   /**
@@ -1941,7 +1940,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().accountstatementsub;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   /**
@@ -1958,7 +1957,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().casinobets;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   /**
@@ -1985,7 +1984,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().createWithDrawPin;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
   RequestWithDrawPin(body: any, from: String): Observable<string> {
     let url_: string = "";
@@ -1993,7 +1992,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().requestWithDrawPin;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
   ResetWithdrawpin(body: any, from: String): Observable<string> {
     let url_: string = "";
@@ -2001,7 +2000,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().resetWithdrawpin;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   // Back Details
@@ -2013,7 +2012,7 @@ export class BackendService {
       url_ = url_.replace(/[?&]$/, "");
     }
     let body1 = { ...body, recaptcha };
-    return this.http.post<any>(url_, body1);
+    return this.http.post<any>(url_, JSON.stringify(body1));
   }
 
   GetBankAccounts(): Observable<ClientkBankAccounts> {
@@ -2035,7 +2034,7 @@ export class BackendService {
   ): Observable<BettingResponse> {
     let url_ = this.baseUrl + "/exchangeapi/client/addclientwalletaccount";
     url_ = url_.replace(/[?&]$/, "");
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   // Add bank with kyc
@@ -2134,7 +2133,7 @@ export class BackendService {
     let url_ = this.baseUrl + "/exchangeapi/client/getbankdetailkyc";
     url_ = url_.replace(/[?&]$/, "");
 
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   // view kyc method
@@ -2160,7 +2159,7 @@ export class BackendService {
   ): Observable<BettingResponse> {
     let url_ = this.baseUrl + "/exchangeapi/client/addclientbankaccounts";
     url_ = url_.replace(/[?&]$/, "");
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   //Remove
@@ -2171,14 +2170,14 @@ export class BackendService {
   RemoveBankAccount(body: any | undefined): Observable<any> {
     let url_ = this.baseUrl + "/exchangeapi/client/removebankdetail";
     url_ = url_.replace(/[?&]$/, "");
-    const content_ = JSON.stringify(body);
+    const content_ = JSON.stringify(JSON.stringify(body));
     const headers = new HttpHeaders()
       .set("Content-Type", "application/json")
-      .append("accountNumber", body);
+      .append("accountNumber", JSON.stringify(body));
     let options_ = {
       headers: headers,
     };
-    return this.http.post<any>(url_, body, options_);
+    return this.http.post<any>(url_, (JSON.stringify(body), options_));
   }
 
   // Request History
@@ -2200,7 +2199,7 @@ export class BackendService {
   ): Observable<BettingResponse> {
     let url_ = this.baseUrl + this.BrowserService.getWindow().requestwithdraw;
     url_ = url_.replace(/[?&]$/, "");
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   /**
@@ -2229,7 +2228,7 @@ export class BackendService {
       url_ = url_.replace(/[?&]$/, "");
     }
 
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   /**
@@ -2246,7 +2245,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().exchangemybets;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   /**
@@ -2263,7 +2262,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().sportsbets;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   /**
@@ -2280,7 +2279,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().pl;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   /**
@@ -2297,7 +2296,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().plmarketwise;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   /**
@@ -2314,7 +2313,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().plsportswise;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   /**
@@ -2331,7 +2330,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().results;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   /**
@@ -2433,7 +2432,7 @@ export class BackendService {
       url_ = url_.replace(/[?&]$/, "");
     }
 
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
   /**
    * @param body (optional)
@@ -2448,7 +2447,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().xgwallet;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   BookMakerOrdersplaced(
@@ -2465,7 +2464,7 @@ export class BackendService {
       url_ = url_.replace(/[?&]$/, "");
     }
 
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   /**
@@ -2482,7 +2481,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().matchunmatchlocalmarket;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   /**
@@ -2499,7 +2498,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().cancelorderslocal;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   /**
@@ -2522,7 +2521,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().sportscancelorders;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   /**
@@ -2534,7 +2533,7 @@ export class BackendService {
   ): Observable<CurrentBetResp> {
     let url_ = this.baseUrl + "/exchangeapi/sports/cancellallorders";
     url_ = url_.replace(/[?&]$/, "");
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   /**
@@ -2551,7 +2550,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().xgcancelorders;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   /**
@@ -2568,7 +2567,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().sportsordersplaced;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   SportsOrdersplacedSingle(
@@ -2580,7 +2579,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().sportsordersplacedSingle;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   SportsBookOrdersplacedSingle(
@@ -2591,7 +2590,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().sportsBookOrderPlacedNew;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   /**
@@ -2618,7 +2617,7 @@ export class BackendService {
         url_ = url_.replace(/[?&]$/, "");
       }
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   /**
@@ -2635,7 +2634,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().ordersplacedxg;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
   /**
    * Detail of Single Markets
@@ -2648,8 +2647,7 @@ export class BackendService {
       url_ = this.baseUrl + this.BrowserService.getWindow().othersmarkets;
       url_ = url_.replace(/[?&]$/, "");
     }
-    const content_ = body;
-    return this.http.post<any>(url_, content_);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   jorhiTigarhiPOST(
@@ -2661,9 +2659,8 @@ export class BackendService {
       url_ = url_.replace(/[?&]$/, "");
     }
 
-    const content_ = JSON.stringify(body);
 
-    return this.http.post<any>(url_, content_);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   GetiPAddressForBetid(
@@ -2671,8 +2668,7 @@ export class BackendService {
   ): Observable<string> {
     let url_ = this.baseUrl + "/exchangeapi/reports/ipaddress";
     url_ = url_.replace(/[?&]$/, "");
-    const content_ = JSON.stringify(body);
-    return this.http.post<any>(url_, content_);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   /**
