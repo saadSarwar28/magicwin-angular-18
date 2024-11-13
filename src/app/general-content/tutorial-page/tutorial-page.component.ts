@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { _window } from 'src/app/services/backend.service';
+import { _window } from '../../services/backend.service';
 
 @Component({
   selector: 'app-tutorial-page',
@@ -9,7 +9,7 @@ import { _window } from 'src/app/services/backend.service';
   styleUrls: ['./tutorial-page.component.scss'],
 })
 export class TutorialPageComponent implements OnInit {
-  constructor() {}
+  constructor() { }
   filterData: any = [];
   data: any = [];
 

@@ -80,7 +80,7 @@ export class CreatepinComponent implements OnInit {
             recaptcha: token,
             otp: this.createPinForm?.value.pin
           }
-          this.backendService.createPin(body, "CreatepinComponent").then((res: any) => {
+          this.backendService.createPin(body, "CreatepinComponent").subscribe((res: any) => {
             if (res.status) {
               this.toasterService.show(res.message, {
                 classname: 'bg-success text-light',
@@ -94,7 +94,6 @@ export class CreatepinComponent implements OnInit {
                 delay: 1500,
               });
             }
-          }).finally(() => {
             this.loading = false
           })
         })

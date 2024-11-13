@@ -76,12 +76,14 @@ export class GamePopupComponent implements OnInit {
           undefined,
           tableId
         ),
-        undefined
+
       )
-      .then((x) => {
+      .subscribe((x) => {
         if (x.url) {
           this.loading = true;
           this.iframeurl = x.url;
+          this.loading = false;
+          this.iframeLoad = true;
           if (this.isLobby && this.providerCode == 'QTC' && this.type == 'live') {
             this.iframeurl += '/games/wl-liveCasinoGames/wl.games.liveCasinoGames';
           }
@@ -111,25 +113,7 @@ export class GamePopupComponent implements OnInit {
 
         }
       })
-      .catch((err) => {
-        this.toastService.show((this.gameInvalidTokenMsg.description ?? err), {
-          classname: 'bg-danger text-light',
-          delay: 1500,
-        });
 
-        if (err.status == 401) {
-          this.genericService.openLoginModal();
-        } else {
-          console.error(err);
-        }
-      })
-      .finally(() => {
-        // document.getElementById("overlay-loader")!.style.display = "none";
-        setTimeout(() => {
-          this.loading = false;
-          this.iframeLoad = true;
-        }, 500);
-      });
   }
 
   loadIframe() {

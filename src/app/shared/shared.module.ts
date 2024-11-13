@@ -16,7 +16,6 @@ import { OrderbyPipe } from '../pipes/orderby.pipe';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 // import { SignupModalComponent } from './signup-modal/signup-modal.component';
-import { NgxMatIntlTelInputModule } from 'ngx-mat-intl-tel-input';
 import { FooterComponent } from '../sports/footer/footer.component';
 import { DefaultBannerComponent } from '../sports/default-banner/default-banner.component';
 import { CarouselModule } from 'ngx-owl-carousel-o';
@@ -114,17 +113,17 @@ import { ProviderBannerComponent } from './provider-banner/provider-banner.compo
     StreamComponent,
     DownloadAppModalComponent,
     SafeHTML,
-    SkeltonLoaderComponent,
+
     ProviderBannerComponent,
     ExtractNumberPipe
   ],
   imports: [
+    SkeltonLoaderComponent,
     CommonModule,
     RouterModule,
     TranslateModule,
     FormsModule,
     ReactiveFormsModule,
-    NgxMatIntlTelInputModule,
     CarouselModule,
     LazyLoadImageModule,
     MomentModule,
@@ -177,7 +176,6 @@ import { ProviderBannerComponent } from './provider-banner/provider-banner.compo
     VirtualScorePipe,
     StreamComponent,
     SafeHTML,
-    SkeltonLoaderComponent,
     ProviderBannerComponent,
     ExtractNumberPipe
     // CreatepinComponent,

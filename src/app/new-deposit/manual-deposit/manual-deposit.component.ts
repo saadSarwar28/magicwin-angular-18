@@ -1,19 +1,16 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Clipboard } from '@angular/cdk/clipboard';
-import { BackendService, _window } from 'src/app/services/backend.service';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
-import { StorageService } from 'src/app/services/storage.service';
-import { ToastService } from 'src/app/services/toast.service';
-import { FileParameter, PaymentRequestModel } from 'src/app/models/models';
+import { BackendService, _window } from '../../services/backend.service';
+import { CheckAuthService } from '../../services/check-auth.service';
+import { StorageService } from '../../services/storage.service';
+import { ToastService } from '../../services/toast.service';
+import { FileParameter, PaymentRequestModel } from '../../models/models';
 import { NavigationStart, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { GoogleAnalyticsService } from 'src/app/services/google-analytics.service';
-import { DepositMethodService } from '../services/deposit-method.service';
+import { GoogleAnalyticsService } from '../../services/google-analytics.service';
 import { CircleTimerComponent } from '@flxng/circle-timer';
 import { ReCaptchaV3Service } from 'ng-recaptcha';
-import { UtillsService } from 'src/app/services/utills.service';
+import { UtillsService } from '../../services/utills.service';
 import Tesseract from 'tesseract.js';
 @Component({
   selector: 'app-manual-deposit',
@@ -26,7 +23,7 @@ export class ManualDepositComponent implements OnInit {
 
   startDate = Date.now() - 15 * 1000; // current time minus 15 seconds
   duration = 60 * 1000; // 1 minute
-  amountToShow: number = 0;
+  amountToShow: number | any = 0;
   utrToShow: any;
   submitted: boolean = false;
   depositAmounts: number[] = [];
@@ -44,7 +41,6 @@ export class ManualDepositComponent implements OnInit {
   constructor(
     private clipBoard: Clipboard,
     private translate: TranslateService,
-    private depositMethodService: DepositMethodService,
     private router: Router,
     private storageService: StorageService,
     private checkauthservice: CheckAuthService,
@@ -125,12 +121,13 @@ export class ManualDepositComponent implements OnInit {
   getDetails() {
     this.reportService
       .ManualPaymentHistory()
-      .then((data) => {
+      .subscribe((data) => {
         if (data) {
           this.depositRequests = data;
+          this.depositLoader = false
         }
       })
-      .finally(() => (this.depositLoader = false));
+
   }
   ngOnInit(): void {
     this.getDetails();
@@ -160,7 +157,7 @@ export class ManualDepositComponent implements OnInit {
 
     this.reportService
       .getDepositDetails('upi')
-      .then((data) => {
+      .subscribe((data) => {
         if (data && data.length > 0) {
           let whatsappData = data.filter(
             (item) => item.depositType === 'Whatsapp'
@@ -174,7 +171,7 @@ export class ManualDepositComponent implements OnInit {
           }
         }
       })
-      .finally(() => { });
+
   }
 
   get amount() {
@@ -284,13 +281,14 @@ export class ManualDepositComponent implements OnInit {
                   this.paytmForm.controls.utrTransactionId.value,
                   token
                 )
-                .then((resp) => {
+                .subscribe((resp) => {
                   if (resp && resp?.status == true) {
                     this.getDetails();
                     this.checkPaymentStatusManually(resp?.transactionId);
                     this.showLoader = true;
                     this.startTimer();
                     // this.gaService.eventEmitter('deposit', 'payment', 'click');
+                    this.paytmForm.controls.wallet.setValue(this.walletVal);
                     this.toasterService.show(resp?.message, {
                       classname: 'bg-success text-light',
                       delay: 3000,
@@ -303,9 +301,7 @@ export class ManualDepositComponent implements OnInit {
                     });
                   }
                 })
-                .finally(() => {
-                  this.paytmForm.controls.wallet.setValue(this.walletVal);
-                });
+
             });
         } catch (error) {
           this.showLoader = false;
@@ -329,7 +325,7 @@ export class ManualDepositComponent implements OnInit {
       this.timerValue = this.timerValue - 1;
       if (this.timerValue == 0 && this.receivedResponseOfPayment == 'loading') {
         this.timerValue = 10;
-        this.reportService.manualPaymentStatus(id, 'phonepe').then((resp) => {
+        this.reportService.manualPaymentStatus(id, 'phonepe').subscribe((resp) => {
           if (
             resp &&
             (resp?.message == 'Accepted' ||
@@ -364,18 +360,19 @@ export class ManualDepositComponent implements OnInit {
   }
 
   copyWallet(value: any) {
-    if (value) {
-      this.clipBoard.copy(value);
-      this.toasterService.show(`Copied ${value}`, {
-        classname: 'bg-success text-light',
-        delay: 1000,
+    navigator.clipboard.writeText(value)
+      .then(() => {
+        this.toasterService.show(`Copied ${value}`, {
+          classname: 'bg-success text-light',
+          delay: 1000,
+        });
+      })
+      .catch((error) => {
+        this.toasterService.show(`Not copied, its empty`, {
+          classname: 'bg-danger text-light',
+          delay: 1000,
+        });
       });
-    } else {
-      this.toasterService.show(`Not copied, its empty`, {
-        classname: 'bg-danger text-light',
-        delay: 1000,
-      });
-    }
   }
 
   uploadPicture(event: any, element: any) {

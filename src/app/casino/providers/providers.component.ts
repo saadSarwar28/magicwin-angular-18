@@ -91,19 +91,14 @@ export class ProvidersComponent implements OnInit, OnChanges, OnDestroy, AfterVi
 
     this.sportservice
       .casinoProviders()
-      .then((res) => {
+      .subscribe((res) => {
         if (res) {
           this.data = res;
+          this.loading = false;
+
         }
       })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setTimeout(() => {
-          this.loading = false;
-        }, 500);
-      });
+
   }
 
   loadCasino(casino: any) {
@@ -135,8 +130,9 @@ export class ProvidersComponent implements OnInit, OnChanges, OnDestroy, AfterVi
               this.tableId
             )
           )
-          .then((resp) => {
+          .subscribe((resp) => {
             if (resp && resp.url) {
+              this.loading = false;
               this.router.navigateByUrl('/casino/' + casino.name, {
                 state: { iframeurl: resp.url },
               });
@@ -147,15 +143,7 @@ export class ProvidersComponent implements OnInit, OnChanges, OnDestroy, AfterVi
               });
             }
           })
-          .catch((err) => {
-            this.toastService.show(err, {
-              classname: 'bg-danger text-light',
-              delay: 1000,
-            });
-          })
-          .finally(() => {
-            this.loading = false;
-          });
+
       }
     }
   }
@@ -229,7 +217,7 @@ export class ProvidersComponent implements OnInit, OnChanges, OnDestroy, AfterVi
               this.tableId
             )
           )
-          .then((resp) => {
+          .subscribe((resp) => {
             if (resp && resp.url) {
               this.router.navigateByUrl('/casino/' + casino, {
                 state: { iframeurl: resp.url },
@@ -242,12 +230,7 @@ export class ProvidersComponent implements OnInit, OnChanges, OnDestroy, AfterVi
               });
             }
           })
-          .catch((err) => {
-            this.toastService.show(err, {
-              classname: 'bg-danger text-light',
-              delay: 1000,
-            });
-          });
+
       } else if (casino == 'BF') {
         this.router.navigate(['/games']);
       } else {
@@ -265,7 +248,7 @@ export class ProvidersComponent implements OnInit, OnChanges, OnDestroy, AfterVi
               undefined
             )
           )
-          .then((resp) => {
+          .subscribe((resp) => {
             if (resp && resp.url) {
               this.router.navigateByUrl('/casino/' + casino, {
                 state: { iframeurl: resp.url },
@@ -277,12 +260,7 @@ export class ProvidersComponent implements OnInit, OnChanges, OnDestroy, AfterVi
               });
             }
           })
-          .catch((err) => {
-            this.toastService.show(err, {
-              classname: 'bg-danger text-light',
-              delay: 1000,
-            });
-          });
+
       }
     }
   }

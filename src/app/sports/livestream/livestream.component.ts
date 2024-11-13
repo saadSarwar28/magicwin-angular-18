@@ -50,7 +50,8 @@ export class LivestreamComponent implements OnInit, AfterViewInit {
 
     this.sportsService
       .GetTv()
-      .then((resp) => {
+      .subscribe((resp) => {
+        this.showLoader = false
         if (resp) {
           if (resp.ipAddress) this.ip = resp.ipAddress;
           this.data = resp.data;
@@ -70,17 +71,7 @@ export class LivestreamComponent implements OnInit, AfterViewInit {
           });
         }
       })
-      .catch((err) => {
-        if (err.status == 401) {
-          this.timerService.clearTimer();
-          this.storageService.secureStorage.removeItem('token');
-          window.location.href = window.location.origin
 
-        } else {
-          console.log(err)
-        }
-      })
-      .finally(() => (this.showLoader = false));
   }
 
 

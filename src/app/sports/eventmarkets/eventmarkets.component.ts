@@ -225,16 +225,20 @@ export class EventmarketsComponent implements OnInit, OnDestroy, AfterViewInit {
         .FancyMarketsAny(
           this.fancyVersion,
           this.eventId,
-          'EventmarketsComponent'
         )
-        .then((resp) => {
-          if (resp) {
-            this.fancyResponse = resp
+        .subscribe({
+          next: (resp) => {
+            if (resp) {
+              this.fancyResponse = resp
+            }
+          },
+          error: (err) => {
+            this.catchError(err)
           }
-        })
-        .catch((err) => {
-          this.catchError(err)
-        });
+        }
+
+        )
+
     }
     this.fancyTimerService.SetTimer(
       setInterval(() => {
@@ -296,10 +300,14 @@ export class EventmarketsComponent implements OnInit, OnDestroy, AfterViewInit {
             new CurrentBetsInput('0', this.eventId, false),
             'EventmarketsComponent'
           )
-          .then((resp) => this.HandleCurrentBets(resp))
-          .catch((err) => {
-            this.catchError(err)
-          });
+          .subscribe(
+            {
+              next: (resp) => this.HandleCurrentBets(resp),
+              error: (error) => this.catchError(error),
+            }
+
+          )
+
       }
     }
   }
@@ -600,7 +608,7 @@ export class EventmarketsComponent implements OnInit, OnDestroy, AfterViewInit {
   LoadData() {
     this.sportsService
       .geteventmarkets(parseInt(this.sportsId), 'EventmarketsComponent')
-      .then((resp) => {
+      .subscribe((resp) => {
         if (resp && resp.name) {
           this.data = resp;
           this.recentMarketsService.pushRecentMarkets({
@@ -657,7 +665,7 @@ export class EventmarketsComponent implements OnInit, OnDestroy, AfterViewInit {
           }
           this.sportsService
             .GetOthersMarkets(this.marketIds[0])
-            .then((resp) => {
+            .subscribe((resp) => {
               this.otherMarkets = resp;
               this.marketIds.forEach((element) => {
                 this.otherMarkets = this.otherMarkets.filter(
@@ -666,9 +674,7 @@ export class EventmarketsComponent implements OnInit, OnDestroy, AfterViewInit {
               });
               this.MarketBookData();
             })
-            .catch((err) => {
-              this.catchError(err)
-            });
+
           this.timerService.SetTimer(
             setInterval(() => {
               this.MarketBookData();
@@ -685,18 +691,20 @@ export class EventmarketsComponent implements OnInit, OnDestroy, AfterViewInit {
           }
         }
       })
-      .catch((err) => {
-        this.catchError(err)
-      });
+
   }
 
   GetWalllet() {
     this.sportsService
       .Sportswallet(this.marketId, 'EventmarketsComponent')
-      .then((resp: ClientWallet) => this.HandleWallet(resp))
-      .catch((err) => {
-        this.catchError(err)
-      });
+      .subscribe(
+        {
+          next: (resp: ClientWallet) => this.HandleWallet(resp),
+          error: (error) => this.catchError(error),
+        }
+
+      )
+
   }
 
   HandleWallet(resp: ClientWallet): any {
@@ -707,16 +715,20 @@ export class EventmarketsComponent implements OnInit, OnDestroy, AfterViewInit {
     if (navigator.onLine == true && document.hidden == false) {
       this.sportsService
         .directMarketsbook(this.marketIds.join(','), 'EventmarketsComponent')
-        .then((resp) => {
-          if (resp && resp.length > 0) {
-            resp.forEach((rate) => {
-              this.populateRate(rate, this.data.competition.event.markets)
-            })
+        .subscribe(
+          {
+            next: (resp) => {
+              if (resp && resp.length > 0) {
+                resp.forEach((rate) => {
+                  this.populateRate(rate, this.data.competition.event.markets)
+                })
+              }
+            },
+            error: (error) => this.catchError(error),
           }
-        })
-        .catch((err) => {
-          this.catchError(err)
-        });
+
+        )
+
     }
   }
 
@@ -917,23 +929,26 @@ export class EventmarketsComponent implements OnInit, OnDestroy, AfterViewInit {
         let m = new MatchUnModel('0', this.sportsId, 'SPORTS');
         this.sportsService
           .matchUnmatchAllSports(marketIdes, 'EventmarketsComponent')
-          .then((resp) => {
-            this.matchedUnmatched = resp;
-            if (
-              this.clientMatchSize !== this.matchedUnmatched.matchedSize ||
-              this.clientUnmatchSize !== this.matchedUnmatched.unMatchedSize
-            ) {
-              this.LoadCurrentBets();
-              this.GetSportMarketLiability();
-              this.GetWalllet();
-              this.RunnerPosition(this.marketIds.join(','))
-              this.clientMatchSize = this.matchedUnmatched.matchedSize;
-              this.clientUnmatchSize = this.matchedUnmatched.unMatchedSize;
+          .subscribe(
+            {
+              next: (resp) => {
+                this.matchedUnmatched = resp;
+                if (
+                  this.clientMatchSize !== this.matchedUnmatched.matchedSize ||
+                  this.clientUnmatchSize !== this.matchedUnmatched.unMatchedSize
+                ) {
+                  this.LoadCurrentBets();
+                  this.GetSportMarketLiability();
+                  this.GetWalllet();
+                  this.RunnerPosition(this.marketIds.join(','))
+                  this.clientMatchSize = this.matchedUnmatched.matchedSize;
+                  this.clientUnmatchSize = this.matchedUnmatched.unMatchedSize;
+                }
+              },
+              error: (error) => this.catchError(error),
             }
-          })
-          .catch((err) => {
-            this.catchError(err)
-          });
+          )
+
       }
     }
   }
@@ -951,32 +966,35 @@ export class EventmarketsComponent implements OnInit, OnDestroy, AfterViewInit {
   RunnerPosition(marketIds: any) {
     if (this.checkauthservice.IsLogin()) {
       this.sportsService
-        .clientpositionsports(marketIds, 'EventmarketsComponent')
-        .then((resp) => {
-          if (resp && resp.length > 0) {
-            resp.forEach(market => {
-              let mar = this.data.competition.event.markets.filter(
-                (x: any) => x.marketId == market.marketId
-              );
-              if (mar && mar.length > 0) {
-                mar[0].runners.forEach((run: any) => {
-                  let clinetPosition = resp.filter(
-                    (es) => es.marketId == market.marketId && es.runnerId == run.selectionId
-                  )
-                  if (clinetPosition && clinetPosition.length > 0) {
-                    run.position = clinetPosition[0].position
-                    run.rPosition = clinetPosition[0].rPosition
-                    run.liability = clinetPosition[0].liability
-                  }
+        .clientpositionsports(marketIds)
+        .subscribe(
+          {
+            next: (resp) => {
+              if (resp && resp.length > 0) {
+                resp.forEach(market => {
+                  let mar = this.data.competition.event.markets.filter(
+                    (x: any) => x.marketId == market.marketId
+                  );
+                  if (mar && mar.length > 0) {
+                    mar[0].runners.forEach((run: any) => {
+                      let clinetPosition = resp.filter(
+                        (es) => es.marketId == market.marketId && es.runnerId == run.selectionId
+                      )
+                      if (clinetPosition && clinetPosition.length > 0) {
+                        run.position = clinetPosition[0].position
+                        run.rPosition = clinetPosition[0].rPosition
+                        run.liability = clinetPosition[0].liability
+                      }
 
-                });
+                    });
+                  }
+                })
               }
-            })
+            },
+            error: (error) => this.catchError(error),
           }
-        })
-        .catch((err) => {
-          this.catchError(err)
-        });
+        )
+
     }
   }
 
@@ -1030,57 +1048,58 @@ export class EventmarketsComponent implements OnInit, OnDestroy, AfterViewInit {
     if (navigator.onLine == true && document.hidden == false) {
       this.sportsService
         .marketdetail(marketId, 'MarketdetailComponent')
-        .then((resp) => {
-          this.LoadCurrentBets();
-          if (resp) {
-            let otherMarketsData: any;
-            otherMarketsData = resp;
-            if (
-              otherMarketsData.isLocalMarket &&
-              otherMarketsData.isLocalMarket === true
-            ) {
-              this.localmarketids.push(
-                otherMarketsData.marketId.replace('1.', '10.')
-              );
-            }
-            this.data.competition.event.markets.push(otherMarketsData);
-            this.matchId = otherMarketsData.event.matchId;
-            this.getSportsbookLiability(this.marketIds.join(','))
-            this.RunnerPosition(this.marketIds.join(','))
+        .subscribe(
+          {
+            next: (value) => (resp) => {
+              this.LoadCurrentBets();
+              if (resp) {
+                let otherMarketsData: any;
+                otherMarketsData = resp;
+                if (
+                  otherMarketsData.isLocalMarket &&
+                  otherMarketsData.isLocalMarket === true
+                ) {
+                  this.localmarketids.push(
+                    otherMarketsData.marketId.replace('1.', '10.')
+                  );
+                }
+                this.data.competition.event.markets.push(otherMarketsData);
+                this.matchId = otherMarketsData.event.matchId;
+                this.getSportsbookLiability(this.marketIds.join(','))
+                this.RunnerPosition(this.marketIds.join(','))
 
-            if (
-              otherMarketsData.eventType.id === '4' &&
-              otherMarketsData.description.marketType === 'MATCH_ODDS'
-            ) {
-              this.router.navigate([
-                '/sports/cricket/' + otherMarketsData.marketId,
-              ]);
-            } else {
-              // this.GetMarketRates();
-              // this.GetMatchedUnmatched();
-              // this.timerservice.SetTimer(setInterval(() => {
-              // this.GetMarketRates();
-              //   this.GetMatchedUnmatched();
-              // }, this.interval));
-            }
+                if (
+                  otherMarketsData.eventType.id === '4' &&
+                  otherMarketsData.description.marketType === 'MATCH_ODDS'
+                ) {
+                  this.router.navigate([
+                    '/sports/cricket/' + otherMarketsData.marketId,
+                  ]);
+                } else {
+                  // this.GetMarketRates();
+                  // this.GetMatchedUnmatched();
+                  // this.timerservice.SetTimer(setInterval(() => {
+                  // this.GetMarketRates();
+                  //   this.GetMatchedUnmatched();
+                  // }, this.interval));
+                }
+              }
+              setTimeout(() => {
+                //
+
+                if (this.matchId && this.matchId > 0) {
+                  let themeMode = _window().themeMode ? _window().themeMode : 'dark';
+                  this.lmtUrl =
+                    _window().lmtscorecard + `Id=${this.matchId}&t=${themeMode == 'dark' ? 'd' : 'l'}`;
+
+                  iFrameResizer('stats');
+                }
+              }, 2500);
+            },
+            error: (error) => this.catchError(error),
           }
-        })
-        .then(() => {
-          setTimeout(() => {
-            //
+        )
 
-            if (this.matchId && this.matchId > 0) {
-              let themeMode = _window().themeMode ? _window().themeMode : 'dark';
-              this.lmtUrl =
-                _window().lmtscorecard + `Id=${this.matchId}&t=${themeMode == 'dark' ? 'd' : 'l'}`;
-
-              iFrameResizer('stats');
-            }
-          }, 2500);
-        })
-        .catch((err) => {
-          this.catchError(err)
-        });
     }
   }
 
@@ -1147,17 +1166,22 @@ export class EventmarketsComponent implements OnInit, OnDestroy, AfterViewInit {
         if (this.eventId != '') {
           this.sportsService
             .TvOnBookmaker(parseInt(this.eventId))
-            .then((resp) => {
-              this.srcData = resp;
-              this.getChannelData(parseInt(this.eventId || 0), resp.ipAddress);
-            })
-            .catch((err) => {
-              this.toasterService.show(err, {
-                classname: 'bg-danger text-light',
-                delay: 1500,
-              });
-              console.error(err);
-            });
+            .subscribe(
+              {
+                next: (resp) => {
+                  this.srcData = resp;
+                  this.getChannelData(parseInt(this.eventId || 0), resp.ipAddress);
+                },
+                error: (error) => {
+                  this.toasterService.show(error, {
+                    classname: 'bg-danger text-light',
+                    delay: 1500,
+                  });
+                  console.error(error);
+                },
+              }
+            )
+
         }
       }
     }
@@ -1230,7 +1254,7 @@ export class EventmarketsComponent implements OnInit, OnDestroy, AfterViewInit {
   getSportsBook(id: any) {
     // console.log(id,' <<<<<<<<<<<<<<<<<<<<<<<<<<<< id here')
     if (id !== '') {
-      this.sportsService.sportsBookCall(id, 'EventmarketsComponent').then((data: SportsBookMarkets[]) => {
+      this.sportsService.sportsBookCall(id, 'EventmarketsComponent').subscribe((data: SportsBookMarkets[]) => {
         if (data && data.length > 0) {
           // this.sportsBooks = data;
           data.forEach((market: SportsBookMarkets) => {
@@ -1258,20 +1282,23 @@ export class EventmarketsComponent implements OnInit, OnDestroy, AfterViewInit {
     if (navigator.onLine == true && document.hidden == false) {
       if (this.checkauthservice.IsLogin()) {
         this.sportsService
-          .FancyMarketsLiability(this.data.event.id, 'EventmarketsComponent')
-          .then((x: any) => {
-            if (x && x.length > 0) {
-              x.forEach((e: any) => {
-                let sportMarket = this.sportsBookMarketsMap.get(e.marketId)
-                if (sportMarket) {
-                  e.position < e.position2 ? sportMarket.liability = Number(Number(e.position).toFixed(2)) : sportMarket.liability = Number(Number(e.position2).toFixed(2))
+          .FancyMarketsLiability(this.data.event.id)
+          .subscribe(
+            {
+              next: (x: any) => {
+                if (x && x.length > 0) {
+                  x.forEach((e: any) => {
+                    let sportMarket = this.sportsBookMarketsMap.get(e.marketId)
+                    if (sportMarket) {
+                      e.position < e.position2 ? sportMarket.liability = Number(Number(e.position).toFixed(2)) : sportMarket.liability = Number(Number(e.position2).toFixed(2))
+                    }
+                  });
                 }
-              });
+              },
+              error: (error) => this.catchError(error),
             }
-          })
-          .catch((err) => {
-            this.catchError(err)
-          });
+          )
+
       }
     }
   }
@@ -1279,7 +1306,7 @@ export class EventmarketsComponent implements OnInit, OnDestroy, AfterViewInit {
   updateSportsBook(id: any) {
     if (this.sportsBooks.length > 0 && navigator.onLine == true && document.hidden == false && this.sportsBookVisible) {
       this.sportsService.sportsBookCall(id, 'Cricket Component')
-        .then((data: SportsBookMarkets[]) => {
+        .subscribe((data: SportsBookMarkets[]) => {
           if (data && data.length > 0) {
             data.forEach((market: SportsBookMarkets) => {
               if (market.marketId) {
@@ -1315,34 +1342,37 @@ export class EventmarketsComponent implements OnInit, OnDestroy, AfterViewInit {
   // Market Liability for SportsBook
   getSportsbookLiability(marketIds: string) {
     if (this.checkauthservice.IsLogin() && marketIds !== '') {
-      this.sportsService.SportsMarketliability(marketIds, 'EventMarketsComponent')
-        .then((resp) => {
-          if (resp && resp.length > 0) {
+      this.sportsService.SportsMarketliability(marketIds)
+        .subscribe(
+          {
+            next: (value) => (resp: any) => {
+              if (resp && resp.length > 0) {
 
-            resp.forEach((x: any) => {
-              // @ts-ignore
-              // for sports book
-              this.sportsBookMarketsMap.get(x.marketId)?.liability = x.libility;
-              // let market = this.sportsBookMarketsMap.get(x.marketId)
-              // market ? market.liability = x.libility : {}
+                resp.forEach((x: any) => {
+                  // @ts-ignore
+                  // for sports book
+                  this.sportsBookMarketsMap.get(x.marketId)?.liability = x.libility;
+                  // let market = this.sportsBookMarketsMap.get(x.marketId)
+                  // market ? market.liability = x.libility : {}
 
-              // for other markets
-              this.data.competition.event.markets.forEach((market: any) => {
-                if (market.marketId == x.marketId) {
-                  market.liability = x.libility
-                }
-              })
+                  // for other markets
+                  this.data.competition.event.markets.forEach((market: any) => {
+                    if (market.marketId == x.marketId) {
+                      market.liability = x.libility
+                    }
+                  })
 
-            });
+                });
 
-            resp.forEach((x: any) => {
+                resp.forEach((x: any) => {
 
-            })
+                })
+              }
+            },
+            error: (error) => this.catchError(error),
           }
-        })
-        .catch((err) => {
-          this.catchError(err)
-        });
+        )
+
     }
   }
 
@@ -1351,11 +1381,14 @@ export class EventmarketsComponent implements OnInit, OnDestroy, AfterViewInit {
     // console.log(marketID, marketID.split(',').length, ' <<<<<<<<<<<<<<<<<<<<<  +++++++++++++++++++++++++++++++ ')
     if (marketID !== '') {
       this.sportsService
-        .clientpositionsports(marketID, 'Event Markets Component')
-        .then((resp: ClientPosition[]) => this.HandleSportsBookPosition(resp))
-        .catch((err) => {
-          this.catchError(err)
-        });
+        .clientpositionsports(marketID)
+        .subscribe(
+          {
+            next: (resp: ClientPosition[]) => this.HandleSportsBookPosition(resp),
+            error: (error) => this.catchError(error),
+          }
+        )
+
     }
   }
 

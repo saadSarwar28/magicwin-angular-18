@@ -21,6 +21,7 @@ import { LazyLoadImageModule } from "ng-lazyload-image";
 // import { NgxMatIntlTelInputModule } from "ngx-mat-intl-tel-input";
 import { FormsModule } from "@angular/forms";
 import { CasinoSearchMobileModalComponent } from './casino-search-mobile-modal/casino-search-mobile-modal.component';
+import { SkeltonLoaderComponent } from '../shared/skelton-loader/skelton-loader.component';
 
 
 @NgModule({
@@ -42,6 +43,7 @@ import { CasinoSearchMobileModalComponent } from './casino-search-mobile-modal/c
   ],
   imports: [
     CommonModule,
+    SkeltonLoaderComponent,
     // SharedModule,
     CasinosRoutingModule,
     TranslateModule,

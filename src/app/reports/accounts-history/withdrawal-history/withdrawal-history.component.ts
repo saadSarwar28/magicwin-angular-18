@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { BackendService, _window } from 'src/app/services/backend.service';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
-import { ToastService } from 'src/app/services/toast.service';
-import * as M from "materialize-css";
-import { GenericService } from 'src/app/services/generic.service';
+import { BackendService, _window } from '../../../services/backend.service';
+import { CheckAuthService } from '../../../services/check-auth.service';
+import { ToastService } from '../../../services/toast.service';
+import { GenericService } from '../../../services/generic.service';
 
 @Component({
   selector: 'app-withdrawal-history',
@@ -39,11 +38,12 @@ export class WithdrawalHistoryComponent implements OnInit {
 
   getWithDrawHistory() {
     this.showLoader = true
-    this.reportService.GetWithdrawRequests().then((data => {
+    this.reportService.GetWithdrawRequests().subscribe((data => {
       if (data) {
         this.withDraws = data;
       }
-    })).finally(() => this.showLoader = false)
+      this.showLoader = false
+    }))
   }
 
 }

@@ -2,7 +2,6 @@ import { Router } from '@angular/router';
 import { APP_BASE_HREF } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, CancelToken } from 'axios';
-import { environment } from 'src/environments/environment';
 
 // import { isAxiosError, ProblemDetails, throwException, _window } from './reports.service';
 // import { ClientWallet, LocalMarketBet, SportsBettingModel } from './sports.service';
@@ -20,6 +19,9 @@ import {
   throwException
 } from "../models/models";
 import { _window } from "./backend.service";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { environment } from '../../environments/environment';
+import { Observable } from 'rxjs/internal/Observable';
 
 
 @Injectable({
@@ -40,7 +42,8 @@ export class BettingService {
     private router: Router,
     public googleAnalyticsService: GoogleAnalyticsService,
     private Instance: AxiosinstanceService,
-    private storageService: StorageService
+    private storageService: StorageService,
+    private http: HttpClient
   ) {
     if (baseHref.length < 5) {
       this.baseUrl = environment.apiurl;
@@ -54,257 +57,59 @@ export class BettingService {
   /**
    * @return Success
    */
-  wallet(cancelToken?: CancelToken | undefined): Promise<ClientWallet> {
+  wallet(cancelToken?: CancelToken | undefined): Observable<ClientWallet> {
     let url_
     if (_window().wallet) {
       url_ = this.baseUrl + _window().wallet
       url_ = url_.replace(/[?&]$/, "");
     }
-
-    let options_ = <AxiosRequestConfig>{
-      method: "GET",
-      url: url_,
-      headers: {
-        "Accept": "application/json"
-      },
-      cancelToken
-    };
-
-    return this.instance.request(options_).catch((_error: any) => {
-      if (isAxiosError(_error) && _error.response) {
-        return _error.response;
-      } else {
-        throw _error;
-      }
-    }).then((_response: AxiosResponse) => {
-      return this.processWallet(_response);
-    });
+    return this.http.get<any>(url_);
   }
 
-  protected processWallet(response: AxiosResponse): Promise<ClientWallet> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && typeof response.headers === "object") {
-      for (let k in response.headers) {
-        if (response.headers.hasOwnProperty(k)) {
-          _headers[k] = response.headers[k];
-        }
-      }
-    }
-    if (status === 200) {
-      const _responseText = response.data;
-      if (_responseText.message == 'UNAUTHRORIZED' && _responseText.status == false && _responseText.code !== 200) {
-        this.googleAnalyticsService.recordExceptions(_responseText.message);
-        this.storageService.secureStorage.removeItem('token');
-        return throwException("Error", _responseText.code, _responseText, _headers, _responseText.message);
-      }
-      let result200: any = null;
-      let resultData200 = _responseText;
-      result200 = ClientWallet.fromJS(resultData200);
-      return result200;
-    }
-    else {
-
-      const _responseText = response.data;
-      let resultdefault: any = null;
-      let resultDatadefault = _responseText;
-      resultdefault = ProblemDetails.fromJS(resultDatadefault);
-      return throwException("Error", status, _responseText, _headers, resultdefault);
-    }
-  }
-
-  jorhiTigarhiPOST(body: MultiPlaceBet | undefined, cancelToken?: CancelToken | undefined): Promise<BettingResponse> {
+  jorhiTigarhiPOST(body: MultiPlaceBet | undefined, cancelToken?: CancelToken | undefined): Observable<BettingResponse> {
     let url_
     if (_window().jorhipost) {
       url_ = this.baseUrl + _window().jorhipost
       url_ = url_.replace(/[?&]$/, "");
     }
 
-    const content_ = JSON.stringify(body);
-
-    let options_ = <AxiosRequestConfig>{
-      data: content_,
-      method: "POST",
-      url: url_,
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-      cancelToken
-    };
-
-    return this.instance.request(options_).catch((_error: any) => {
-      if (isAxiosError(_error) && _error.response) {
-        return _error.response;
-      } else {
-        throw _error;
-      }
-    }).then((_response: AxiosResponse) => {
-      return this.processJorhiTigarhi_POST(_response);
-    });
-  }
-
-  protected processJorhiTigarhi_POST(response: AxiosResponse): Promise<BettingResponse> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && typeof response.headers === "object") {
-      for (let k in response.headers) {
-        if (response.headers.hasOwnProperty(k)) {
-          _headers[k] = response.headers[k];
-        }
-      }
-    }
-    if (status === 200) {
-      const _responseText = response.data;
-      if (_responseText.message == 'UNAUTHRORIZED' && _responseText.status == false && _responseText.code !== 200) {
-        this.googleAnalyticsService.recordExceptions(_responseText.message);
-        this.storageService.secureStorage.removeItem('token');
-        return throwException("Error", _responseText.code, _responseText, _headers, _responseText.message);
-      }
-      let result200: any = null;
-      let resultData200 = _responseText;
-      result200 = BettingResponse.fromJS(resultData200);
-      return result200;
-    } else {
-      const _responseText = response.data;
-      return throwException("Error", status, _responseText, _headers);
-    }
+    return this.http.post<any>(url_, body);
   }
 
   /**
    * @param body (optional)
    * @return Success
    */
-  Sportswallet(body: string | undefined, cancelToken?: CancelToken | undefined): Promise<ClientWallet> {
+  Sportswallet(body: string | undefined, cancelToken?: CancelToken | undefined): Observable<ClientWallet> {
     let url_
     if (_window().sportswallet) {
       url_ = this.baseUrl + _window().sportswallet
       url_ = url_.replace(/[?&]$/, "");
     }
-
-    const content_ = JSON.stringify(body);
-
-    let options_ = <AxiosRequestConfig>{
-      data: content_,
-      method: "POST",
-      url: url_,
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-      cancelToken
-    };
-
-    return this.instance.request(options_).catch((_error: any) => {
-      if (isAxiosError(_error) && _error.response) {
-        return _error.response;
-      } else {
-        throw _error;
-      }
-    }).then((_response: AxiosResponse) => {
-      return this.processSportswallet(_response);
-    });
+    return this.http.post<any>(url_, body);
   }
 
-  protected processSportswallet(response: AxiosResponse): Promise<ClientWallet> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && typeof response.headers === "object") {
-      for (let k in response.headers) {
-        if (response.headers.hasOwnProperty(k)) {
-          _headers[k] = response.headers[k];
-        }
-      }
-    }
-    if (status === 200) {
-      const _responseText = response.data;
-      if (_responseText.message == 'UNAUTHRORIZED' && _responseText.status == false && _responseText.code !== 200) {
-        this.googleAnalyticsService.recordExceptions(_responseText.message);
-        this.storageService.secureStorage.removeItem('token');
-        return throwException("Error", _responseText.code, _responseText, _headers, _responseText.message);
-      }
-      let result200: any = null;
-      let resultData200 = _responseText;
-      result200 = ClientWallet.fromJS(resultData200);
-      return result200;
-    } else {
-      const _responseText = response.data;
-      let resultdefault: any = null;
-      let resultDatadefault = _responseText;
-      resultdefault = ProblemDetails.fromJS(resultDatadefault);
-      return throwException("Error", status, _responseText, _headers, resultdefault);
-    }
-  }
+
   /**
    * @param body (optional)
    * @return Success
    */
-  XgameWallet(body: string | undefined, cancelToken?: CancelToken | undefined): Promise<ClientWallet> {
+  XgameWallet(body: string | undefined, cancelToken?: CancelToken | undefined): Observable<ClientWallet> {
     let url_
     if (_window().xgwallet) {
       url_ = this.baseUrl + _window().xgwallet
       url_ = url_.replace(/[?&]$/, "");
     }
-
-    const content_ = JSON.stringify(body);
-
-    let options_ = <AxiosRequestConfig>{
-      data: content_,
-      method: "POST",
-      url: url_,
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-      cancelToken
-    };
-
-    return this.instance.request(options_).catch((_error: any) => {
-      if (isAxiosError(_error) && _error.response) {
-        return _error.response;
-      } else {
-        throw _error;
-      }
-    }).then((_response: AxiosResponse) => {
-      return this.processXgamewallet(_response);
-    });
+    return this.http.post<any>(url_, body);
   }
 
-  protected processXgamewallet(response: AxiosResponse): Promise<ClientWallet> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && typeof response.headers === "object") {
-      for (let k in response.headers) {
-        if (response.headers.hasOwnProperty(k)) {
-          _headers[k] = response.headers[k];
-        }
-      }
-    }
-    if (status === 200) {
-      const _responseText = response.data;
-      if (_responseText.message == 'UNAUTHRORIZED' && _responseText.status == false && _responseText.code !== 200) {
-        this.googleAnalyticsService.recordExceptions(_responseText.message);
-        this.storageService.secureStorage.removeItem('token');
-        return throwException("Error", _responseText.code, _responseText, _headers, _responseText.message);
-      }
-      let result200: any = null;
-      let resultData200 = _responseText;
-      result200 = ClientWallet.fromJS(resultData200);
-      return result200;
-    } else {
-      const _responseText = response.data;
-      let resultdefault: any = null;
-      let resultDatadefault = _responseText;
-      resultdefault = ProblemDetails.fromJS(resultDatadefault);
-      return throwException("Error", status, _responseText, _headers, resultdefault);
-    }
-  }
+
 
   LotteryMarkets(
     id: number,
     from: string,
     cancelToken?: CancelToken | undefined
-  ): Promise<any> {
+  ): Observable<any> {
     let url_;
     if (_window().lotterycricket) {
       if (_window().lotterycricket.startsWith('http')) {
@@ -317,147 +122,23 @@ export class BettingService {
       url_ = url_.replace('{id}', encodeURIComponent('' + id));
       url_ = url_.replace(/[?&]$/, '');
     }
-
-    let options_ = <AxiosRequestConfig>{
-      method: 'GET',
-      url: url_,
-      headers: {
-        Accept: 'application/json',
-        from: from,
-      },
-      cancelToken,
-    };
-
-    return this.instance
-      .request(options_)
-      .catch((_error: any) => {
-        if (isAxiosError(_error) && _error.response) {
-          return _error.response;
-        } else {
-          throw _error;
-        }
-      })
-      .then((_response: AxiosResponse) => {
-        return this.processLotteryMarkets(_response);
-      });
+    return this.http.get<any>(url_);
   }
 
-  protected processLotteryMarkets(response: AxiosResponse): Promise<any> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && typeof response.headers === 'object') {
-      for (let k in response.headers) {
-        if (response.headers.hasOwnProperty(k)) {
-          _headers[k] = response.headers[k];
-        }
-      }
-    }
-    if (status === 200) {
-      const _responseText = response.data;
-      if (
-        _responseText.message == 'UNAUTHRORIZED' &&
-        _responseText.status == false &&
-        _responseText.code !== 200
-      ) {
-        // this.googleAnalyticsService.recordExceptions(_responseText.message);
-        // this.storageService.secureStorage.removeItem('token');
-        return throwException(
-          'Error',
-          _responseText.code,
-          _responseText,
-          _headers,
-          _responseText.message
-        );
-      }
-      let result200: any = null;
-      let resultData200 = _responseText;
-      result200 = resultData200;
-      return result200;
-    } else {
-      const _responseText = response.data;
-      this.googleAnalyticsService.recordExceptions(response);
-      let resultdefault: any = null;
-      let resultDatadefault = _responseText;
-      resultdefault = ProblemDetails.fromJS(resultDatadefault);
-      return throwException(
-        'Error',
-        status,
-        _responseText,
-        _headers,
-        resultdefault
-      );
-    }
-  }
-
-
-
-
-  LotteryOrdersplaced(body: FancyModel | undefined, cancelToken?: CancelToken | undefined): Promise<BettingResponse> {
+  LotteryOrdersplaced(body: FancyModel | undefined, cancelToken?: CancelToken | undefined): Observable<BettingResponse> {
     let url_
     if (_window().lotteryordersplaced) {
       url_ = this.baseUrl + _window().lotteryordersplaced
       url_ = url_.replace(/[?&]$/, "");
     }
-
-    const content_ = JSON.stringify(body);
-
-    let options_ = <AxiosRequestConfig>{
-      data: content_,
-      method: "POST",
-      url: url_,
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-      cancelToken
-    };
-
-    return this.instance.request(options_).catch((_error: any) => {
-      if (isAxiosError(_error) && _error.response) {
-        return _error.response;
-      } else {
-        throw _error;
-      }
-    }).then((_response: AxiosResponse) => {
-      return this.processLotteryOrdersplaced(_response);
-    });
-  }
-
-  protected processLotteryOrdersplaced(response: AxiosResponse): Promise<BettingResponse> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && typeof response.headers === "object") {
-      for (let k in response.headers) {
-        if (response.headers.hasOwnProperty(k)) {
-          _headers[k] = response.headers[k];
-        }
-      }
-    }
-    if (status === 200) {
-      const _responseText = response.data;
-      if (_responseText.message == 'UNAUTHRORIZED' && _responseText.status == false && _responseText.code !== 200) {
-        this.googleAnalyticsService.recordExceptions(_responseText.message);
-        this.storageService.secureStorage.removeItem('token');
-        return throwException("Error", _responseText.code, _responseText, _headers, _responseText.message);
-      }
-      let result200: any = null;
-      let resultData200 = _responseText;
-      result200 = BettingResponse.fromJS(resultData200);
-      return result200;
-    } else {
-      const _responseText = response.data;
-      let resultdefault: any = null;
-      let resultDatadefault = _responseText;
-      resultdefault = ProblemDetails.fromJS(resultDatadefault);
-      return throwException("Error", status, _responseText, _headers, resultdefault);
-    }
+    return this.http.post<any>(url_, body);
   }
 
   BookMakerOrdersplaced(
     lookSabha: boolean = false,
     body: FancyModel | undefined,
     cancelToken?: CancelToken | undefined
-  ): Promise<BettingResponse> {
+  ): Observable<BettingResponse> {
     let url_;
     if (_window().bookmakerordersplaced) {
       let version = lookSabha
@@ -466,80 +147,7 @@ export class BettingService {
       url_ = this.baseUrl + _window().bookmakerordersplaced + `${version}`;
       url_ = url_.replace(/[?&]$/, '');
     }
-
-    const content_ = JSON.stringify(body);
-
-    let options_ = <AxiosRequestConfig>{
-      data: content_,
-      method: 'POST',
-      url: url_,
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      cancelToken,
-    };
-
-    return this.instance
-      .request(options_)
-      .catch((_error: any) => {
-        if (isAxiosError(_error) && _error.response) {
-          return _error.response;
-        } else {
-          throw _error;
-        }
-      })
-      .then((_response: AxiosResponse) => {
-        return this.processBookMakerOrdersplaced(_response);
-      });
-  }
-
-  protected processBookMakerOrdersplaced(
-    response: AxiosResponse
-  ): Promise<BettingResponse> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && typeof response.headers === 'object') {
-      for (let k in response.headers) {
-        if (response.headers.hasOwnProperty(k)) {
-          _headers[k] = response.headers[k];
-        }
-      }
-    }
-    if (status === 200) {
-      const _responseText = response.data;
-      if (
-        _responseText.message == 'UNAUTHRORIZED' &&
-        _responseText.status == false &&
-        _responseText.code !== 200
-      ) {
-        this.googleAnalyticsService.recordExceptions(_responseText.message);
-        this.storageService.secureStorage.removeItem('token');
-        return throwException(
-          'Error',
-          _responseText.code,
-          _responseText,
-          _headers,
-          _responseText.message
-        );
-      }
-      let result200: any = null;
-      let resultData200 = _responseText;
-      result200 = BettingResponse.fromJS(resultData200);
-      return result200;
-    } else {
-      const _responseText = response.data;
-      let resultdefault: any = null;
-      let resultDatadefault = _responseText;
-      resultdefault = ProblemDetails.fromJS(resultDatadefault);
-      return throwException(
-        'Error',
-        status,
-        _responseText,
-        _headers,
-        resultdefault
-      );
-    }
+    return this.http.post<any>(url_, body);
   }
 
 
@@ -549,65 +157,13 @@ export class BettingService {
      * @param body (optional)
      * @return Success
      */
-  MatchunmatchLocalMarket(body: string | undefined, cancelToken?: CancelToken | undefined): Promise<MatchedUnmatched> {
+  MatchunmatchLocalMarket(body: string | undefined, cancelToken?: CancelToken | undefined): Observable<MatchedUnmatched> {
     let url_
     if (_window().matchunmatchlocalmarket) {
       url_ = this.baseUrl + _window().matchunmatchlocalmarket
       url_ = url_.replace(/[?&]$/, "");
     }
-
-    const content_ = JSON.stringify(body);
-
-    let options_ = <AxiosRequestConfig>{
-      data: content_,
-      method: "POST",
-      url: url_,
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-      cancelToken
-    };
-
-    return this.instance.request(options_).catch((_error: any) => {
-      if (isAxiosError(_error) && _error.response) {
-        return _error.response;
-      } else {
-        throw _error;
-      }
-    }).then((_response: AxiosResponse) => {
-      return this.processMatchunmatchlocal(_response);
-    });
-  }
-
-  protected processMatchunmatchlocal(response: AxiosResponse): Promise<MatchedUnmatched> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && typeof response.headers === "object") {
-      for (let k in response.headers) {
-        if (response.headers.hasOwnProperty(k)) {
-          _headers[k] = response.headers[k];
-        }
-      }
-    }
-    if (status === 200) {
-      const _responseText = response.data;
-      if (_responseText.message == 'UNAUTHRORIZED' && _responseText.status == false && _responseText.code !== 200) {
-        this.googleAnalyticsService.recordExceptions(_responseText.message);
-        this.storageService.secureStorage.removeItem('token');
-        return throwException("Error", _responseText.code, _responseText, _headers, _responseText.message);
-      }
-      let result200: any = null;
-      let resultData200 = _responseText;
-      result200 = MatchedUnmatched.fromJS(resultData200);
-      return result200;
-    } else {
-      const _responseText = response.data;
-      let resultdefault: any = null;
-      let resultDatadefault = _responseText;
-      resultdefault = ProblemDetails.fromJS(resultDatadefault);
-      return throwException("Error", status, _responseText, _headers, resultdefault);
-    }
+    return this.http.post<any>(url_, body);
   }
 
   /**
@@ -615,70 +171,13 @@ export class BettingService {
      * @param body (optional) all inputs are required
      * @return Success
      */
-  LocalMarketCancelorders(body: CancelOrders | undefined, cancelToken?: CancelToken | undefined): Promise<CurrentBetResp> {
+  LocalMarketCancelorders(body: CancelOrders | undefined, cancelToken?: CancelToken | undefined): Observable<CurrentBetResp> {
     let url_
     if (_window().cancelorderslocal) {
       url_ = this.baseUrl + _window().cancelorderslocal
       url_ = url_.replace(/[?&]$/, "");
     }
-
-    const content_ = JSON.stringify(body);
-
-    let options_ = <AxiosRequestConfig>{
-      data: content_,
-      method: "POST",
-      url: url_,
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-      cancelToken
-    };
-
-    return this.instance.request(options_).catch((_error: any) => {
-      if (isAxiosError(_error) && _error.response) {
-        return _error.response;
-      } else {
-        throw _error;
-      }
-    }).then((_response: AxiosResponse) => {
-      return this.processLocalMarketCancelorders(_response);
-    });
-  }
-
-  protected processLocalMarketCancelorders(response: AxiosResponse): Promise<CurrentBetResp> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && typeof response.headers === "object") {
-      for (let k in response.headers) {
-        if (response.headers.hasOwnProperty(k)) {
-          _headers[k] = response.headers[k];
-        }
-      }
-    }
-    if (status === 200) {
-      const _responseText = response.data;
-      if (_responseText.message == 'UNAUTHRORIZED' && _responseText.status == false && _responseText.code !== 200) {
-        this.googleAnalyticsService.recordExceptions(_responseText.message);
-        this.storageService.secureStorage.removeItem('token');
-        return throwException("Error", _responseText.code, _responseText, _headers, _responseText.message);
-      }
-      if (_responseText.message == 'UNAUTHRORIZED' && _responseText.status == false && _responseText.code !== 200) {
-        this.googleAnalyticsService.recordExceptions(_responseText.message);
-        this.storageService.secureStorage.removeItem('token');
-        return throwException("Error", _responseText.code, _responseText, _headers, _responseText.message);
-      }
-      let result200: any = null;
-      let resultData200 = _responseText;
-      result200 = CurrentBetResp.fromJS(resultData200);
-      return result200;
-    } else {
-      const _responseText = response.data;
-      let resultdefault: any = null;
-      let resultDatadefault = _responseText;
-      resultdefault = ProblemDetails.fromJS(resultDatadefault);
-      return throwException("Error", status, _responseText, _headers, resultdefault);
-    }
+    return this.http.post<any>(url_, body);
   }
 
   /**
@@ -692,70 +191,13 @@ export class BettingService {
      * @param body (optional) all inputs are required
      * @return Success
      */
-  SportsCancelOrders(body: CancelOrders | undefined, cancelToken?: CancelToken | undefined): Promise<CurrentBetResp> {
+  SportsCancelOrders(body: CancelOrders | undefined, cancelToken?: CancelToken | undefined): Observable<CurrentBetResp> {
     let url_
     if (_window().sportscancelorders) {
       url_ = this.baseUrl + _window().sportscancelorders
       url_ = url_.replace(/[?&]$/, "");
     }
-
-    const content_ = JSON.stringify(body);
-
-    let options_ = <AxiosRequestConfig>{
-      data: content_,
-      method: "POST",
-      url: url_,
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-      cancelToken
-    };
-
-    return this.instance.request(options_).catch((_error: any) => {
-      if (isAxiosError(_error) && _error.response) {
-        return _error.response;
-      } else {
-        throw _error;
-      }
-    }).then((_response: AxiosResponse) => {
-      return this.processSportsCancelOrders(_response);
-    });
-  }
-
-  protected processSportsCancelOrders(response: AxiosResponse): Promise<CurrentBetResp> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && typeof response.headers === "object") {
-      for (let k in response.headers) {
-        if (response.headers.hasOwnProperty(k)) {
-          _headers[k] = response.headers[k];
-        }
-      }
-    }
-    if (status === 200) {
-      const _responseText = response.data;
-      if (_responseText.message == 'UNAUTHRORIZED' && _responseText.status == false && _responseText.code !== 200) {
-        this.googleAnalyticsService.recordExceptions(_responseText.message);
-        this.storageService.secureStorage.removeItem('token');
-        return throwException("Error", _responseText.code, _responseText, _headers, _responseText.message);
-      }
-      if (_responseText.message == 'UNAUTHRORIZED' && _responseText.status == false && _responseText.code !== 200) {
-        this.googleAnalyticsService.recordExceptions(_responseText.message);
-        this.storageService.secureStorage.removeItem('token');
-        return throwException("Error", _responseText.code, _responseText, _headers, _responseText.message);
-      }
-      let result200: any = null;
-      let resultData200 = _responseText;
-      result200 = CurrentBetResp.fromJS(resultData200);
-      return result200;
-    } else {
-      const _responseText = response.data;
-      let resultdefault: any = null;
-      let resultDatadefault = _responseText;
-      resultdefault = ProblemDetails.fromJS(resultDatadefault);
-      return throwException("Error", status, _responseText, _headers, resultdefault);
-    }
+    return this.http.post<any>(url_, body);
   }
 
   /**
@@ -763,65 +205,13 @@ export class BettingService {
    * @param body (optional) all inputs are required
    * @return Success
    */
-  XGameCancelOrders(body: XGameOrderCancelModel | undefined, cancelToken?: CancelToken | undefined): Promise<BettingResponse> {
+  XGameCancelOrders(body: XGameOrderCancelModel | undefined, cancelToken?: CancelToken | undefined): Observable<BettingResponse> {
     let url_
     if (_window().xgcancelorders) {
       url_ = this.baseUrl + _window().xgcancelorders
       url_ = url_.replace(/[?&]$/, "");
     }
-
-    const content_ = JSON.stringify(body);
-
-    let options_ = <AxiosRequestConfig>{
-      data: content_,
-      method: "POST",
-      url: url_,
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-      cancelToken
-    };
-
-    return this.instance.request(options_).catch((_error: any) => {
-      if (isAxiosError(_error) && _error.response) {
-        return _error.response;
-      } else {
-        throw _error;
-      }
-    }).then((_response: AxiosResponse) => {
-      return this.processXGameCancelOrders(_response);
-    });
-  }
-
-  protected processXGameCancelOrders(response: AxiosResponse): Promise<BettingResponse> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && typeof response.headers === "object") {
-      for (let k in response.headers) {
-        if (response.headers.hasOwnProperty(k)) {
-          _headers[k] = response.headers[k];
-        }
-      }
-    }
-    if (status === 200) {
-      const _responseText = response.data;
-      if (_responseText.message == 'UNAUTHRORIZED' && _responseText.status == false && _responseText.code !== 200) {
-        this.googleAnalyticsService.recordExceptions(_responseText.message);
-        this.storageService.secureStorage.removeItem('token');
-        return throwException("Error", _responseText.code, _responseText, _headers, _responseText.message);
-      }
-      let result200: any = null;
-      let resultData200 = _responseText;
-      result200 = BettingResponse.fromJS(resultData200);
-      return result200;
-    } else {
-      const _responseText = response.data;
-      let resultdefault: any = null;
-      let resultDatadefault = _responseText;
-      resultdefault = ProblemDetails.fromJS(resultDatadefault);
-      return throwException("Error", status, _responseText, _headers, resultdefault);
-    }
+    return this.http.post<any>(url_, body);
   }
 
   /**
@@ -829,65 +219,13 @@ export class BettingService {
    * @param body (optional) all inputs are required
    * @return Success
    */
-  SportsOrdersplaced(body: SportsBettingModel | undefined, cancelToken?: CancelToken | undefined): Promise<BettingResponse> {
+  SportsOrdersplaced(body: SportsBettingModel | undefined, cancelToken?: CancelToken | undefined): Observable<BettingResponse> {
     let url_
     if (_window().sportsordersplaced) {
       url_ = this.baseUrl + _window().sportsordersplaced
       url_ = url_.replace(/[?&]$/, "");
     }
-
-    const content_ = JSON.stringify(body);
-
-    let options_ = <AxiosRequestConfig>{
-      data: content_,
-      method: "POST",
-      url: url_,
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-      cancelToken
-    };
-
-    return this.instance.request(options_).catch((_error: any) => {
-      if (isAxiosError(_error) && _error.response) {
-        return _error.response;
-      } else {
-        throw _error;
-      }
-    }).then((_response: AxiosResponse) => {
-      return this.processSportsOrdersplaced(_response);
-    });
-  }
-
-  protected processSportsOrdersplaced(response: AxiosResponse): Promise<BettingResponse> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && typeof response.headers === "object") {
-      for (let k in response.headers) {
-        if (response.headers.hasOwnProperty(k)) {
-          _headers[k] = response.headers[k];
-        }
-      }
-    }
-    if (status === 200) {
-      const _responseText = response.data;
-      if (_responseText.message == 'UNAUTHRORIZED' && _responseText.status == false && _responseText.code !== 200) {
-        this.googleAnalyticsService.recordExceptions(_responseText.message);
-        this.storageService.secureStorage.removeItem('token');
-        return throwException("Error", _responseText.code, _responseText, _headers, _responseText.message);
-      }
-      let result200: any = null;
-      let resultData200 = _responseText;
-      result200 = BettingResponse.fromJS(resultData200);
-      return result200;
-    } else {
-      const _responseText = response.data;
-      let resultdefault: any = null;
-      let resultDatadefault = _responseText;
-      resultdefault = ProblemDetails.fromJS(resultDatadefault);
-      return throwException("Error", status, _responseText, _headers, resultdefault);
-    }
+    return this.http.post<any>(url_, body);
   }
 
   /**
@@ -899,7 +237,7 @@ export class BettingService {
     lookSabha: boolean = false,
     body: FancyModel | undefined,
     cancelToken?: CancelToken | undefined
-  ): Promise<BettingResponse> {
+  ): Observable<BettingResponse> {
     let url_;
     if (_window().fancyordersplacedSingle && _window().sportsbookplacedSingle) {
       let version = lookSabha
@@ -908,145 +246,15 @@ export class BettingService {
       url_ = this.baseUrl + _window().fancyordersplaced + `${version}`;
       url_ = url_.replace(/[?&]$/, '');
     }
-
-    const content_ = JSON.stringify(body);
-
-    let options_ = <AxiosRequestConfig>{
-      data: content_,
-      method: 'POST',
-      url: url_,
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      cancelToken,
-    };
-
-    return this.instance
-      .request(options_)
-      .catch((_error: any) => {
-        if (isAxiosError(_error) && _error.response) {
-          return _error.response;
-        } else {
-          throw _error;
-        }
-      })
-      .then((_response: AxiosResponse) => {
-        return this.processFancyOrdersplaced(_response);
-      });
+    return this.http.post<any>(url_, body);
   }
-
-  protected processFancyOrdersplaced(
-    response: AxiosResponse
-  ): Promise<BettingResponse> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && typeof response.headers === 'object') {
-      for (let k in response.headers) {
-        if (response.headers.hasOwnProperty(k)) {
-          _headers[k] = response.headers[k];
-        }
-      }
-    }
-    if (status === 200) {
-      const _responseText = response.data;
-      if (
-        _responseText.message == 'UNAUTHRORIZED' &&
-        _responseText.status == false &&
-        _responseText.code !== 200
-      ) {
-        this.googleAnalyticsService.recordExceptions(_responseText.message);
-        this.storageService.secureStorage.removeItem('token');
-        return throwException(
-          'Error',
-          _responseText.code,
-          _responseText,
-          _headers,
-          _responseText.message
-        );
-      }
-      let result200: any = null;
-      let resultData200 = _responseText;
-      result200 = BettingResponse.fromJS(resultData200);
-      return result200;
-    } else {
-      const _responseText = response.data;
-      let resultdefault: any = null;
-      let resultDatadefault = _responseText;
-      resultdefault = ProblemDetails.fromJS(resultDatadefault);
-      return throwException(
-        'Error',
-        status,
-        _responseText,
-        _headers,
-        resultdefault
-      );
-    }
-  }
-  cancellallOrdersSports(body: CancellAllOrders | undefined, cancelToken?: CancelToken | undefined): Promise<CurrentBetResp> {
+  cancellallOrdersSports(body: CancellAllOrders | undefined, cancelToken?: CancelToken | undefined): Observable<CurrentBetResp> {
     let url_
     if (_window().sportscancellallorders) {
       url_ = this.baseUrl + _window().sportscancellallorders
       url_ = url_.replace(/[?&]$/, "");
     }
-
-    const content_ = JSON.stringify(body);
-
-    let options_ = <AxiosRequestConfig>{
-      data: content_,
-      method: "POST",
-      url: url_,
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-      cancelToken
-    };
-
-    return this.instance.request(options_).catch((_error: any) => {
-      if (isAxiosError(_error) && _error.response) {
-        return _error.response;
-      } else {
-        throw _error;
-      }
-    }).then((_response: AxiosResponse) => {
-      return this.processcancellallOrdersSports(_response);
-    });
-  }
-
-  protected processcancellallOrdersSports(response: AxiosResponse): Promise<CurrentBetResp> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && typeof response.headers === "object") {
-      for (let k in response.headers) {
-        if (response.headers.hasOwnProperty(k)) {
-          _headers[k] = response.headers[k];
-        }
-      }
-    }
-    if (status === 200) {
-      const _responseText = response.data;
-      if (_responseText.message == 'UNAUTHRORIZED' && _responseText.status == false && _responseText.code !== 200) {
-        this.googleAnalyticsService.recordExceptions(_responseText.message);
-        this.storageService.secureStorage.removeItem('token');
-        return throwException("Error", _responseText.code, _responseText, _headers, _responseText.message);
-      }
-      if (_responseText.message == 'UNAUTHRORIZED' && _responseText.status == false && _responseText.code !== 200) {
-        this.googleAnalyticsService.recordExceptions(_responseText.message);
-        this.storageService.secureStorage.removeItem('token');
-        return throwException("Error", _responseText.code, _responseText, _headers, _responseText.message);
-      }
-      let result200: any = null;
-      let resultData200 = _responseText;
-      result200 = CurrentBetResp.fromJS(resultData200);
-      return result200;
-    } else {
-      const _responseText = response.data;
-      let resultdefault: any = null;
-      let resultDatadefault = _responseText;
-      resultdefault = ProblemDetails.fromJS(resultDatadefault);
-      return throwException("Error", status, _responseText, _headers, resultdefault);
-    }
+    return this.http.post<any>(url_, body);
   }
 
 
@@ -1054,302 +262,48 @@ export class BettingService {
     body: SportsBettingModel | undefined,
     from: string,
     cancelToken?: CancelToken | undefined
-  ): Promise<CurrentBetResp> {
+  ): Observable<CurrentBetResp> {
     let url_;
     if (_window().sportsordersplacedSingle) {
       url_ = this.baseUrl + _window().sportsordersplacedSingle;
       url_ = url_.replace(/[?&]$/, '');
     }
-
-    const content_ = JSON.stringify(body);
-
-    let options_ = <AxiosRequestConfig>{
-      data: content_,
-      method: 'POST',
-      url: url_,
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        from: from,
-      },
-      cancelToken,
-    };
-
-    return this.instance
-      .request(options_)
-      .catch((_error: any) => {
-        if (isAxiosError(_error) && _error.response) {
-          return _error.response;
-        } else {
-          throw _error;
-        }
-      })
-      .then((_response: AxiosResponse) => {
-        return this.processOrdersplacedPostSingle(_response);
-      });
-  }
-
-  protected processOrdersplacedPostSingle(
-    response: AxiosResponse
-  ): Promise<CurrentBetResp> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && typeof response.headers === 'object') {
-      for (let k in response.headers) {
-        if (response.headers.hasOwnProperty(k)) {
-          _headers[k] = response.headers[k];
-        }
-      }
-    }
-    if (status === 200) {
-      const _responseText = response.data;
-      if (
-        _responseText.message == 'UNAUTHRORIZED' &&
-        _responseText.status == false &&
-        _responseText.code !== 200
-      ) {
-        this.googleAnalyticsService.recordExceptions(_responseText.message);
-        this.storageService.secureStorage.removeItem('token');
-        return throwException(
-          'Error',
-          _responseText.code,
-          _responseText,
-          _headers,
-          _responseText.message
-        );
-      }
-      let result200: any = null;
-      let resultData200 = _responseText;
-      result200 = CurrentBetResp.fromJS(resultData200);
-      return result200;
-    } else {
-      const _responseText = response.data;
-      this.googleAnalyticsService.recordExceptions(response);
-      let resultdefault: any = null;
-      let resultDatadefault = _responseText;
-      resultdefault = ProblemDetails.fromJS(resultDatadefault);
-      return throwException(
-        'Error',
-        status,
-        _responseText,
-        _headers,
-        resultdefault
-      );
-    }
+    return this.http.post<any>(url_, body);
   }
 
   SportsBookOrdersplacedSingle(
     body: SportsBookModelSingle | undefined,
     cancelToken?: CancelToken | undefined
-  ): Promise<CurrentBetResp> {
+  ): Observable<CurrentBetResp> {
     let url_;
     if (_window().sportsBookOrderPlacedNew) {
       url_ = this.baseUrl + _window().sportsBookOrderPlacedNew;
       url_ = url_.replace(/[?&]$/, '');
     }
-
-    const content_ = JSON.stringify(body);
-
-    let options_ = <AxiosRequestConfig>{
-      data: content_,
-      method: 'POST',
-      url: url_,
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      cancelToken,
-    };
-
-    return this.instance
-      .request(options_)
-      .catch((_error: any) => {
-        if (isAxiosError(_error) && _error.response) {
-          return _error.response;
-        } else {
-          throw _error;
-        }
-      })
-      .then((_response: AxiosResponse) => {
-        return this.processSportsBookOrdersplacedSingle(_response);
-      });
+    return this.http.post<any>(url_, body);
   }
 
-  protected processSportsBookOrdersplacedSingle(
-    response: AxiosResponse
-  ): Promise<CurrentBetResp> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && typeof response.headers === 'object') {
-      for (let k in response.headers) {
-        if (response.headers.hasOwnProperty(k)) {
-          _headers[k] = response.headers[k];
-        }
-      }
-    }
-    if (status === 200) {
-      const _responseText = response.data;
-      if (
-        _responseText.message == 'UNAUTHRORIZED' &&
-        _responseText.status == false &&
-        _responseText.code !== 200
-      ) {
-        this.googleAnalyticsService.recordExceptions(_responseText.message);
-        this.storageService.secureStorage.removeItem('token');
-        return throwException(
-          'Error',
-          _responseText.code,
-          _responseText,
-          _headers,
-          _responseText.message
-        );
-      }
-      let result200: any = null;
-      let resultData200 = _responseText;
-      result200 = CurrentBetResp.fromJS(resultData200);
-      return result200;
-    } else {
-      const _responseText = response.data;
-      let resultdefault: any = null;
-      let resultDatadefault = _responseText;
-      resultdefault = ProblemDetails.fromJS(resultDatadefault);
-      return throwException(
-        'Error',
-        status,
-        _responseText,
-        _headers,
-        resultdefault
-      );
-    }
-  }
-  SportsOrdersplacedMulti(body: SportsBettingModelM | undefined, from: string, cancelToken?: CancelToken | undefined): Promise<CurrentBetResp> {
+  SportsOrdersplacedMulti(body: SportsBettingModelM | undefined, from: string, cancelToken?: CancelToken | undefined): Observable<CurrentBetResp> {
     let url_
     if (_window().sportsordersplacedSingle) {
       url_ = this.baseUrl + _window().sportsordersplacedMulti
       url_ = url_.replace(/[?&]$/, "");
     }
-
-
-    const content_ = JSON.stringify(body);
-
-    let options_ = <AxiosRequestConfig>{
-      data: content_,
-      method: "POST",
-      url: url_,
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-        "from": from
-      },
-      cancelToken
-    };
-
-    return this.instance.request(options_).catch((_error: any) => {
-      if (isAxiosError(_error) && _error.response) {
-        return _error.response;
-      } else {
-        throw _error;
-      }
-    }).then((_response: AxiosResponse) => {
-      return this.processOrdersplacedPostMulti(_response);
-    });
-  }
-
-  protected processOrdersplacedPostMulti(response: AxiosResponse): Promise<CurrentBetResp> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && typeof response.headers === "object") {
-      for (let k in response.headers) {
-        if (response.headers.hasOwnProperty(k)) {
-          _headers[k] = response.headers[k];
-        }
-      }
-    }
-    if (status === 200) {
-      const _responseText = response.data;
-      if (_responseText.message == 'UNAUTHRORIZED' && _responseText.status == false && _responseText.code !== 200) {
-        this.googleAnalyticsService.recordExceptions(_responseText.message);
-        this.storageService.secureStorage.removeItem('token');
-        return throwException("Error", _responseText.code, _responseText, _headers, _responseText.message);
-      }
-      let result200: any = null;
-      let resultData200 = _responseText;
-      result200 = CurrentBetResp.fromJS(resultData200);
-      return result200;
-    } else {
-      const _responseText = response.data;
-      this.googleAnalyticsService.recordExceptions(response);
-      let resultdefault: any = null;
-      let resultDatadefault = _responseText;
-      resultdefault = ProblemDetails.fromJS(resultDatadefault);
-      return throwException("Error", status, _responseText, _headers, resultdefault);
-    }
+    return this.http.post<any>(url_, body);
   }
 
 
-  BookMakerOrdersplacedMulti(body: FancyModelSingle | undefined, cancelToken?: CancelToken | undefined): Promise<CurrentBetResp> {
+  BookMakerOrdersplacedMulti(body: FancyModelSingle | undefined, cancelToken?: CancelToken | undefined): Observable<CurrentBetResp> {
     let url_
     if (_window().bookmakerordersplaced) {
       url_ = this.baseUrl + _window().bookmakerordersplacedMulti
       url_ = url_.replace(/[?&]$/, "");
     }
-
-    const content_ = JSON.stringify(body);
-
-    let options_ = <AxiosRequestConfig>{
-      data: content_,
-      method: "POST",
-      url: url_,
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-      cancelToken
-    };
-
-    return this.instance.request(options_).catch((_error: any) => {
-      if (isAxiosError(_error) && _error.response) {
-        return _error.response;
-      } else {
-        throw _error;
-      }
-    }).then((_response: AxiosResponse) => {
-      return this.processBookMakerOrdersplacedMulti(_response);
-    });
-  }
-
-  protected processBookMakerOrdersplacedMulti(response: AxiosResponse): Promise<CurrentBetResp> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && typeof response.headers === "object") {
-      for (let k in response.headers) {
-        if (response.headers.hasOwnProperty(k)) {
-          _headers[k] = response.headers[k];
-        }
-      }
-    }
-    if (status === 200) {
-      const _responseText = response.data;
-      if (_responseText.message == 'UNAUTHRORIZED' && _responseText.status == false && _responseText.code !== 200) {
-        this.googleAnalyticsService.recordExceptions(_responseText.message);
-        this.storageService.secureStorage.removeItem('token');
-        return throwException("Error", _responseText.code, _responseText, _headers, _responseText.message);
-      }
-      let result200: any = null;
-      let resultData200 = _responseText;
-      result200 = CurrentBetResp.fromJS(resultData200);
-      return result200;
-    } else {
-      const _responseText = response.data;
-      let resultdefault: any = null;
-      let resultDatadefault = _responseText;
-      resultdefault = ProblemDetails.fromJS(resultDatadefault);
-      return throwException("Error", status, _responseText, _headers, resultdefault);
-    }
+    return this.http.post<any>(url_, body);
   }
 
 
-  FancyOrdersplacedSingle(lookSabha: boolean = false, body: FancyModelSingle | undefined, isSportsBook: any, cancelToken?: CancelToken | undefined): Promise<CurrentBetResp> {
+  FancyOrdersplacedSingle(lookSabha: boolean = false, body: FancyModelSingle | undefined, isSportsBook: any, cancelToken?: CancelToken | undefined): Observable<CurrentBetResp> {
     let url_
     if (_window().fancyordersplacedSingle && _window().sportsbookplacedSingle) {
       if (isSportsBook == true) {
@@ -1361,251 +315,47 @@ export class BettingService {
         url_ = url_.replace(/[?&]$/, '');
       }
     }
-
-    const content_ = JSON.stringify(body);
-
-    let options_ = <AxiosRequestConfig>{
-      data: content_,
-      method: "POST",
-      url: url_,
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-      cancelToken
-    };
-
-    return this.instance.request(options_).catch((_error: any) => {
-      if (isAxiosError(_error) && _error.response) {
-        return _error.response;
-      } else {
-        throw _error;
-      }
-    }).then((_response: AxiosResponse) => {
-      return this.processFancyOrdersplacedSingle(_response);
-    });
+    return this.http.post<any>(url_, body);
   }
 
-  protected processFancyOrdersplacedSingle(response: AxiosResponse): Promise<CurrentBetResp> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && typeof response.headers === "object") {
-      for (let k in response.headers) {
-        if (response.headers.hasOwnProperty(k)) {
-          _headers[k] = response.headers[k];
-        }
-      }
-    }
-    if (status === 200) {
-      const _responseText = response.data;
-      if (_responseText.message == 'UNAUTHRORIZED' && _responseText.status == false && _responseText.code !== 200) {
-        this.googleAnalyticsService.recordExceptions(_responseText.message);
-        this.storageService.secureStorage.removeItem('token');
-        return throwException("Error", _responseText.code, _responseText, _headers, _responseText.message);
-      }
-      let result200: any = null;
-      let resultData200 = _responseText;
-      result200 = CurrentBetResp.fromJS(resultData200);
-      return result200;
-    } else {
-      const _responseText = response.data;
-      let resultdefault: any = null;
-      let resultDatadefault = _responseText;
-      resultdefault = ProblemDetails.fromJS(resultDatadefault);
-      return throwException("Error", status, _responseText, _headers, resultdefault);
-    }
-  }
-  otherRacesPost(body: any | undefined, cancelToken?: CancelToken | undefined): Promise<any> {
+
+  otherRacesPost(body: any | undefined, cancelToken?: CancelToken | undefined): Observable<any> {
     let url_
     if (_window().otherracesordersplaced) {
       url_ = this.baseUrl + _window().otherracesordersplaced
       url_ = url_.replace(/[?&]$/, "");
     }
-    const content_ = JSON.stringify(body);
-    let options_ = <AxiosRequestConfig>{
-      data: content_,
-      method: "POST",
-      url: url_,
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-      cancelToken
-    };
+    return this.http.post<any>(url_, body);
+  }
 
-    return this.instance.request(options_).catch((_error: any) => {
-      if (isAxiosError(_error) && _error.response) {
-        return _error.response;
-      } else {
-        throw _error;
-      }
-    }).then((_response: AxiosResponse) => {
-      return this.processLocalMarketOrdersplaceds(_response);
-    });
-  }
-  protected processLocalMarketOrdersplaceds(response: AxiosResponse): Promise<BettingResponse> {
-    //debugger
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && typeof response.headers === "object") {
-      for (let k in response.headers) {
-        if (response.headers.hasOwnProperty(k)) {
-          _headers[k] = response.headers[k];
-        }
-      }
-    }
-    if (status === 200) {
-      const _responseText = response.data;
-      if (_responseText.message == 'UNAUTHRORIZED' && _responseText.status == false && _responseText.code !== 200) {
-        this.googleAnalyticsService.recordExceptions(_responseText.message);
-        this.storageService.secureStorage.removeItem('token');
-        return throwException("Error", _responseText.code, _responseText, _headers, _responseText.message);
-      }
-      let result200: any = null;
-      let resultData200 = _responseText;
-      result200 = BettingResponse.fromJS(resultData200);
-      return result200;
-    } else {
-      const _responseText = response.data;
-      let resultdefault: any = null;
-      let resultDatadefault = _responseText;
-      resultdefault = ProblemDetails.fromJS(resultDatadefault);
-      return throwException("Error", status, _responseText, _headers, resultdefault);
-    }
-  }
   /**
    * Order Placed in local market
    * @param body (optional) all inputs are required
    * @return Success
    */
-  LocalMarketOrdersplaced(body: LocalMarketBet | undefined, cancelToken?: CancelToken | undefined): Promise<CurrentBetResp> {
+  LocalMarketOrdersplaced(body: LocalMarketBet | undefined, cancelToken?: CancelToken | undefined): Observable<CurrentBetResp> {
     let url_
     if (_window().localordersplaced) {
       url_ = this.baseUrl + _window().localordersplaced
       url_ = url_.replace(/[?&]$/, "");
     }
-
-    const content_ = JSON.stringify(body);
-
-    let options_ = <AxiosRequestConfig>{
-      data: content_,
-      method: "POST",
-      url: url_,
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-      cancelToken
-    };
-
-    return this.instance.request(options_).catch((_error: any) => {
-      if (isAxiosError(_error) && _error.response) {
-        return _error.response;
-      } else {
-        throw _error;
-      }
-    }).then((_response: AxiosResponse) => {
-      return this.processLocalMarketOrdersplaced(_response);
-    });
+    return this.http.post<any>(url_, body);
   }
 
-  protected processLocalMarketOrdersplaced(response: AxiosResponse): Promise<CurrentBetResp> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && typeof response.headers === "object") {
-      for (let k in response.headers) {
-        if (response.headers.hasOwnProperty(k)) {
-          _headers[k] = response.headers[k];
-        }
-      }
-    }
-    if (status === 200) {
-      const _responseText = response.data;
-      if (_responseText.message == 'UNAUTHRORIZED' && _responseText.status == false && _responseText.code !== 200) {
-        this.googleAnalyticsService.recordExceptions(_responseText.message);
-        this.storageService.secureStorage.removeItem('token');
-        return throwException("Error", _responseText.code, _responseText, _headers, _responseText.message);
-      }
-      let result200: any = null;
-      let resultData200 = _responseText;
-      result200 = CurrentBetResp.fromJS(resultData200);
-      return result200;
-    } else {
-      const _responseText = response.data;
-      let resultdefault: any = null;
-      let resultDatadefault = _responseText;
-      resultdefault = ProblemDetails.fromJS(resultDatadefault);
-      return throwException("Error", status, _responseText, _headers, resultdefault);
-    }
-  }
 
   /**
    * order placed in exchange game
    * @param body (optional) all inputs are required
    * @return Success
    */
-  XgameOrdersplaced(body: OrderPlaceModel | undefined, cancelToken?: CancelToken | undefined): Promise<BettingResponse> {
+  XgameOrdersplaced(body: OrderPlaceModel | undefined, cancelToken?: CancelToken | undefined): Observable<BettingResponse> {
     let url_
     if (_window().ordersplacedxg) {
       url_ = this.baseUrl + _window().ordersplacedxg
       url_ = url_.replace(/[?&]$/, "");
     }
-
-    const content_ = JSON.stringify(body);
-
-    let options_ = <AxiosRequestConfig>{
-      data: content_,
-      method: "POST",
-      url: url_,
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-      cancelToken
-    };
-
-    return this.instance.request(options_).catch((_error: any) => {
-      if (isAxiosError(_error) && _error.response) {
-        return _error.response;
-      } else {
-        throw _error;
-      }
-    }).then((_response: AxiosResponse) => {
-      return this.processXgameOrdersplaced(_response);
-    });
+    return this.http.post<any>(url_, body);
   }
-
-  protected processXgameOrdersplaced(response: AxiosResponse): Promise<BettingResponse> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && typeof response.headers === "object") {
-      for (let k in response.headers) {
-        if (response.headers.hasOwnProperty(k)) {
-          _headers[k] = response.headers[k];
-        }
-      }
-    }
-    if (status === 200) {
-      const _responseText = response.data;
-      if (_responseText.message == 'UNAUTHRORIZED' && _responseText.status == false && _responseText.code !== 200) {
-        this.googleAnalyticsService.recordExceptions(_responseText.message);
-        this.storageService.secureStorage.removeItem('token');
-        return throwException("Error", _responseText.code, _responseText, _headers, _responseText.message);
-      }
-      let result200: any = null;
-      let resultData200 = _responseText;
-      result200 = BettingResponse.fromJS(resultData200);
-      return result200;
-    } else {
-      const _responseText = response.data;
-      let resultdefault: any = null;
-      let resultDatadefault = _responseText;
-      resultdefault = ProblemDetails.fromJS(resultDatadefault);
-      return throwException("Error", status, _responseText, _headers, resultdefault);
-    }
-  }
-
-
 }
 
 

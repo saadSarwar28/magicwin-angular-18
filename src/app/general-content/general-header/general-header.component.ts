@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { GenericService } from 'src/app/services/generic.service';
+import { GenericService } from '../..//services/generic.service';
 
 @Component({
   selector: 'app-general-header',

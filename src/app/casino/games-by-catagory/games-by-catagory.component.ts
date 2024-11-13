@@ -217,7 +217,7 @@ export class GamesByCatagoryComponent implements OnInit, AfterViewInit {
     this.sportservice.gameUrl = undefined;
     if (true) {
       this.sportservice
-        .setFavourite(id, gameId).then((x) => {
+        .setFavourite(id, gameId).subscribe((x) => {
           if (x) {
             // this.loading = true;
             if (id == 1) {
@@ -238,20 +238,7 @@ export class GamesByCatagoryComponent implements OnInit, AfterViewInit {
           }
           this.loadFav()
         })
-        .catch((err) => {
-          this.openMsgModal('');
-          if (err.status == 401) {
-            this.openLoginModal();
-          } else {
-            console.error(err);
-          }
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.loading = false;
-          }, 500);
 
-        });
     }
   }
 
@@ -260,8 +247,9 @@ export class GamesByCatagoryComponent implements OnInit, AfterViewInit {
     this.loading = false;
     this.sportservice
       .getFavorite()
-      .then((res) => {
+      .subscribe((res) => {
         this.favdata = res;
+        this.loading = false;
 
         this.favdata.forEach((group: any) => {
           group.data.forEach((game: any) => {
@@ -270,10 +258,7 @@ export class GamesByCatagoryComponent implements OnInit, AfterViewInit {
           });
         });
       })
-      .catch((err) => {
-        console.log(err);
-        this.loading = false;
-      });
+
   }
 
   loadImage(items: any) {
@@ -284,32 +269,29 @@ export class GamesByCatagoryComponent implements OnInit, AfterViewInit {
     if (this.catagorys.includes(game)) {
       this.sportservice
         .casinoCatagory(game)
-        .then((res) => {
+        .subscribe((res) => {
           // const allDataArray = res.map(item => item.data).reduce((acc, curr) => acc.concat(curr), []);
           this.data = res;
+          this.loading = false;
+
           this.data.forEach((group: any) => {
             this.totalNumberofGames += group.data.length;
           });
           this.loading = false;
         })
-        .catch((err) => {
-          console.log(err);
-          this.loading = false;
-        });
+
     } else {
       this.sportservice
         .casnioGametype(game)
-        .then((res) => {
+        .subscribe((res) => {
           this.data = res;
+          this.loading = false;
           this.data.forEach((group: any) => {
             this.totalNumberofGames += group.data.length;
           });
           this.loading = false;
         })
-        .catch((err) => {
-          console.log(err);
-          this.loading = false;
-        });
+
     }
   }
 
@@ -556,11 +538,10 @@ export class GamesByCatagoryComponent implements OnInit, AfterViewInit {
             undefined,
             tableId
           ),
-          undefined
         )
-        .then((x) => {
+        .subscribe((x) => {
           if (x.url) {
-            this.loading = true;
+            this.loading = false;
             this.sportservice.gameUrl = x.url;
             this.navigateToGame();
           } else {
@@ -571,19 +552,7 @@ export class GamesByCatagoryComponent implements OnInit, AfterViewInit {
             this.openMsgModal(err);
           }
         })
-        .catch((err) => {
-          this.openMsgModal('');
-          if (err.status == 401) {
-            this.openLoginModal();
-          } else {
-            console.error(err);
-          }
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.loading = false;
-          }, 500);
-        });
+
     }
   }
 

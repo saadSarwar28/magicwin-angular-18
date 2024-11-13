@@ -63,20 +63,14 @@ export class StreamComponent implements OnInit {
         this.eventId = this.eventId;
       }
       this.sportService.TvOnBookmaker(parseInt(this.eventId || 0))
-        .then((resp) => {
+        .subscribe((resp) => {
           if (resp) {
             this.srcData = resp;
             this.channel = this.srcData.channelId;
             this.getStream();
           }
         })
-        .catch((err) => {
-          this.toasterService.show(err, {
-            classname: 'bg-danger text-light',
-            delay: 1500,
-          });
-          console.error(err);
-        });
+
     }
   }
 

@@ -2,7 +2,7 @@
 import { Injectable, ComponentFactoryResolver, ApplicationRef, Injector, ComponentRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
-import { ModalComponentComponent } from 'src/app/modal-component/modal-component.component';
+import { ModalComponentComponent } from '../../modal-component/modal-component.component';
 
 @Injectable({
   providedIn: 'root',

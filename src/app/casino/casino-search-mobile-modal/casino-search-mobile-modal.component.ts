@@ -160,7 +160,7 @@ export class CasinoSearchMobileModalComponent implements OnInit {
   searchInput!: QueryList<ElementRef>;
   filterData(event: any) {
     if (event.target.value.length > 2) {
-      this.sportservice.searchCasinoPost(this.searchTerm).then((resp) => {
+      this.sportservice.searchCasinoPost(this.searchTerm).subscribe((resp) => {
         if (resp && resp.length > 0) {
           this.filteredData = resp;
         } else {
@@ -201,7 +201,7 @@ export class CasinoSearchMobileModalComponent implements OnInit {
     this.sportservice.gameUrl = undefined;
     if (true) {
       this.sportservice
-        .setFavourite(id, gameId).then((x) => {
+        .setFavourite(id, gameId).subscribe((x) => {
           if (x) {
             // this.loading = true;
             if (id == 1) {
@@ -221,21 +221,10 @@ export class CasinoSearchMobileModalComponent implements OnInit {
             this.openMsgModal(err);
           }
           this.loadFav()
-        })
-        .catch((err) => {
-          this.openMsgModal('');
-          if (err.status == 401) {
-            this.openLoginModal();
-          } else {
-            console.error(err);
-          }
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.loading = false;
-          }, 500);
+          this.loading = false;
 
-        });
+        })
+
     }
   }
   favdata: any;
@@ -243,8 +232,9 @@ export class CasinoSearchMobileModalComponent implements OnInit {
     this.loading = false;
     this.sportservice
       .getFavorite()
-      .then((res) => {
+      .subscribe((res) => {
         this.favdata = res;
+        this.loading = false;
 
         this.favdata.forEach((group: any) => {
           group.data.forEach((game: any) => {
@@ -253,10 +243,7 @@ export class CasinoSearchMobileModalComponent implements OnInit {
           });
         });
       })
-      .catch((err) => {
-        console.log(err);
-        this.loading = false;
-      });
+
   }
   loadImage(items: any) {
     items.imgLoad = true;
@@ -457,9 +444,8 @@ export class CasinoSearchMobileModalComponent implements OnInit {
             undefined,
             tableId
           ),
-          undefined
         )
-        .then((x) => {
+        .subscribe((x) => {
           if (x.url) {
             this.loading = true;
             this.sportservice.gameUrl = x.url;
@@ -472,19 +458,7 @@ export class CasinoSearchMobileModalComponent implements OnInit {
             this.openMsgModal(err);
           }
         })
-        .catch((err) => {
-          this.openMsgModal('');
-          if (err.status == 401) {
-            this.openLoginModal();
-          } else {
-            console.error(err);
-          }
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.loading = false;
-          }, 500);
-        });
+
     }
   }
 

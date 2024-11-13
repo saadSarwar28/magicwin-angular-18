@@ -5,10 +5,11 @@ import {
   AxiosResponse,
   CancelToken,
 } from 'axios';
-import { environment } from 'src/environments/environment';
+
 import { AxiosinstanceService } from './axiosinstance.service';
 import { _window } from './backend.service';
 import { isAxiosError, throwException } from '../models/models';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',

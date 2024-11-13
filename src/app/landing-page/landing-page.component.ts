@@ -6,8 +6,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { DeviceDetectorService } from 'ngx-device-detector';
-import { _window } from 'src/app/services/backend.service';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
+import { _window } from '../services/backend.service';
 import {
   FancytimerService,
   MarketTimerService,
@@ -21,11 +20,12 @@ import {
 import { Meta } from '@angular/platform-browser';
 import { Event, NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { UtillsService } from '../services/utills.service';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { CheckAuthService } from '../services/check-auth.service';
 @Component({
   selector: 'app-landing-page',
   templateUrl: './landing-page.component.html',
   styleUrls: ['./landing-page.component.scss'],
+  standalone: true,
 })
 export class LandingPageComponent implements OnInit, AfterViewInit {
   cdnUrl: any = 'https://iriscdn.b-cdn.net/';
@@ -99,7 +99,7 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
     private remainingtimer: RemainingTimerService,
     private myTimer: TimerService,
     private utillsService: UtillsService,
-    private breakpointObserver: BreakpointObserver,
+    // private breakpointObserver: BreakpointObserver,
     private cdr: ChangeDetectorRef
   ) {
     this.deviceInfo = this.deviceService.getDeviceInfo();
@@ -312,12 +312,12 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
     this.newstimer.clearTimer();
     this.remainingtimer.clearTimer();
 
-    this.breakpointObserver
-    .observe([Breakpoints.Handset])
-    .subscribe((result) => {
-      this.isMobile = result.matches;
-      this.cdr.detectChanges();
-    });
+    // this.breakpointObserver
+    // .observe([Breakpoints.Handset])
+    // .subscribe((result) => {
+    //   this.isMobile = result.matches;
+    //   this.cdr.detectChanges();
+    // });
   }
 
   ngOnDestroy(): void {

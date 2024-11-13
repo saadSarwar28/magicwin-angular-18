@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { formatDate } from "@angular/common";
 import { Router } from '@angular/router';
-import { CasinoBetsInputModel, CasinoOrders, MyBetsInputModel } from 'src/app/models/models';
-import { BackendService, _window } from 'src/app/services/backend.service';
-import { ToastService } from 'src/app/services/toast.service';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
+import { CasinoBetsInputModel, CasinoOrders, MyBetsInputModel } from '../../models/models';
+import { BackendService, _window } from '../../services/backend.service';
+import { ToastService } from '../../services/toast.service';
+import { CheckAuthService } from '../../services/check-auth.service';
 import { TranslateService } from '@ngx-translate/core';
-import { futureDateRestictedValidator } from 'src/app/validators/restrict-future-date-validator';
-import { StorageService } from 'src/app/services/storage.service';
+import { futureDateRestictedValidator } from '../../validators/restrict-future-date-validator';
+import { StorageService } from '../../services/storage.service';
 @Component({
   selector: 'app-casinoBets',
   templateUrl: './casinoBets.component.html',
@@ -83,7 +83,7 @@ export class CasinoBetsComponent implements OnInit {
     if (this.dateInputForm.invalid) {
       this.isShownDate = true;
     } else {
-      if ((this.dateInputForm.controls.endDate.value) < new Date('2020-01-01')) {
+      if ((this.dateInputForm.controls['endDate'].value) < new Date('2020-01-01')) {
         const translatedResponse = this.toasterTranslationMethod("Selected date is too old date");
         this.toasterService.show(translatedResponse, { classname: 'bg-danger text-light' });
       } else {
@@ -92,53 +92,36 @@ export class CasinoBetsComponent implements OnInit {
         // this.dateAndFilterBets.date = (document.getElementById('startdate') as HTMLInputElement).value;
         // this.dateAndFilterBets.date = new Date(this.dateAndFilterBets.date).toISOString();
         const body = {
-          date: new Date(`${this.dateInputForm.controls.endDate.value}T${this.dateInputForm.controls.endTime.value}`).toISOString(),
-          filterType: this.dateInputForm.controls.filterType.value
+          date: new Date(`${this.dateInputForm.controls['endDate'].value}T${this.dateInputForm.controls['endTime'].value}`).toISOString(),
+          filterType: this.dateInputForm.controls['filterType'].value
         }
-        this.httpService.casinobets(body, "CasinoBetsComponent").then((response: CasinoOrders[]) => {
+        this.httpService.casinobets(body, "CasinoBetsComponent").subscribe((response: CasinoOrders[]) => {
           if (response) {
             if (response.length === 0) {
               this.toasterService.show('No data found', { classname: 'bg-danger text-light' });
             }
+            this.showLoader = false
             this.casinoBets = response;
             this.paginatedReports()
           }
           // }, error => {
           //   this.toasterService.show(error, {classname: 'bg-danger text-light'});
-        }).catch(err => {
-          if (err.status == 401) {
-            // this.router.navigate(['signin']);
-            this.storageService.secureStorage.removeItem('token');
-            window.location.href = window.location.origin
-          } else {
-            console.log(err);
-            const translatedResponse = this.toasterTranslationMethod(err);
-            this.toasterService.show(translatedResponse, { classname: 'bg-danger text-light' });
-          }
-        }).finally(() => this.showLoader = false);
+        })
       }
     }
   }
 
   casinoBetsWeek() {
     this.showLoader = true;
-    this.httpService.casinobets(this.dateAndFilterBets, "CasinoBetsComponent").then((response: CasinoOrders[]) => {
+    this.httpService.casinobets(this.dateAndFilterBets, "CasinoBetsComponent").subscribe((response: CasinoOrders[]) => {
       if (response) {
         this.casinoBets = response;
+        this.showLoader = false
         this.paginatedReports()
       }
       // }, error => {
       //   this.toasterService.show(error, {classname: 'bg-danger text-light'});
-    }).catch(err => {
-      if (err.status == 401) {
-        // this.router.navigate(['signin']);
-        this.storageService.secureStorage.removeItem('token');
-        window.location.href = window.location.origin
-      } else {
-        console.log(err);
-        this.toasterService.show(err, { classname: 'bg-danger text-light' });
-      }
-    }).finally(() => this.showLoader = false);
+    })
   }
 
   downloadSportsBets() {

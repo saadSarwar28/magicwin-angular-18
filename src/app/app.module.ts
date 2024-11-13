@@ -1,7 +1,6 @@
 import { APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ExchangeComponent } from './exchange/exchange.component';
 import { AxiosinstanceService } from './services/axiosinstance.service';
@@ -47,6 +46,8 @@ import { MomentModule } from 'ngx-moment';
 import { PopularBannersComponent } from './sports/popular-banners/popular-banners.component';
 import { InplayUpcomingMatchesComponent } from './sports/inplay-upcoming/inplay-upcoming-matches/inplay-upcoming-matches.component';
 import { SeoService } from "./services/seo.service";
+import { SharedModule } from './shared/shared.module';
+
 export const createTranslateLoader = (http: HttpClient) => {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 };
@@ -61,22 +62,38 @@ export function initializeSeoService(metaService: SeoService) {
     ExchangeComponent,
     ErrorpageComponent,
     OneTimeDirective,
+    ChangePasswordFirstTimeComponent,
+    ModalComponentComponent,
     MybetsModalComponent,
     clickOutsideMyBetsDirective,
+    VideoModalComponent,
+    SitefooterComponent,
+    NavbartopComponent,
+    OneClickBetComponent,
+    NavSettingComponent,
+    LoginModalComponent,
+    ChangepinmodalComponent,
+    CreatepinComponent,
+    SettingsComponent,
+    GameSliderComponent,
+    SportsNavComponent,
     SignupTermsConditionComponent,
     LoginTermsConditionComponent,
     ToastsContainer,
     SummaryContentComponent,
     CelebritiesComponent,
+    PopularBannersComponent,
+    InplayUpcomingComponent,
+    InplayUpcomingMatchesComponent,
 
   ],
   imports: [
+    LandingPageComponent,
     NgxMatIntlTelInputComponent,
     TranslateModule,
     BrowserModule,
     RecaptchaModule,
     RecaptchaV3Module,
-    AppRoutingModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
@@ -86,6 +103,7 @@ export function initializeSeoService(metaService: SeoService) {
     CommonModule,
     BrowserAnimationsModule,
     MomentModule,
+    SharedModule,
     // ServiceWorkerModule.register('ngsw-worker.js', {
     //   enabled: environment.production,
     //   // Register the ServiceWorker as soon as the app is stable

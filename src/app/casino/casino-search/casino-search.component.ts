@@ -205,7 +205,7 @@ export class CasinoSearchComponent implements OnInit, AfterViewInit {
   searchInput!: QueryList<ElementRef>;
   filterData(event: any) {
     if (event.target.value.length > 2) {
-      this.sportservice.searchCasinoPost(this.searchTerm).then((resp) => {
+      this.sportservice.searchCasinoPost(this.searchTerm).subscribe((resp) => {
         if (resp && resp.length > 0) {
           this.gamesCount = 0
           this.filteredData = resp;
@@ -314,7 +314,7 @@ export class CasinoSearchComponent implements OnInit, AfterViewInit {
     this.sportservice.gameUrl = undefined;
     if (true) {
       this.sportservice
-        .setFavourite(id, gameId).then((x) => {
+        .setFavourite(id, gameId).subscribe((x) => {
           if (x) {
             // this.loading = true;
             if (id == 1) {
@@ -335,20 +335,7 @@ export class CasinoSearchComponent implements OnInit, AfterViewInit {
           }
           this.loadFav()
         })
-        .catch((err) => {
-          this.openMsgModal('');
-          if (err.status == 401) {
-            this.openLoginModal();
-          } else {
-            console.error(err);
-          }
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.loading = false;
-          }, 500);
 
-        });
     }
   }
   favdata: any;
@@ -356,8 +343,9 @@ export class CasinoSearchComponent implements OnInit, AfterViewInit {
     this.loading = false;
     this.sportservice
       .getFavorite()
-      .then((res) => {
+      .subscribe((res) => {
         this.favdata = res;
+        this.loading = false;
 
         this.favdata.forEach((group: any) => {
           group.data.forEach((game: any) => {
@@ -366,10 +354,7 @@ export class CasinoSearchComponent implements OnInit, AfterViewInit {
           });
         });
       })
-      .catch((err) => {
-        console.log(err);
-        this.loading = false;
-      });
+
   }
   loadImage(items: any) {
     items.imgLoad = true;
@@ -564,9 +549,8 @@ export class CasinoSearchComponent implements OnInit, AfterViewInit {
             undefined,
             tableId
           ),
-          undefined
         )
-        .then((x) => {
+        .subscribe((x) => {
           if (x.url) {
             this.loading = true;
             this.sportservice.gameUrl = x.url;
@@ -579,19 +563,7 @@ export class CasinoSearchComponent implements OnInit, AfterViewInit {
             this.openMsgModal(err);
           }
         })
-        .catch((err) => {
-          this.openMsgModal('');
-          if (err.status == 401) {
-            this.openLoginModal();
-          } else {
-            console.error(err);
-          }
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.loading = false;
-          }, 500);
-        });
+
     }
   }
 

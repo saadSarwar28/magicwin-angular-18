@@ -196,7 +196,7 @@ export class LoginSignButtonsComponent implements OnInit {
               c,
               'LoginComponent'
             )
-            .then((resp) => {
+            .subscribe((resp) => {
               if (resp) {
                 if (resp && resp.token) {
                   this.gaService.eventEmitter(
@@ -235,8 +235,7 @@ export class LoginSignButtonsComponent implements OnInit {
                   }
                 }
               }
-            })
-            .catch((er) => {
+            }, er => {
               if (er.response && er.response.message) {
                 this.toastService.show(er.response.messagee, {
                   classname: 'bg-danger text-light',
@@ -248,8 +247,10 @@ export class LoginSignButtonsComponent implements OnInit {
                   delay: 1500,
                 });
               }
-            });
-        } else {
+            }
+
+            )
+
         }
       });
     } catch (error) {

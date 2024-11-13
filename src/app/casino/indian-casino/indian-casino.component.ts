@@ -205,9 +205,10 @@ export class IndianCasinoComponent implements OnInit {
     this.sportservice.gameUrl = undefined;
     if (true) {
       this.sportservice
-        .setFavourite(id, gameId).then((x) => {
+        .setFavourite(id, gameId).subscribe((x) => {
           if (x) {
-            // this.loading = true;
+            this.loading = false;
+
             if (id == 1) {
               this.toasterService.show('Added to Favorites', {
                 classname: 'bg-success text-light',
@@ -226,20 +227,7 @@ export class IndianCasinoComponent implements OnInit {
           }
           this.loadFav()
         })
-        .catch((err) => {
-          this.openMsgModal('');
-          if (err.status == 401) {
-            this.openLoginModal();
-          } else {
-            console.error(err);
-          }
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.loading = false;
-          }, 500);
 
-        });
     }
   }
   favdata: any;
@@ -247,8 +235,9 @@ export class IndianCasinoComponent implements OnInit {
     this.loading = false;
     this.sportservice
       .getFavorite()
-      .then((res) => {
+      .subscribe((res) => {
         this.favdata = res;
+        this.loading = false;
 
         this.favdata.forEach((group: any) => {
           group.data.forEach((game: any) => {
@@ -257,10 +246,7 @@ export class IndianCasinoComponent implements OnInit {
           });
         });
       })
-      .catch((err) => {
-        console.log(err);
-        this.loading = false;
-      });
+
   }
   scrollRight(index: number): void {
     const container = this.imageContainer.nativeElement;
@@ -336,7 +322,7 @@ export class IndianCasinoComponent implements OnInit {
     if (this.catagorys.includes(game)) {
       this.sportservice
         .casinoCatagory(game)
-        .then((res) => {
+        .subscribe((res) => {
           // const allDataArray = res.map(item => item.data).reduce((acc, curr) => acc.concat(curr), []);
           this.data = res;
           // this.toggleImages(this.data[0].data)
@@ -345,25 +331,21 @@ export class IndianCasinoComponent implements OnInit {
           });
           this.loading = false;
         })
-        .catch((err) => {
-          console.log(err);
-          this.loading = false;
-        });
+
     } else {
       this.sportservice
         .casnioGametype(game)
-        .then((res) => {
+        .subscribe((res) => {
           this.data = res;
+          this.loading = false;
+
           this.toggleGamePro = new Array(this.data.length).fill(false);
           this.data.forEach((group: any) => {
             this.totalNumberofGames += group.data.length;
           });
           this.loading = false;
         })
-        .catch((err) => {
-          console.log(err);
-          this.loading = false;
-        });
+
     }
   }
 
@@ -627,11 +609,12 @@ export class IndianCasinoComponent implements OnInit {
             undefined,
             tableId
           ),
-          undefined
         )
-        .then((x) => {
+        .subscribe((x) => {
           if (x.url) {
             this.loading = true;
+            this.loading = false;
+
             this.sportservice.gameUrl = x.url;
             this.navigateToGame();
           } else {
@@ -642,19 +625,7 @@ export class IndianCasinoComponent implements OnInit {
             this.openMsgModal(err);
           }
         })
-        .catch((err) => {
-          this.openMsgModal('');
-          if (err.status == 401) {
-            this.openLoginModal();
-          } else {
-            console.error(err);
-          }
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.loading = false;
-          }, 500);
-        });
+
     }
   }
 

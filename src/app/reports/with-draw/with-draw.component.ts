@@ -1,22 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { StorageService } from '../../services/storage.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
-import { ToastService } from 'src/app/services/toast.service';
-import { BackendService, _window } from 'src/app/services/backend.service';
+import { CheckAuthService } from '../../services/check-auth.service';
+import { ToastService } from '../../services/toast.service';
+import { BackendService, _window } from '../../services/backend.service';
 import {
   RequetedAmount,
-} from 'src/app/models/models';
+} from '../../models/models';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { GoogleAnalyticsService } from 'src/app/services/google-analytics.service';
+import { GoogleAnalyticsService } from '../../services/google-analytics.service';
 import { ReCaptchaV3Service } from 'ng-recaptcha';
-import { minLengthNumberValidator } from 'src/app/validators/minLengthValidator';
-import { UtillsService } from 'src/app/services/utills.service';
-import { WalletService } from 'src/app/services/wallet.service';
+import { minLengthNumberValidator } from '../../validators/minLengthValidator';
+import { UtillsService } from '../../services/utills.service';
+import { WalletService } from '../../services/wallet.service';
 import { MatDialog } from '@angular/material/dialog';
-import { CreatepinComponent } from 'src/app/shared/createpin/createpin.component';
-import { ChangepinmodalComponent } from 'src/app/shared/changepinmodal/changepinmodal.component';
+import { CreatepinComponent } from '../../shared/createpin/createpin.component';
+import { ChangepinmodalComponent } from '../../shared/changepinmodal/changepinmodal.component';
 @Component({
   selector: 'app-with-draw',
   templateUrl: './with-draw.component.html',
@@ -161,7 +161,7 @@ export class WithDrawComponent implements OnInit {
             };
             this.reportService
               .WithdrawRequest(RequetedAmount)
-              .then((resp: any) => {
+              .subscribe((resp: any) => {
                 this.gaService.eventEmitter('withdraw', 'payment', 'click');
                 const translatedResponse = this.toasterTranslationMethod(
                   resp?.message
@@ -196,8 +196,9 @@ export class WithDrawComponent implements OnInit {
                     delay: 3000,
                   });
                 }
+                this.showLoader = false
               })
-              .finally(() => (this.showLoader = false));
+
           });
       } catch (error) {
         this.showLoader = false;
@@ -207,7 +208,7 @@ export class WithDrawComponent implements OnInit {
   }
 
   getWithDrawHistory() {
-    this.reportService.GetWithdrawRequests().then((data) => {
+    this.reportService.GetWithdrawRequests().subscribe((data) => {
       if (data) {
         this.withDraws = data;
       }
@@ -272,7 +273,7 @@ export class WithDrawComponent implements OnInit {
             };
             this.reportService
               .AddBankAccount(ClientkBankAccounts)
-              .then((data) => {
+              .subscribe((data) => {
                 if (data && data.status == true) {
                   const translatedResponse = this.toasterTranslationMethod(
                     data?.message
@@ -292,10 +293,9 @@ export class WithDrawComponent implements OnInit {
                     delay: 3000,
                   });
                 }
-              })
-              .finally(() => {
                 this.showLoader = false;
-              });
+              })
+
           });
       } catch (error) {
         this.showLoader = false;
@@ -310,7 +310,7 @@ export class WithDrawComponent implements OnInit {
     this.showLoader = true;
     this.reportService
       .GetBankAccounts()
-      .then((data: any) => {
+      .subscribe((data: any) => {
         if (data) {
           if (data && data.banks.length > 0) {
             this.selectedTab = 'existing';
@@ -345,9 +345,10 @@ export class WithDrawComponent implements OnInit {
               delay: 3000,
             });
           }
+          this.showLoader = false
         }
       })
-      .finally(() => (this.showLoader = false));
+
   }
 
   onDeleteAccount(accountNumber: any) {
@@ -357,7 +358,7 @@ export class WithDrawComponent implements OnInit {
       this.showLoader = true;
       this.reportService
         .RemoveBankAccount(accountNumber)
-        .then((data) => {
+        .subscribe((data) => {
           if (data && data.status == true) {
             const translatedResponse = this.toasterTranslationMethod(
               data?.message
@@ -378,10 +379,9 @@ export class WithDrawComponent implements OnInit {
               delay: 3000,
             });
           }
-        })
-        .finally(() => {
           this.showLoader = false;
-        });
+        })
+
       // })
     } catch (error) {
       this.showLoader = false;
@@ -500,7 +500,7 @@ export class WithDrawComponent implements OnInit {
     this.showLoader = true;
     this.reportService
       .CheckKYC('WithDrawComponent')
-      .then((data) => {
+      .subscribe((data) => {
         if (data?.status == false) {
           if (data?.redirect == undefined) {
             this.showWithDrawForm = true;
@@ -519,8 +519,9 @@ export class WithDrawComponent implements OnInit {
         } else {
           this.showWithDrawForm = false;
         }
+        this.showLoader = false
       })
-      .finally(() => (this.showLoader = false));
+
   }
 
   openCreatePinModal() {

@@ -28,7 +28,7 @@ export class BlogDetailComponent implements OnInit {
   getBlogDetail(routeName: string) {
     this.backendService
       .GetBlog()
-      .then((data: any) => {
+      .subscribe((data: any) => {
         if (data?.length > 0) {
           let currentBlog = data?.find((x: any) =>
             x.route?.includes(routeName)
@@ -45,6 +45,6 @@ export class BlogDetailComponent implements OnInit {
           }
         }
       })
-      .finally(() => { });
+
   }
 }

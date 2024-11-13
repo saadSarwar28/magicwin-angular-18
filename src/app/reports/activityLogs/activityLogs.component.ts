@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivityLogs } from 'src/app/models/models';
-import { BackendService, _window } from 'src/app/services/backend.service';
-import { ToastService } from 'src/app/services/toast.service';
+import { ActivityLogs } from '../../models/models';
+import { BackendService, _window } from '../../services/backend.service';
+import { ToastService } from '../../services/toast.service';
 import { formatDate } from "@angular/common";
-import { CheckAuthService } from 'src/app/services/check-auth.service';
+import { CheckAuthService } from '../../services/check-auth.service';
 import { Router } from '@angular/router';
-import * as M from "materialize-css";
-import { StorageService } from 'src/app/services/storage.service';
+import { StorageService } from '../../services/storage.service';
 
 @Component({
   selector: 'app-activityLogs',
@@ -39,20 +38,11 @@ export class ActivityLogsComponent implements OnInit {
   // tslint:disable-next-line:typedef
   getActivityLog() {
     this.showLoader = true
-    this.httpService.activity("ActivityLogsComponent").then((response: ActivityLogs[]) => {
+    this.httpService.activity("ActivityLogsComponent").subscribe((response: ActivityLogs[]) => {
       this.activityLogs = response;
       this.paginatedReports()
-    }).catch(error => {
-      if (error.status == 401) {
-        // this.router.navigate(['/signin']);
-        this.storageService.secureStorage.removeItem('token');
-        window.location.href = window.location.origin
-
-      } else {
-        console.log(error);
-      }
-      this.toasterService.show(error, { classname: 'bg-danger text-light' });
-    }).finally(() => this.showLoader = false);
+      this.showLoader = false
+    })
   }
 
   dateFormat(loginDateTime: any) {

@@ -115,7 +115,7 @@ export class CompetitionMarketsComponent implements OnInit, OnDestroy {
         parseInt(this.sportsId),
         'CompetitionMarketsComponent'
       )
-      .then((resp) => {
+      .subscribe((resp) => {
         this.data = resp;
         this.isLoading = false
         resp.competitions?.forEach((x: any) => {
@@ -143,19 +143,21 @@ export class CompetitionMarketsComponent implements OnInit, OnDestroy {
             this.GetScore();
           }, 1000)
         );
-      })
-      .catch((err) => {
+      }, err => {
         this.isLoading = false
         this.catchError(err)
-      });
+      }
+
+      )
+
   }
 
   GetSportMarketLiability(marketIds: string) {
     if (this.checkauthservice.IsLogin()) {
       if (marketIds != "") {
         this.sportsService
-          .SportsMarketliability(marketIds, 'CompetitionMarketsComponent')
-          .then((resp) => {
+          .SportsMarketliability(marketIds)
+          .subscribe((resp: any) => {
             if (resp && resp.length > 0) {
               resp.forEach((x: any) => {
                 this.data?.competitions?.forEach((event: any) => {
@@ -168,10 +170,11 @@ export class CompetitionMarketsComponent implements OnInit, OnDestroy {
                 })
               })
             }
-          })
-          .catch((err) => {
+          }, (err) => {
             this.catchError(err)
-          });
+          }
+          )
+
       }
     }
   }
@@ -297,7 +300,7 @@ export class CompetitionMarketsComponent implements OnInit, OnDestroy {
       if (this.marketIds.length > 0) {
         this.sportsService
           .marketsbook(this.marketIds.join(','), 'CompetitionMarketsComponent')
-          .then((resp) => {
+          .subscribe((resp) => {
             if (resp && resp.length > 0) {
               resp.forEach((rate) => {
                 let market = this.data?.competitions?.forEach((sports: any, indexx: any) => {
@@ -354,10 +357,11 @@ export class CompetitionMarketsComponent implements OnInit, OnDestroy {
                 });
               });
             }
-          })
-          .catch((err) => {
+          }, (err) => {
             this.catchError(err)
-          });
+          }
+          )
+
       }
 
     }

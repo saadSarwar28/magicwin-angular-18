@@ -345,9 +345,8 @@ export class CasinoComponent implements OnInit, AfterViewInit, OnDestroy {
           undefined,
           tableId
         ),
-        undefined
       )
-      .then((x) => {
+      .subscribe((x) => {
         if (x.url) {
           this.loading = true;
           this.iframeurl = x.url;
@@ -387,25 +386,7 @@ export class CasinoComponent implements OnInit, AfterViewInit, OnDestroy {
           }
         }
       })
-      .catch((err) => {
-        this.toastService.show(this.gameInvalidTokenMsg.description ?? err, {
-          classname: 'bg-danger text-light',
-          delay: 1500,
-        });
 
-        if (err.status == 401) {
-          this.openLoginModal();
-        } else {
-          console.error(err);
-        }
-      })
-      .finally(() => {
-        // document.getElementById("overlay-loader")!.style.display = "none";
-        setTimeout(() => {
-          this.loading = false;
-          this.iframeLoad = true;
-        }, 500);
-      });
   }
 
   openLoginModal() {

@@ -2,10 +2,10 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 import { FormBuilder, FormControl, FormGroup, MinValidator, Validators } from "@angular/forms";
 import { DatePipe, formatDate } from "@angular/common";
-import { AccountStatementSubReport, AccountstmtInputModel, AccountstmtModel } from 'src/app/models/models';
-import { ToastService } from 'src/app/services/toast.service';
-import { BackendService, _window } from 'src/app/services/backend.service';
-import { StorageService } from 'src/app/services/storage.service';
+import { AccountStatementSubReport, AccountstmtInputModel, AccountstmtModel } from '../../models/models';
+import { ToastService } from '../../services/toast.service';
+import { BackendService, _window } from '../../services/backend.service';
+import { StorageService } from '../../services/storage.service';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -190,35 +190,28 @@ export class AccountStatementComponent implements OnInit {
     } else {
       // console.log("this.dateRange", new Date(this.dateInputForm.controls.startDate.value).toISOString());
       // console.log("this.dateRange", new Date());
-      if ((this.dateInputForm.controls.startDate.value) < '2020-01-01') {
+      if ((this.dateInputForm.controls['startDate'].value) < '2020-01-01') {
         const translatedResponse = this.toasterTranslationMethod("Start date is too old date");
         this.toasterService.show(translatedResponse, { classname: 'bg-danger text-light' });
-      } else if ((this.dateInputForm.controls.endDate.value) < '2020-01-01') {
+      } else if ((this.dateInputForm.controls['endDate'].value) < '2020-01-01') {
         const translatedResponse = this.toasterTranslationMethod("End date is too old date");
         this.toasterService.show(translatedResponse, { classname: 'bg-danger text-light' });
-      } else if ((this.dateInputForm.controls.startDate.value) > (this.dateInputForm.controls.endDate.value)) {
+      } else if ((this.dateInputForm.controls['startDate'].value) > (this.dateInputForm.controls['endDate'].value)) {
         const translatedResponse = this.toasterTranslationMethod("Please select a valid date");
         this.toasterService.show(translatedResponse, { classname: 'bg-danger text-light' });
       } else {
         this.isShownStart = false;
         this.isShownEnd = false;
         this.showLoader = true;
-        this.dateRange.startDate = new Date(this.dateInputForm.controls.startDate.value).toISOString();
-        this.dateRange.endDate = new Date(this.dateInputForm.controls.endDate.value).toISOString();
-        this.httpService.accountstatement(this.dateRange, "AccountStatementComponent").then((response: AccountstmtModel[]) => {
+        this.dateRange.startDate = new Date(this.dateInputForm.controls['startDate'].value).toISOString();
+        this.dateRange.endDate = new Date(this.dateInputForm.controls['endDate'].value).toISOString();
+        this.httpService.accountstatement(this.dateRange, "AccountStatementComponent").subscribe((response: AccountstmtModel[]) => {
           if (response) {
             this.accountStatements = response;
             this.paginatedStatements()
+            this.showLoader = false
           }
-        }).catch(err => {
-          if (err.status == 401) {
-            // this.router.navigate(['/signin']);
-            this.storageService.secureStorage.removeItem('token');
-            window.location.href = window.location.origin
-          } else {
-            console.log(err);
-          }
-        }).finally(() => this.showLoader = false);
+        })
       }
     }
   }
@@ -235,24 +228,16 @@ export class AccountStatementComponent implements OnInit {
       startDate: [startDate, Validators.compose([Validators.required])],
       endDate: [endDate, Validators.required]
     }, { Validator: this.dateLessThan('dateFrom', 'dateTo') });
-    this.dateRange.startDate = this.dateInputForm.controls.startDate.value;
-    this.dateRange.endDate = this.dateInputForm.controls.endDate.value;
-    this.httpService.accountstatement(this.dateRange, "AccountStatementComponent").then((response: AccountstmtModel[]) => {
+    this.dateRange.startDate = this.dateInputForm.controls['startDate'].value;
+    this.dateRange.endDate = this.dateInputForm.controls['endDate'].value;
+    this.httpService.accountstatement(this.dateRange, "AccountStatementComponent").subscribe((response: AccountstmtModel[]) => {
       if (response) {
         this.accountStatements = response;
+        this.showLoader = false
       }
       // , error => {
       //   this.toasterService.show(error, {classname: 'bg-danger text-light'});
-    }).catch(err => {
-      if (err.status == 401) {
-        // this.router.navigate(['/signin']);
-        this.storageService.secureStorage.removeItem('token');
-        window.location.href = window.location.origin
-
-      } else {
-        console.log(err);
-      }
-    }).finally(() => this.showLoader = false);
+    })
   }
 
 
@@ -273,22 +258,14 @@ export class AccountStatementComponent implements OnInit {
       return
     } else {
       this.showLoader = true;
-      this.httpService.accountstatementsub(marketID, "AccountStatementComponent").then((response: AccountStatementSubReport[]) => {
+      this.httpService.accountstatementsub(marketID, "AccountStatementComponent").subscribe((response: AccountStatementSubReport[]) => {
         if (response) {
           this.accountStatementsSub = response;
           this.accountStatementSubShow = true;
           this.accountStatementShow = false;
+          this.showLoader = false
         }
-      }).catch(err => {
-        if (err.status == 401) {
-          // this.router.navigate(['/signin']);
-          this.storageService.secureStorage.removeItem('token');
-          window.location.href = window.location.origin
-
-        } else {
-          console.log(err);
-        }
-      }).finally(() => this.showLoader = false);
+      })
     }
   }
 

@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { formatDate } from "@angular/common";
 import { Router } from '@angular/router';
-import { CasinoBetsInputModel, MyBetsInputModel, SportsResult } from 'src/app/models/models';
-import { BackendService, _window } from 'src/app/services/backend.service';
-import { ToastService } from 'src/app/services/toast.service';
+import { CasinoBetsInputModel, MyBetsInputModel, SportsResult } from '../../models/models';
+import { BackendService, _window } from '../../services/backend.service';
+import { ToastService } from '../../services/toast.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
+import { CheckAuthService } from '../../services/check-auth.service';
 import { TranslateService } from '@ngx-translate/core';
-import { StorageService } from 'src/app/services/storage.service';
-import { futureDateRestictedValidator } from 'src/app/validators/restrict-future-date-validator';
+import { StorageService } from '../../services/storage.service';
+import { futureDateRestictedValidator } from '../../validators/restrict-future-date-validator';
 @Component({
   selector: 'app-results',
   templateUrl: './results.component.html',
@@ -282,47 +282,29 @@ export class ResultsComponent implements OnInit {
     // }
     this.showLoader = true;
     const body = {
-      date: new Date(`${this.dateInputForm.controls.endDate.value}T${this.dateInputForm.controls.endTime.value}`).toISOString(),
-      filterType: this.dateInputForm.controls.filterType.value.value
+      date: new Date(`${this.dateInputForm.controls['endDate'].value}T${this.dateInputForm.controls['endTime'].value}`).toISOString(),
+      filterType: this.dateInputForm.controls['filterType'].value.value
     }
-    this.httpService.results(body, "ResultsComponent").then((response: SportsResult[]) => {
+    this.httpService.results(body, "ResultsComponent").subscribe((response: SportsResult[]) => {
       if (response) {
         if (response.length === 0) {
           this.toasterService.show('No data found', { classname: 'bg-danger text-light' });
         }
         this.results = response;
         this.paginatedReports()
+        this.showLoader = false
       }
-    }).catch(err => {
-      if (err.status == 401) {
-        // this.router.navigate(['signin']);
-        this.storageService.secureStorage.removeItem('token');
-        window.location.href = window.location.origin
-      } else {
-        console.log(err);
-        const translatedResponse = this.toasterTranslationMethod(err);
-        this.toasterService.show(translatedResponse, { classname: 'bg-danger text-light' });
-      }
-    }).finally(() => this.showLoader = false);
+    })
   }
 
   getWeekResults() {
     this.showLoader = true;
-    this.httpService.results(this.filterType, "ResultsComponent").then((response: SportsResult[]) => {
+    this.httpService.results(this.filterType, "ResultsComponent").subscribe((response: SportsResult[]) => {
       if (response) {
         this.results = response;
       }
-    }).catch(err => {
-      if (err.status == 401) {
-        // this.router.navigate(['signin']);
-        this.storageService.secureStorage.removeItem('token');
-        window.location.href = window.location.origin
-      } else {
-        console.log(err);
-        const translatedResponse = this.toasterTranslationMethod(err);
-        this.toasterService.show(translatedResponse, { classname: 'bg-danger text-light' });
-      }
-    }).finally(() => this.showLoader = false);
+      this.showLoader = false
+    })
   }
 
   downloadSportsBets() {

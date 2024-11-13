@@ -6,14 +6,14 @@ import {
   SimpleChanges,
 } from '@angular/core';
 
-import { _window } from 'src/app/services/backend.service';
+import { _window } from '../../services/backend.service';
 
 import { OwlOptions } from 'ngx-owl-carousel-o';
 
-import { UtillsService } from 'src/app/services/utills.service';
+import { UtillsService } from '../../services/utills.service';
 import { Router } from '@angular/router';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
-import { GenericService } from 'src/app/services/generic.service';
+import { CheckAuthService } from '../../services/check-auth.service';
+import { GenericService } from '../../services/generic.service';
 
 @Component({
   selector: 'app-gameslider',
@@ -24,17 +24,17 @@ export class GameSliderComponent implements OnInit, OnChanges {
   cdnSportsLanding: string = '';
   sitename: string = '';
   @Input() popularGamesData: any = [];
-  @Input() isMobile :boolean  = false;
+  @Input() isMobile: boolean = false;
   isMagicwin: boolean = true;
   sliderAutoPlay: boolean = false;
-  sliderArrowUrl:string = 'https://iriscdn.b-cdn.net/kheloyaar360.net/bannerArrow.svg';
-  showSliderArrowBtn:boolean = false;
+  sliderArrowUrl: string = 'https://iriscdn.b-cdn.net/kheloyaar360.net/bannerArrow.svg';
+  showSliderArrowBtn: boolean = false;
   constructor(
     public utillsService: UtillsService,
     private router: Router,
     private checkauthservice: CheckAuthService,
     private genericService: GenericService
-  ) {}
+  ) { }
   customOptions1: any;
 
   repeatedItems(items: any, count: number): any[] {

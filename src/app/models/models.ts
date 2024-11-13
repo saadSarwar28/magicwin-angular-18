@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 import { KeyLineDescription } from "../services/backend.service";
-import {sportsIdMap} from "../services/sportsEnum";
+import { sportsIdMap } from "../services/sportsEnum";
 
 
 
@@ -7121,7 +7121,7 @@ export interface IClientkBankAccounts {
 
 export class RequetedAmount implements IRequetedAmount {
   accountNo?: string | undefined;
-  amount?: number;
+  amount?: number | string;
   id?: number;
   recaptcha?: string;
   constructor(data?: IRequetedAmount) {

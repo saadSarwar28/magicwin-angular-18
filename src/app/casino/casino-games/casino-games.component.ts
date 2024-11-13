@@ -173,7 +173,7 @@ export class CasinoGamesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.loading = true;
     this.sportservice
       .casinoProviderWise(gameType)
-      .then((resp: any) => {
+      .subscribe((resp: any) => {
         if (resp) {
           this.data = resp;
           this.data.forEach((group: any) => {
@@ -182,15 +182,6 @@ export class CasinoGamesComponent implements OnInit, AfterViewInit, OnDestroy {
           this.loading = false;
         }
       })
-      .catch((err: any) => {
-        console.log(err);
-        this.loading = false;
-      })
-      .finally(() => {
-        setTimeout(() => {
-          this.loading = false;
-        }, 500);
-      });
     this.loadFav()
   }
   changeIndex(d: string) {
@@ -223,7 +214,7 @@ export class CasinoGamesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.sportservice.gameUrl = undefined;
     if (true) {
       this.sportservice
-        .setFavourite(id, gameId).then((x: any) => {
+        .setFavourite(id, gameId).subscribe((x: any) => {
           if (x) {
             // this.loading = true;
             if (id == 1) {
@@ -244,20 +235,7 @@ export class CasinoGamesComponent implements OnInit, AfterViewInit, OnDestroy {
           }
           this.loadFav()
         })
-        .catch((err: any) => {
-          this.openMsgModal('');
-          if (err.status == 401) {
-            this.openLoginModal();
-          } else {
-            console.error(err);
-          }
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.loading = false;
-          }, 500);
 
-        });
     }
   }
   favdata: any;
@@ -265,8 +243,9 @@ export class CasinoGamesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.loading = false;
     this.sportservice
       .getFavorite()
-      .then((res: any) => {
+      .subscribe((res: any) => {
         this.favdata = res;
+        this.loading = false;
 
         this.favdata.forEach((group: any) => {
           group.data.forEach((game: any) => {
@@ -275,10 +254,7 @@ export class CasinoGamesComponent implements OnInit, AfterViewInit, OnDestroy {
           });
         });
       })
-      .catch((err: any) => {
-        console.log(err);
-        this.loading = false;
-      });
+
   }
   ngAfterViewInit(): void {
     if (this.isLoggedIn) {
@@ -488,9 +464,8 @@ export class CasinoGamesComponent implements OnInit, AfterViewInit, OnDestroy {
             undefined,
             tableId
           ),
-          undefined
         )
-        .then((x: any) => {
+        .subscribe((x: any) => {
           if (x.url) {
             this.loading = true;
             this.sportservice.gameUrl = x.url;
@@ -503,20 +478,7 @@ export class CasinoGamesComponent implements OnInit, AfterViewInit, OnDestroy {
             this.openMsgModal(err);
           }
         })
-        .catch((err: any) => {
-          this.openMsgModal('');
 
-          if (err.status == 401) {
-            this.openLoginModal();
-          } else {
-            console.error(err);
-          }
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.loading = false;
-          }, 500);
-        });
     }
   }
 

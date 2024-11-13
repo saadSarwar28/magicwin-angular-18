@@ -165,22 +165,22 @@ export class LoginModalComponent implements OnInit {
   }
 
   isConnected() {
-    if (_window().ping) {
-      axios
-        .get(_window().ping)
-        .then((response: any) => {
-          if (response && response.data) {
-            this.noInternet = response.data == 'PONG' ? false : true;
-            return;
-          }
-        })
-        .catch((error: any) => {
-          console.log(error);
-        });
-    }
+    // if (_window().ping) {
+    //   axios
+    //     .get(_window().ping)
+    //     .then((response: any) => {
+    //       if (response && response.data) {
+    //         this.noInternet = response.data == 'PONG' ? false : true;
+    //         return;
+    //       }
+    //     })
+    //     .catch((error: any) => {
+    //       console.log(error);
+    //     });
+    // }
   }
   createOnline() {
-    return merge<boolean>(
+    return merge<any>(
       fromEvent(window, 'offline').pipe(map(() => false)),
       fromEvent(window, 'online').pipe(map(() => true)),
       new Observable((sub: Observer<boolean>) => {
@@ -268,7 +268,7 @@ export class LoginModalComponent implements OnInit {
                 c,
                 'LoginComponent'
               )
-              .then((resp) => {
+              .subscribe((resp) => {
                 if (resp) {
                   if (resp.code && resp.code != 200) {
                     this.loginForm.setErrors({ Invalid: resp.message });
@@ -314,15 +314,18 @@ export class LoginModalComponent implements OnInit {
                     }
                   }
                 }
-              })
-              .catch((er) => {
+                this.showLoader = false
+              }, er => {
                 if (er.response && er.response.message) {
                   this.loginForm.setErrors({ Invalid: er.response.message });
                 } else {
                   this.loginForm.setErrors({ Invalid: er.response });
                 }
-              })
-              .finally(() => (this.showLoader = false));
+
+              }
+
+              )
+
           });
       } catch (error) {
         this.showLoader = false;
@@ -391,7 +394,7 @@ export class LoginModalComponent implements OnInit {
                 c,
                 'LoginComponent'
               )
-              .then((resp) => {
+              .subscribe((resp) => {
                 if (resp) {
                   if (resp.code && resp.code != 200) {
                     this.loginForm.setErrors({ Invalid: resp.message });
@@ -440,15 +443,17 @@ export class LoginModalComponent implements OnInit {
                     }
                   }
                 }
-              })
-              .catch((er) => {
+                this.showLoader = false
+              }, er => {
                 if (er.response && er.response.message) {
                   this.loginForm.setErrors({ Invalid: er.response.message });
                 } else {
                   this.loginForm.setErrors({ Invalid: er.response });
                 }
-              })
-              .finally(() => (this.showLoader = false));
+              }
+
+              )
+
 
             // });
           } else {
@@ -495,7 +500,7 @@ export class LoginModalComponent implements OnInit {
         otp,
         'LoginComponent'
       )
-      .then((resp) => {
+      .subscribe((resp) => {
         if (resp) {
           if (resp.code && resp.code != 200) {
             this.otpResponse.message = resp.message;
@@ -537,14 +542,18 @@ export class LoginModalComponent implements OnInit {
             }
           }
         }
-      })
-      .catch((er) => {
+        this.showLoader = false
+
+      }, er => {
         if (er.response.message) {
           this.clearTimerInterval();
           this.otpResponse.message = er.response.message;
         }
-      })
-      .finally(() => (this.showLoader = false));
+        this.showLoader = false
+      }
+
+      )
+
   }
 
   clearTimerInterval() {

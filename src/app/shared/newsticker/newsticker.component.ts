@@ -44,20 +44,22 @@ export class NewstickerComponent implements OnInit, OnDestroy {
 
 
   getNews() {
-    this.sportsService.GetNews().then(_resp => {
+    this.sportsService.GetNews().subscribe(_resp => {
       if (_resp) {
         this.news = _resp
       } else {
         this.news = _window().marquee_text;
       }
-    }).catch(err => {
+    }, err => {
       if (err.status == 401) {
         this.storageService.secureStorage.removeItem('token');
         window.location.href = window.location.origin
       } else {
         console.log(err);
       }
-    })
+    }
+
+    )
   }
 
   timer(timer: any) {

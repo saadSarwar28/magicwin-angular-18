@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ClientStake } from 'src/app/models/models';
-import { BackendService, _window } from 'src/app/services/backend.service';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
-import { ToastService } from 'src/app/services/toast.service';
-import { StorageService } from 'src/app/services/storage.service';
+import { ClientStake } from '../../models/models';
+import { BackendService, _window } from '../../services/backend.service';
+import { CheckAuthService } from '../../services/check-auth.service';
+import { ToastService } from '../../services/toast.service';
+import { StorageService } from '../../services/storage.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ReCaptchaV3Service } from 'ng-recaptcha';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -83,20 +83,12 @@ export class StakeButtonsComponent implements OnInit {
   // tslint:disable-next-line:typedef
   getStackButtons() {
     this.showLoader = true;
-    this.backendService.stakesGet("StakeButtonsComponent").then((response: ClientStake) => {
+    this.backendService.stakesGet("StakeButtonsComponent").subscribe((response: ClientStake) => {
       if (response) {
         this.stackButtons = response;
       }
-    }).catch(err => {
-      if (err.status == 401) {
-        this.storageService.secureStorage.removeItem('token');
-        window.location.href = window.location.origin
-      } else {
-        console.log(err);
-        const translatedResponse = this.toasterTranslationMethod(err);
-        this.toasterService.show(translatedResponse, { classname: 'bg-danger text-light' });
-      }
-    }).finally(() => this.showLoader = false);
+      this.showLoader = false
+    })
   }
 
   hasDuplicates(obj) {
@@ -119,7 +111,7 @@ export class StakeButtonsComponent implements OnInit {
       this.recaptchaV3Service.execute('importantAction')
         .subscribe((token: any) => {
           this.showLoader = true;
-          this.backendService.stakesPost(this.stackButtons, "StakeButtonsComponent", token).then(response => {
+          this.backendService.stakesPost(this.stackButtons, "StakeButtonsComponent", token).subscribe(response => {
             if (response) {
               let btn = this.checkauthservice.getstaks();
               let stackeValues = {
@@ -137,16 +129,8 @@ export class StakeButtonsComponent implements OnInit {
               const translatedResponse = this.toasterTranslationMethod(response);
               this.toasterService.show(translatedResponse, { classname: 'bg-success text-light' });
             }
-          }).catch(err => {
-            if (err.status == 401) {
-              // this.router.navigate(['signin']);
-              this.storageService.secureStorage.removeItem('token');
-              window.location.href = window.location.origin
-            } else {
-              console.log(err)
-              this.toasterService.show(err, { classname: 'bg-danger text-light' });
-            }
-          }).finally(() => this.showLoader = false);
+            this.showLoader = false
+          })
         })
     } catch (error) {
       this.showLoader = false;

@@ -92,27 +92,34 @@ export class MybetsComponent implements OnInit, OnChanges {
           .cancellallOrdersSports(
             new CancellAllOrders(this.eventId, 'MYBETS', orders)
           )
-          .then((resp: any) => {
-            this.loadBets.emit()
-            this.cancelBet.emit(marketIds)
-            this.toasterService.show(resp.message, {
-              classname: 'bg-success text-light',
-              delay: 3000,
-              sound: true,
-            });
-          })
-          .catch((err) => {
-            if (err.status == 401) {
-              this.genericService.openLoginModal()
-            } else {
-              console.log(err);
-              this.toasterService.show(err, {
-                classname: 'bg-danger text-light',
-                delay: 1500,
-                sound: true,
-              });
+          .subscribe(
+            {
+              next: (resp: any) => {
+                this.loadBets.emit()
+                this.cancelBet.emit(marketIds)
+                this.toasterService.show(resp.message, {
+                  classname: 'bg-success text-light',
+                  delay: 3000,
+                  sound: true,
+                });
+                this.cancellingBet = false;
+              },
+              error: (err) => {
+                this.cancellingBet = false;
+                if (err.status == 401) {
+                  this.genericService.openLoginModal()
+                } else {
+                  console.log(err);
+                  this.toasterService.show(err, {
+                    classname: 'bg-danger text-light',
+                    delay: 1500,
+                    sound: true,
+                  });
+                }
+              },
             }
-          }).finally(() => { this.cancellingBet = false; });
+          )
+
       }
     }
   }

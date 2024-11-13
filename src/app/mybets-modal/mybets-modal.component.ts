@@ -65,7 +65,7 @@ export class MybetsModalComponent implements OnInit {
       setTimeout(() => {
         this.rotate = false
       }, 500)
-      this.backendService.MyMarkets().then(res => {
+      this.backendService.MyMarkets().subscribe(res => {
         if (res && res.length > 0) {
           this.marketData = res
           this.marketData.forEach(element => {
@@ -74,18 +74,7 @@ export class MybetsModalComponent implements OnInit {
             }
           });
         }
-      }).catch(err => {
-        if (err.status == 401) {
-          // this.router.navigate(['signin']);
-          this.storageService.secureStorage.removeItem('token');
-          window.location.href = window.location.origin
-
-        } else {
-          console.log(err)
-        }
-      }).finally(() => { this.loadingData = false; });
-    } else {
-
+      })
     }
   }
   bookmaker = [4, 6, 18, 19]
@@ -162,7 +151,7 @@ export class MybetsModalComponent implements OnInit {
           .cancellallOrdersSports(
             new CancellAllOrders(this.eventId, 'MYBETS', orders)
           )
-          .then((resp: any) => {
+          .subscribe((resp: any) => {
             this.LoadCurrentBets()
             this.toasterService.show(resp.message, {
               classname: 'bg-success text-light',
@@ -170,18 +159,7 @@ export class MybetsModalComponent implements OnInit {
               sound: true,
             });
           })
-          .catch((err) => {
-            if (err.status == 401) {
-              this.genericService.openLoginModal()
-            } else {
-              console.log(err);
-              this.toasterService.show(err, {
-                classname: 'bg-danger text-light',
-                delay: 1500,
-                sound: true,
-              });
-            }
-          }).finally(() => { this.cancellingBet = false; });
+
       }
     }
   }
@@ -195,22 +173,10 @@ export class MybetsModalComponent implements OnInit {
           new CurrentBetsInput(this.currentBets[0].marketId.replace("1.", "10."), this.eventId, false),
           'CricketComponent'
         )
-        .then((resp) => {
+        .subscribe((resp) => {
           this.utillsService.currentBets.next({ bets: resp, eventId: this.eventId })
         })
-        .catch((err) => {
-          if (err.status == 401) {
-            this.fancyTimerService.clearTimer();
-            this.storageService.secureStorage.removeItem('token');
-            window.location.href = window.location.href;
-            this.genericService.openLoginModal();
-          } else {
-            console.log(err);
-          }
-        })
-        .finally(() => {
-          this.sendingrequest = false;
-        });
+
     }
   }
 

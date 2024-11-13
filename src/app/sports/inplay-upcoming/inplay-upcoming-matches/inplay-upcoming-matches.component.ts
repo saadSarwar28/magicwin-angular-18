@@ -211,41 +211,46 @@ export class InplayUpcomingMatchesComponent implements OnInit {
     if (navigator.onLine == true && document.hidden == false) {
       this.backendService
         .popularbyid(id, this.setPageNumber, 'UpcomingComponent')
-        .then((resp) => {
-          if (resp && resp.length > 0) {
-            this.loadingData = false;
-            this.not_virtual = resp.filter((x: any) =>
-              x.marketId.startsWith('1.')
-            );
-            this.marketIds = this.not_virtual.map((x: any) => x.marketId)
-            this.eventIds = this.eventIds.concat(
-              resp.filter((x: any) => x.inplay).map((x: any) => x.version)
-            );
-            this.inPlayMarketIds = this.inPlayMarketIds.concat(
-              this.not_virtual.filter((x: any) => x.inplay).map((x: any) => x.marketId)
-            )
+        .subscribe(
+          {
+            next: (resp) => {
+              if (resp && resp.length > 0) {
+                this.loadingData = false;
+                this.not_virtual = resp.filter((x: any) =>
+                  x.marketId.startsWith('1.')
+                );
+                this.marketIds = this.not_virtual.map((x: any) => x.marketId)
+                this.eventIds = this.eventIds.concat(
+                  resp.filter((x: any) => x.inplay).map((x: any) => x.version)
+                );
+                this.inPlayMarketIds = this.inPlayMarketIds.concat(
+                  this.not_virtual.filter((x: any) => x.inplay).map((x: any) => x.marketId)
+                )
 
-            this.GetScore();
-            this.GetMarketRates();
-            setTimeout(() => {
-              this.GetSportMarketLiability(this.inPlayMarketIds.join(','));
-            }, 500)
-            this.scoreTimerService.SetTimer(
-              setInterval(() => {
                 this.GetScore();
                 this.GetMarketRates();
-              }, this.sInterval)
-            );
+                setTimeout(() => {
+                  this.GetSportMarketLiability(this.inPlayMarketIds.join(','));
+                }, 500)
+                this.scoreTimerService.SetTimer(
+                  setInterval(() => {
+                    this.GetScore();
+                    this.GetMarketRates();
+                  }, this.sInterval)
+                );
 
-          } else {
-            this.not_virtual = [];
-            this.loadingData = false;
+              } else {
+                this.not_virtual = [];
+                this.loadingData = false;
+              }
+            },
+            error: (error) => {
+              this.catchError(error)
+              this.loadingData = false;
+            },
           }
-        })
-        .catch((err) => {
-          this.catchError(err)
-          this.loadingData = false;
-        });
+        )
+
     }
   }
 
@@ -347,24 +352,27 @@ export class InplayUpcomingMatchesComponent implements OnInit {
   GetSportMarketLiability(marketIds: any) {
     if (this.checkauthservice.IsLogin()) {
       this.backendService
-        .SportsMarketliability(marketIds, 'UpcomingComponent')
-        .then((resp) => {
-          if (resp && resp.length > 0) {
-            resp.forEach((x: any) => {
-              if (this.not_virtual && this.not_virtual.length > 0) {
-                let l = this.not_virtual.filter(
-                  (lm: any) => lm.marketId == x.marketId
-                );
-                if (l && l.length > 0) {
-                  l[0].marketLiability = x.libility;
-                }
+        .SportsMarketliability(marketIds)
+        .subscribe(
+          {
+            next: (resp: any) => {
+              if (resp && resp.length > 0) {
+                resp.forEach((x: any) => {
+                  if (this.not_virtual && this.not_virtual.length > 0) {
+                    let l = this.not_virtual.filter(
+                      (lm: any) => lm.marketId == x.marketId
+                    );
+                    if (l && l.length > 0) {
+                      l[0].marketLiability = x.libility;
+                    }
+                  }
+                })
               }
-            })
+            },
+            error: (error) => this.catchError(error),
           }
-        })
-        .catch((err) => {
-          this.catchError(err)
-        });
+        )
+
     }
   }
 
@@ -394,7 +402,7 @@ export class InplayUpcomingMatchesComponent implements OnInit {
       this.marketIds = Array.from(new Set(this.marketIds));
       this.backendService
         .marketsbook(this.marketIds.join(','), 'UpcomingComponent')
-        .then((resp) => {
+        .subscribe((resp) => {
           if (resp && resp.length > 0) {
             resp.forEach((rate) => {
               this.not_virtual.forEach((sports: any) => {
@@ -461,9 +469,7 @@ export class InplayUpcomingMatchesComponent implements OnInit {
             });
           }
         })
-        .catch((err) => {
-          this.catchError(err)
-        });
+
     }
   }
 

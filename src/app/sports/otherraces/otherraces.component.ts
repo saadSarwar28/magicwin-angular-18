@@ -98,8 +98,7 @@ export class OtherracesComponent implements OnInit, OnDestroy {
       .withAutomaticReconnect()
       .build();
     this.hubConnection
-      .start()
-      .then(() => {
+      .start().then(() => {
         this.isLoading = false
         this.LoadCurrentBets();
       })
@@ -232,7 +231,7 @@ export class OtherracesComponent implements OnInit, OnDestroy {
         if (this.data) {
           this.sportsService
             .MatchunmatchLocalMarket('10', 'otherracesComponent')
-            .then((resp: any) => {
+            .subscribe((resp: any) => {
               this.matchedUnmatched = resp;
               if (
                 this.clientMatchSize !== this.matchedUnmatched.matchedSize ||
@@ -245,20 +244,17 @@ export class OtherracesComponent implements OnInit, OnDestroy {
                 this.clientMatchSize = this.matchedUnmatched.matchedSize;
                 this.clientUnmatchSize = this.matchedUnmatched.unMatchedSize;
               }
-            })
-            .catch((err) => {
+            }, err => {
               if (err.status == 401) {
                 this.storageService.secureStorage.removeItem('token');
                 window.location.href = window.location.href;
                 this.timerService.clearTimer();
-              } else {
-                console.error(err);
               }
-            });
+            })
         } else {
           this.sportsService
             .matchUnmatchAllSports(this.data.marketId, 'OtherracesComponent')
-            .then((resp) => {
+            .subscribe((resp) => {
               this.matchedUnmatched = resp;
               if (
                 this.clientMatchSize !== this.matchedUnmatched.matchedSize ||
@@ -268,14 +264,15 @@ export class OtherracesComponent implements OnInit, OnDestroy {
                 this.clientMatchSize = this.matchedUnmatched.matchedSize;
                 this.clientUnmatchSize = this.matchedUnmatched.unMatchedSize;
               }
-            })
-            .catch((err) => {
+            }, err => {
               if (err.status == 401) {
+                this.storageService.secureStorage.removeItem('token');
+                window.location.href = window.location.href;
                 this.timerService.clearTimer();
-              } else {
-                console.error(err);
               }
-            });
+            }
+            )
+
         }
       }
     }
@@ -366,7 +363,7 @@ export class OtherracesComponent implements OnInit, OnDestroy {
 
     this.sportsService
       .otherRacesPost(requestData)
-      .then((resp: BettingResponse) => {
+      .subscribe((resp: BettingResponse) => {
         betstatus = resp.status;
         const translatedResponse = resp.message;
 
@@ -383,20 +380,6 @@ export class OtherracesComponent implements OnInit, OnDestroy {
             sound: true,
           });
         }
-      })
-      .catch((err) => {
-        if (err.status == 401) {
-          this.storageService.secureStorage.removeItem('token');
-          window.location.href = window.location.origin;
-        } else {
-          console.log(err);
-          this.toasterService.show(err, {
-            classname: 'red darken-1 text-light',
-            delay: 1500,
-            sound: true,
-          });
-        }
-      }).finally(() => {
         this.placingBet = false
       })
 
@@ -537,7 +520,7 @@ export class OtherracesComponent implements OnInit, OnDestroy {
 
         let body = new CurrentBetsInput('10', '10', false);
 
-        this.sportsService.localmarketcurrentbets("10", "otherracesComponent").then(resp => {
+        this.sportsService.localmarketcurrentbets("10", "otherracesComponent").subscribe((resp: any) => {
           if (resp && resp.length > 0) {
             this.currentBets = resp;
 
@@ -551,7 +534,7 @@ export class OtherracesComponent implements OnInit, OnDestroy {
           else {
             this.currentBets = resp;
           }
-        }).catch((err: any) => {
+        }, err => {
           if (err.status == 401) {
             this.storageService.secureStorage.removeItem('token');
             window.location.href = window.location.href;
@@ -559,10 +542,10 @@ export class OtherracesComponent implements OnInit, OnDestroy {
             if (!this.readOnly) {
               this.timerService.clearTimer();
             }
-          } else {
-            console.error(err);
           }
-        }).finally(() => this.sendingrequest = false);
+          this.sendingrequest = false
+        })
+
       }
     }
   }
@@ -583,17 +566,17 @@ export class OtherracesComponent implements OnInit, OnDestroy {
       this.sportsService
         .clientpositionsports(
           mktids.join(","),
-          'otherracesComponent'
         )
-        .then((resp: ClientPosition[]) => this.HandleRunnerPosition(resp))
-        .catch((err) => {
-          if (err.status == 401) {
+        .subscribe((resp: ClientPosition[]) => this.HandleRunnerPosition(resp)
+          , (err) => {
+            if (err.status == 401) {
 
-            this.timerService.clearTimer();
-          } else {
-            console.error(err);
-          }
-        });
+              this.timerService.clearTimer();
+            } else {
+              console.error(err);
+            }
+          });
+
     }
   }
 
@@ -601,8 +584,8 @@ export class OtherracesComponent implements OnInit, OnDestroy {
     if (this.checkauthservice.IsLogin()) {
       const mktids = this.markets.map(x => x.marketId);
       this.sportsService
-        .SportsMarketliability(mktids.join(','), 'otherracesComponent')
-        .then((resp: LineLiablityMulti[]) => this.HandleMarketLiability(resp))
+        .SportsMarketliability(mktids.join(','))
+        .subscribe((resp: LineLiablityMulti[]) => this.HandleMarketLiability(resp))
         .catch((err) => {
           if (err.status == 401) {
 

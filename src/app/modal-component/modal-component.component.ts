@@ -4,7 +4,7 @@ import { GenericService } from '../services/generic.service';
 import { BackendService, CasinoRequest } from '../services/backend.service';
 import { ToastService } from '../services/toast.service';
 import { DeviceDetectorService } from 'ngx-device-detector';
-import { iFrameResizer } from 'src/assets/lmtScore/sports-radar';
+import { iFrameResizer } from '../../assets/lmtScore/sports-radar';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 
 @Component({
@@ -100,9 +100,9 @@ export class ModalComponentComponent implements OnInit {
           undefined,
           tableId
         ),
-        undefined
+
       )
-      .then((x) => {
+      .subscribe((x) => {
         if (x.url) {
           this.loading = true;
           this.iframeurl = x.url;
@@ -135,25 +135,7 @@ export class ModalComponentComponent implements OnInit {
 
         }
       })
-      .catch((err) => {
-        this.toastService.show((this.gameInvalidTokenMsg.description ?? err), {
-          classname: 'bg-danger text-light',
-          delay: 1500,
-        });
 
-        if (err.status == 401) {
-          this.genericService.openLoginModal();
-        } else {
-          console.error(err);
-        }
-      })
-      .finally(() => {
-        // document.getElementById("overlay-loader")!.style.display = "none";
-        setTimeout(() => {
-          this.loading = false;
-          this.iframeLoad = true;
-        }, 500);
-      });
   }
 
   loadIframe() {

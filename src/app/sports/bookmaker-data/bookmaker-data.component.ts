@@ -239,11 +239,12 @@ export class BookmakerDataComponent implements OnInit {
       if (this.checkauthservice.IsLogin()) {
         if (this.fancyData && this.fancyData.bookMaker && this.fancyData.bookMaker.length > 0) {
           this.sportService
-            .clientpositionsports(mkts, 'FancyBookmakerComponent')
-            .then((resp: ClientPosition[]) => this.HandleRunnerPosition(resp))
-            .catch((err) => {
-              this.catchError(err)
-            });
+            .clientpositionsports(mkts)
+            .subscribe((resp: ClientPosition[]) => this.HandleRunnerPosition(resp)
+              , err => {
+                this.catchError(err)
+              }
+            )
         }
       }
     }
@@ -410,8 +411,8 @@ export class BookmakerDataComponent implements OnInit {
     if (this.checkauthservice.IsLogin()) {
       if (marketid !== '') {
         this.sportService
-          .SportsMarketliability(marketid, 'BookmakerDataComponent')
-          .then((resp) => {
+          .SportsMarketliability(marketid)
+          .subscribe((resp: any) => {
             if (resp && resp.length > 0) {
               resp.forEach((x: any) => {
                 let f = this.fancyData.bookMaker.filter(
@@ -422,10 +423,13 @@ export class BookmakerDataComponent implements OnInit {
                 }
               });
             }
-          })
-          .catch((err) => {
-            this.catchError(err)
-          });
+          },
+            err => {
+              this.catchError(err)
+
+            }
+          )
+
       }
     }
   }

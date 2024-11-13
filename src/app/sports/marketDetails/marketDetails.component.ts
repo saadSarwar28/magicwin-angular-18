@@ -284,17 +284,14 @@ export class MarketDetailsComponent
       this.sportService
         .FancyMarketsAny(
           this.fancyVersion,
-          this.eventId,
-          'EventmarketsComponent'
+          this.eventId
         )
-        .then((resp) => {
+        .subscribe((resp) => {
           if (resp) {
             this.fancyResponse = resp
           }
         })
-        .catch((err) => {
-          this.catchError(err)
-        });
+
     }
     this.fancyTimerService.SetTimer(
       setInterval(() => {
@@ -308,7 +305,7 @@ export class MarketDetailsComponent
     // ;
     this.sportService
       .marketdetail(this.marketId, 'MarketDetailsComponent')
-      .then((resp) => {
+      .subscribe((resp) => {
         if (resp) {
           this.isLoading = false
           this.data = resp;
@@ -353,19 +350,15 @@ export class MarketDetailsComponent
           this.GetSportMarketLiability(this.marketId);
           this.GetMarketPosition(this.marketId);
           this.LoadCurrentBets();
-
+          setTimeout(() => {
+            if (this.matchId > 0) {
+              this.GetLMT(this.matchId);
+            }
+          }, 2500);
         }
+
       })
-      .then(() => {
-        setTimeout(() => {
-          if (this.matchId > 0) {
-            this.GetLMT(this.matchId);
-          }
-        }, 2500);
-      })
-      .catch((err) => {
-        this.catchError(err)
-      });
+
   }
 
   routeToSports(data: any) {
@@ -431,20 +424,23 @@ export class MarketDetailsComponent
         }
         this.sportService
           .SportsCurrentbets(body, 'MarketDetailsComponent')
-          .then((resp) => {
-            this.utillsService.currentBets.next({
-              bets: resp,
-              eventId: this.eventId,
-            });
-            if (resp && resp.length > 0) {
-              this.currentBets = resp;
-            } else {
-              this.currentBets = resp;
+          .subscribe(
+            {
+              next: (value) => (resp) => {
+                this.utillsService.currentBets.next({
+                  bets: resp,
+                  eventId: this.eventId,
+                });
+                if (resp && resp.length > 0) {
+                  this.currentBets = resp;
+                } else {
+                  this.currentBets = resp;
+                }
+              },
+              error: (error) => this.catchError(error),
             }
-          })
-          .catch((err) => {
-            this.catchError(err)
-          });
+          )
+
       }
     }
   }
@@ -455,7 +451,7 @@ export class MarketDetailsComponent
     if (this.marketId == undefined || this.marketId.length <= 0) return;
     this.sportService
       .directSinglemarketbook(this.marketId, 'MarketDetailsComponent')
-      .then((resp) => {
+      .subscribe((resp) => {
         if (resp) {
           if (this.data?.description?.bettingType === 'LINE') {
             let m = this.data.runners;
@@ -1026,9 +1022,7 @@ export class MarketDetailsComponent
           }
         }
       })
-      .catch((err) => {
-        this.catchError(err)
-      });
+
   }
 
 
@@ -1043,23 +1037,26 @@ export class MarketDetailsComponent
         }
         this.sportService
           .matchUnmatchAllSports(marketIdes, 'MarketDetailsComponent')
-          .then((resp) => {
-            this.matchedUnmatched = resp;
-            if (
-              this.clientMatchSize !== this.matchedUnmatched.matchedSize ||
-              this.clientUnmatchSize !== this.matchedUnmatched.unMatchedSize
-            ) {
-              this.LoadCurrentBets();
-              this.GetMarketPosition(this.marketId);
-              this.GetSportMarketLiability(this.marketId);
-              this.GetWalllet();
-              this.clientMatchSize = this.matchedUnmatched.matchedSize;
-              this.clientUnmatchSize = this.matchedUnmatched.unMatchedSize;
+          .subscribe(
+            {
+              next: (resp) => {
+                this.matchedUnmatched = resp;
+                if (
+                  this.clientMatchSize !== this.matchedUnmatched.matchedSize ||
+                  this.clientUnmatchSize !== this.matchedUnmatched.unMatchedSize
+                ) {
+                  this.LoadCurrentBets();
+                  this.GetMarketPosition(this.marketId);
+                  this.GetSportMarketLiability(this.marketId);
+                  this.GetWalllet();
+                  this.clientMatchSize = this.matchedUnmatched.matchedSize;
+                  this.clientUnmatchSize = this.matchedUnmatched.unMatchedSize;
+                }
+              },
+              error: (error) => this.catchError(error),
             }
-          })
-          .catch((err) => {
-            this.catchError(err)
-          });
+          )
+
       }
     }
   }
@@ -1191,11 +1188,14 @@ export class MarketDetailsComponent
     if (this.checkauthservice.IsLogin()) {
       if (marketID !== '') {
         this.sportService
-          .clientpositionsports(marketID.replace('1.', '10.'), 'MarketDetailsComponent')
-          .then((resp: ClientPosition[]) => this.HandleRunnerPosition(resp))
-          .catch((err) => {
-            this.catchError(err)
-          });
+          .clientpositionsports(marketID.replace('1.', '10.'))
+          .subscribe(
+            {
+              next: (resp: ClientPosition[]) => this.HandleRunnerPosition(resp),
+              error: (error) => this.catchError(error),
+            }
+          )
+
       }
     }
   }
@@ -1233,19 +1233,22 @@ export class MarketDetailsComponent
   private GetSportMarketLiability(mkts: any) {
     if (this.checkauthservice.IsLogin()) {
       this.sportService
-        .SportsMarketliability(mkts, 'MarketDetailsComponent')
-        .then((resp) => {
-          if (resp && resp.length > 0) {
-            resp.forEach((x: any) => {
-              if (x.marketId == this.data.marketId) {
-                this.data.liability = x.libility;
+        .SportsMarketliability(mkts)
+        .subscribe(
+          {
+            next: (resp: any) => {
+              if (resp && resp.length > 0) {
+                resp.forEach((x: any) => {
+                  if (x.marketId == this.data.marketId) {
+                    this.data.liability = x.libility;
+                  }
+                });
               }
-            });
+            },
+            error: (error) => this.catchError(error),
           }
-        })
-        .catch((err) => {
-          this.catchError(err)
-        });
+        )
+
     }
 
   }

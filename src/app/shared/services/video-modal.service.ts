@@ -1,7 +1,7 @@
 // modal.service.ts
 import { Injectable, ComponentFactoryResolver, ApplicationRef, Injector, ComponentRef } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
-import { VideoModalComponent } from 'src/app/shared/video-modal/video-modal.component';
+import { VideoModalComponent } from '../../shared/video-modal/video-modal.component';
 
 @Injectable({
   providedIn: 'root',

@@ -23,7 +23,8 @@ export class VideoPlayerComponentTut implements OnInit, OnDestroy {
   };
   @Input() height: string = ''
   id: string = ''
-  player: videojs.Player | undefined;
+  player: any
+  //  videojs.Player | undefined;
   constructor(
     private elementRef: ElementRef,
   ) { }

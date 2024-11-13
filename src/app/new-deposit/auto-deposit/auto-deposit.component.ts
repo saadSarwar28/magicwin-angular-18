@@ -6,17 +6,16 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Clipboard } from '@angular/cdk/clipboard';
-import { BackendService, _window } from 'src/app/services/backend.service';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
-import { ToastService } from 'src/app/services/toast.service';
-import { FileParameter } from 'src/app/models/models';
+import { BackendService, _window } from '../../services/backend.service';
+import { CheckAuthService } from '../../services/check-auth.service';
+import { ToastService } from '../../services/toast.service';
+import { FileParameter } from '../../models/models';
 import { Router, Params } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { GoogleAnalyticsService } from 'src/app/services/google-analytics.service';
+import { GoogleAnalyticsService } from '../../services/google-analytics.service';
 import { CircleTimerComponent } from '@flxng/circle-timer';
 import { ReCaptchaV3Service } from 'ng-recaptcha';
-import { UtillsService } from 'src/app/services/utills.service';
+import { UtillsService } from '../../services/utills.service';
 import Tesseract from 'tesseract.js';
 @Component({
   selector: 'app-auto-deposit',
@@ -29,7 +28,7 @@ export class AutoDepositComponent implements OnInit, AfterViewInit {
 
   startDate = Date.now() - 15 * 1000; // current time minus 15 seconds
   duration = 60 * 1000; // 1 minute
-  amountToShow: number = 0;
+  amountToShow: number | any = 0;
   currentpath: any = 'bank-transfer';
   utrToShow: any;
   selectedType: any;
@@ -138,12 +137,12 @@ export class AutoDepositComponent implements OnInit, AfterViewInit {
   getDetails() {
     this.reportService
       .ManualPaymentHistory()
-      .then((data) => {
+      .subscribe((data) => {
         if (data) {
           this.depositRequests = data;
         }
       })
-      .finally(() => { });
+
   }
 
   depositType: string = '';
@@ -427,12 +426,12 @@ export class AutoDepositComponent implements OnInit, AfterViewInit {
             this.upiForm.controls.utrTransactionId.value,
             token
           )
-          .then((resp) => {
+          .subscribe((resp) => {
             if (resp && resp?.status == true) {
               this.startLoading = true;
               this.startTimer();
               this.checkPaymentStatusManually(resp?.transactionId);
-
+              this.upiForm.controls.wallet.setValue(this.walletVal);
               this.gaService.eventEmitter('deposit', 'payment', 'click');
               this.toasterService.show(resp?.message, {
                 classname: 'bg-success text-light',
@@ -449,9 +448,7 @@ export class AutoDepositComponent implements OnInit, AfterViewInit {
               });
             }
           })
-          .finally(() => {
-            this.upiForm.controls.wallet.setValue(this.walletVal);
-          });
+
       });
   }
 
@@ -470,13 +467,13 @@ export class AutoDepositComponent implements OnInit, AfterViewInit {
         this.reportService
           .manualPayment_POST(
             data,
-            this.depositType === 'USDT' ? this.usdtMultiply * this.upiForm.controls.amount.value : this.upiForm.controls.amount.value,
+            this.depositType === 'USDT' ? this.usdtMultiply * Number(this.upiForm.controls.amount.value) : Number(this.upiForm.controls.amount.value),
             this.depositType,
             this.upiForm.controls.utrTransactionId.value,
             token,
             this.bnkID
           )
-          .then((resp) => {
+          .subscribe((resp) => {
             if (resp && resp?.status == true) {
               this.startLoading = true;
               this.startTimer();
@@ -484,6 +481,7 @@ export class AutoDepositComponent implements OnInit, AfterViewInit {
               this.upiForm.reset();
               this.imageUrl = '';
               this.manualPaymentReqestParam.fileName = ""
+              this.upiForm.controls.wallet.setValue(this.walletVal);
               this.gaService.eventEmitter('deposit', 'payment', 'click');
               this.toasterService.show(resp?.message, {
                 classname: 'bg-danger text-light',
@@ -497,9 +495,7 @@ export class AutoDepositComponent implements OnInit, AfterViewInit {
               });
             }
           })
-          .finally(() => {
-            this.upiForm.controls.wallet.setValue(this.walletVal);
-          });
+
       });
   }
 
@@ -516,8 +512,8 @@ export class AutoDepositComponent implements OnInit, AfterViewInit {
       if (this.timerValue == 0) {
         this.timerValue = 10;
         this.reportService
-          .manualPaymentStatus(id, this.depositType)
-          .then((resp) => {
+          .manualPaymentStatus(id, '')
+          .subscribe((resp) => {
             if (resp && resp?.message != 'Pending') {
               if (!resp?.message.includes('Processing')) {
                 this.depositStatus = resp?.message;
@@ -546,18 +542,19 @@ export class AutoDepositComponent implements OnInit, AfterViewInit {
   }
 
   copyWallet(value: any) {
-    if (value) {
-      this.clipBoard.copy(value);
-      this.toasterService.show(`Copied ${value}`, {
-        classname: 'bg-success text-light',
-        delay: 1000,
+    navigator.clipboard.writeText(value)
+      .then(() => {
+        this.toasterService.show(`Copied ${value}`, {
+          classname: 'bg-success text-light',
+          delay: 1000,
+        });
+      })
+      .catch((error) => {
+        this.toasterService.show(`Not copied, its empty`, {
+          classname: 'bg-danger text-light',
+          delay: 1000,
+        });
       });
-    } else {
-      this.toasterService.show(`Not copied, its empty`, {
-        classname: 'bg-danger text-light',
-        delay: 1000,
-      });
-    }
   }
 
   uploadPicture(event: any, element: any) {

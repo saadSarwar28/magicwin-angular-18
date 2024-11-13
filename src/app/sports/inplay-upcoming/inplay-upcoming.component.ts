@@ -181,7 +181,7 @@ export class InplayUpcomingComponent implements OnInit, OnDestroy {
       this.virtualEventIds = []
       this.backendService
         .popularbyid('4', 5, 'VirtualCricketComponent')
-        .then((resp) => {
+        .subscribe((resp) => {
           if (resp && resp.length > 0) {
             this.virtual = resp;
             this.virtualEventIds = resp
@@ -197,9 +197,7 @@ export class InplayUpcomingComponent implements OnInit, OnDestroy {
             }, this.sInterval)
           );
         })
-        .catch((err) => {
-          this.catchError(err)
-        });
+
     }
   }
 

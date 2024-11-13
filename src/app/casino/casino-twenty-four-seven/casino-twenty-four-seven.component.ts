@@ -433,7 +433,7 @@ export class CasinoTwentyFourSevenComponent implements OnInit, AfterViewInit {
     if (this.catagorys.includes(game)) {
       this.sportservice
         .casinoCatagory(game)
-        .then((res) => {
+        .subscribe((res) => {
           this.games = res;
           // this.isAllGames = this.games.length > 1
           this.openDivs = []
@@ -447,16 +447,15 @@ export class CasinoTwentyFourSevenComponent implements OnInit, AfterViewInit {
           // }
           this.loading = false;
         })
-        .catch((err) => {
-          console.log(err);
-          this.loading = false;
-        });
+
     } else {
       this.sportservice
         .casnioGametype(game)
-        .then((res) => {
+        .subscribe((res) => {
           this.games = res;
           this.openDivs = []
+          this.loading = false;
+
           this.toggleGamePro = new Array(this.games.length).fill(false);
           this.games.forEach((group: any, index: number) => {
             this.totalNumberofGames += group.data.length;
@@ -471,10 +470,7 @@ export class CasinoTwentyFourSevenComponent implements OnInit, AfterViewInit {
           // this.isAllGames = this.games.length > 1
           this.loading = false;
         })
-        .catch((err) => {
-          console.log(err);
-          this.loading = false;
-        });
+
     }
     this.loadFav()
   }
@@ -485,9 +481,9 @@ export class CasinoTwentyFourSevenComponent implements OnInit, AfterViewInit {
     // this.loading = false;
     this.sportservice
       .getFavorite()
-      .then((res) => {
+      .subscribe((res) => {
         this.favdata = res;
-
+        this.loading = false;
         this.favdata.forEach((group: any) => {
           group.data.forEach((game: any) => {
 
@@ -495,10 +491,7 @@ export class CasinoTwentyFourSevenComponent implements OnInit, AfterViewInit {
           });
         });
       })
-      .catch((err) => {
-        console.log(err);
-        this.loading = false;
-      });
+
   }
 
   navigateToGame() {
@@ -736,9 +729,8 @@ export class CasinoTwentyFourSevenComponent implements OnInit, AfterViewInit {
           undefined,
           tableId
         ),
-        undefined
       )
-      .then((x) => {
+      .subscribe((x) => {
         if (x.url) {
           this.loading = true;
           this.sportservice.gameUrl = x.url;
@@ -751,26 +743,14 @@ export class CasinoTwentyFourSevenComponent implements OnInit, AfterViewInit {
           this.openMsgModal(err);
         }
       })
-      .catch((err) => {
-        if (err.status == 401) {
-          this.openLoginModal();
-        } else {
-          this.openMsgModal('');
-          console.error(err);
-        }
-      })
-      .finally(() => {
-        setTimeout(() => {
-          this.loading = false;
-        }, 500);
-      });
+
   }
 
   setfavouiteCasino(id: any, gameId: any | undefined) {
     this.sportservice.gameUrl = undefined;
     if (true) {
       this.sportservice
-        .setFavourite(id, gameId).then((x) => {
+        .setFavourite(id, gameId).subscribe((x) => {
           if (x) {
             // this.loading = true;
             if (id == 1) {
@@ -791,20 +771,7 @@ export class CasinoTwentyFourSevenComponent implements OnInit, AfterViewInit {
           }
           this.loadFav()
         })
-        .catch((err) => {
-          this.openMsgModal('');
-          if (err.status == 401) {
-            this.openLoginModal();
-          } else {
-            console.error(err);
-          }
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.loading = false;
-          }, 500);
 
-        });
     }
   }
 

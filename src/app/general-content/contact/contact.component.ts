@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BackendService, _window } from 'src/app/services/backend.service';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
-import { UtillsService } from 'src/app/services/utills.service';
+import { BackendService, _window } from '../..//services/backend.service';
+import { CheckAuthService } from '../../services/check-auth.service';
+import { UtillsService } from '../../services/utills.service';
 
 @Component({
   selector: 'app-contact',

@@ -81,7 +81,7 @@ export class LotterymarketComponent implements OnInit, OnDestroy {
     if (navigator.onLine == true && document.hidden == false) {
       this.sportService
         .LotteryMarkets(this.eventId || 0, 'LotterymarketComponent')
-        .then((resp) => {
+        .subscribe((resp) => {
           if (resp) {
             this.lotteryHandling(resp);
             if (this.callFirstTime) {
@@ -92,9 +92,7 @@ export class LotterymarketComponent implements OnInit, OnDestroy {
             this.callFirstTime = false
           }
         })
-        .catch((err) => {
-          this.catchError(err)
-        });
+
     }
   }
   lotteryCollapse: boolean = true;
@@ -290,11 +288,14 @@ export class LotterymarketComponent implements OnInit, OnDestroy {
       if (this.checkauthservice.IsLogin()) {
         if (this.lotteryData && this.lotteryData && this.lotteryData.length > 0) {
           this.sportService
-            .clientpositionsports(mkts, 'LotterymarketComponent')
-            .then((resp: ClientPosition[]) => this.HandleRunnerPosition(resp))
-            .catch((err) => {
-              this.catchError(err)
-            });
+            .clientpositionsports(mkts)
+            .subscribe(
+              {
+                next: (resp: ClientPosition[]) => this.HandleRunnerPosition(resp),
+                error: (error) => this.catchError(error),
+              }
+            )
+
         }
       }
     }
@@ -335,22 +336,25 @@ export class LotterymarketComponent implements OnInit, OnDestroy {
       if (this.checkauthservice.IsLogin()) {
         if (this.lotteryData && this.lotteryData.length > 0) {
           this.sportService
-            .SportsMarketliability(mkts, 'LotterymarketComponent')
-            .then((resp: any) => {
-              if (resp && resp.length > 0) {
-                resp.forEach((x: any) => {
-                  let f = this.lotteryData.filter(
-                    (xx: any) => xx.marketId == x.marketId.split('.')[1]
-                  );
-                  if (f && f.length > 0) {
-                    f[0].liability = x.libility;
+            .SportsMarketliability(mkts)
+            .subscribe(
+              {
+                next: (resp: any) => {
+                  if (resp && resp.length > 0) {
+                    resp.forEach((x: any) => {
+                      let f = this.lotteryData.filter(
+                        (xx: any) => xx.marketId == x.marketId.split('.')[1]
+                      );
+                      if (f && f.length > 0) {
+                        f[0].liability = x.libility;
+                      }
+                    });
                   }
-                });
+                },
+                error: (error) => this.catchError(error),
               }
-            })
-            .catch((err) => {
-              this.catchError(err)
-            });
+            )
+
         }
       }
     }

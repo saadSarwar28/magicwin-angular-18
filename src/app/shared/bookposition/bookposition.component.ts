@@ -21,24 +21,20 @@ export class BookpositionComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.data.marketId?.startsWith('4.')) {
-      this.sportservice.ClientPositionFancy(this.data.marketId, "BookpositionComponent").then((x: FancyMarketLiabilty[]) => {
+      this.sportservice.ClientPositionFancy(this.data.marketId).subscribe((x: any) => {
         x.forEach((a: FancyMarketLiabilty) => {
           this.positions.push({ position: parseInt(a.position), position2: parseInt(a.position2) });
         });
-      }).catch(err => {
-        console.error(err);
-      });
+      })
     } else {
       this.sportservice
-        .clientpositionsports(this.data.marketId, "BookpositionComponent")
-        .then((resp: ClientPosition[]) => {
+        .clientpositionsports(this.data.marketId)
+        .subscribe((resp: ClientPosition[]) => {
           resp.forEach((a: any) => {
             this.positions.push({ position: parseInt(a.handicap), position2: parseInt(a.position) });
           });
         })
-        .catch(err => {
-          console.error(err);
-        });
+
     }
   }
 

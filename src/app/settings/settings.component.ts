@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit, } from '@angular/core';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
+import { CheckAuthService } from '../services/check-auth.service';
 import { Router, } from '@angular/router';
 import {
   _window,
-} from 'src/app/services/backend.service';
-import { StorageService } from 'src/app/services/storage.service';
+} from '../services/backend.service';
+import { StorageService } from '../services/storage.service';
 import { Meta } from '@angular/platform-browser';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { UtillsService } from '../services/utills.service';

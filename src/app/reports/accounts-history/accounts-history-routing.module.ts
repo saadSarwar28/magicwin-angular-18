@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthguardService } from 'src/app/services/authguard.service';
 import { DepositHistoryComponent } from './deposit-history/deposit-history.component';
 import { HistoryHomeComponent } from './history-home/history-home.component';
 import { WithdrawalHistoryComponent } from './withdrawal-history/withdrawal-history.component';
+import { AuthguardService } from '../../services/authguard.service';
 
 const routes: Routes = [
   {

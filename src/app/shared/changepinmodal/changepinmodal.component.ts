@@ -149,7 +149,7 @@ export class ChangepinmodalComponent
         };
         this.backendService
           .ResetWithdrawpin(body, 'ResetWithdrawpin')
-          .then((res: any) => {
+          .subscribe((res: any) => {
             if (res.status) {
               this.toasterService.show(res.message, {
                 classname: 'bg-success text-light',
@@ -162,10 +162,9 @@ export class ChangepinmodalComponent
                 delay: 1500,
               });
             }
-          })
-          .finally(() => {
             this.loading = false;
-          });
+          })
+
       });
     }
   }
@@ -179,7 +178,7 @@ export class ChangepinmodalComponent
       };
       this.backendService
         .RequestWithDrawPin(body, 'RequestWithDrawPin')
-        .then((res: any) => {
+        .subscribe((res: any) => {
           if (res.status) {
             this.toasterService.show(res.message, {
               classname: 'bg-success text-light',
@@ -191,10 +190,9 @@ export class ChangepinmodalComponent
               delay: 1500,
             });
           }
-        })
-        .finally(() => {
           this.loadingOtp = false;
-        });
+        })
+
     });
   }
   closeModal() {

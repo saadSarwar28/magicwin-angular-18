@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { _window } from 'src/app/services/backend.service';
+import { _window } from '../../services/backend.service';
 
 @Component({
   selector: 'reports-top-nav',

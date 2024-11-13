@@ -339,11 +339,14 @@ export class FancyBookmakerComponent implements OnInit, OnDestroy {
       if (this.checkauthservice.IsLogin()) {
         if (this.fancyData && this.fancyData.bookMaker && this.fancyData.bookMaker.length > 0) {
           this.sportService
-            .clientpositionsports(mkts, 'FancyBookmakerComponent')
-            .then((resp: ClientPosition[]) => this.HandleRunnerPosition(resp))
-            .catch((err) => {
-              this.catchError(err)
-            });
+            .clientpositionsports(mkts)
+            .subscribe(
+              {
+                next: (value) => (resp: ClientPosition[]) => this.HandleRunnerPosition(resp),
+                error: (error) => this.catchError(error),
+              }
+            )
+
         }
       }
     }
@@ -433,25 +436,27 @@ export class FancyBookmakerComponent implements OnInit, OnDestroy {
       this.sportService
         .FancyMarketsAny(
           this.fancyVersion,
-          this.eventId,
-          'FancyBookmakerComponent'
+          this.eventId
         )
-        .then((resp) => {
-          if (resp) {
-            this.fancyHandling(resp);
-            if (this.callFirstTime) {
-              let ids = this.fancyData.bookMaker.map((x: any) => '6.' + x.marketId).join(',')
-              this.getSportsbookLiability(ids)
+        .subscribe(
+          {
+            next: (resp) => {
+              if (resp) {
+                this.fancyHandling(resp);
+                if (this.callFirstTime) {
+                  let ids = this.fancyData.bookMaker.map((x: any) => '6.' + x.marketId).join(',')
+                  this.getSportsbookLiability(ids)
 
-              this.GetMarketPosition(ids);
-              this.GetFancyMarketLiability()
-            }
-            this.callFirstTime = false
+                  this.GetMarketPosition(ids);
+                  this.GetFancyMarketLiability()
+                }
+                this.callFirstTime = false
+              }
+            },
+            error: (error) => this.catchError(error),
           }
-        })
-        .catch((err) => {
-          this.catchError(err)
-        });
+        )
+
     }
     this.fancyTimerService.SetTimer(
       setInterval(() => {
@@ -712,47 +717,53 @@ export class FancyBookmakerComponent implements OnInit, OnDestroy {
     if (this.checkauthservice.IsLogin()) {
       if (marketid !== '') {
         this.sportService
-          .SportsMarketliability(marketid, 'CricketComponent')
-          .then((resp) => {
-            if (resp && resp.length > 0) {
-              resp.forEach((x: any) => {
-                let f = this.fancyData.bookMaker.filter(
-                  (xx: any) => xx.marketId == x.marketId.split('.')[1]
-                );
-                if (f && f.length > 0) {
-                  f[0].liability = x.libility;
+          .SportsMarketliability(marketid)
+          .subscribe(
+            {
+              next: (resp: any) => {
+                if (resp && resp.length > 0) {
+                  resp.forEach((x: any) => {
+                    let f = this.fancyData.bookMaker.filter(
+                      (xx: any) => xx.marketId == x.marketId.split('.')[1]
+                    );
+                    if (f && f.length > 0) {
+                      f[0].liability = x.libility;
+                    }
+                  });
                 }
-              });
+              },
+              error: (error) => this.catchError(error),
             }
-          })
-          .catch((err) => {
-            this.catchError(err)
-          });
+          )
+
       }
     }
   }
   GetFancyMarketLiability() {
     if (this.checkauthservice.IsLogin()) {
       this.sportService
-        .FancyMarketsLiability(this.eventId, 'FancyBookmakerComponent')
-        .then((x: any) => {
-          if (x && x.length > 0) {
-            x.forEach((e: any) => {
-              if (this.fancyData.fancy && this.fancyData.fancy.length > 0) {
-                let f = this.fancyData.fancy.filter(
-                  (a: any) => a.marketId == e.marketId.split('.')[1]
-                );
-                if (f && f.length > 0) {
-                  f[0].position = parseFloat(e.position);
-                  f[0].position2 = parseFloat(e.position2);
-                }
+        .FancyMarketsLiability(this.eventId)
+        .subscribe(
+          {
+            next: (x: any) => {
+              if (x && x.length > 0) {
+                x.forEach((e: any) => {
+                  if (this.fancyData.fancy && this.fancyData.fancy.length > 0) {
+                    let f = this.fancyData.fancy.filter(
+                      (a: any) => a.marketId == e.marketId.split('.')[1]
+                    );
+                    if (f && f.length > 0) {
+                      f[0].position = parseFloat(e.position);
+                      f[0].position2 = parseFloat(e.position2);
+                    }
+                  }
+                });
               }
-            });
+            },
+            error: (error) => this.catchError(error),
           }
-        })
-        .catch((err) => {
-          this.catchError(err)
-        });
+        )
+
     }
   }
   ngOnDestroy(): void {

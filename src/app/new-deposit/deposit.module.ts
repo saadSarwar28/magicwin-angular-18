@@ -5,11 +5,11 @@ import { DepositComponent } from './deposit/deposit.component';
 import { InstantDepositComponent } from './instant-deposit/instant-deposit.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-import { CircleTimerModule } from '@flxng/circle-timer';
 import { ManualDepositComponent } from './manual-deposit/manual-deposit.component';
 import { AutoDepositComponent } from './auto-deposit/auto-deposit.component';
 import { DirectiveModule } from '../directives/directive.module';
 import { SharedModule } from "../shared/shared.module";
+
 
 @NgModule({
   declarations: [
@@ -23,7 +23,7 @@ import { SharedModule } from "../shared/shared.module";
     DepositRoutingModule,
     ReactiveFormsModule,
     TranslateModule,
-    CircleTimerModule,
+
     DirectiveModule,
     SharedModule
   ],

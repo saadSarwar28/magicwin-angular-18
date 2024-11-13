@@ -41,7 +41,7 @@ export class CasinoFilterMenusComponent implements OnInit {
     }
     this.sportservice
       .casinoProviders()
-      .then((res: any) => {
+      .subscribe((res: any) => {
         if (res) {
           this.allProviders = [];
           this.providersData = res;
@@ -57,14 +57,7 @@ export class CasinoFilterMenusComponent implements OnInit {
           }
         }
       })
-      .catch((err: any) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setTimeout(() => {
-          // this.loading = false;
-        }, 500);
-      });
+
 
     this.utillsService.bannerData.subscribe((resp: any) => {
       if (resp) {

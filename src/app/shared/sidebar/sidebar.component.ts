@@ -119,7 +119,7 @@ export class SidebarComponent implements OnInit {
               } else {
                 this.backendService
                   .customtree(new CustomTreeModel(v.url), 'SidebarComponent')
-                  .then((resp: CustomMenu) => {
+                  .subscribe((resp: CustomMenu) => {
                     if (resp) {
                       this.data = [];
                       let m: IMenu = {
@@ -202,8 +202,7 @@ export class SidebarComponent implements OnInit {
                         // console.log(this.data);
                       }
                     }
-                  })
-                  .catch((err) => {
+                  }, err => {
                     if (err.status == 401) {
                       // this.router.navigate(['signin']);
                       this.storageService.secureStorage.removeItem('token');
@@ -211,7 +210,9 @@ export class SidebarComponent implements OnInit {
                     } else {
                       console.log(err);
                     }
-                  });
+                  }
+                  )
+
               }
             }
             else {
@@ -221,20 +222,20 @@ export class SidebarComponent implements OnInit {
                 ) {
                   this.backendService
                     .eventtypes('SidebarComponent')
-                    .then((resp: Menu[]) => {
+                    .subscribe((resp: Menu[]) => {
                       this.data = resp;
                       this.showLoader = false;
-                    })
-                    .catch((er) => {
+                    }, er => {
                       if (er.status == 401) {
-                        // this.router.navigate(['signin']);
                         this.storageService.secureStorage.removeItem('token');
                         window.location.href = window.location.origin;
 
                       } else {
                         console.log(er);
                       }
-                    })
+                    }
+                    )
+
                 }
               }
 
@@ -321,18 +322,19 @@ export class SidebarComponent implements OnInit {
     if (!this.avoidEventCall) {
       this.backendService
         .eventtypes('SidebarComponent')
-        .then((resp: Menu[]) => {
+        .subscribe((resp: Menu[]) => {
           this.data = resp;
           this.showLoader = false;
-        })
-        .catch((err) => {
+        }, err => {
           if (err.status == 401) {
             this.storageService.secureStorage.removeItem('token');
             window.location.href = window.location.origin;
           } else {
             console.log(err);
           }
-        });
+        }
+        )
+
     }
   }
   getPopularsports() {
@@ -371,25 +373,16 @@ export class SidebarComponent implements OnInit {
           undefined
         )
       )
-      .then((resp) => {
+      .subscribe((resp) => {
         if (resp && resp.url) {
           this.router.navigateByUrl('/casino/' + casino, {
             state: { iframeurl: resp.url },
           });
         } else {
-          // this.toastService.show(resp.msg, {
-          //   classname: 'bg-danger text-light',
-          //   delay: 1000,
-          // });
           this.genericService.openLoginModal();
         }
       })
-      .catch((err) => {
-        this.toastService.show(err, {
-          classname: 'bg-danger text-light',
-          delay: 1000,
-        });
-      });
+
   }
   FindLast(xs: any): any {
     return xs.reduce((acc: any, x: any) => {
@@ -471,7 +464,7 @@ export class SidebarComponent implements OnInit {
             parseInt(m.childNode.split('/')[1]),
             'SidebarComponent-LoadChild'
           )
-          .then((resp: RaceEvents[]) => {
+          .subscribe((resp: RaceEvents[]) => {
             if (this.data.length > 0) {
               this.data = this.data.filter((x) => x.id == m.id);
             } else {
@@ -500,7 +493,7 @@ export class SidebarComponent implements OnInit {
             parseInt(m.childNode.split('/')[1]), this.router.url,
             'SidebarComponent-LoadChild'
           )
-          .then((resp: TodayRacesASSS[]) => {
+          .subscribe((resp: TodayRacesASSS[]) => {
             if (this.data[0].childs[0].childs.length > 1) {
               this.data[0].childs[0].childs =
                 this.data[0].childs[0].childs.filter((x: Menu) => x.id == m.id);
@@ -528,7 +521,7 @@ export class SidebarComponent implements OnInit {
         let _url = m.url && m.url[0] == '/' ? m.url.substring(1, m.url.length) : m.url
         this.backendService
           .customtree(new CustomTreeModel('/sports/' + _url), 'SidebarComponent')
-          .then((resp: CustomMenu) => {
+          .subscribe((resp: CustomMenu) => {
             if (resp) {
               this.data = [];
               let m: IMenu = {
@@ -612,15 +605,7 @@ export class SidebarComponent implements OnInit {
               }
             }
           })
-          .catch((err) => {
-            if (err.status == 401) {
-              // this.router.navigate(['signin']);
-              this.storageService.secureStorage.removeItem('token');
-              window.location.href = window.location.origin;
-            } else {
-              console.log(err);
-            }
-          });
+
         break;
       case 'getcompetition':
         this.backendService
@@ -628,7 +613,7 @@ export class SidebarComponent implements OnInit {
             parseInt(m.childNode.split('/')[1]),
             'SidebarComponent-LoadChild'
           )
-          .then((resp) => {
+          .subscribe((resp) => {
             if (this.data.length > 1) {
               this.data = this.data.filter((x) => x.id == m.id);
               this.data[0].childs = resp;
@@ -648,7 +633,7 @@ export class SidebarComponent implements OnInit {
             parseInt(m.childNode.split('/')[1]),
             'SidebarComponent-LoadChild'
           )
-          .then((resp) => {
+          .subscribe((resp) => {
             if (this.data.length > 1) {
               this.data = this.data.filter((x) => x.id == m.id);
               this.data[0].childs = resp;
@@ -669,7 +654,7 @@ export class SidebarComponent implements OnInit {
             parseInt(m.childNode.split('/')[1]), this.router.url,
             'SidebarComponent-LoadChild'
           )
-          .then((resp) => {
+          .subscribe((resp) => {
             if (this.data[0].id == '1') {
               if (did) {
                 if (level == 'c') {
@@ -743,7 +728,7 @@ export class SidebarComponent implements OnInit {
             parseInt(m.childNode.split('/')[1]),
             'SidebarComponent-LoadChild'
           )
-          .then((resp) => {
+          .subscribe((resp) => {
             if (this.data.length == 1) {
               if (this.data[0].childs.length > 1) {
                 this.data[0].childs = this.data[0].childs.filter(
@@ -762,7 +747,7 @@ export class SidebarComponent implements OnInit {
             parseInt(m.childNode.split('/')[2]), this.router.url,
             'SidebarComponent-LoadChild'
           )
-          .then((resp) => {
+          .subscribe((resp) => {
             if (did) {
               if (this.data[0].id == '1') {
                 if (this.data[0].childs) {
@@ -807,7 +792,7 @@ export class SidebarComponent implements OnInit {
             parseInt(m.childNode.split('/')[2]),
             'SidebarComponent-LoadChild'
           )
-          .then((resp) => {
+          .subscribe((resp) => {
             // console.log(resp);
             if (did) {
               if (this.data[0].id == '1') {
@@ -851,7 +836,7 @@ export class SidebarComponent implements OnInit {
             parseInt(m.childNode.split('/')[1]),
             'SidebarComponent-LoadChild'
           )
-          .then((resp) => {
+          .subscribe((resp) => {
             if (this.data.length == 1) {
               if (this.data[0].childs.length != 1) {
                 this.data[0].childs = this.data[0].childs.filter(
@@ -888,7 +873,7 @@ export class SidebarComponent implements OnInit {
             parseInt(m.childNode.split('/')[1]),
             'SidebarComponent-LoadChild', m.url
           )
-          .then((resp) => {
+          .subscribe((resp) => {
             if (this.data[0].id == '1') {
               if (did) {
                 if (level == 'd') {
@@ -995,7 +980,7 @@ export class SidebarComponent implements OnInit {
             parseInt(m.childNode.split('/')[1]),
             'SidebarComponent-LoadChild'
           )
-          .then((resp) => {
+          .subscribe((resp) => {
             if (this.data.length == 1) {
               if (this.data[0].childs.length != 1) {
                 this.data[0].childs = this.data[0].childs.filter(
@@ -1068,7 +1053,7 @@ export class SidebarComponent implements OnInit {
             parseInt(m.childNode.split('/')[1]),
             'SidebarComponent-LoadChild'
           )
-          .then((resp) => {
+          .subscribe((resp) => {
             if (this.data.length == 1) {
               if (this.data[0].childs.length != 1) {
                 this.data[0].childs = this.data[0].childs.filter(
@@ -1182,7 +1167,7 @@ export class SidebarComponent implements OnInit {
             parseInt(m.childNode.split('/')[1]),
             'SidebarComponent-LoadChild'
           )
-          .then((resp: RaceEvents[]) => {
+          .subscribe((resp: RaceEvents[]) => {
             if (this.data.length > 0) {
               this.data = this.data.filter((x) => x.id == m.id);
             } else {
@@ -1211,7 +1196,7 @@ export class SidebarComponent implements OnInit {
             parseInt(m.childNode.split('/')[1]), this.router.url,
             'SidebarComponent-LoadChild'
           )
-          .then((resp: TodayRacesASSS[]) => {
+          .subscribe((resp: TodayRacesASSS[]) => {
             if (this.data[0].childs[0].childs.length > 1) {
               this.data[0].childs[0].childs =
                 this.data[0].childs[0].childs.filter((x: Menu) => x.id == m.id);
@@ -1242,7 +1227,7 @@ export class SidebarComponent implements OnInit {
             'all',
             'SidebarComponent-LoadChild'
           )
-          .then((resp) => {
+          .subscribe((resp) => {
             if (this.data.length > 1) {
               this.data = this.data.filter((x) => x.id == m.id);
               this.data[0].childs = resp;
@@ -1262,7 +1247,7 @@ export class SidebarComponent implements OnInit {
             parseInt(m.childNode.split('/')[1]),
             'SidebarComponent-LoadChild'
           )
-          .then((resp) => {
+          .subscribe((resp) => {
             if (this.data.length > 1) {
               this.data = this.data.filter((x) => x.id == m.id);
               this.data[0].childs = resp;
@@ -1282,7 +1267,7 @@ export class SidebarComponent implements OnInit {
             parseInt(m.childNode.split('/')[1]),
             'SidebarComponent-LoadChild'
           )
-          .then((resp) => {
+          .subscribe((resp) => {
             if (this.data.length > 1) {
               this.data = this.data.filter((x) => x.id == m.id);
               this.data[0].childs = resp;
@@ -1303,7 +1288,7 @@ export class SidebarComponent implements OnInit {
             parseInt(m.childNode.split('/')[1]), this.router.url,
             'SidebarComponent-LoadChild'
           )
-          .then((resp) => {
+          .subscribe((resp) => {
             if (this.data[0].id == '1') {
               if (did) {
                 if (level == 'c') {
@@ -1374,7 +1359,7 @@ export class SidebarComponent implements OnInit {
             parseInt(m.childNode.split('/')[1]),
             'SidebarComponent-LoadChild'
           )
-          .then((resp) => {
+          .subscribe((resp) => {
             if (this.data.length == 1) {
               if (this.data[0].childs.length > 1) {
                 this.data[0].childs = this.data[0].childs.filter(
@@ -1394,7 +1379,7 @@ export class SidebarComponent implements OnInit {
             this.router.url,
             'SidebarComponent-LoadChild'
           )
-          .then((resp) => {
+          .subscribe((resp) => {
             if (did) {
               if (this.data[0].id == '1') {
                 if (this.data[0].childs) {
@@ -1439,7 +1424,7 @@ export class SidebarComponent implements OnInit {
             parseInt(m.childNode.split('/')[2]),
             'SidebarComponent-LoadChild'
           )
-          .then((resp) => {
+          .subscribe((resp) => {
             // console.log(resp);
             if (did) {
               if (this.data[0].id == '1') {
@@ -1483,7 +1468,7 @@ export class SidebarComponent implements OnInit {
             parseInt(m.childNode.split('/')[1]),
             'SidebarComponent-LoadChild'
           )
-          .then((resp) => {
+          .subscribe((resp) => {
             if (this.data.length == 1) {
               if (this.data[0].childs.length != 1) {
                 this.data[0].childs = this.data[0].childs.filter(
@@ -1519,7 +1504,7 @@ export class SidebarComponent implements OnInit {
           parseInt(m.childNode.split('/')[1]),
           'SidebarComponent-LoadChild', m.url
         )
-          .then((resp) => {
+          .subscribe((resp) => {
             if (this.data[0].id == '1') {
               if (did) {
                 if (level == 'd') {
@@ -1626,7 +1611,7 @@ export class SidebarComponent implements OnInit {
             parseInt(m.childNode.split('/')[1]),
             'SidebarComponent-LoadChild'
           )
-          .then((resp) => {
+          .subscribe((resp) => {
             if (this.data.length == 1) {
               if (this.data[0].childs.length != 1) {
                 this.data[0].childs = this.data[0].childs.filter(
@@ -1699,7 +1684,7 @@ export class SidebarComponent implements OnInit {
             parseInt(m.childNode.split('/')[1]),
             'SidebarComponent-LoadChild'
           )
-          .then((resp) => {
+          .subscribe((resp) => {
             if (this.data.length == 1) {
               if (this.data[0].childs.length != 1) {
                 this.data[0].childs = this.data[0].childs.filter(
@@ -1764,7 +1749,7 @@ export class SidebarComponent implements OnInit {
       // debugger
       this.backendService
         .searchMarkets_POST(event.target.value)
-        .then((resp) => {
+        .subscribe((resp: any) => {
           if (resp && resp.length > 0) {
             this.suggestions = resp;
           }

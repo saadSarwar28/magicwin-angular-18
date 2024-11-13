@@ -53,7 +53,7 @@ export class BasketballscorecardComponent implements OnInit {
       return;
     }
 
-    this.betService.timeLineNew1(parseInt(this.evtid!), "SoccerscorecardComponent").then(
+    this.betService.timeLineNew1(parseInt(this.evtid!)).subscribe(
       (d: any) => {
 
         this.data = d;
@@ -81,14 +81,6 @@ export class BasketballscorecardComponent implements OnInit {
         console.log('get menu get. error:' + error);
 
       }
-    ).catch(err => {
-      if (err.status == 401) {
-        // this.router.navigate(['signin']);
-        this.storageService.secureStorage.removeItem('token');
-        window.location.href = window.location.origin
-      } else {
-        console.log(err)
-      }
-    });
+    )
   }
 }

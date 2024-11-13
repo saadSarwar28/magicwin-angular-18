@@ -386,25 +386,28 @@ export class FancyDataComponent implements OnInit, OnChanges {
   GetFancyMarketLiability() {
     if (this.checkauthservice.IsLogin()) {
       this.sportService
-        .FancyMarketsLiability(this.eventId, 'FancyDataComponent')
-        .then((x: any) => {
-          if (x && x.length > 0) {
-            x.forEach((e: any) => {
-              if (this.fancyData.fancy && this.fancyData.fancy.length > 0) {
-                let f = this.fancyData.fancy.filter(
-                  (a: any) => a.marketId == e.marketId.split('.')[1]
-                );
-                if (f && f.length > 0) {
-                  f[0].position = parseFloat(e.position);
-                  f[0].position2 = parseFloat(e.position2);
-                }
+        .FancyMarketsLiability(this.eventId)
+        .subscribe(
+          {
+            next: (x: any) => {
+              if (x && x.length > 0) {
+                x.forEach((e: any) => {
+                  if (this.fancyData.fancy && this.fancyData.fancy.length > 0) {
+                    let f = this.fancyData.fancy.filter(
+                      (a: any) => a.marketId == e.marketId.split('.')[1]
+                    );
+                    if (f && f.length > 0) {
+                      f[0].position = parseFloat(e.position);
+                      f[0].position2 = parseFloat(e.position2);
+                    }
+                  }
+                });
               }
-            });
+            },
+            error: (error) => this.catchError(error),
           }
-        })
-        .catch((err) => {
-          this.catchError(err)
-        });
+        )
+
     }
   }
   ngOnDestroy(): void {

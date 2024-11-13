@@ -5,14 +5,14 @@ import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms"
 import { formatDate } from "@angular/common";
 import { Router } from '@angular/router';
 
-import { PLInner, PLInnerSub, AccountstmtInputModel, PLInnerInput, PLModel } from 'src/app/models/models';
-import { BackendService, _window } from 'src/app/services/backend.service';
-import { ToastService } from 'src/app/services/toast.service';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
+import { PLInner, PLInnerSub, AccountstmtInputModel, PLInnerInput, PLModel } from '../../models/models';
+import { BackendService, _window } from '../../services/backend.service';
+import { ToastService } from '../../services/toast.service';
+import { CheckAuthService } from '../../services/check-auth.service';
 type NewType = undefined;
-import { StorageService } from 'src/app/services/storage.service';
+import { StorageService } from '../../services/storage.service';
 import { TranslateService } from '@ngx-translate/core';
-import { futureDateRestictedValidator } from 'src/app/validators/restrict-future-date-validator';
+import { futureDateRestictedValidator } from '../../validators/restrict-future-date-validator';
 
 
 @Component({
@@ -209,26 +209,17 @@ export class PlStatementComponent implements OnInit {
         // this.dateRange.endDate = (document.getElementById('end-date-profitLoss') as HTMLInputElement).value;
         this.dateRange.startDate = new Date(this.dateInputForm.controls.startDate.value).toISOString();
         this.dateRange.endDate = new Date(this.dateInputForm.controls.endDate.value).toISOString();
-        this.httpService.pl(this.dateRange, "PlStatementComponent").then((response: PLModel[]) => {
+        this.httpService.pl(this.dateRange, "PlStatementComponent").subscribe((response: PLModel[]) => {
           if (response) {
             if (response.length === 0) {
               this.toasterService.show('No data found', { classname: 'bg-danger text-light' });
             }
             this.profitLoss = response;
           }
+          this.showLoader = false
           // }, error => {
           //   this.toasterService.show(error, {classname: 'bg-danger text-light'});
-        }).catch(err => {
-          if (err.status == 401) {
-            // this.router.navigate(['signin']);
-            this.storageService.secureStorage.removeItem('token');
-            window.location.href = window.location.origin
-          } else {
-            console.log(err);
-            const translatedResponse = this.toasterTranslationMethod(err);
-            this.toasterService.show(translatedResponse, { classname: 'bg-danger text-light' });
-          }
-        }).finally(() => this.showLoader = false);
+        })
       }
     }
   }
@@ -260,7 +251,7 @@ export class PlStatementComponent implements OnInit {
     }, { Validator: this.dateLessThan('dateFrom', 'dateTo') });
     this.dateRange.startDate = this.dateInputForm.controls.startDate.value;
     this.dateRange.endDate = this.dateInputForm.controls.endDate.value;
-    this.httpService.pl(this.dateRange, "PlStatementComponent").then((response: PLModel[]) => {
+    this.httpService.pl(this.dateRange, "PlStatementComponent").subscribe((response: PLModel[]) => {
       if (response.length > 0) {
         this.profitLoss = response;
       } else {
@@ -269,19 +260,10 @@ export class PlStatementComponent implements OnInit {
           delay: 1000,
         });
       }
+      this.showLoader = false
       // }, error => {
       //   this.toasterService.show(error, {classname: 'bg-danger text-light'});
-    }).catch(err => {
-      if (err.status == 401) {
-        // this.router.navigate(['signin']);
-        this.storageService.secureStorage.removeItem('token');
-        window.location.href = window.location.origin
-      } else {
-        console.log(err);
-        const translatedResponse = this.toasterTranslationMethod(err);
-        this.toasterService.show(translatedResponse, { classname: 'bg-danger text-light' });
-      }
-    }).finally(() => this.showLoader = false);
+    })
   }
 
   downloadSportsBets() {
@@ -329,22 +311,14 @@ export class PlStatementComponent implements OnInit {
     this.dateRangeInner.endDate = new Date(new Date().toUTCString()).toISOString();
     this.dateRangeInner.startDate = new Date(new Date(curr.setDate(last)).toUTCString()).toISOString();
 
-    this.httpService.plsportswise(this.dateRangeInner, "PlStatementComponent").then((response: PLInner[]) => {
+    this.httpService.plsportswise(this.dateRangeInner, "PlStatementComponent").subscribe((response: PLInner[]) => {
 
       if (response) {
         this.profitLossInner = response;
         this.paginatedReports()
       }
-    }).catch(err => {
-      if (err.status == 401) {
-        // this.router.navigate(['signin']);
-        this.storageService.secureStorage.removeItem('token');
-        window.location.href = window.location.origin
-      } else {
-        console.log(err)
-        this.toasterService.show(err, { classname: 'bg-danger text-light' });
-      }
-    }).finally(() => this.showLoader = false);
+      this.showLoader = false
+    })
   }
 
   showProfitLossMainReport() {
@@ -370,23 +344,14 @@ export class PlStatementComponent implements OnInit {
     // this.dateRangeInner.endDate = (document.getElementById('end-date-profitLoss') as HTMLInputElement).value;
     this.dateRangeInner.startDate = new Date(this.dateInputForm.controls.startDate.value).toISOString();
     this.dateRangeInner.endDate = new Date(this.dateInputForm.controls.endDate.value).toISOString();
-    this.httpService.plsportswise(this.dateRangeInner, "PlStatementComponent").then((response: PLInner[]) => {
+    this.httpService.plsportswise(this.dateRangeInner, "PlStatementComponent").subscribe((response: PLInner[]) => {
       if (response) {
         this.profitLossInner = response;
         this.paginatedReports()
-      }
-    }).catch(err => {
-      if (err.status == 401) {
-        // this.router.navigate(['signin']);
-        this.storageService.secureStorage.removeItem('token');
-        window.location.href = window.location.origin
 
-      } else {
-        console.log(err);
-        const translatedResponse = this.toasterTranslationMethod(err);
-        this.toasterService.show(translatedResponse, { classname: 'bg-danger text-light' });
       }
-    }).finally(() => this.showLoader = false);
+      this.showLoader = false
+    })
     //   }
     // }
   }
@@ -401,21 +366,13 @@ export class PlStatementComponent implements OnInit {
     this.profitLossMarketWise = true;
     this.showLoader = true;
     this.dateRangeMarketWise.eventType = marketId;
-    this.httpService.plsmarketwise(this.dateRangeMarketWise, "PlStatementComponent").then((response: PLInnerSub[]) => {
+    this.httpService.plsmarketwise(this.dateRangeMarketWise, "PlStatementComponent").subscribe((response: PLInnerSub[]) => {
       if (response) {
         response.forEach(x => x.net = Number(x.cPL + x.cCom))
         this.profitLossMarketWiseRes = response;
       }
-    }).catch(err => {
-      if (err.status == 401) {
-        // this.router.navigate(['signin']);
-        this.storageService.secureStorage.removeItem('token');
-        window.location.href = window.location.origin
-      } else {
-        console.log(err)
-        this.toasterService.show(err, { classname: 'bg-danger text-light' });
-      }
-    }).finally(() => this.showLoader = false);
+      this.showLoader = false
+    })
   }
 
   getProfitLossMarketWiseStatement() {
@@ -435,20 +392,12 @@ export class PlStatementComponent implements OnInit {
     // this.dateRangeMarketWise.endDate = (document.getElementById('end-date-profitLoss') as HTMLInputElement).value;
     this.dateRangeMarketWise.startDate = new Date(this.dateInputForm.controls.startDate.value).toISOString();
     this.dateRangeMarketWise.endDate = new Date(this.dateInputForm.controls.endDate.value).toISOString();
-    this.httpService.plsmarketwise(this.dateRangeMarketWise, "PlStatementComponent").then((response: PLInnerSub[]) => {
+    this.httpService.plsmarketwise(this.dateRangeMarketWise, "PlStatementComponent").subscribe((response: PLInnerSub[]) => {
       if (response) {
         this.profitLossMarketWiseRes = response;
       }
-    }).catch(err => {
-      if (err.status == 401) {
-        // this.router.navigate(['signin']);
-        this.storageService.secureStorage.removeItem('token');
-        window.location.href = window.location.origin
-      } else {
-        console.log(err)
-        this.toasterService.show(err, { classname: 'bg-danger text-light' });
-      }
-    }).finally(() => this.showLoader = false);
+      this.showLoader = false
+    })
     //   }
     // }
   }

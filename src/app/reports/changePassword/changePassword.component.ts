@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { ChangePassword } from 'src/app/models/models';
-import { BackendService, _window } from 'src/app/services/backend.service';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
-import { ToastService } from 'src/app/services/toast.service';
+import { ChangePassword } from '../../models/models';
+import { BackendService, _window } from '../../services/backend.service';
+import { CheckAuthService } from '../../services/check-auth.service';
+import { ToastService } from '../../services/toast.service';
 import { ReCaptchaV3Service } from 'ng-recaptcha';
 
 
@@ -89,9 +89,9 @@ export class ChangePasswordComponent implements OnInit {
             this.passwordForm.controls.current_pass.setValue(this.passwordForm.controls.current_pass.value.replaceAll(' ', ''));
             this.passwordForm.controls.new_pass.setValue(this.passwordForm.controls.new_pass.value.replaceAll(' ', ''));
             this.showLoader = true;
-            this.reportsService.ChangePassword(new ChangePassword(this.passwordForm.controls["current_pass"].value, this.passwordForm.controls["new_pass"].value, token), "ChangePasswordComponent").then((resp: any) => {
+            this.reportsService.ChangePassword(new ChangePassword(this.passwordForm.controls["current_pass"].value, this.passwordForm.controls["new_pass"].value, token), "ChangePasswordComponent").subscribe((resp: any) => {
               if (resp?.status == true) {
-
+                this.showLoader = false;
                 const translatedResponse = this.toasterTranslationMethod(resp?.message);
                 this.toasterService.show(translatedResponse, { classname: 'bg-success text-light' });
                 this.passwordForm.reset()
@@ -99,17 +99,7 @@ export class ChangePasswordComponent implements OnInit {
               else {
                 this.passwordForm.controls['current_pass'].setErrors({ 'error': resp?.message ? resp?.message : resp?.split('_').join(' ') });
               }
-            }).catch(err => {
-              if (err.status == 401) {
-                this.router.navigate(['/signin']);
-              } else {
-                const translatedResponse = this.toasterTranslationMethod(err?.message);
-                this.toasterService.show(translatedResponse, { classname: 'bg-danger text-light' });
-                console.error(err);
-              }
-            }).finally(() => {
-              this.showLoader = false;
-            });
+            })
           })
       }
 

@@ -1,16 +1,15 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Clipboard } from '@angular/cdk/clipboard';
-import { BackendService, _window } from 'src/app/services/backend.service';
-import { GrezPayInputModel, PaymentRequestModel } from 'src/app/models/models';
-import { ToastService } from 'src/app/services/toast.service';
+import { BackendService, _window } from '../../services/backend.service';
+import { GrezPayInputModel, PaymentRequestModel } from '../../models/models';
+import { ToastService } from '../../services/toast.service';
 import { NavigationEnd, Router } from '@angular/router';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
-import { StorageService } from 'src/app/services/storage.service';
+import { CheckAuthService } from '../../services/check-auth.service';
+import { StorageService } from '../../services/storage.service';
 import { TranslateService } from '@ngx-translate/core';
-import { GoogleAnalyticsService } from 'src/app/services/google-analytics.service';
-import { UtillsService } from 'src/app/services/utills.service';
+import { GoogleAnalyticsService } from '../../services/google-analytics.service';
+import { UtillsService } from '../../services/utills.service';
 
 @Component({
   selector: 'app-instant-deposit',
@@ -140,7 +139,7 @@ export class InstantDepositComponent implements OnInit {
     if (this.checkauthservice.IsLogin()) {
       this.reportService
         .pyamentgetway_GET()
-        .then((data) => {
+        .subscribe((data) => {
           if (data) {
             this.userDetails = data;
             // this.paymentMethodTypes = (Object.keys(this.userDetails.paymentOptions));
@@ -148,28 +147,7 @@ export class InstantDepositComponent implements OnInit {
             // this.selectPaymentType()
           }
         })
-        .catch((err) => {
-          if (err.status == 401) {
-            this.storageService.secureStorage.removeItem('token');
-            this.storageService.secureStorage.removeItem('stakes');
-            this.storageService.secureStorage.removeItem('client');
-            this.toasterService.show(err.message, {
-              classname: 'red darken-1 text-light',
-              delay: 1500,
-            });
-            setTimeout(() => {
-              this.router.navigate(['signin']).then(() => {
-                window.location.href = window.location.href;
-              });
-            }, 1500);
-          } else {
-            console.log(err);
-            this.toasterService.show(err.message, {
-              classname: 'red darken-1 text-light',
-              delay: 1500,
-            });
-          }
-        });
+
     } else {
       this.storageService.secureStorage.removeItem('token');
       this.storageService.secureStorage.removeItem('stakes');

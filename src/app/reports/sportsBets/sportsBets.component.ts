@@ -2,14 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { formatDate } from "@angular/common";
 import { Router } from '@angular/router';
-import { MyBetsInputModel, MarketOrders, IPAddressForBetIds } from 'src/app/models/models';
-import { BackendService, _window } from 'src/app/services/backend.service';
-import { ToastService } from 'src/app/services/toast.service';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
-import { StorageService } from 'src/app/services/storage.service';
+import { MyBetsInputModel, MarketOrders, IPAddressForBetIds } from '../../models/models';
+import { BackendService, _window } from '../../services/backend.service';
+import { ToastService } from '../../services/toast.service';
+import { CheckAuthService } from '../../services/check-auth.service';
+import { StorageService } from '../../services/storage.service';
 import { TranslateService } from '@ngx-translate/core';
 
-import { futureDateRestictedValidator } from 'src/app/validators/restrict-future-date-validator';
+import { futureDateRestictedValidator } from '../../validators/restrict-future-date-validator';
 @Component({
   selector: 'app-sportsBets',
   templateUrl: './sportsBets.component.html',
@@ -88,7 +88,7 @@ export class SportsBetsComponent implements OnInit {
     if (!el) {
       return
     }
-    this.httpService.GetiPAddressForBetid(new IPAddressForBetIds(marketId, betid, type)).then(resp => {
+    this.httpService.GetiPAddressForBetid(new IPAddressForBetIds(marketId, betid, type)).subscribe(resp => {
       if (resp == '') {
         el.value = '127.0.0.1'
       }
@@ -105,7 +105,7 @@ export class SportsBetsComponent implements OnInit {
       } else {
         el.value = '127.0.0.1'
       }
-    }).catch(er => console.error(er));
+    })
   }
 
   getSportsBets() {
@@ -130,27 +130,18 @@ export class SportsBetsComponent implements OnInit {
         // this.dateRangeFilterTypeBets.endDate = (document.getElementById('enddate') as HTMLInputElement).value;
         this.dateRangeFilterTypeBets.startDate = new Date(this.dateInputForm.controls.startDate.value).toISOString();
         this.dateRangeFilterTypeBets.endDate = new Date(this.dateInputForm.controls.endDate.value).toISOString();
-        this.dateRangeFilterTypeBets.filterType = this.dateInputForm.controls.filterType.value;
-        this.httpService.sportsbets(this.dateRangeFilterTypeBets, "SportsBetsComponent").then((response: MarketOrders[]) => {
+        this.dateRangeFilterTypeBets.filterType = this.dateInputForm.controls['filterType'].value;
+        this.httpService.sportsbets(this.dateRangeFilterTypeBets, "SportsBetsComponent").subscribe((response: MarketOrders[]) => {
           if (response) {
             if (response.length === 0) {
               this.toasterService.show('No data found', { classname: 'bg-danger text-light' });
             }
             this.sportsBets = response;
           }
+          this.showLoader = false
           // }, error => {
           //   this.toasterService.show(error, {classname: 'bg-danger text-light'});
-        }).catch(err => {
-          if (err.status == 401) {
-            // this.router.navigate(['signin']);
-            this.storageService.secureStorage.removeItem('token');
-            window.location.href = window.location.origin
-          } else {
-            console.log(err);
-            const translatedResponse = this.toasterTranslationMethod(err);
-            this.toasterService.show(translatedResponse, { classname: 'bg-danger text-light' });
-          }
-        }).finally(() => this.showLoader = false);
+        })
       }
     }
   }
@@ -164,24 +155,15 @@ export class SportsBetsComponent implements OnInit {
   // tslint:disable-next-line:typedef
   sportBetsWeek() {
     this.showLoader = true;
-    this.httpService.sportsbets(this.dateRangeFilterTypeBets, "SportsBetsComponent").then((response: MarketOrders[]) => {
+    this.httpService.sportsbets(this.dateRangeFilterTypeBets, "SportsBetsComponent").subscribe((response: MarketOrders[]) => {
       if (response) {
         this.sportsBets = response;
         this.paginatedReports()
       }
+      this.showLoader = false
       // , error => {
       //   this.toasterService.show(error, {classname: 'bg-danger text-light'});
-    }).catch(err => {
-      if (err.status == 401) {
-        // this.router.navigate(['signin']);
-        this.storageService.secureStorage.removeItem('token');
-        window.location.href = window.location.origin
-      } else {
-        console.log(err);
-        const translatedResponse = this.toasterTranslationMethod(err);
-        this.toasterService.show(translatedResponse, { classname: 'bg-danger text-light' });
-      }
-    }).finally(() => this.showLoader = false);
+    })
   }
 
   // tslint:disable-next-line:typedef

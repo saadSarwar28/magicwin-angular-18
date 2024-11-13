@@ -24,14 +24,12 @@ export class BlogsComponent implements OnInit {
     this.loader = true;
     this.backendService
       .GetBlog()
-      .then((data: any) => {
+      .subscribe((data: any) => {
         if (data?.length > 0) {
           this.blogData = data;
         }
-      })
-      .finally(() => {
         this.loader = false;
-      });
+      })
   }
   routeToBlog(blogDetail: any) {
     this.router.navigate([blogDetail.route]);
