@@ -1,0 +1,61 @@
+<div class="virtual-cricket" *ngIf="
+isShowVirtualCricket &&
+isb2c &&
+selectedId == '4' &&
+virtual &&
+virtual.length > 0
+">
+  <div class="tab-container inner-pages-tabs p-0 mt-3 mb-2">
+    <div class="tabs  d-flex">
+      <div class="d-flex">
+        <div class="menu sport-name pl-0" routerLink="/sports/tournament/virtual-cricket-70707070">
+          <img class="virtual-img-filter" src="https://iriscdn.b-cdn.net/kheloyar/virtual-cricket.svg"
+            alt="virtual-cricket">
+          Virtual Cricket
+        </div>
+      </div>
+      <div class="see-all-menu pointer" *ngIf="landing">
+        <a class="see-all-menu me-2" routerLink="/sports/tournament/virtual-cricket-70707070"> {{ "seeall" | translate
+          }} <i class="bi bi-arrow-right fs-16 fw-bold iconArrow"></i></a>
+      </div>
+    </div>
+  </div>
+  <ng-container *ngIf="virtual && virtual.length > 0;">
+    <!-- <div class="oneXTwo d-flex  justify-content-between">
+      <span>1</span><span>X</span><span>2</span>
+    </div> -->
+    <ng-container *ngFor="let m of virtual">
+      <div class="match-card p-2 bb-1">
+        <div class="match-info">
+          <div class="match-teams w-100 sm-mb-0s">
+            <div class="d-flex justify-content-between">
+              <div class="d-flex gap-1 align-items-center">
+                <img src="https://iriscdn.b-cdn.net/kheloyar/game_controller.png" alt="">
+                <span class="team-name pointer" (click)="routeToMarket(m.url)"
+                  [innerHTML]="m.marketName | marketName"></span>
+              </div>
+              <div class="match-icons gap-1 d-flex me-3  align-items-center ">
+                <span class="icon inplay-blinker " *ngIf="m.inplay">
+                </span>
+                <span class="icon" *ngIf="m.maxSettings > 0">
+                  <img src="https://iriscdn.b-cdn.net/kheloyar/newlandingIcons/newlandingIcons/bookmaker.svg" alt="" />
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex icons-odds pointer" (click)="routeToMarket(m.url)">
+          <div class="virtual-score virtual-bg" *ngIf="m.score && m.inplay" [innerHTML]="m.score">
+          </div>
+          <div class="virtual-score  justify-content-center virtual-bg" *ngIf="!m.inplay && !m.score">
+            <app-match-start-time [m]="m"></app-match-start-time>
+          </div>
+          <div class="virtual-score  justify-content-center virtual-bg" *ngIf="m.inplay && !m.score">
+            Score is loading...
+          </div>
+
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+</div>

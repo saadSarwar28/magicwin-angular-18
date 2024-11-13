@@ -73,8 +73,11 @@ export class AppComponent implements OnInit{
     private storageService: StorageService,
     private backendService: BackendService,
     private metaService: Meta,
-    private platformService: PlatformService
+    private platformService: PlatformService,
   ) {
+
+    this.isServer = this.platformService.isServer()
+    this.isBrowser = this.platformService.isBrowser()
     // this.requestPermission();
     if (this.platformService.isBrowser()) {
       this.deviceInfo = this.deviceService.getDeviceInfo();

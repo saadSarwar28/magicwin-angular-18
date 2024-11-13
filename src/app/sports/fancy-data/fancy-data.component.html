@@ -1,0 +1,124 @@
+<ng-container *ngIf="fancyData && fancyData.fancy && fancyData.fancy.length > 0">
+  <div class="landing-page mb-2 cricket-component">
+    <div class="tab-container  cricket-pages-tabs p-0  mb-1">
+      <div class="tabs bg-tansparent d-flex mb-0">
+        <div class="d-flex ">
+          <div class="d-flex sm-flex-column">
+            <div class="menu border-0 sport-name sm-fs-13 fs-lap-13 pl-0 me-3">
+              Fancy Markets
+            </div>
+          </div>
+        </div>
+        <div class="d-flex match-card me-2 ">
+          <div class="odds-container">
+            <app-oddsbutton [cssClass]="'transparnt-odd desktop-odds text-lay'" [price]="'NO'"></app-oddsbutton>
+            <app-oddsbutton [cssClass]="'transparnt-odd desktop-odds text-back'" [price]="'YES'"></app-oddsbutton>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ul class="nav fancy-filter custom-scrollbar flex-nowrap nav-pills p-2 mb-0 mt-2 mb-2 market-bg"
+      *ngIf="fancyDataFilters && fancyDataFilters?.length > 1">
+      <li class="nav-item me-2 pointer" *ngFor="let b of fancyDataFilters; let i = index">
+        <span class="nav-link sm-fs-14 fs-lap-13" [class.active]="fancyFilter == b" (click)="fancyFilter = b">{{ b
+          }}</span>
+      </li>
+    </ul>
+    <ng-container *ngFor="let group of fancyData.fancy | groupBy : 'catagory' | sortBy : 'sortingOrder'">
+      <ng-container *ngIf="
+    fancyFilter === 'ALL' || fancyFilter === group.key
+  ">
+        <div class="tab-container cricket-pages-tabs p-0  mb-1">
+          <div class="tabs bg-tansparent d-flex mb-0">
+            <div class="d-flex justify-content-between w-100">
+              <div class="d-flex sm-flex-column">
+                <div class="menu border-0 sport-name fs-lap-13 pl-0 me-3">
+                  {{ group.key }}
+                </div>
+              </div>
+              <div class="d-flex align-content-center gap-2 align-items-center">
+                <div class="collapse-icon expendable-panel-clr pointer me-2" style="font-size: 26px;"
+                  (click)="collapseMarket(group)">
+                  {{group.collapse
+                  ?
+                  "+" : "-"}} </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <div class="position-relative" *ngIf="!group.collapse">
+        <div *ngIf="oneClickBetObj[group.key]"
+          class="market-overlay position-absolute bg-theme z-2 d-flex justify-content-center align-items-center sm-fs-14">
+          <img [src]="siteLoader" height="100px" alt="Loading..." />
+        </div>
+        <ng-container *ngFor="
+    let fancyBet of group.value
+      | sortBy : 'sortingOrder' | filterFancyMarkets : 'catagory' : fancyFilter; let i = index ">
+
+          <div class="match-card align-items-center flex-row market-bg  px-2 pt-2 pb-2 border-0 mb-1 ">
+            <div class="match-info w-100  d-flex align-items-center">
+              <div class="match-teams w-100 d-flex  ms-2  ">
+                <div class="d-flex justify-content-between w-100">
+                  <span class="fs-lap-13"> {{ fancyBet?.marketName}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="odds-container align-items-center ">
+              <!-- <div class="d-none d-md-flex ">
+              <app-oddsbutton [cssClass]="'transparnt-odd desktop-odds'"></app-oddsbutton>
+            </div>
+            <div class="d-none d-md-flex ">
+              <app-oddsbutton [cssClass]="'transparnt-odd desktop-odds'"></app-oddsbutton>
+            </div>
+            <div class="d-none d-md-flex ">
+              <app-oddsbutton [cssClass]="'transparnt-odd desktop-odds'"></app-oddsbutton>
+            </div>
+            <div class="d-none d-md-flex ">
+              <app-oddsbutton [cssClass]="'transparnt-odd desktop-odds'"></app-oddsbutton>
+            </div> -->
+              <div class="d-flex transparnt-odd desktop-odds odds-item align-items-center justify-content-end ">
+                <div class="position d-flex  justify-content-center text-center sm-fs-11 flex-column me-1">
+                  <span *ngIf="fancyBet.position" [ngClass]="fancyBet.position >= 0 ? 'text-success' : 'liabilityClr'">
+                    {{ fancyBet.position | trunc }}</span>
+                  <span *ngIf="fancyBet.position2"
+                    [ngClass]="fancyBet.position2 >= 0 ? 'text-success' : 'liabilityClr'">
+                    {{ fancyBet.position2 | trunc }}</span>
+                </div>
+                <img class="me-1" (click)="
+              openFancyPosition(fancyBet.marketId, fancyBet.marketName)
+            " src="https://iriscdn.b-cdn.net/kheloyar/clientweb/images/ladder.svg" height="20px" alt="">
+              </div>
+              <div class="d-flex flex-column gap-1">
+                <ng-container *ngFor="let item of fancyMarkets;let i =index">
+                  <div class="position-relative gap-1 d-flex " *ngIf="fancyBet[item.runsNo] && fancyBet[item.runsYes]">
+                    <div
+                      class="market-overlay position-absolute   d-flex justify-content-center align-items-center sm-fs-12"
+                      *ngIf="
+                 !['ONLINE', 'ACTIVE', 'OPEN'].includes(fancyBet[item.statusName])">
+                      <span [class.liabilityClr]="fancyBet[item.statusName] == 'SUSPENDED'">
+                        {{ fancyBet[item.statusName] | removeUnderscore }}
+                      </span>
+                    </div>
+                    <app-oddsbutton [cssClass]="'lay desktop-odds'"
+                      (click)="placeBetFancy(group.key,fancyBet,'lay',fancyBet[item.runsNo],fancyBet[item.oddsNo])"
+                      [price]="fancyBet[item.runsNo]" [size]="fancyBet[item.oddsNo]" [fancy]="true">
+                    </app-oddsbutton>
+                    <app-oddsbutton [cssClass]="'back desktop-odds'"
+                      (click)="placeBetFancy(group.key,fancyBet,'back',fancyBet[item.runsYes],fancyBet[item.oddsYes])"
+                      [price]="fancyBet[item.runsYes]" [size]="fancyBet[item.oddsYes]" [fancy]="true">
+                    </app-oddsbutton>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="fancyBet.betslip && ['ONLINE', 'ACTIVE', 'OPEN'].includes(fancyBet.statusName) ">
+            <app-partial-betslip [r]="fancyBet.betslip" (valueChange)="FancyBetStatus($event)">
+            </app-partial-betslip>
+          </div>
+        </ng-container>
+      </div>
+    </ng-container>
+  </div>
+</ng-container>

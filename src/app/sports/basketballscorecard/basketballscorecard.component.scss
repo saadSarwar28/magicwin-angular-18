@@ -1,0 +1,56 @@
+.white-box {
+  height: 100px;
+  background: url("/assets/images/basket-bg.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  text-align: center;
+  border-radius: 10px;
+  margin: auto 5px;
+  padding: 0 5px;
+}
+
+.teams-score {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.teams-score p {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 30px;
+  color: #fff;
+  padding: 0px;
+  margin: 0px;
+}
+
+.teams-score span {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 30px;
+  margin: 0px 20px;
+  color: #eef1f7;
+}
+
+.team-score {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  span {
+    text-align: center;
+  }
+}
+.team-score table {
+  width: 50px;
+}
+.team-score table,
+th,
+td {
+  border: 1px solid white;
+  text-align: center;
+  padding: 2px;
+  font-size: 12px;
+}

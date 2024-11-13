@@ -4,5 +4,10 @@ import { LandingPageComponent } from './standalone/landing-page/landing-page.com
 export const routes: Routes = [
   {
     path: '', component: LandingPageComponent
-  }
+  },
+  {
+    path: 'sports',
+    loadChildren: () =>
+      import('./sports/sports.module').then((m) => m.SportsModule),
+  },
 ];

@@ -427,7 +427,7 @@ export class BackendService {
    * @param id Event id
    * @return Success
    */
-  timeLineNew1(id: number): Observable<void> {
+  timeLineNew1(id: number, from: any): Observable<void> {
     let url_: string = "";
     if (this.BrowserService.getWindow().timeline1) {
       url_ = this.baseUrl + this.BrowserService.getWindow().timeline1;
@@ -3725,4 +3725,21 @@ export interface ISignUpB2CModel {
   option2?: string | undefined | null;
   option3?: string | undefined | null;
   option4?: string | undefined | null;
+}
+
+
+// export function _window(): any {
+//   // return the global native browser window object
+//   return window;
+// }
+
+export function _window(): any {
+  // Check if the code is running in the browser
+  if (typeof window !== 'undefined') {
+    // Return the native browser window object if available (client-side)
+    return window;
+  } else {
+    // Return null or an empty object if running on the server (SSR)
+    return {};
+  }
 }

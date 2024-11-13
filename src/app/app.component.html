@@ -10,7 +10,9 @@
     class="sidebar custom-scrollbar"
     [class.open]="toogleSide && !defualtOpenInMob"
   >
-    <app-sidebar></app-sidebar>
+    @if (isBrowser) {
+      <app-sidebar></app-sidebar>
+    }
   </div>
   <div class="content" [class.sidebar-open]="toogleSide && !defualtOpenInMob">
     <!--    <navbartop (toggleSideBar)="toggle($event)"></navbartop>-->
@@ -19,7 +21,7 @@
     </div>
     <ng-container *ngIf="!isIframe">
       @if ((isMobile && landingPage) || (!isMobile && isSidebarOpen)) {
-        <app-footer></app-footer>
+      <app-footer></app-footer>
       }
     </ng-container>
   </div>

@@ -1,0 +1,196 @@
+<div class="upcoming-compo">
+
+  <div class="tab-container mt-2" *ngIf="isMagicwin">
+    <div class="tabs upcoming-tabs  d-flex mb-2">
+      <div class="d-flex">
+        <div class="menu menu-item me-2" *ngFor="let i of items" [class.activeItem]="i.id == setPageNumber"
+          (click)="setPage(i.id)">
+          {{i.name}}</div>
+      </div>
+      <div class="see-all-menu pointer">
+        <a class="see-all-menu me-2" [routerLink]="'/sports/' + this.activeSport?.toLowerCase()">See All <i class="bi bi-arrow-right fs-16 fw-bold iconArrow"></i></a>
+      </div>
+    </div>
+    <div class="sports-menu scrollable-list">
+      <ng-container *ngFor="let item of sports">
+        <div class="sport-item" [class.activeMenu]="item.id == selectedId"
+          (click)="selectPopularById(item.id);activeSport = item.name ">
+          <img style="height: 14.479px;width:14.485px ;" [src]="item.img" [alt]="sitename + '-'+ item.name " />
+          {{ item.name }}
+        </div>
+      </ng-container>
+    </div>
+  </div>
+  <div class="tab-container other-site-upcoming-tab" *ngIf="!isMagicwin">
+    <div class="d-flex upcoming-tab-items justify-content-between ">
+      <div class="d-flex">
+        <div class="menu sm-fs-13 me-3 pointer" *ngFor="let i of items;let index = index"
+          [class.upcomingActiveTab]="i.id === setPageNumber" (click)="setPage(i.id)">
+          {{i.name}}</div>
+      </div>
+      <div class="see-all-menu d-flex align-items-center">
+        <a class="see-all-menu pointer me-2" [routerLink]="'/sports/' + this.activeSport?.toLowerCase()">See All</a>
+      </div>
+    </div>
+    <div class="scrollable-list ">
+      <ng-container *ngFor="let item of sports;let index = index">
+        <div class="sport-item sm-fs-13" [class]="'sport-item' + (index+1)"
+          [class.sport-item-active]="item.id == selectedId"
+          (click)="selectPopularById(item.id);activeSport = item.name">
+          <img style="height: 17.479px;width:14.485px ;" [src]="item.img" [alt]="sitename + '-'+ item.name " />
+          {{ item.name }}
+        </div>
+      </ng-container>
+    </div>
+  </div>
+  <ng-container *ngIf="not_virtual && not_virtual.length > 0;">
+    <div class="oneXTwo d-flex d-md-none justify-content-between">
+      <span>1</span><span>X</span><span>2</span>
+    </div>
+    <div class="position-relative">
+      <div *ngIf="placeBet"
+        class="market-overlay position-absolute bg-theme z-2 d-flex justify-content-center align-items-center sm-fs-14">
+        <img [src]="siteLoader" height="100px" alt="Loading..." />
+      </div>
+      <ng-container *ngFor="let m of not_virtual">
+        <div class="match-card p-2 mb-0 bb-1">
+
+          <div class="match-info gap-1">
+            <ng-template #elseIcon>
+              <span class="d-lg-flex d-none">
+                <img [src]="sportsImgs[(+selectedId)-1].img" style="height: 20px;" alt="sports-icon">
+              </span>
+            </ng-template>
+
+            <div class="status me-2" *ngIf="m.score;else elseIcon">
+              <app-teams-score [score]="m.score"></app-teams-score>
+            </div>
+            <div class="match-teams w-100 sm-mb-0">
+
+              <app-match-start-time [m]="m"></app-match-start-time>
+              <div class="d-flex justify-content-between">
+                <div class="d-flex gap-1">
+
+                  <span class="team-name pointer" (click)="routeToMarket(m.url)"
+                    [innerHTML]="m.marketName | marketName">
+                  </span>
+                </div>
+                <div class="match-icons gap-1 d-flex me-3  align-items-center " [ngClass]="!m.score && !((m.marketStartTime
+                  | amDifference : today : 'minutes') < 1 && (m.marketStartTime
+                  | amDifference : today : 'minutes')  < 0) ? 'mt-minus-18' : ''">
+                  <span class="liabilityClr fs-12 " *ngIf="m.marketLiability">
+                    {{ m.marketLiability}}
+                  </span>
+                  <span class="icon inplay-blinker" *ngIf="
+              (m.marketStartTime
+                | amDifference : today : 'minutes') < 1 &&
+              (m.marketStartTime
+                | amDifference : today : 'minutes') < 0
+            ">
+                  </span>
+                  <!-- <span class="icon d-none d-md-flex">
+                  <img alt="vip_odds " style="height: 10px;"
+                    src="https://iriscdn.b-cdn.net/kheloyar/web/vip_odds-dark.png">
+                </span> -->
+
+                  <span class="bmfntv-icon " *ngIf="m.maxMarketSettings > 0">
+                    <i class="bi bi-tv fs-10"></i>
+                  </span>
+                  <span class="bmfntv-icon fs-10" *ngIf="m.maxSettings > 0">
+                    BM
+                  </span>
+                  <span class="bmfntv-icon fs-10" *ngIf="m.minSettings > 0">
+                    FN
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex icons-odds position-relative">
+            <div class="odds-container position-relative">
+              <div
+                class="market-overlay position-absolute text-black justify-content-center virtual-bg d-flex pointer  align-items-center sm-fs-14"
+                (click)="routeToMarket(m)" *ngIf="m?.marketType == 'TOURNAMENT_WINNER'">
+                Tournament Winner Market
+              </div>
+              <ng-container *ngIf="m.runners.length == 3; else runners2">
+                <ng-container *ngFor="
+                              let r of m.runners | orderBy : 'sortPriority'
+                            ">
+                  <app-oddsbutton (click)="placebet(m, r, 'back')" [cssClass]="'back desktop-odds'" [price]="
+                                r.back[0]?.price == 0 ? '-' : r.back[0]?.price
+                              " [size]="
+                                r.back[0]?.size == 0 ? '-' : r.back[0]?.size
+                              "></app-oddsbutton>
+                  <app-oddsbutton (click)="placebet(m, r, 'lay')" [cssClass]="'lay desktop-odds'" [price]="
+                                r.lay[0]?.price == 0 ? '-' : r.lay[0]?.price
+                              " [size]="
+                                r.lay[0]?.size == 0 ? '-' : r.lay[0]?.size
+                              "></app-oddsbutton>
+                </ng-container>
+              </ng-container>
+              <ng-template #runners2>
+                <app-oddsbutton (click)="placebet(m, m.runners[0], 'back')" [cssClass]="'back desktop-odds'" [price]="
+            m.runners[0]?.back[0]?.price == 0
+              ? '-'
+              : m.runners[0]?.back[0]?.price
+          " [size]="
+            m.runners[0]?.back[0]?.size == 0
+              ? '-'
+              : m.runners[0]?.back[0]?.size
+          "></app-oddsbutton>
+
+                <app-oddsbutton (click)="placebet(m, m.runners[0], 'lay')" [cssClass]="'lay desktop-odds'" [price]="
+            m.runners[0]?.lay[0]?.price == 0
+              ? '-'
+              : m.runners[0]?.lay[0]?.price
+          " [size]="
+            m.runners[0]?.lay[0]?.size == 0
+              ? '-'
+              : m.runners[0]?.lay[0]?.size
+          "></app-oddsbutton>
+                <app-oddsbutton [cssClass]="
+            'back-opacity desktop-odds'
+          "></app-oddsbutton>
+                <app-oddsbutton [cssClass]="
+            'lay-opacity desktop-odds'
+          "></app-oddsbutton>
+
+                <app-oddsbutton (click)="placebet(m, m.runners[1], 'back')" [cssClass]="'back desktop-odds'" [price]="
+            m.runners[1]?.back[0]?.price == 0
+              ? '-'
+              : m.runners[1]?.back[0]?.price
+          " [size]="
+            m.runners[1]?.back[0]?.size == 0
+              ? '-'
+              : m.runners[1]?.back[0]?.size
+          "></app-oddsbutton>
+
+                <app-oddsbutton (click)="placebet(m, m.runners[1], 'lay')" [cssClass]="'lay desktop-odds'" [price]="
+            m.runners[1]?.lay[0]?.price == 0
+              ? '-'
+              : m.runners[1]?.lay[0]?.price
+          " [size]="
+            m.runners[1]?.lay[0]?.size == 0
+              ? '-'
+              : m.runners[1]?.lay[0]?.size
+          "></app-oddsbutton>
+              </ng-template>
+            </div>
+
+          </div>
+
+        </div>
+        <div *ngIf="m.betslip">
+          <app-partial-betslip [r]="m.betslip" (valueChange)="BetPlacedStatus($event)"></app-partial-betslip>
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
+  <div class="site-loader" *ngIf="not_virtual && not_virtual.length == 0 && loadingData">
+    <app-skelton-loader [loaderType]="'sportsLoading'"></app-skelton-loader>
+  </div>
+  <div class="d-flex justify-content-center mt-2" *ngIf="not_virtual.length == 0 && !loadingData">
+    <p class="no-data text-center" style="padding: 10px">No match found from the source.</p>
+  </div>
+</div>

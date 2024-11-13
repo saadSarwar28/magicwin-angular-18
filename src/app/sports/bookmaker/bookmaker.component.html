@@ -1,0 +1,27 @@
+<div class="site-loader vh-40 mt-5" *ngIf="isFirstLoad">
+  <div class="row gx-0">
+    <div class="col-lg-8">
+      <app-skelton-loader [loaderType]="'marketLoading'"></app-skelton-loader>
+    </div>
+    <div class="col-lg-4">
+      <app-skelton-loader [loaderType]="'myBets'"></app-skelton-loader>
+    </div>
+  </div>
+</div>
+<div class="row gx-0" *ngIf="!isFirstLoad">
+  <div class="col-lg-8">
+    <ng-container *ngIf="!election">
+      <div class="forIframe" *ngIf="bookmakerLMTShow  && bookmakerlmt">
+        <iframe id="stats" *ngIf="bookmakerlmt" [src]="bookmakerlmt | safe1" width="100%" onload="this.style.opacity=1;"
+          style="border: none; border-radius: 2px; overflow: hidden; height: 105px;color: #fff !important;background-color: #fff;"
+          scrolling="0"></iframe>
+      </div>
+    </ng-container>
+    <app-bookmaker-data [fancyResponse]="fancyResponse" [eventId]="eventId"
+      (loadBets)="callFunction()"></app-bookmaker-data>
+    <app-fancy-data [fancyResponse]="fancyResponse" [eventId]="eventId" (loadBets)="callFunction()"></app-fancy-data>
+  </div>
+  <div class="col-lg-4">
+    <app-mybets [currentBets]="currentBets"></app-mybets>
+  </div>
+</div>
