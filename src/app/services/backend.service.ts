@@ -732,7 +732,7 @@ export class BackendService {
   }
 
   LotteryOrdersplaced(
-    body: FancyModel | undefined
+    body: FancyModel | undefined, from?: any
   ): Observable<BettingResponse> {
     let url_: string = "";
     if (this.BrowserService.getWindow().lotteryordersplaced) {

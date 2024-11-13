@@ -78,19 +78,19 @@ export class AppComponent implements OnInit{
     // this.requestPermission();
     if (this.platformService.isBrowser()) {
       this.deviceInfo = this.deviceService.getDeviceInfo();
-    }
 
-    if (this.browserService.getWindow() && this.browserService.getWindow().isShowDownlaodPopup) {
-      this.showDownloadAppModal();
-    }
-    if (this.browserService.getWindow() && this.browserService.getWindow().isIframe) {
-      this.isIframe = this.browserService.getWindow() && this.browserService.getWindow().isIframe
-    }
-    if (this.browserService.getWindow() && this.browserService.getWindow().cdnUrl) {
-      this.cdnUrl = this.browserService.getWindow() && this.browserService.getWindow().cdnUrl;
-    }
-    if (this.browserService.getWindow() && this.browserService.getWindow().showWhatsAppIconInBottom) {
-      this.showWhatsAppIconWithText = this.browserService.getWindow() && this.browserService.getWindow().showWhatsAppIconInBottom;
+      if (this.browserService.getWindow().isShowDownlaodPopup) {
+        this.showDownloadAppModal();
+      }
+      if (this.browserService.getWindow().isIframe) {
+        this.isIframe = this.browserService.getWindow() && this.browserService.getWindow().isIframe
+      }
+      if (this.browserService.getWindow().cdnUrl) {
+        this.cdnUrl = this.browserService.getWindow() && this.browserService.getWindow().cdnUrl;
+      }
+      if (this.browserService.getWindow().showWhatsAppIconInBottom) {
+        this.showWhatsAppIconWithText = this.browserService.getWindow() && this.browserService.getWindow().showWhatsAppIconInBottom;
+      }
     }
 
   }

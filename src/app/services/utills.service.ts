@@ -70,15 +70,15 @@ export class UtillsService {
 
   // // Don't Touch    ///////
 
- 
+
   // ==================================Start Betting Methods ====================================================
 
 
   placeBet(r: any, looksabha?: boolean) {
     let keepAlive =
-      this.storageService.secureStorage.getItem('keepAlive') == null
+      this.storageService.getItem('keepAlive') == null
         ? false
-        : this.storageService.secureStorage.getItem('keepAlive');
+        : this.storageService.getItem('keepAlive');
     let modellocal;
     if (r.bettingOn === 'Otherraces') {
       modellocal = {
@@ -437,12 +437,12 @@ export class UtillsService {
 
   openMyMartkesModal() {
     if (this.checkauthservice.IsLogin()) {
-      this.dialogRef.open(MymarketsComponent, {
-        width: '700px',
-        maxHeight: '70vh',
-        maxWidth: '95vw',
-        panelClass: 'my-markets-dialog',
-      });
+      // this.dialogRef.open(MymarketsComponent, {
+      //   width: '700px',
+      //   maxHeight: '70vh',
+      //   maxWidth: '95vw',
+      //   panelClass: 'my-markets-dialog',
+      // });
     } else {
       this.openLoginModal()
     }
@@ -635,10 +635,10 @@ export class UtillsService {
           }
         }
         }
-     
-    
+
+
     )
-    
+
 
   }
   openMsgModal(error) {
