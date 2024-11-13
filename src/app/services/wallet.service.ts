@@ -24,12 +24,23 @@ export class WalletService {
   loadBalance() {
     if (this.checkauthservice.IsLogin()) {
       this.bettingservice
-        .GetWallet()
-        .subscribe((resp) => {
+        .GetWallet('WalletComponent')
+        .then((resp) => {
           this.walletDetail.next(resp)
-        }
-        )
+        })
+        .catch((err) => {
+          if (err.status == 401) {
+            // window.location.href = window.location.origin;
+            this.storageService.secureStorage.removeItem('token');
+            this.storageService.secureStorage.removeItem('client');
+            this.storageService.secureStorage.removeItem('iframeLoggedin')
+            localStorage.removeItem('showAgreementOnce');
+            localStorage.removeItem('routeCasino');
 
+          } else {
+            console.error(JSON.stringify(err));
+          }
+        })
     }
   }
   walletTimer: any = 1000;

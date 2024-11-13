@@ -1,31 +1,47 @@
-import { Injectable } from '@angular/core';
-import SecureStorage  from 'secure-web-storage';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import SecureStorage from 'secure-web-storage';
 import * as CryptoJS from 'crypto-js';
 
-const SECRET_KEY = 'secret_key';
+const SECRET_KEY: any = 'secret_key';
+
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class StorageService {
+  private secureStorage: any;
+  private isBrowser: boolean;
 
-  constructor() { }
-
-  public secureStorage = new SecureStorage(localStorage, {
-    hash: function hash(key:any): any {
-        key = CryptoJS.SHA256(key, new Object(SECRET_KEY));
-        return key.toString();
-    },
-    // Encrypt the localstorage data
-    encrypt: function encrypt(data:any) {
-        data = CryptoJS.AES.encrypt(data, SECRET_KEY);
-        data = data.toString();
-        return data;
-    },
-    // Decrypt the encrypted data
-    decrypt: function decrypt(data:any) {
-        data = CryptoJS.AES.decrypt(data, SECRET_KEY);
-        data = data.toString(CryptoJS.enc.Utf8);
-        return data;
+  constructor(@Inject(PLATFORM_ID) private platformId: object) {
+    this.isBrowser = isPlatformBrowser(platformId);
+    if (this.isBrowser) {
+      this.secureStorage = new SecureStorage(localStorage as any, {
+        hash: (key: any) => CryptoJS.SHA256(key, SECRET_KEY).toString(),
+        encrypt: (data: any) => CryptoJS.AES.encrypt(data, SECRET_KEY).toString(),
+        decrypt: (data: any) => CryptoJS.AES.decrypt(data, SECRET_KEY).toString(CryptoJS.enc.Utf8),
+      });
     }
-    });
+  }
+
+  getItem(key: string): any {
+    return this.isBrowser ? this.secureStorage.getItem(key) : null;
+  }
+
+  setItem(key: string, value: any): void {
+    if (this.isBrowser) {
+      this.secureStorage.setItem(key, value);
+    }
+  }
+
+  removeItem(key: string): void {
+    if (this.isBrowser) {
+      this.secureStorage.removeItem(key);
+    }
+  }
+
+  clear(): void {
+    if (this.isBrowser) {
+      this.secureStorage.clear()
+    }
+  }
 }

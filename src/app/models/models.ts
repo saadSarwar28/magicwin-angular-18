@@ -1,4 +1,4 @@
-import { AxiosError } from "axios";
+// import { AxiosError } from "axios";
 import { KeyLineDescription } from "../services/backend.service";
 import { sportsIdMap } from "../services/sportsEnum";
 
@@ -6,7 +6,18 @@ import { sportsIdMap } from "../services/sportsEnum";
 
 
 
-
+export class CustomError implements Error{
+  name: string;
+  message: string;
+  code: number;
+  data: any;
+     constructor(message:string, statusCode:number, data:any){
+      this.message=message;
+      this.name="CustomError";
+      this.code=statusCode;
+      this.data=data;
+     }
+}
 
 /** Game Detail */
 export class XGameDetail implements IXGameDetail {
@@ -3059,6 +3070,10 @@ export class SportsBettingModel implements ISportsBettingModel {
   size!: number;
   /** keep alive */
   keepAliveOn!: boolean;
+  /** Size */
+  side!: string;
+  /** keep alive */
+  keepAlive!: boolean;
   /** Version */
   version!: number;
 
@@ -3094,6 +3109,10 @@ export interface ISportsBettingModel {
   size: number;
   /** keep alive */
   keepAliveOn: boolean;
+  /** Size */
+  side: string;
+  /** keep alive */
+  keepAlive: boolean;
   /** Version */
   version: number;
 }
@@ -4659,9 +4678,9 @@ export function throwException(message: string, status: number, response: string
   throw new ApiException(message, status, response, headers, null);
 }
 
-export function isAxiosError(obj: any | undefined): obj is AxiosError {
-  return obj && obj.isAxiosError === true;
-}
+// export function isAxiosError(obj: any | undefined): obj is AxiosError {
+//   return obj && obj.isAxiosError === true;
+// }
 
 export class ProblemDetails implements IProblemDetails {
   type!: string | null;
@@ -4716,7 +4735,7 @@ export interface IProblemDetails {
 }
 
 export class ApiException extends Error {
-  message: string;
+  override message: string;
   status: number;
   response: string;
   headers: { [key: string]: any; };
@@ -7136,7 +7155,7 @@ export class RequetedAmount implements IRequetedAmount {
 
 export interface IRequetedAmount {
   accountNo?: string | undefined;
-  amount?: number;
+  amount?: number | string;
   id?: number;
   recaptcha?: string;
 }

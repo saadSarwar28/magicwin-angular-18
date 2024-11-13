@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "magicwin-v18": {
+    "magicwin-ssr": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/magicwin-v18",
+            "outputPath": "dist/magicwin-ssr",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -41,6 +41,12 @@
           },
           "configurations": {
             "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
               "budgets": [
                 {
                   "type": "initial",
@@ -67,10 +73,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "magicwin-v18:build:production"
+              "buildTarget": "magicwin-ssr:build:production"
             },
             "development": {
-              "buildTarget": "magicwin-v18:build:development"
+              "buildTarget": "magicwin-ssr:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -78,7 +84,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "magicwin-v18:build"
+            "buildTarget": "magicwin-ssr:build"
           }
         },
         "test": {

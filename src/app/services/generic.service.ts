@@ -1,6 +1,6 @@
 import { ApplicationRef, ComponentFactoryResolver, Injectable, Injector, ComponentRef, Renderer2, RendererFactory2, HostListener } from '@angular/core';
 import { GamePopupService } from './game-popup.service';
-import { LoginModalComponent } from '../shared/login-modal/login-modal.component';
+// import { LoginModalComponent } from '../shared/login-modal/login-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 
 @Injectable({
@@ -8,7 +8,8 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class GenericService {
   private renderer: Renderer2;
-  constructor(private gamePopupService: GamePopupService,
+  constructor(
+    private gamePopupService: GamePopupService,
     private resolver: ComponentFactoryResolver,
     private appRef: ApplicationRef,
     private injector: Injector,
@@ -20,11 +21,11 @@ export class GenericService {
 
 
   openLoginModal() {
-    this.dialog.open(LoginModalComponent, {
-      width: '500px',
-      maxWidth: '94vw',
-      panelClass: 'login-dialog',
-    });
+    // this.dialog.open(LoginModalComponent, {
+    //   width: '500px',
+    //   maxWidth: '94vw',
+    //   panelClass: 'login-dialog',
+    // });
   }
 
   openGameModal(data: any) {
@@ -46,7 +47,7 @@ export class GenericService {
 
   private popupComponentRef: ComponentRef<any> | null = null;
   openPopup(
-    component,
+    component: any,
     data?: any,
     popupClass: string = 'medium-popup',
     callback?: (value: any) => void) {
@@ -136,11 +137,11 @@ export class GenericService {
   }
 
   setRouteBeforeLogin(
-    provider,
-    gameId,
-    tableId,
-    isCheckUrl,
-    routerLink,
+    provider : any,
+    gameId : any,
+    tableId : any,
+    isCheckUrl : any,
+    routerLink : any,
     menuItem = false,
     rummy = false
   ) {

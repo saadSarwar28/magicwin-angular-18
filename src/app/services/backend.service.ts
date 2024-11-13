@@ -1,5 +1,8 @@
+import { PlatformService } from './platform.service';
+import { BrowserService } from './browser.service';
 import { APP_BASE_HREF } from "@angular/common";
 import { Inject, Injectable } from "@angular/core";
+import { environment } from '../../environments/environment';
 import {
   AccountStatementSubReport,
   AccountstmtInputModel,
@@ -46,7 +49,6 @@ import {
   GreezPaymentResponse,
   GrezPayInputModel,
   IPAddressForBetIds,
-  isAxiosError,
   KYCResponse,
   LineLiablityMulti,
   LineMarket,
@@ -102,14 +104,20 @@ import {
 } from "../models/models";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable } from "rxjs/internal/Observable";
+import { SportsIdMapperService } from './sportsIdMapper.service';
 @Injectable({
   providedIn: "root",
 })
 export class BackendService {
   gameUrl?: undefined;
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private BrowserService: BrowserService,
+    private PlatformService: PlatformService,
+    private sportsMapperService: SportsIdMapperService
+  ) { }
 
-  private baseUrl: string = "your-base-url";
+  private baseUrl: string = environment.apiurl;
 
   slugifyName(name: string) {
     return name
@@ -155,10 +163,10 @@ export class BackendService {
 
   sportsBookCall(eventid: number, from: string): Observable<SportsBookMarkets[]> {
     let url_: string = "";
-    if (_window().sportsbookgetdata) {
+    if (this.BrowserService.getWindow().sportsbookgetdata) {
       if (eventid === undefined || eventid === null)
         throw new Error("The parameter 'eventid' must be defined.");
-      url_ = _window().sportsbookgetdata + eventid;
+      url_ = this.BrowserService.getWindow().sportsbookgetdata + eventid;
     }
     return this.http.get<SportsBookMarkets[]>(url_);
   }
@@ -196,7 +204,7 @@ export class BackendService {
   // Get payment Gateway
 
   getDepositDetails(type: string | undefined): Observable<any> {
-    let url_ = this.baseUrl + _window().getbankdetail;
+    let url_ = this.baseUrl + this.BrowserService.getWindow().getbankdetail;
     url_ = url_.replace(/[?&]$/, "");
     return this.http.get<any>(url_);
   }
@@ -233,7 +241,7 @@ export class BackendService {
 
   // manualPaymentPost
   manualPayment_POST(
-    file: FileParameter | undefined,
+    file: FileParameter | any,
     amount: number | any,
     paymentMethod: string | undefined,
     transactoinId: string | undefined,
@@ -276,8 +284,8 @@ export class BackendService {
 
   manualPaymentStatus(id: any, from: string): Observable<any> {
     let url_: string = "";
-    if (_window().manualpaymentstatus) {
-      url_ = this.baseUrl + _window().manualpaymentstatus;
+    if (this.BrowserService.getWindow().manualpaymentstatus) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().manualpaymentstatus;
       if (id === undefined || id === null)
         throw new Error("The parameter 'id' must be defined.");
       url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -295,7 +303,7 @@ export class BackendService {
   // Client KYC
 
   clientKYC_POST(
-    file: FileParameter | undefined,
+    file: FileParameter | any,
     paymentMethod: string | undefined,
     recap: string
   ): Observable<BettingResponse> {
@@ -337,8 +345,8 @@ export class BackendService {
 
   GetNews(): Observable<string> {
     let url_: string = "";
-    if (_window().getnews) {
-      url_ = this.baseUrl + _window().getnews;
+    if (this.BrowserService.getWindow().getnews) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().getnews;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.get<any>(url_);
@@ -346,8 +354,8 @@ export class BackendService {
 
   GetxGameDetails(id: number): Observable<XGameDetails> {
     let url_: string = "";
-    if (_window().getxgdetails) {
-      url_ = this.baseUrl + _window().getxgdetails;
+    if (this.BrowserService.getWindow().getxgdetails) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().getxgdetails;
       if (id === undefined || id === null)
         throw new Error("The parameter 'id' must be defined.");
       url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -358,8 +366,8 @@ export class BackendService {
 
   GetNextRace(from: string): Observable<NextRaceWithStatus> {
     let url_: string = "";
-    if (_window().nextrace) {
-      url_ = this.baseUrl + _window().nextrace;
+    if (this.BrowserService.getWindow().nextrace) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().nextrace;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.get<NextRaceWithStatus>(url_);
@@ -370,8 +378,8 @@ export class BackendService {
    */
   GetTv(): Observable<TVResponseToClient> {
     let url_: string = "";
-    if (_window().gettv) {
-      url_ = this.baseUrl + _window().gettv;
+    if (this.BrowserService.getWindow().gettv) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().gettv;
       url_ = url_.replace(/[?&]$/, "");
     }
 
@@ -388,8 +396,8 @@ export class BackendService {
     from: String
   ): Observable<MatchedUnmatched> {
     let url_: string = "";
-    if (_window().matchunmatchallsports) {
-      url_ = this.baseUrl + _window().matchunmatchallsports;
+    if (this.BrowserService.getWindow().matchunmatchallsports) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().matchunmatchallsports;
       url_ = url_.replace(/[?&]$/, "");
     }
 
@@ -403,8 +411,8 @@ export class BackendService {
    */
   timeLine2(id: number): Observable<void> {
     let url_: string = "";
-    if (_window().timeline2) {
-      url_ = this.baseUrl + _window().timeline2;
+    if (this.BrowserService.getWindow().timeline2) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().timeline2;
       if (id === undefined || id === null)
         throw new Error("The parameter 'id' must be defined.");
       url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -421,8 +429,8 @@ export class BackendService {
    */
   timeLineNew1(id: number): Observable<void> {
     let url_: string = "";
-    if (_window().timeline1) {
-      url_ = this.baseUrl + _window().timeline1;
+    if (this.BrowserService.getWindow().timeline1) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().timeline1;
       if (id === undefined || id === null)
         throw new Error("The parameter 'id' must be defined.");
       url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -541,8 +549,8 @@ export class BackendService {
     from: String
   ): Observable<{ [key: string]: string }> {
     let url_: string = "";
-    if (_window().casinopost) {
-      url_ = this.baseUrl + _window().casinopost;
+    if (this.BrowserService.getWindow().casinopost) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().casinopost;
       url_ = url_.replace(/[?&]$/, "");
     }
 
@@ -554,8 +562,8 @@ export class BackendService {
    */
   casinoGET(from: String): Observable<{ [key: string]: string }> {
     let url_: string = "";
-    if (_window().casinoget) {
-      url_ = this.baseUrl + _window().casinoget;
+    if (this.BrowserService.getWindow().casinoget) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().casinoget;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.get<any>(url_);
@@ -568,8 +576,8 @@ export class BackendService {
    */
   clientpositionsports(body: string | undefined, from?: string): Observable<ClientPosition[]> {
     let url_: string = "";
-    if (_window().clientpositionsports) {
-      url_ = this.baseUrl + _window().clientpositionsports;
+    if (this.BrowserService.getWindow().clientpositionsports) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().clientpositionsports;
       url_ = url_.replace(/[?&]$/, "");
     }
 
@@ -585,8 +593,8 @@ export class BackendService {
     body: string | undefined
   ): Observable<FancyMarketLiabilty> {
     let url_: string = "";
-    if (_window().clientpositionfancy) {
-      url_ = this.baseUrl + _window().clientpositionfancy;
+    if (this.BrowserService.getWindow().clientpositionfancy) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().clientpositionfancy;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<FancyMarketLiabilty>(url_, body);
@@ -599,8 +607,8 @@ export class BackendService {
    */
   FancyMarketsLiability(eventid: number): Observable<FancyMarketLiabilty> {
     let url_: string = "";
-    if (_window().fancymarketsliability) {
-      url_ = this.baseUrl + _window().fancymarketsliability;
+    if (this.BrowserService.getWindow().fancymarketsliability) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().fancymarketsliability;
       if (eventid === undefined || eventid === null)
         throw new Error("The parameter 'eventid' must be defined.");
       url_ = url_.replace("{eventid}", encodeURIComponent("" + eventid));
@@ -620,8 +628,8 @@ export class BackendService {
     from: String
   ): Observable<CurrentBets> {
     let url_: string = "";
-    if (_window().racemarketcurrentbets) {
-      url_ = this.baseUrl + _window().racemarketcurrentbets;
+    if (this.BrowserService.getWindow().racemarketcurrentbets) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().racemarketcurrentbets;
       if (id === null) throw new Error("The parameter 'id' cannot be null.");
       else if (id !== undefined)
         url_ += "id=" + encodeURIComponent("" + id) + "&";
@@ -641,8 +649,8 @@ export class BackendService {
     from: String
   ): Observable<MatchedUnmatched> {
     let url_: string = "";
-    if (_window().matchunmatchrace) {
-      url_ = this.baseUrl + _window().matchunmatchrace;
+    if (this.BrowserService.getWindow().matchunmatchrace) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().matchunmatchrace;
       url_ = url_.replace(/[?&]$/, "");
     }
 
@@ -659,8 +667,8 @@ export class BackendService {
     from: String
   ): Observable<CurrentBets[]> {
     let url_: string = "";
-    if (_window().localmarketcurrentbets) {
-      url_ = this.baseUrl + _window().localmarketcurrentbets;
+    if (this.BrowserService.getWindow().localmarketcurrentbets) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().localmarketcurrentbets;
       url_ = url_.replace(/[?&]$/, "");
     }
 
@@ -675,11 +683,11 @@ export class BackendService {
 
   FancyMarketsAny(v: string, id: number): Observable<any> {
     let url_: string = "";
-    if (_window().fancymarketsany) {
-      if (_window().fancymarketsany.startsWith("http")) {
-        url_ = _window().fancymarketsany;
+    if (this.BrowserService.getWindow().fancymarketsany) {
+      if (this.BrowserService.getWindow().fancymarketsany.startsWith("http")) {
+        url_ = this.BrowserService.getWindow().fancymarketsany;
       } else {
-        url_ = this.baseUrl + _window().fancymarketsany + `/${v}/${id}`;
+        url_ = this.baseUrl + this.BrowserService.getWindow().fancymarketsany + `/${v}/${id}`;
       }
       if (id === undefined || id === null)
         throw new Error("The parameter 'id' must be defined.");
@@ -692,11 +700,11 @@ export class BackendService {
 
   FancyMarketsV3(id: number): Observable<any> {
     let url_: string = "";
-    if (_window().fancymarkets) {
-      if (_window().fancymarkets.startsWith("http")) {
-        url_ = _window().fancymarkets;
+    if (this.BrowserService.getWindow().fancymarkets) {
+      if (this.BrowserService.getWindow().fancymarkets.startsWith("http")) {
+        url_ = this.BrowserService.getWindow().fancymarkets;
       } else {
-        url_ = this.baseUrl + _window().fancymarkets;
+        url_ = this.baseUrl + this.BrowserService.getWindow().fancymarkets;
       }
       if (id === undefined || id === null)
         throw new Error("The parameter 'id' must be defined.");
@@ -709,11 +717,11 @@ export class BackendService {
 
   LotteryMarkets(id: number, from: string): Observable<any> {
     let url_: string = "";
-    if (_window().lotterycricket) {
-      if (_window().lotterycricket.startsWith("http")) {
-        url_ = _window().fancymarkets;
+    if (this.BrowserService.getWindow().lotterycricket) {
+      if (this.BrowserService.getWindow().lotterycricket.startsWith("http")) {
+        url_ = this.BrowserService.getWindow().fancymarkets;
       } else {
-        url_ = this.baseUrl + _window().lotterycricket;
+        url_ = this.baseUrl + this.BrowserService.getWindow().lotterycricket;
       }
       if (id === undefined || id === null)
         throw new Error("The parameter 'id' must be defined.");
@@ -727,8 +735,8 @@ export class BackendService {
     body: FancyModel | undefined
   ): Observable<BettingResponse> {
     let url_: string = "";
-    if (_window().lotteryordersplaced) {
-      url_ = this.baseUrl + _window().lotteryordersplaced;
+    if (this.BrowserService.getWindow().lotteryordersplaced) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().lotteryordersplaced;
       url_ = url_.replace(/[?&]$/, "");
     }
 
@@ -737,11 +745,11 @@ export class BackendService {
 
   FancyMarkets(id: number, from: String): Observable<AllFancyData> {
     let url_: string = "";
-    if (_window().fancymarkets) {
-      if (_window().fancymarkets.startsWith("http")) {
-        url_ = _window().fancymarkets;
+    if (this.BrowserService.getWindow().fancymarkets) {
+      if (this.BrowserService.getWindow().fancymarkets.startsWith("http")) {
+        url_ = this.BrowserService.getWindow().fancymarkets;
       } else {
-        url_ = this.baseUrl + _window().fancymarkets;
+        url_ = this.baseUrl + this.BrowserService.getWindow().fancymarkets;
       }
       if (id === undefined || id === null)
         throw new Error("The parameter 'id' must be defined.");
@@ -757,8 +765,8 @@ export class BackendService {
    */
   GetWallet(): Observable<ClientWallet> {
     let url_: string = "";
-    if (_window().getwallet) {
-      url_ = this.baseUrl + _window().getwallet;
+    if (this.BrowserService.getWindow().getwallet) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().getwallet;
       url_ = url_.replace(/[?&]$/, "");
     }
 
@@ -780,8 +788,8 @@ export class BackendService {
       marketId = marketId.replace("1.", "");
     }
     let url_: string = "";
-    if (_window().runnergraph) {
-      url_ = this.baseUrl + _window().runnergraph;
+    if (this.BrowserService.getWindow().runnergraph) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().runnergraph;
       if (marketId === null)
         throw new Error("The parameter 'marketId' cannot be null.");
       else if (marketId !== undefined)
@@ -806,8 +814,8 @@ export class BackendService {
     from?: string
   ): Observable<LineLiablityMulti[]> {
     let url_: string = "";
-    if (_window().sportsmarketliability) {
-      url_ = this.baseUrl + _window().sportsmarketliability;
+    if (this.BrowserService.getWindow().sportsmarketliability) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().sportsmarketliability;
       url_ = url_.replace(/[?&]$/, "");
     }
 
@@ -820,8 +828,8 @@ export class BackendService {
    */
   MyMarkets(): Observable<MyMarket[]> {
     let url_: string = "";
-    if (_window().mymarket) {
-      url_ = this.baseUrl + _window().mymarket;
+    if (this.BrowserService.getWindow().mymarket) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().mymarket;
       url_ = url_.replace(/[?&]$/, "");
     }
 
@@ -833,8 +841,8 @@ export class BackendService {
    */
   SportAllMarketLibility(from: String): Observable<LineLiablityMulti> {
     let url_: string = "";
-    if (_window().allmarketsliability) {
-      url_ = this.baseUrl + _window().allmarketsliability;
+    if (this.BrowserService.getWindow().allmarketsliability) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().allmarketsliability;
       url_ = url_.replace(/[?&]$/, "");
     }
 
@@ -846,8 +854,8 @@ export class BackendService {
    */
   currentBetsAll_GET(from: String): Observable<CurrentBetsModel> {
     let url_: string = "";
-    if (_window().currentbetsall) {
-      url_ = this.baseUrl + _window().currentbetsall;
+    if (this.BrowserService.getWindow().currentbetsall) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().currentbetsall;
       url_ = url_.replace(/[?&]$/, "");
     }
 
@@ -864,8 +872,8 @@ export class BackendService {
     from: String
   ): Observable<CurrentBets[]> {
     let url_: string = "";
-    if (_window().sportscurrentbets) {
-      url_ = this.baseUrl + _window().sportscurrentbets;
+    if (this.BrowserService.getWindow().sportscurrentbets) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().sportscurrentbets;
       url_ = url_.replace(/[?&]$/, "");
     }
 
@@ -878,8 +886,8 @@ export class BackendService {
    */
   racemarket(body: string | undefined, from: String): Observable<MarketDetail> {
     let url_: string = "";
-    if (_window().racemarket) {
-      url_ = this.baseUrl + _window().racemarket;
+    if (this.BrowserService.getWindow().racemarket) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().racemarket;
       url_ = url_.replace(/[?&]$/, "");
     }
 
@@ -895,8 +903,8 @@ export class BackendService {
     from: String
   ): Observable<CustomMenu> {
     let url_: string = "";
-    if (_window().customtree) {
-      url_ = this.baseUrl + _window().customtree;
+    if (this.BrowserService.getWindow().customtree) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().customtree;
       url_ = url_.replace(/[?&]$/, "");
     }
 
@@ -904,13 +912,13 @@ export class BackendService {
   }
 
   GetPopularSports(): Observable<PopularSports> {
-    let url_ = this.baseUrl + _window().populapSports;
+    let url_ = this.baseUrl + this.BrowserService.getWindow().populapSports;
     url_ = url_.replace(/[?&]$/, "");
     return this.http.get<PopularSports>(url_);
   }
 
   otherRacesPost(body: any | undefined): Observable<any> {
-    let url_ = this.baseUrl + _window().otherracesordersplaced;
+    let url_ = this.baseUrl + this.BrowserService.getWindow().otherracesordersplaced;
     url_ = url_.replace(/[?&]$/, "");
     const content_ = JSON.stringify(body);
 
@@ -923,12 +931,12 @@ export class BackendService {
    * @return Success
    */
   LocalMarketOrdersplaced(
-    body: LocalMarketBet | undefined,
+    body: LocalMarketBet | any,
     from: String
   ): Observable<BettingResponse> {
     let url_: string = "";
-    if (_window().localordersplaced) {
-      url_ = this.baseUrl + _window().localordersplaced;
+    if (this.BrowserService.getWindow().localordersplaced) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().localordersplaced;
       url_ = url_.replace(/[?&]$/, "");
     }
 
@@ -938,8 +946,8 @@ export class BackendService {
   searchMarkets_POST(query: string | undefined): Observable<SearchResult> {
     let url_: string = "";
 
-    if (_window().search) {
-      url_ = this.baseUrl + _window().search;
+    if (this.BrowserService.getWindow().search) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().search;
       url_ = url_.replace(/[?&]$/, "");
     }
     //  ;
@@ -961,8 +969,8 @@ export class BackendService {
     from: String
   ): Observable<ClientParameters> {
     let url_: string = "";
-    if (_window().clientparameters) {
-      url_ = this.baseUrl + _window().clientparameters;
+    if (this.BrowserService.getWindow().clientparameters) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().clientparameters;
       url_ = url_.replace(/[?&]$/, "");
     }
 
@@ -1030,8 +1038,8 @@ export class BackendService {
     from: String
   ): Observable<MarketBook[]> {
     let url_: string = "";
-    if (_window().directmarketsbook) {
-      url_ = this.baseUrl + _window().directmarketsbook;
+    if (this.BrowserService.getWindow().directmarketsbook) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().directmarketsbook;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<MarketBook[]>(url_, body);
@@ -1042,8 +1050,8 @@ export class BackendService {
     from: String
   ): Observable<MarketBook[]> {
     let url_: string = "";
-    if (_window().marketsbook) {
-      url_ = this.baseUrl + _window().marketsbook;
+    if (this.BrowserService.getWindow().marketsbook) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().marketsbook;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<any>(url_, body);
@@ -1059,8 +1067,8 @@ export class BackendService {
     from: String
   ): Observable<MarketBook[]> {
     let url_: string = "";
-    if (_window().cricketmarketsbook) {
-      url_ = this.baseUrl + _window().cricketmarketsbook;
+    if (this.BrowserService.getWindow().cricketmarketsbook) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().cricketmarketsbook;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<any>(url_, body);
@@ -1073,8 +1081,8 @@ export class BackendService {
    */
   eventsbydatemarkets(id: number, from: String): Observable<DirectEvents> {
     let url_: string = "";
-    if (_window().eventbydatemarkets) {
-      url_ = this.baseUrl + _window().eventbydatemarkets;
+    if (this.BrowserService.getWindow().eventbydatemarkets) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().eventbydatemarkets;
       if (id === undefined || id === null)
         throw new Error("The parameter 'id' must be defined.");
       url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -1095,8 +1103,8 @@ export class BackendService {
     from: String
   ): Observable<MarketBook> {
     let url_: string = "";
-    if (_window().directmarketsbook) {
-      url_ = this.baseUrl + _window().directmarketsbook;
+    if (this.BrowserService.getWindow().directmarketsbook) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().directmarketsbook;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<any>(url_, body);
@@ -1109,8 +1117,8 @@ export class BackendService {
    */
   MultipleScore(body: string | undefined, from: String): Observable<any[]> {
     let url_: string = "";
-    if (_window().multiplescore) {
-      url_ = _window().multiplescore;
+    if (this.BrowserService.getWindow().multiplescore) {
+      url_ = this.BrowserService.getWindow().multiplescore;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<any>(url_, body);
@@ -1123,8 +1131,8 @@ export class BackendService {
    */
   getcompetition(id: number, from: String): Observable<Menu[]> {
     let url_: string = "";
-    if (_window().getcompetition) {
-      url_ = this.baseUrl + _window().getcompetition;
+    if (this.BrowserService.getWindow().getcompetition) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().getcompetition;
       if (id === undefined || id === null)
         throw new Error("The parameter 'id' must be defined.");
       url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -1141,8 +1149,8 @@ export class BackendService {
    */
   getcountries(id: number, all: string, from: String): Observable<Menu[]> {
     let url_: string = "";
-    if (_window().getcountries) {
-      url_ = this.baseUrl + _window().getcountries;
+    if (this.BrowserService.getWindow().getcountries) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().getcountries;
       if (id === undefined || id === null)
         throw new Error("The parameter 'id' must be defined.");
       url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -1203,8 +1211,8 @@ export class BackendService {
     from: String
   ): Observable<Menu[]> {
     let url_: string = "";
-    if (_window().geteventsbycountry) {
-      url_ = this.baseUrl + _window().geteventsbycountry;
+    if (this.BrowserService.getWindow().geteventsbycountry) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().geteventsbycountry;
       if (countryCode === undefined || countryCode === null)
         throw new Error("The parameter 'countryCode' must be defined.");
       url_ = url_.replace(
@@ -1226,8 +1234,8 @@ export class BackendService {
    */
   geteventsbydate(id: number, from: String): Observable<Menu[]> {
     let url_: string = "";
-    if (_window().geteventsbydate) {
-      url_ = this.baseUrl + _window().geteventsbydate;
+    if (this.BrowserService.getWindow().geteventsbydate) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().geteventsbydate;
       if (id === undefined || id === null)
         throw new Error("The parameter 'id' must be defined.");
       url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -1243,8 +1251,8 @@ export class BackendService {
    */
   getevents(id: number, url: string, from: String): Observable<Menu[]> {
     let url_: string = "";
-    if (_window().getevents) {
-      url_ = this.baseUrl + _window().getevents;
+    if (this.BrowserService.getWindow().getevents) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().getevents;
       if (id === undefined || id === null)
         throw new Error("The parameter 'id' must be defined.");
       url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -1257,7 +1265,7 @@ export class BackendService {
    * @return Success
    */
   todayRacesOld(id: number, from: string): Observable<TodayRacesASSS[]> {
-    let url_ = this.baseUrl + _window().todayracesOld;
+    let url_ = this.baseUrl + this.BrowserService.getWindow().todayracesOld;
     if (id === undefined || id === null)
       throw new Error("The parameter 'id' must be defined.");
     url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -1276,8 +1284,8 @@ export class BackendService {
     from: String
   ): Observable<TodayRacesASSS[]> {
     let url_: string = "";
-    if (_window().getgroupmarkets) {
-      url_ = this.baseUrl + _window().getgroupmarkets;
+    if (this.BrowserService.getWindow().getgroupmarkets) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().getgroupmarkets;
       if (id === undefined || id === null)
         throw new Error("The parameter 'id' must be defined.");
       url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -1299,8 +1307,8 @@ export class BackendService {
    */
   getevent1(id: number, from: String): Observable<Menu[]> {
     let url_: string = "";
-    if (_window().getevent1) {
-      url_ = this.baseUrl + _window().getevent1;
+    if (this.BrowserService.getWindow().getevent1) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().getevent1;
       if (id === undefined || id === null)
         throw new Error("The parameter 'id' must be defined.");
       url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -1316,8 +1324,8 @@ export class BackendService {
    */
   getevent2(id: number, from: String): Observable<Menu[]> {
     let url_: string = "";
-    if (_window().getevent2) {
-      url_ = this.baseUrl + _window().getevent2;
+    if (this.BrowserService.getWindow().getevent2) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().getevent2;
       if (id === undefined || id === null)
         throw new Error("The parameter 'id' must be defined.");
       url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -1333,8 +1341,8 @@ export class BackendService {
    */
   getevent3(id: number, from: String): Observable<Menu[]> {
     let url_: string = "";
-    if (_window().getevent3) {
-      url_ = this.baseUrl + _window().getevent3;
+    if (this.BrowserService.getWindow().getevent3) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().getevent3;
       if (id === undefined || id === null)
         throw new Error("The parameter 'id' must be defined.");
       url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -1349,8 +1357,8 @@ export class BackendService {
    */
   eventtypes(from: String): Observable<Menu[]> {
     let url_: string = "";
-    if (_window().eventtypes) {
-      url_ = this.baseUrl + _window().eventtypes;
+    if (this.BrowserService.getWindow().eventtypes) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().eventtypes;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.get<any>(url_);
@@ -1363,8 +1371,8 @@ export class BackendService {
    */
   getfixtures(id: number, from: String): Observable<Menu[]> {
     let url_: string = "";
-    if (_window().getfixtures) {
-      url_ = this.baseUrl + _window().getfixtures;
+    if (this.BrowserService.getWindow().getfixtures) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().getfixtures;
       if (id === undefined || id === null)
         throw new Error("The parameter 'id' must be defined.");
       url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -1385,8 +1393,8 @@ export class BackendService {
     url: string | undefined
   ): Observable<MultilevelMenu[]> {
     let url_: string = "";
-    if (_window().getmarkets) {
-      url_ = this.baseUrl + _window().getmarkets;
+    if (this.BrowserService.getWindow().getmarkets) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().getmarkets;
       if (id === undefined || id === null)
         throw new Error("The parameter 'id' must be defined.");
       url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -1402,8 +1410,8 @@ export class BackendService {
    */
   todayraces(id: number, from: String): Observable<RaceEvents[]> {
     let url_: string = "";
-    if (_window().todayraces) {
-      url_ = this.baseUrl + _window().todayraces;
+    if (this.BrowserService.getWindow().todayraces) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().todayraces;
       if (id === undefined || id === null)
         throw new Error("The parameter 'id' must be defined.");
       url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -1419,8 +1427,8 @@ export class BackendService {
    */
   geteventmarkets(id: number | string, from: String): Observable<EventMarkets> {
     let url_: string = "";
-    if (_window().geteventmarkets) {
-      url_ = this.baseUrl + _window().geteventmarkets;
+    if (this.BrowserService.getWindow().geteventmarkets) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().geteventmarkets;
       if (id === undefined || id === null)
         throw new Error("The parameter 'id' must be defined.");
       url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -1436,8 +1444,8 @@ export class BackendService {
    */
   linemarketsundermo(id: number, from: String): Observable<LineMarket[]> {
     let url_: string = "";
-    if (_window().linemarketsundermo) {
-      url_ = this.baseUrl + _window().linemarketsundermo;
+    if (this.BrowserService.getWindow().linemarketsundermo) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().linemarketsundermo;
       if (id === undefined || id === null)
         throw new Error("The parameter 'id' must be defined.");
       url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -1453,8 +1461,8 @@ export class BackendService {
    */
   getcompetitionmarkets(id: number, from: String): Observable<DirectEvents> {
     let url_: string = "";
-    if (_window().getcompetitonmarkets) {
-      url_ = this.baseUrl + _window().getcompetitonmarkets;
+    if (this.BrowserService.getWindow().getcompetitonmarkets) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().getcompetitonmarkets;
       if (id === undefined || id === null)
         throw new Error("The parameter 'id' must be defined.");
       url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -1471,8 +1479,8 @@ export class BackendService {
    */
   raceschedule(all: string, id: number, from: String): Observable<RaceDate[]> {
     let url_: string = "";
-    if (_window().raceschedule) {
-      url_ = this.baseUrl + _window().raceschedule;
+    if (this.BrowserService.getWindow().raceschedule) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().raceschedule;
       if (all === undefined || all === null)
         throw new Error("The parameter 'all' must be defined.");
       url_ = url_.replace("{all}", encodeURIComponent("" + all));
@@ -1494,8 +1502,8 @@ export class BackendService {
     from: String
   ): Observable<DefaultInplay[]> {
     let url_: string = "";
-    if (_window().getdefaultpage) {
-      url_ = this.baseUrl + _window().getdefaultpage;
+    if (this.BrowserService.getWindow().getdefaultpage) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().getdefaultpage;
       if (page === null)
         throw new Error("The parameter 'page' cannot be null.");
       else if (page !== undefined)
@@ -1512,8 +1520,8 @@ export class BackendService {
    */
   eventmarkets(id: number, from: String): Observable<EventTypeSS> {
     let url_: string = "";
-    if (_window().eventmarkets) {
-      url_ = this.baseUrl + _window().eventmarkets;
+    if (this.BrowserService.getWindow().eventmarkets) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().eventmarkets;
       if (id === undefined || id === null)
         throw new Error("The parameter 'id' must be defined.");
       url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -1532,8 +1540,8 @@ export class BackendService {
     from: String
   ): Observable<DefaultInplay[]> {
     let url_: string = "";
-    if (_window().inplayevents) {
-      url_ = this.baseUrl + _window().inplayevents;
+    if (this.BrowserService.getWindow().inplayevents) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().inplayevents;
       if (page === null)
         throw new Error("The parameter 'page' cannot be null.");
       else if (page !== undefined)
@@ -1553,8 +1561,8 @@ export class BackendService {
     from: String
   ): Observable<MarketDetail> {
     let url_: string = "";
-    if (_window().marketdetail) {
-      url_ = this.baseUrl + _window().marketdetail;
+    if (this.BrowserService.getWindow().marketdetail) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().marketdetail;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<any>(url_, body);
@@ -1565,8 +1573,8 @@ export class BackendService {
    */
   raceeventmarkets(eventID1: string, from: String): Observable<EventTypeRaces> {
     let url_: string = "";
-    if (_window().raceeventmarkets) {
-      url_ = this.baseUrl + _window().raceeventmarkets;
+    if (this.BrowserService.getWindow().raceeventmarkets) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().raceeventmarkets;
       if (eventID1 === undefined || eventID1 === null)
         throw new Error("The parameter 'eventID1' must be defined.");
       url_ = url_.replace("{EventID1}", encodeURIComponent("" + eventID1));
@@ -1588,8 +1596,8 @@ export class BackendService {
   ): Observable<DirectEvents> {
     let url_: string = "";
     let id = this.sportsMapperService.getSportByName(sport);
-    if (_window().sportsbyid) {
-      url_ = this.baseUrl + _window().sportsbyid;
+    if (this.BrowserService.getWindow().sportsbyid) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().sportsbyid;
       if (sport === undefined || sport === null)
         throw new Error("The parameter 'sport' must be defined.");
       url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -1612,8 +1620,8 @@ export class BackendService {
     from: String
   ): Observable<MatchedUnmatched> {
     let url_: string = "";
-    if (_window().matchunmatchxg) {
-      url_ = this.baseUrl + _window().matchunmatchxg;
+    if (this.BrowserService.getWindow().matchunmatchxg) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().matchunmatchxg;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<any>(url_, body);
@@ -1625,8 +1633,8 @@ export class BackendService {
     from: String
   ): Observable<any> {
     let url_: string = "";
-    if (_window().popularbyid) {
-      url_ = this.baseUrl + _window().popularbyid;
+    if (this.BrowserService.getWindow().popularbyid) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().popularbyid;
       if (id === undefined || id === null)
         throw new Error("The parameter 'id' must be defined.");
       url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -1645,8 +1653,8 @@ export class BackendService {
    */
   book(body: any | undefined, from: String): Observable<any> {
     let url_: string = "";
-    if (_window().singlebook) {
-      url_ = this.baseUrl + _window().singlebook;
+    if (this.BrowserService.getWindow().singlebook) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().singlebook;
       url_ = url_.replace(/[?&]$/, "");
     }
 
@@ -1660,8 +1668,8 @@ export class BackendService {
    */
   gamedetail(id: number, from: String): Observable<XGameDetail[]> {
     let url_: string = "";
-    if (_window().gamedetail) {
-      url_ = this.baseUrl + _window().gamedetail;
+    if (this.BrowserService.getWindow().gamedetail) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().gamedetail;
       if (id === undefined || id === null)
         throw new Error("The parameter 'id' must be defined.");
       url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -1677,8 +1685,8 @@ export class BackendService {
    */
   result(body: Results | undefined, from: String): Observable<any> {
     let url_: string = "";
-    if (_window().result) {
-      url_ = this.baseUrl + _window().result;
+    if (this.BrowserService.getWindow().result) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().result;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<any>(url_, body);
@@ -1690,8 +1698,8 @@ export class BackendService {
    */
   games(from: String): Observable<XgameNow[]> {
     let url_: string = "";
-    if (_window().games) {
-      url_ = this.baseUrl + _window().games;
+    if (this.BrowserService.getWindow().games) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().games;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.get<any>(url_);
@@ -1703,8 +1711,8 @@ export class BackendService {
    */
   singlebook(body: XGameSingleBook | undefined, from: String): Observable<any> {
     let url_: string = "";
-    if (_window().singlebook) {
-      url_ = this.baseUrl + _window().singlebook;
+    if (this.BrowserService.getWindow().singlebook) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().singlebook;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<any>(url_, body);
@@ -1720,8 +1728,8 @@ export class BackendService {
     from: String
   ): Observable<BettingResponse> {
     let url_: string = "";
-    if (_window().cancelorders) {
-      url_ = this.baseUrl + _window().cancelorders;
+    if (this.BrowserService.getWindow().cancelorders) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().cancelorders;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<any>(url_, body);
@@ -1736,8 +1744,8 @@ export class BackendService {
     from: String
   ): Observable<BettingResponse> {
     let url_: string = "";
-    if (_window().ordersplacedxg) {
-      url_ = this.baseUrl + _window().ordersplacedxg;
+    if (this.BrowserService.getWindow().ordersplacedxg) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().ordersplacedxg;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<any>(url_, body);
@@ -1753,8 +1761,8 @@ export class BackendService {
     from: String
   ): Observable<CurrentBetsGame[]> {
     let url_: string = "";
-    if (_window().currentbetsxg) {
-      url_ = this.baseUrl + _window().currentbetsxg;
+    if (this.BrowserService.getWindow().currentbetsxg) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().currentbetsxg;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<any>(url_, body);
@@ -1765,8 +1773,8 @@ export class BackendService {
     from: String
   ): Observable<UserPosition[]> {
     let url_: string = "";
-    if (_window().clientpositionxg) {
-      url_ = this.baseUrl + _window().clientpositionxg;
+    if (this.BrowserService.getWindow().clientpositionxg) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().clientpositionxg;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<any>(url_, body);
@@ -1781,8 +1789,8 @@ export class BackendService {
     from: String
   ): Observable<ClientWallet> {
     let url_: string = "";
-    if (_window().walletxg) {
-      url_ = this.baseUrl + _window().walletxg;
+    if (this.BrowserService.getWindow().walletxg) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().walletxg;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<any>(url_, body);
@@ -1856,8 +1864,8 @@ export class BackendService {
     from: String
   ): Observable<BettingResponse> {
     let url_: string = "";
-    if (_window().changepassword) {
-      url_ = this.baseUrl + _window().changepassword;
+    if (this.BrowserService.getWindow().changepassword) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().changepassword;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<any>(url_, body);
@@ -1912,8 +1920,8 @@ export class BackendService {
     from: String
   ): Observable<AccountstmtModel[]> {
     let url_: string = "";
-    if (_window().accountstatement) {
-      url_ = this.baseUrl + _window().accountstatement;
+    if (this.BrowserService.getWindow().accountstatement) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().accountstatement;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<any>(url_, body);
@@ -1929,8 +1937,8 @@ export class BackendService {
     from: String
   ): Observable<AccountStatementSubReport[]> {
     let url_: string = "";
-    if (_window().accountstatementsub) {
-      url_ = this.baseUrl + _window().accountstatementsub;
+    if (this.BrowserService.getWindow().accountstatementsub) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().accountstatementsub;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<any>(url_, body);
@@ -1946,8 +1954,8 @@ export class BackendService {
     from: String
   ): Observable<CasinoOrders[]> {
     let url_: string = "";
-    if (_window().casinobets) {
-      url_ = this.baseUrl + _window().casinobets;
+    if (this.BrowserService.getWindow().casinobets) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().casinobets;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<any>(url_, body);
@@ -1959,8 +1967,8 @@ export class BackendService {
    */
   stakesGet(from: String): Observable<ClientStake> {
     let url_: string = "";
-    if (_window().stakesget) {
-      url_ = this.baseUrl + _window().stakesget;
+    if (this.BrowserService.getWindow().stakesget) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().stakesget;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.get<any>(url_);
@@ -1973,24 +1981,24 @@ export class BackendService {
    */
   createPin(body: any, from: String): Observable<string> {
     let url_: string = "";
-    if (_window().createWithDrawPin) {
-      url_ = this.baseUrl + _window().createWithDrawPin;
+    if (this.BrowserService.getWindow().createWithDrawPin) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().createWithDrawPin;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<any>(url_, body);
   }
   RequestWithDrawPin(body: any, from: String): Observable<string> {
     let url_: string = "";
-    if (_window().requestWithDrawPin) {
-      url_ = this.baseUrl + _window().requestWithDrawPin;
+    if (this.BrowserService.getWindow().requestWithDrawPin) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().requestWithDrawPin;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<any>(url_, body);
   }
   ResetWithdrawpin(body: any, from: String): Observable<string> {
     let url_: string = "";
-    if (_window().resetWithdrawpin) {
-      url_ = this.baseUrl + _window().resetWithdrawpin;
+    if (this.BrowserService.getWindow().resetWithdrawpin) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().resetWithdrawpin;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<any>(url_, body);
@@ -2000,8 +2008,8 @@ export class BackendService {
 
   stakesPost(body: any, from: String, recaptcha: any): Observable<string> {
     let url_: string = "";
-    if (_window().stakespost) {
-      url_ = this.baseUrl + _window().stakespost;
+    if (this.BrowserService.getWindow().stakespost) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().stakespost;
       url_ = url_.replace(/[?&]$/, "");
     }
     let body1 = { ...body, recaptcha };
@@ -2033,7 +2041,7 @@ export class BackendService {
   // Add bank with kyc
 
   addclientbankaccountwithkyc(
-    image_File: FileParameter | undefined,
+    image_File: FileParameter | any,
     image_PaymentMethod: string | undefined,
     haveKyc: boolean | undefined,
     accountNo: string | undefined,
@@ -2093,7 +2101,7 @@ export class BackendService {
 
   updatebankdetailkyc(
     accountNo: string | undefined,
-    file: FileParameter | undefined,
+    file: FileParameter | any,
     paymentMethod: string | undefined
   ): Observable<BettingResponse> {
     let url_ = this.baseUrl + "/exchangeapi/client/updatebankdetailkyc";
@@ -2190,7 +2198,7 @@ export class BackendService {
   WithdrawRequest(
     body: RequetedAmount | undefined
   ): Observable<BettingResponse> {
-    let url_ = this.baseUrl + _window().requestwithdraw;
+    let url_ = this.baseUrl + this.BrowserService.getWindow().requestwithdraw;
     url_ = url_.replace(/[?&]$/, "");
     return this.http.post<any>(url_, body);
   }
@@ -2216,8 +2224,8 @@ export class BackendService {
     from: String
   ): Observable<MarketOrders[]> {
     let url_: string = "";
-    if (_window().fancybets) {
-      url_ = this.baseUrl + _window().fancybets;
+    if (this.BrowserService.getWindow().fancybets) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().fancybets;
       url_ = url_.replace(/[?&]$/, "");
     }
 
@@ -2234,8 +2242,8 @@ export class BackendService {
     from: String
   ): Observable<MarketOrders[]> {
     let url_: string = "";
-    if (_window().exchangemybets) {
-      url_ = this.baseUrl + _window().exchangemybets;
+    if (this.BrowserService.getWindow().exchangemybets) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().exchangemybets;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<any>(url_, body);
@@ -2251,8 +2259,8 @@ export class BackendService {
     from: String
   ): Observable<MarketOrders[]> {
     let url_: string = "";
-    if (_window().sportsbets) {
-      url_ = this.baseUrl + _window().sportsbets;
+    if (this.BrowserService.getWindow().sportsbets) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().sportsbets;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<any>(url_, body);
@@ -2268,8 +2276,8 @@ export class BackendService {
     from: String
   ): Observable<PLModel[]> {
     let url_: string = "";
-    if (_window().pl) {
-      url_ = this.baseUrl + _window().pl;
+    if (this.BrowserService.getWindow().pl) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().pl;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<any>(url_, body);
@@ -2285,8 +2293,8 @@ export class BackendService {
     from: String
   ): Observable<PLInnerSub[]> {
     let url_: string = "";
-    if (_window().plmarketwise) {
-      url_ = this.baseUrl + _window().plmarketwise;
+    if (this.BrowserService.getWindow().plmarketwise) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().plmarketwise;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<any>(url_, body);
@@ -2302,8 +2310,8 @@ export class BackendService {
     from: String
   ): Observable<PLInner[]> {
     let url_: string = "";
-    if (_window().plsportswise) {
-      url_ = this.baseUrl + _window().plsportswise;
+    if (this.BrowserService.getWindow().plsportswise) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().plsportswise;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<any>(url_, body);
@@ -2319,8 +2327,8 @@ export class BackendService {
     from: String
   ): Observable<SportsResult[]> {
     let url_: string = "";
-    if (_window().results) {
-      url_ = this.baseUrl + _window().results;
+    if (this.BrowserService.getWindow().results) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().results;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<any>(url_, body);
@@ -2332,8 +2340,8 @@ export class BackendService {
    */
   activity(from: String): Observable<ActivityLogs[]> {
     let url_: string = "";
-    if (_window().activity) {
-      url_ = this.baseUrl + _window().activity;
+    if (this.BrowserService.getWindow().activity) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().activity;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.get<any>(url_);
@@ -2345,17 +2353,17 @@ export class BackendService {
    */
   GetBanners(body: string | undefined): Observable<Banners[]> {
     let url_: string = "";
-    if (_window().banners) {
-      url_ = this.baseUrl + _window().banners;
+    if (this.BrowserService.getWindow() && this.BrowserService.getWindow().banners) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().banners;
       url_ = url_.replace(/[?&]$/, "");
     }
-    return this.http.post<any>(url_, body);
+    return this.http.post<any>(url_, JSON.stringify(body));
   }
 
   GetEventTv(id: number): Observable<EventTv> {
     let url_: string = "";
-    if (_window().eventtv) {
-      url_ = this.baseUrl + _window().eventtv;
+    if (this.BrowserService.getWindow().eventtv) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().eventtv;
       if (id === undefined || id === null)
         throw new Error("The parameter 'id' must be defined.");
       url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -2367,8 +2375,8 @@ export class BackendService {
   //virtualTV
   GetVirtualTv(id: number): Observable<any> {
     let url_: string = "";
-    if (_window().virtualtv) {
-      url_ = this.baseUrl + _window().virtualtv;
+    if (this.BrowserService.getWindow().virtualtv) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().virtualtv;
       if (id === undefined || id === null)
         throw new Error("The parameter 'id' must be defined.");
       url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -2383,8 +2391,8 @@ export class BackendService {
     from: string
   ): Observable<Menu[]> {
     let url_: string = "";
-    if (_window().getcompetitionsbycountry) {
-      url_ = this.baseUrl + _window().getcompetitionsbycountry;
+    if (this.BrowserService.getWindow().getcompetitionsbycountry) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().getcompetitionsbycountry;
       if (countryCode === undefined || countryCode === null)
         throw new Error("The parameter 'countryCode' must be defined.");
       url_ = url_.replace(
@@ -2404,8 +2412,8 @@ export class BackendService {
    */
   wallet(from: String): Observable<ClientWallet> {
     let url_: string = "";
-    if (_window().wallet) {
-      url_ = this.baseUrl + _window().wallet;
+    if (this.BrowserService.getWindow().wallet) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().wallet;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.get<any>(url_);
@@ -2420,8 +2428,8 @@ export class BackendService {
     from: String
   ): Observable<ClientWallet> {
     let url_: string = "";
-    if (_window().sportswallet) {
-      url_ = this.baseUrl + _window().sportswallet;
+    if (this.BrowserService.getWindow().sportswallet) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().sportswallet;
       url_ = url_.replace(/[?&]$/, "");
     }
 
@@ -2436,8 +2444,8 @@ export class BackendService {
     from: String
   ): Observable<ClientWallet> {
     let url_: string = "";
-    if (_window().xgwallet) {
-      url_ = this.baseUrl + _window().xgwallet;
+    if (this.BrowserService.getWindow().xgwallet) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().xgwallet;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<any>(url_, body);
@@ -2449,11 +2457,11 @@ export class BackendService {
     from: String
   ): Observable<BettingResponse> {
     let url_: string = "";
-    if (_window().bookmakerordersplaced) {
+    if (this.BrowserService.getWindow().bookmakerordersplaced) {
       let version = lookSabha
-        ? _window().loksabhabookmakerOrderPlVersion
-        : _window().bookmakerOrderPlVersion;
-      url_ = this.baseUrl + _window().bookmakerordersplaced + `${version}`;
+        ? this.BrowserService.getWindow().loksabhabookmakerOrderPlVersion
+        : this.BrowserService.getWindow().bookmakerOrderPlVersion;
+      url_ = this.baseUrl + this.BrowserService.getWindow().bookmakerordersplaced + `${version}`;
       url_ = url_.replace(/[?&]$/, "");
     }
 
@@ -2470,8 +2478,8 @@ export class BackendService {
     from: String
   ): Observable<MatchedUnmatched> {
     let url_: string = "";
-    if (_window().matchunmatchlocalmarket) {
-      url_ = this.baseUrl + _window().matchunmatchlocalmarket;
+    if (this.BrowserService.getWindow().matchunmatchlocalmarket) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().matchunmatchlocalmarket;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<any>(url_, body);
@@ -2487,8 +2495,8 @@ export class BackendService {
     from: String
   ): Observable<CurrentBetResp> {
     let url_: string = "";
-    if (_window().cancelorderslocal) {
-      url_ = this.baseUrl + _window().cancelorderslocal;
+    if (this.BrowserService.getWindow().cancelorderslocal) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().cancelorderslocal;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<any>(url_, body);
@@ -2510,8 +2518,8 @@ export class BackendService {
     from: String
   ): Observable<CurrentBetResp> {
     let url_: string = "";
-    if (_window().sportscancelorders) {
-      url_ = this.baseUrl + _window().sportscancelorders;
+    if (this.BrowserService.getWindow().sportscancelorders) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().sportscancelorders;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<any>(url_, body);
@@ -2539,8 +2547,8 @@ export class BackendService {
     from: String
   ): Observable<BettingResponse> {
     let url_: string = "";
-    if (_window().xgcancelorders) {
-      url_ = this.baseUrl + _window().xgcancelorders;
+    if (this.BrowserService.getWindow().xgcancelorders) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().xgcancelorders;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<any>(url_, body);
@@ -2556,8 +2564,8 @@ export class BackendService {
     from: String
   ): Observable<BettingResponse> {
     let url_: string = "";
-    if (_window().sportsordersplaced) {
-      url_ = this.baseUrl + _window().sportsordersplaced;
+    if (this.BrowserService.getWindow().sportsordersplaced) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().sportsordersplaced;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<any>(url_, body);
@@ -2568,8 +2576,8 @@ export class BackendService {
     from: string
   ): Observable<CurrentBetResp> {
     let url_: string = "";
-    if (_window().sportsordersplacedSingle) {
-      url_ = this.baseUrl + _window().sportsordersplacedSingle;
+    if (this.BrowserService.getWindow().sportsordersplacedSingle) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().sportsordersplacedSingle;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<any>(url_, body);
@@ -2579,8 +2587,8 @@ export class BackendService {
     body: SportsBookModelSingle | undefined
   ): Observable<CurrentBetResp> {
     let url_: string = "";
-    if (_window().sportsBookOrderPlacedNew) {
-      url_ = this.baseUrl + _window().sportsBookOrderPlacedNew;
+    if (this.BrowserService.getWindow().sportsBookOrderPlacedNew) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().sportsBookOrderPlacedNew;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<any>(url_, body);
@@ -2598,15 +2606,15 @@ export class BackendService {
     isSportsBook?: boolean
   ): Observable<BettingResponse> {
     let url_: string = "";
-    if (_window().fancyordersplacedSingle && _window().sportsbookplacedSingle) {
+    if (this.BrowserService.getWindow().fancyordersplacedSingle && this.BrowserService.getWindow().sportsbookplacedSingle) {
       if (isSportsBook == true) {
-        url_ = this.baseUrl + _window().sportsbookplacedSingle;
+        url_ = this.baseUrl + this.BrowserService.getWindow().sportsbookplacedSingle;
         url_ = url_.replace(/[?&]$/, "");
       } else {
         let version = lookSabha
-          ? _window().loksabhafancyOrderPlVersion
-          : _window().fancyOrderPlVersion;
-        url_ = this.baseUrl + _window().fancyordersplaced + `${version}`;
+          ? this.BrowserService.getWindow().loksabhafancyOrderPlVersion
+          : this.BrowserService.getWindow().fancyOrderPlVersion;
+        url_ = this.baseUrl + this.BrowserService.getWindow().fancyordersplaced + `${version}`;
         url_ = url_.replace(/[?&]$/, "");
       }
     }
@@ -2623,8 +2631,8 @@ export class BackendService {
     from: String
   ): Observable<BettingResponse> {
     let url_: string = "";
-    if (_window().ordersplacedxg) {
-      url_ = this.baseUrl + _window().ordersplacedxg;
+    if (this.BrowserService.getWindow().ordersplacedxg) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().ordersplacedxg;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.post<any>(url_, body);
@@ -2636,8 +2644,8 @@ export class BackendService {
    */
   GetOthersMarkets(body: string | undefined): Observable<OthersMarkets[]> {
     let url_: string = "";
-    if (_window().othersmarkets) {
-      url_ = this.baseUrl + _window().othersmarkets;
+    if (this.BrowserService.getWindow().othersmarkets) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().othersmarkets;
       url_ = url_.replace(/[?&]$/, "");
     }
     const content_ = body;
@@ -2648,8 +2656,8 @@ export class BackendService {
     body: MultiPlaceBet | undefined
   ): Observable<BettingResponse> {
     let url_: string = "";
-    if (_window().jorhipost) {
-      url_ = this.baseUrl + _window().jorhipost;
+    if (this.BrowserService.getWindow().jorhipost) {
+      url_ = this.baseUrl + this.BrowserService.getWindow().jorhipost;
       url_ = url_.replace(/[?&]$/, "");
     }
 
@@ -2672,8 +2680,8 @@ export class BackendService {
    */
   GetBlog(from?: String): Observable<LineLiablityMulti[]> {
     let url_: string = "";
-    if (_window().getBlogDetail) {
-      url_ = _window().getBlogDetail;
+    if (this.BrowserService.getWindow().getBlogDetail) {
+      url_ = this.BrowserService.getWindow().getBlogDetail;
       url_ = url_.replace(/[?&]$/, "");
     }
     return this.http.get<any>(url_);
@@ -2683,11 +2691,6 @@ export class BackendService {
     let url_ = this.baseUrl + "/exchangeapi/casino/games/favourite";
     return this.http.get<any>(url_);
   }
-}
-
-export function _window(): any {
-  // return the global native browser window object
-  return window;
 }
 
 export class TodayRacesASSS implements ITodayRacesASSS {

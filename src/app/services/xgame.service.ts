@@ -3,12 +3,12 @@ import { APP_BASE_HREF } from '@angular/common';
 import { ThisReceiver } from '@angular/compiler';
 import { Inject, Injectable } from '@angular/core';
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, CancelToken } from 'axios';
+import { environment } from 'src/environments/environment';
 import { AxiosinstanceService } from './axiosinstance.service';
-import { GoogleAnalyticsService } from "./google-analytics.service";
-import { StorageService } from "./storage.service";
-import { _window } from "./backend.service";
-import { ClientWallet, isAxiosError, MatchedUnmatched, ProblemDetails, throwException } from "../models/models";
-import { environment } from '../../environments/environment';
+import {GoogleAnalyticsService} from "./google-analytics.service";
+import {StorageService} from "./storage.service";
+import {_window} from "./backend.service";
+import {ClientWallet, isAxiosError, MatchedUnmatched, ProblemDetails, throwException} from "../models/models";
 // import { MatchedUnmatched } from './betting.service';
 // import { GoogleAnalyticsService } from './googleAnalytics.service';
 // import { isAxiosError, ProblemDetails, throwException, _window } from './reports.service';
@@ -25,9 +25,9 @@ export class XgameService {
   constructor(
     // @Inject(APP_BASE_HREF) private baseHref: string,
     public googleAnalyticsService: GoogleAnalyticsService,
-    private Instance: AxiosinstanceService,
-    private storageService: StorageService
-  ) {
+     private Instance: AxiosinstanceService,
+     private storageService:StorageService
+     ) {
     // if (baseHref.length < 5) {
     //   this.baseUrl = environment.apiurl;
     // } else {
@@ -38,7 +38,7 @@ export class XgameService {
 
   GetxGameDetails(id: number, cancelToken?: CancelToken | undefined): Promise<XGameDetails> {
     let url_
-    if (_window().getxgdetails) {
+    if(_window().getxgdetails){
       url_ = this.baseUrl + _window().getxgdetails
       if (id === undefined || id === null)
         throw new Error("The parameter 'id' must be defined.");
@@ -79,7 +79,7 @@ export class XgameService {
     }
     if (status === 200) {
       const _responseText = response.data;
-      if (_responseText.message == 'UNAUTHRORIZED' && _responseText.status == false && _responseText.code !== 200) {
+      if(_responseText.message=='UNAUTHRORIZED' &&   _responseText.status==false && _responseText.code!==200){
         // this.googleAnalyticsService.recordExceptions(_responseText.message);
         this.storageService.secureStorage.removeItem('token');
         return throwException("Error", _responseText.code, _responseText, _headers, _responseText.message);
@@ -103,7 +103,7 @@ export class XgameService {
 */
   MatchUnmatchXG(body: XgameInputModel | undefined, cancelToken?: CancelToken | undefined): Promise<MatchedUnmatched> {
     let url_
-    if (_window().matchunmatchxg) {
+    if(_window().matchunmatchxg){
       url_ = this.baseUrl + _window().matchunmatchxg
       url_ = url_.replace(/[?&]$/, "");
     }
@@ -145,7 +145,7 @@ export class XgameService {
     }
     if (status === 200) {
       const _responseText = response.data;
-      if (_responseText.message == 'UNAUTHRORIZED' && _responseText.status == false && _responseText.code !== 200) {
+      if(_responseText.message=='UNAUTHRORIZED' &&   _responseText.status==false && _responseText.code!==200){
         // this.googleAnalyticsService.recordExceptions(_responseText.message);
         this.storageService.secureStorage.removeItem('token');
         return throwException("Error", _responseText.code, _responseText, _headers, _responseText.message);
@@ -167,7 +167,7 @@ export class XgameService {
    */
   book(body: any | undefined, cancelToken?: CancelToken | undefined): Promise<any> {
     let url_
-    if (_window().singlebook) {
+    if(_window().singlebook){
       url_ = this.baseUrl + _window().singlebook
       url_ = url_.replace(/[?&]$/, "");
     }
@@ -210,7 +210,7 @@ export class XgameService {
     }
     if (status === 200) {
       const _responseText = response.data;
-      if (_responseText.message == 'UNAUTHRORIZED' && _responseText.status == false && _responseText.code !== 200) {
+      if(_responseText.message=='UNAUTHRORIZED' &&   _responseText.status==false && _responseText.code!==200){
         // this.googleAnalyticsService.recordExceptions(_responseText.message);
         this.storageService.secureStorage.removeItem('token');
         return throwException("Error", _responseText.code, _responseText, _headers, _responseText.message);
@@ -235,7 +235,7 @@ export class XgameService {
      */
   gamedetail(id: number, cancelToken?: CancelToken | undefined): Promise<XGameDetail[]> {
     let url_
-    if (_window().gamedetail) {
+    if(_window().gamedetail){
       url_ = this.baseUrl + _window().gamedetail
       if (id === undefined || id === null)
         throw new Error("The parameter 'id' must be defined.");
@@ -276,7 +276,7 @@ export class XgameService {
     }
     if (status === 200) {
       const _responseText = response.data;
-      if (_responseText.message == 'UNAUTHRORIZED' && _responseText.status == false && _responseText.code !== 200) {
+      if(_responseText.message=='UNAUTHRORIZED' &&   _responseText.status==false && _responseText.code!==200){
         // this.googleAnalyticsService.recordExceptions(_responseText.message);
         this.storageService.secureStorage.removeItem('token');
         return throwException("Error", _responseText.code, _responseText, _headers, _responseText.message);
@@ -308,7 +308,7 @@ export class XgameService {
    */
   result(body: Results | undefined, cancelToken?: CancelToken | undefined): Promise<any> {
     let url_
-    if (_window().result) {
+    if(_window().result){
       url_ = this.baseUrl + _window().result
       url_ = url_.replace(/[?&]$/, "");
     }
@@ -350,7 +350,7 @@ export class XgameService {
     }
     if (status === 200) {
       const _responseText = response.data;
-      if (_responseText.message == 'UNAUTHRORIZED' && _responseText.status == false && _responseText.code !== 200) {
+      if(_responseText.message=='UNAUTHRORIZED' &&   _responseText.status==false && _responseText.code!==200){
         // this.googleAnalyticsService.recordExceptions(_responseText.message);
         this.storageService.secureStorage.removeItem('token');
         return throwException("Error", _responseText.code, _responseText, _headers, _responseText.message);
@@ -440,7 +440,7 @@ export class XgameService {
  */
   games(cancelToken?: CancelToken | undefined): Promise<XgameNow[]> {
     let url_
-    if (_window().games) {
+    if(_window().games){
       url_ = this.baseUrl + _window().games
       url_ = url_.replace(/[?&]$/, "");
     }
@@ -478,7 +478,7 @@ export class XgameService {
     }
     if (status === 200) {
       const _responseText = response.data;
-      if (_responseText.message == 'UNAUTHRORIZED' && _responseText.status == false && _responseText.code !== 200) {
+      if(_responseText.message=='UNAUTHRORIZED' &&   _responseText.status==false && _responseText.code!==200){
         // this.googleAnalyticsService.recordExceptions(_responseText.message);
         this.storageService.secureStorage.removeItem('token');
         return throwException("Error", _responseText.code, _responseText, _headers, _responseText.message);
@@ -514,7 +514,7 @@ export class XgameService {
    */
   singlebook(body: XGameSingleBook | undefined, cancelToken?: CancelToken | undefined): Promise<any> {
     let url_
-    if (_window().singlebook) {
+    if(_window().singlebook){
       url_ = this.baseUrl + _window().singlebook
       url_ = url_.replace(/[?&]$/, "");
     }
@@ -556,7 +556,7 @@ export class XgameService {
     }
     if (status === 200) {
       const _responseText = response.data;
-      if (_responseText.message == 'UNAUTHRORIZED' && _responseText.status == false && _responseText.code !== 200) {
+      if(_responseText.message=='UNAUTHRORIZED' &&   _responseText.status==false && _responseText.code!==200){
         // this.googleAnalyticsService.recordExceptions(_responseText.message);
         this.storageService.secureStorage.removeItem('token');
         return throwException("Error", _responseText.code, _responseText, _headers, _responseText.message);
@@ -581,7 +581,7 @@ export class XgameService {
   */
   CancelOrdersXgame(body: XGameOrderCancelModel | undefined, cancelToken?: CancelToken | undefined): Promise<BettingResponse> {
     let url_
-    if (_window().cancelorders) {
+    if(_window().cancelorders){
       url_ = this.baseUrl + _window().cancelorders
       url_ = url_.replace(/[?&]$/, "");
     }
@@ -622,7 +622,7 @@ export class XgameService {
     }
     if (status === 200) {
       const _responseText = response.data;
-      if (_responseText.message == 'UNAUTHRORIZED' && _responseText.status == false && _responseText.code !== 200) {
+      if(_responseText.message=='UNAUTHRORIZED' &&   _responseText.status==false && _responseText.code!==200){
         // this.googleAnalyticsService.recordExceptions(_responseText.message);
         this.storageService.secureStorage.removeItem('token');
         return throwException("Error", _responseText.code, _responseText, _headers, _responseText.message);
@@ -646,7 +646,7 @@ export class XgameService {
     */
   ordersplacedPost(body: any | undefined, cancelToken?: CancelToken | undefined): Promise<any> {
     let url_
-    if (_window().ordersplacedxg) {
+    if(_window().ordersplacedxg){
       url_ = this.baseUrl + _window().ordersplacedxg
       url_ = url_.replace(/[?&]$/, "");
     }
@@ -686,7 +686,7 @@ export class XgameService {
     }
     if (status === 200) {
       const _responseText = response.data;
-      if (_responseText.message == 'UNAUTHRORIZED' && _responseText.status == false && _responseText.code !== 200) {
+      if(_responseText.message=='UNAUTHRORIZED' &&   _responseText.status==false && _responseText.code!==200){
         // this.googleAnalyticsService.recordExceptions(_responseText.message);
         this.storageService.secureStorage.removeItem('token');
         return throwException("Error", _responseText.code, _responseText, _headers, _responseText.message);
@@ -711,7 +711,7 @@ export class XgameService {
    */
   CurrentbetsXGame(body: XGameCurrentBetsInput | undefined, cancelToken?: CancelToken | undefined): Promise<CurrentBetsGame[]> {
     let url_
-    if (_window().currentbetsxg) {
+    if(_window().currentbetsxg){
       url_ = this.baseUrl + _window().currentbetsxg
       url_ = url_.replace(/[?&]$/, "");
     }
@@ -752,7 +752,7 @@ export class XgameService {
     }
     if (status === 200) {
       const _responseText = response.data;
-      if (_responseText.message == 'UNAUTHRORIZED' && _responseText.status == false && _responseText.code !== 200) {
+      if(_responseText.message=='UNAUTHRORIZED' &&   _responseText.status==false && _responseText.code!==200){
         // this.googleAnalyticsService.recordExceptions(_responseText.message);
         this.storageService.secureStorage.removeItem('token');
         return throwException("Error", _responseText.code, _responseText, _headers, _responseText.message);
@@ -779,7 +779,7 @@ export class XgameService {
 
   ClientPositionXgame(body: ClientPosXgameInput | undefined, cancelToken?: CancelToken | undefined): Promise<UserPosition[]> {
     let url_
-    if (_window().clientpositionxg) {
+    if(_window().clientpositionxg){
       url_ = this.baseUrl + _window().clientpositionxg
       url_ = url_.replace(/[?&]$/, "");
     }
@@ -821,7 +821,7 @@ export class XgameService {
     }
     if (status === 200) {
       const _responseText = response.data;
-      if (_responseText.message == 'UNAUTHRORIZED' && _responseText.status == false && _responseText.code !== 200) {
+      if(_responseText.message=='UNAUTHRORIZED' &&   _responseText.status==false && _responseText.code!==200){
         // this.googleAnalyticsService.recordExceptions(_responseText.message);
         this.storageService.secureStorage.removeItem('token');
         return throwException("Error", _responseText.code, _responseText, _headers, _responseText.message);
@@ -849,7 +849,7 @@ export class XgameService {
     */
   walletXgame(body: string | undefined, cancelToken?: CancelToken | undefined): Promise<ClientWallet> {
     let url_
-    if (_window().walletxg) {
+    if(_window().walletxg){
       url_ = this.baseUrl + _window().walletxg
       url_ = url_.replace(/[?&]$/, "");
     }
@@ -890,7 +890,7 @@ export class XgameService {
     }
     if (status === 200) {
       const _responseText = response.data;
-      if (_responseText.message == 'UNAUTHRORIZED' && _responseText.status == false && _responseText.code !== 200) {
+      if(_responseText.message=='UNAUTHRORIZED' &&   _responseText.status==false && _responseText.code!==200){
         // this.googleAnalyticsService.recordExceptions(_responseText.message);
         this.storageService.secureStorage.removeItem('token');
         return throwException("Error", _responseText.code, _responseText, _headers, _responseText.message);
@@ -1485,7 +1485,7 @@ export class XgameNow implements IXgameNow {
 
   init(_data?: any) {
     if (_data) {
-      this.gameName = _data["gameName"].replace(' ', '').toLowerCase();
+      this.gameName = _data["gameName"].replace(' ','').toLowerCase();
       this.channelId = _data["channelId"];
       this.isStandard = _data["isStandard"];
       this.routerLink = this.routerLink = `games/${_data["gameName"].replace(/\s/g, "").toLocaleLowerCase()}/${_data.channelId}`;

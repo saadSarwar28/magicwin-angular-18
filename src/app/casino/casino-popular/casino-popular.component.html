@@ -1,6 +1,0 @@
-<ul class="popular-tab" *ngIf="casinosArr && casinosArr.length>0">
-  <li *ngFor="let item of casinosArr" routerLinkActive="active" [routerLink]="item.link">
-    <img height="22" [src]="cdnSportsLanding + 'banners/' + item.id + '.png'" />
-    <a class="type-heading"> {{item.text|translate}}</a>
-  </li>
-</ul>

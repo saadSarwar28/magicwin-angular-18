@@ -1,8 +1,9 @@
+import { PlatformService } from './platform.service';
 import {DOCUMENT, ɵDomAdapter as DomAdapter, ɵgetDOM as getDOM} from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
-import jwtDecode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { StorageService } from './storage.service';
-import { _window } from './backend.service';
+import { BrowserService } from './browser.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,13 +11,14 @@ import { _window } from './backend.service';
 export class AuthService {
   private _dom: DomAdapter;
   readonly:HTMLMetaElement | null | undefined;
-  constructor(@Inject(DOCUMENT) private _doc: any,private storageService: StorageService) {
+  constructor(@Inject(DOCUMENT) private _doc: any,private storageService: StorageService,
+  private browserService: BrowserService) {
     this._dom = getDOM();
     this.readonly= this.getTag("name");
   }
   // ...
   public isAuthenticated(): boolean {
-    const token = this.storageService.secureStorage.getItem('token');
+    const token = this.storageService.getItem('token');
     // Check whether the token is expired and return
     // true or false
     if(this.readonly && this.readonly.content=='readonly')
@@ -24,7 +26,7 @@ export class AuthService {
     if(token){
       let decode:any= jwtDecode(token);
       if(Math.floor((new Date).getTime() / 1000) >= decode.exp){
-        this.storageService.secureStorage.clear();
+        this.storageService.clear();
         return false;
       }
 
@@ -39,12 +41,12 @@ export class AuthService {
   }
   isLoggedIn(){
 
-    if (_window().isIframe) {
-    const token = this.storageService.secureStorage.getItem('token');
+    if (this.browserService.getWindow() && this.browserService.getWindow().isIframe) {
+    const token = this.storageService.getItem('token');
       if (token) {
         let decode: any = jwtDecode(token);
         if (Math.floor(new Date().getTime() / 1000) >= decode.exp) {
-          this.storageService.secureStorage.clear();
+          this.storageService.clear();
           return false;
         }
 

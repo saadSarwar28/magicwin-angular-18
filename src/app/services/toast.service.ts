@@ -9,7 +9,7 @@ export class ToastService {
 
   constructor(private storageService: StorageService) { }
   // show(textOrTpl: string | TemplateRef<any>, options: any = {}) {
-  //   if (this.storageService.secureStorage.getItem('toasterNotification') && options.sound == true) {
+  //   if (this.storageService.getItem('toasterNotification') && options.sound == true) {
   //     let audio: HTMLAudioElement = new Audio('../../../assets/sound/alert.mp3');
   //     audio.play();
   //   }
@@ -17,14 +17,14 @@ export class ToastService {
   // }
 
   show(textOrTpl: string | TemplateRef<any>, options: any = {}) {
-    if (this.storageService.secureStorage.getItem('toasterNotification') && options.sound == true) {
+    if (this.storageService.getItem('toasterNotification') && options.sound == true) {
       let audio: HTMLAudioElement = new Audio('../../../assets/sound/alert.mp3');
       audio.play();
     }
     this.toasts.push({ textOrTpl, ...options });
   }
 
-  remove(toast) {
+  remove(toast : any) {
     this.toasts = this.toasts.filter(t => t !== toast);
   }
 

@@ -1,22 +1,25 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { StorageService } from './storage.service';
-import { _window, BackendService, CasinoRequest } from './backend.service';
+import { BackendService, CasinoRequest } from './backend.service';
 import { ClientParameters, ClientStake } from '../models/models';
 import { ToastService } from './toast.service';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { CheckAuthService } from './check-auth.service';
 import { GenericService } from '../services/generic.service';
 import { Router } from '@angular/router';
-import { ModalService } from '../shared/services/modal.service';
+import { ModalService } from './model.service';
+
 import {
   FancyModel,
   LocalMarketBet,
   SportsBettingModel, SportsBookModelSingle,
 } from '../models/models';
 import { MatDialog } from '@angular/material/dialog';
-import { MymarketsComponent } from '../sports/mymarkets/mymarkets.component';
+// import { MymarketsComponent } from '../sports/mymarkets/mymarkets.component';
 import { WalletTimerService } from './timer.service';
+import { BrowserService } from './browser.service';
+import { PlatformService } from './platform.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -38,7 +41,9 @@ export class UtillsService {
   ipaddress: any = new BehaviorSubject(null);
   deviceInfo: any;
   providerModalArr: any;
-  constructor(private deviceService: DeviceDetectorService, private storageService: StorageService,
+  constructor(
+    private deviceService: DeviceDetectorService,
+    private storageService: StorageService,
     private sportsService: BackendService,
     private toasterService: ToastService,
     private genericService: GenericService,
@@ -47,16 +52,19 @@ export class UtillsService {
     private bettingservice: BackendService,
     private dialogRef: MatDialog,
     private checkauthservice: CheckAuthService,
-
-
+    private browserService: BrowserService,
+    private platformService: PlatformService,
 
   ) {
+    // console.log(' utills service constructor called ..........')
     this.deviceInfo = this.deviceService.getDeviceInfo();
-    if (_window().providerModalArr) {
-      this.providerModalArr =
-        typeof _window().providerModalArr == 'string'
-          ? JSON.parse(_window().providerModalArr)
-          : _window().providerModalArr;
+    if (this.platformService.isBrowser()) {
+      if (this.browserService.getWindow().providerModalArr) {
+        this.providerModalArr =
+          typeof this.browserService.getWindow().providerModalArr == 'string'
+            ? JSON.parse(this.browserService.getWindow().providerModalArr)
+            : this.browserService.getWindow().providerModalArr;
+      }
     }
   }
 
@@ -67,9 +75,9 @@ export class UtillsService {
 
   placeBet(r: any, looksabha?: boolean) {
     let keepAlive =
-      this.storageService.secureStorage.getItem('keepAlive') == null
+      this.storageService.getItem('keepAlive') == null
         ? false
-        : this.storageService.secureStorage.getItem('keepAlive');
+        : this.storageService.getItem('keepAlive');
     let modellocal;
     if (r.bettingOn === 'Otherraces') {
       modellocal = {
@@ -127,7 +135,7 @@ export class UtillsService {
         r.bType
       );
       return this.bettingservice
-        .LotteryOrdersplaced(modellocal, 'PartialBetslipComponent')
+        .LotteryOrdersplaced(modellocal)
 
     }
     else if (r.bettingOn === 'fn') {
@@ -151,7 +159,7 @@ export class UtillsService {
         r.size,
         'BACK'
       );
-      return this.bettingservice.SportsBookOrdersplacedSingle(modellocal, undefined)
+      return this.bettingservice.SportsBookOrdersplacedSingle(modellocal)
     } else {
       modellocal = new LocalMarketBet(
         Number(r.eventId),
@@ -234,7 +242,7 @@ export class UtillsService {
 
 
   getBanners() {
-    this.sportsService.GetBanners('darker_theme').then(d => {
+    this.sportsService.GetBanners('darker_theme').subscribe(d => {
       if (d) {
         if (Array.isArray(d)) {
           d.forEach((banner: any) => {
@@ -251,11 +259,12 @@ export class UtillsService {
         this.bannerData.next(Array.from(d));
         this.bannerArray = Array.from(d)
       }
-    }).catch(er =>
-      console.error(er)
-    ).finally(() => {
-      this.skeltonLoaderForMobi.next(false)
     })
+    // .catch(er =>
+    //   console.error(er)
+    // ).finally(() => {
+    //   this.skeltonLoaderForMobi.next(false)
+    // })
 
     // }
 
@@ -265,15 +274,16 @@ export class UtillsService {
   getDepositDetails() {
     this.sportsService
       .getDepositDetails('upi')
-      .then((data) => {
+      .subscribe((data) => {
         this.bankDetails.next(Array.from(data))
-      }).catch((err) => {
-        this.errorMessage = true
       })
+      // .catch((err) => {
+      //   this.errorMessage = true
+      // })
   }
 
   getConfig() {
-    this.sportsService.getGetConfig().then(data => {
+    this.sportsService.getGetConfig().subscribe(data => {
       if (data) {
         let data2 = [
           {
@@ -287,12 +297,12 @@ export class UtillsService {
 
           }
         ]
-        let pin: any = data.find((item) => item.type === 'WPIN');
+        let pin: any = data.find((item: any) => item.type === 'WPIN');
         if (pin && pin.data && pin.data.length > 0) {
           this.checkPin = pin.data[0].id;
           this.clientPhone = pin.data[0].link;
         }
-        let PGData: any = data.find((item) => item.type === 'PG');
+        let PGData: any = data.find((item: any) => item.type === 'PG');
         let id = PGData.data[0].id;
         let link = PGData.data[0].link;
         this.depositLink = link;
@@ -302,7 +312,8 @@ export class UtillsService {
         this.configData.next(Array.from(data));
         this.configArray = Array.from(data)
       }
-    }).catch(er => console.error(er));
+    })
+    // .catch(er => console.error(er));
 
   }
 
@@ -319,9 +330,10 @@ export class UtillsService {
       .catch(error => console.error('Error fetching IP address:', error));
 
   }
+
   getCurrentCountry() {
     const cookies = document.cookie;
-    const cookieObj = cookies.split(';').reduce((acc, cookie) => {
+    const cookieObj = cookies.split(';').reduce((acc : any, cookie) => {
       const [key, value] = cookie.trim().split('=');
       acc[key] = decodeURIComponent(value);
       return acc;
@@ -332,19 +344,20 @@ export class UtillsService {
 
 
   getStackButtons() {
-    this.sportsService.stakesGet("StakeButtonsComponent").then((response: ClientStake) => {
+    this.sportsService.stakesGet("StakeButtonsComponent").subscribe((response: ClientStake) => {
       if (response) {
         this.stakesValues.next(response);
       }
-    }).catch(err => {
-      if (err.status == 401) {
-        this.storageService.secureStorage.removeItem('token');
-        window.location.href = window.location.origin
-      } else {
-        console.log(err);
-        this.toasterService.show(err, { classname: 'bg-danger text-light' });
-      }
     })
+    // .catch(err => {
+    //   if (err.status == 401) {
+    //     this.storageService.removeItem('token');
+    //     window.location.href = window.location.origin
+    //   } else {
+    //     console.log(err);
+    //     this.toasterService.show(err, { classname: 'bg-danger text-light' });
+    //   }
+    // })
   }
 
 
@@ -417,7 +430,7 @@ export class UtillsService {
     }
   }
 
-  getVirtualScoreFormatedWay(m) {
+  getVirtualScoreFormatedWay(m : any) {
     // Step 1: Parse the HTML string
     const parser = new DOMParser();
     const doc = parser.parseFromString(m, 'text/html');
@@ -431,12 +444,12 @@ export class UtillsService {
 
   openMyMartkesModal() {
     if (this.checkauthservice.IsLogin()) {
-      this.dialogRef.open(MymarketsComponent, {
-        width: '700px',
-        maxHeight: '70vh',
-        maxWidth: '95vw',
-        panelClass: 'my-markets-dialog',
-      });
+      // this.dialogRef.open(MymarketsComponent, {
+      //   width: '700px',
+      //   maxHeight: '70vh',
+      //   maxWidth: '95vw',
+      //   panelClass: 'my-markets-dialog',
+      // });
     } else {
       this.openLoginModal()
     }
@@ -545,10 +558,10 @@ export class UtillsService {
 
   isLiveCasino: boolean = false
   isCheckUrl: boolean = false
-  tempProvider;
-  tempGameId
-  tempTableId
-  openProviderModal(isLiveCasino?) {
+  tempProvider : any;
+  tempGameId : any
+  tempTableId : any
+  openProviderModal(isLiveCasino? : any) {
     // this.isLiveCasino = isLiveCasino;
     // var elems = document.getElementById('provider-modal');
 
@@ -605,9 +618,8 @@ export class UtillsService {
           undefined,
           tableId
         ),
-        undefined
       )
-      .then((x) => {
+      .subscribe((x: any) => {
         if (x.url) {
           this.sportsService.gameUrl = x.url;
           this.navigateToGame();
@@ -619,19 +631,19 @@ export class UtillsService {
           this.openMsgModal(err);
         }
       })
-      .catch((err) => {
-        this.openMsgModal('');
-        console.log(err, 'in error')
-        if (err.status == 401) {
-          this.openLoginModal();
-        } else {
-          console.error(err);
-        }
-      })
-      .finally(() => { });
+      // .catch((err: any) => {
+      //   this.openMsgModal('');
+      //   console.log(err, 'in error')
+      //   if (err.status == 401) {
+      //     this.openLoginModal();
+      //   } else {
+      //     console.error(err);
+      //   }
+      // })
+      // .finally(() => { });
 
   }
-  openMsgModal(error) {
+  openMsgModal(error: any) {
     this.toasterService.show(error, {
       classname: 'bg-danger text-light',
       delay: 1500,
@@ -675,11 +687,11 @@ export class UtillsService {
 
 
   setRouteBeforeLogin(
-    provider,
-    gameId,
-    tableId,
-    isCheckUrl,
-    routerLink,
+    provider : any,
+    gameId : any,
+    tableId : any,
+    isCheckUrl : any,
+    routerLink : any,
     menuItem = false,
     rummy = false
   ) {
