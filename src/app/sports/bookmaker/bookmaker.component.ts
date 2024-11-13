@@ -1,4 +1,4 @@
-import { BackendService } from 'src/app/services/backend.service';
+import { BackendService } from '../../services/backend.service';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -10,14 +10,14 @@ import {
 import { FancytimerService, TimerService, } from '../../services/timer.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StorageService } from '../../services/storage.service';
-import { ToastService } from 'src/app/services/toast.service';
+import { ToastService } from '../../services/toast.service';
 import { iFrameResizer } from '../../../assets/lmtScore/sports-radar';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
+import { CheckAuthService } from '../../services/check-auth.service';
 import { _window } from '../../services/backend.service';
-import { UtillsService } from 'src/app/services/utills.service';
+import { UtillsService } from '../../services/utills.service';
 import { DeviceDetectorService } from 'ngx-device-detector';
-import { GetStatusService } from 'src/app/services/get-status.service';
-import { CurrentBets, CurrentBetsInput } from 'src/app/models/models';
+import { GetStatusService } from '../../services/get-status.service';
+import { CurrentBets, CurrentBetsInput } from '../../models/models';
 declare function iFrameResize(): any;
 @Component({
   selector: 'app-bookmaker',
@@ -126,9 +126,8 @@ export class BookmakerComponent implements OnInit, OnDestroy {
         .FancyMarketsAny(
           this.loksabhafancyVersion,
           this.eventId,
-          'BookmakerComponent'
         )
-        .then((resp) => {
+        .subscribe((resp) => {
           if (resp) {
             this.fancyResponse = resp;
             if (this.isFirstLoad) {
@@ -136,9 +135,7 @@ export class BookmakerComponent implements OnInit, OnDestroy {
             }
           }
         })
-        .catch((err) => {
-          this.catchError(err)
-        });
+
     }
     this.fancyTimerService.SetTimer(
       setInterval(() => {
@@ -147,9 +144,9 @@ export class BookmakerComponent implements OnInit, OnDestroy {
     );
   }
 
-  catchError(err) {
+  catchError(err: any) {
     if (err && err.status && err.status == 401) {
-      this.storageService.secureStorage.removeItem('token');
+      this.storageService.removeItem('token');
       this.fancyTimerService.clearTimer();
       this.timerService.clearTimer()
 
@@ -183,7 +180,7 @@ export class BookmakerComponent implements OnInit, OnDestroy {
   getusername() {
     let random = Math.floor(Math.random() * 10000000 + 1);
     this.username =
-      this.storageService.secureStorage.getItem('client') || random;
+      this.storageService.getItem('client') || random;
     return this.username;
   }
 
@@ -192,7 +189,7 @@ export class BookmakerComponent implements OnInit, OnDestroy {
     if (this.srcData == undefined) {
       try {
         if (this.eventId && this.eventId !== undefined) {
-          this.sportService.TvOnBookmaker(this.eventId).then((resp: any) => {
+          this.sportService.TvOnBookmaker(this.eventId).subscribe((resp: any) => {
             if (resp) {
               this.matchId = resp.sportsRadarId;
               this.srcData = resp;
@@ -219,19 +216,13 @@ export class BookmakerComponent implements OnInit, OnDestroy {
   LoadCurrentBets() {
     if (this.checkauthservice.IsLogin()) {
       if (this.eventId) {
-        this.sportService.SportsCurrentbets(new CurrentBetsInput(this.marketId, this.eventId, false), "BookmakerComponent").then(resp => {
+        this.sportService.SportsCurrentbets(new CurrentBetsInput(this.marketId, this.eventId, false), "BookmakerComponent").subscribe((resp: any) => {
           if (resp && resp.length > 0) {
             this.currentBets = resp;
           } else {
             this.currentBets = [];
           }
-        }).catch(err => {
-          if (err.status == 401) {
-
-          } else {
-            console.error(err);
-          }
-        });
+        })
       }
     }
 
@@ -241,7 +232,7 @@ export class BookmakerComponent implements OnInit, OnDestroy {
       if (this.eventId) {
         this.sportService
           .GetVirtualTv(parseInt(this.eventId))
-          .then((resp) => {
+          .subscribe((resp) => {
             if (resp && resp.message) {
               this.srcData = resp;
               if (resp.message.includes('http')) {
@@ -249,20 +240,7 @@ export class BookmakerComponent implements OnInit, OnDestroy {
               }
             }
           })
-          .catch((err) => {
-            if (err.status == 401) {
-              // this.router.navigate(['signin']);
-              this.storageService.secureStorage.removeItem('token');
-              window.location.href = window.location.href;
 
-            } else {
-              console.log(err);
-              this.toasterService.show(err, {
-                classname: 'bg-danger text-light',
-                delay: 1500,
-              });
-            }
-          });
       }
     }
   }

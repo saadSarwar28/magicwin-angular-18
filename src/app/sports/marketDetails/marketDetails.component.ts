@@ -1,7 +1,7 @@
 import {
   MatchUnModel,
-} from 'src/app/models/models';
-import { BackendService } from 'src/app/services/backend.service';
+} from '../../models/models';
+import { BackendService } from '../../services/backend.service';
 import {
   AfterViewInit,
   Component,
@@ -22,18 +22,18 @@ import {
   MatchedUnmatched,
 } from '../../models/models';
 import { FancytimerService, TimerService } from '../../services/timer.service';
-import { ToastService } from 'src/app/services/toast.service';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
+import { ToastService } from '../../services/toast.service';
+import { CheckAuthService } from '../../services/check-auth.service';
 import { _window } from '../../services/backend.service';
 import {
   SetAmount,
   shortenLargeNumber,
-} from 'src/app/services/shortenLargeNumber';
-import { UtillsService } from 'src/app/services/utills.service';
+} from '../../services/shortenLargeNumber';
+import { UtillsService } from '../../services/utills.service';
 import { DeviceDetectorService } from 'ngx-device-detector';
-import { GetStatusService } from 'src/app/services/get-status.service';
-import { GenericService } from 'src/app/services/generic.service';
-import { WalletService } from 'src/app/services/wallet.service';
+import { GetStatusService } from '../../services/get-status.service';
+import { GenericService } from '../../services/generic.service';
+import { WalletService } from '../../services/wallet.service';
 declare function iFrameResize(): any;
 @Component({
   selector: 'app-marketDetails',
@@ -156,14 +156,14 @@ export class MarketDetailsComponent
     }
 
     if (_window().hideOCBonComp) {
-      if (!this.storageService.secureStorage.getItem('OCB')) {
+      if (!this.storageService.getItem('OCB')) {
         this.hideOCBonComp = false;
       } else {
         this.hideOCBonComp = _window().hideOCBonComp;
       }
     }
 
-    this.route.params.subscribe((p) => {
+    this.route.params.subscribe((p: any) => {
       this.marketId = p.name;
       this.marketId =
         this.marketId.split('-')[this.marketId.split('-').length - 1];
@@ -258,7 +258,7 @@ export class MarketDetailsComponent
     } else {
       this.checkUserAgent();
     }
-    this.utillsService.ipaddress.subscribe((data) => {
+    this.utillsService.ipaddress.subscribe((data: any) => {
       if (data) {
         this.getIPAddress = data;
       }
@@ -284,17 +284,14 @@ export class MarketDetailsComponent
       this.sportService
         .FancyMarketsAny(
           this.fancyVersion,
-          this.eventId,
-          'EventmarketsComponent'
+          this.eventId
         )
-        .then((resp) => {
+        .subscribe((resp) => {
           if (resp) {
             this.fancyResponse = resp
           }
         })
-        .catch((err) => {
-          this.catchError(err)
-        });
+
     }
     this.fancyTimerService.SetTimer(
       setInterval(() => {
@@ -308,7 +305,7 @@ export class MarketDetailsComponent
     // ;
     this.sportService
       .marketdetail(this.marketId, 'MarketDetailsComponent')
-      .then((resp) => {
+      .subscribe((resp) => {
         if (resp) {
           this.isLoading = false
           this.data = resp;
@@ -353,19 +350,15 @@ export class MarketDetailsComponent
           this.GetSportMarketLiability(this.marketId);
           this.GetMarketPosition(this.marketId);
           this.LoadCurrentBets();
-
+          setTimeout(() => {
+            if (this.matchId > 0) {
+              this.GetLMT(this.matchId);
+            }
+          }, 2500);
         }
+
       })
-      .then(() => {
-        setTimeout(() => {
-          if (this.matchId > 0) {
-            this.GetLMT(this.matchId);
-          }
-        }, 2500);
-      })
-      .catch((err) => {
-        this.catchError(err)
-      });
+
   }
 
   routeToSports(data: any) {
@@ -400,7 +393,7 @@ export class MarketDetailsComponent
   GetClientParameters() {
     if (navigator.onLine == true && document.hidden == false) {
       if (this.checkauthservice.IsLogin()) {
-        this.checkauthservice.clientParameters.subscribe(clientParams => {
+        this.checkauthservice.clientParameters.subscribe((clientParams: any) => {
           if (clientParams) {
             this.cBuyRate = clientParams?.cBuyRate;
             this.cTotalShare = clientParams.pShare + clientParams.cShare;
@@ -431,20 +424,23 @@ export class MarketDetailsComponent
         }
         this.sportService
           .SportsCurrentbets(body, 'MarketDetailsComponent')
-          .then((resp) => {
-            this.utillsService.currentBets.next({
-              bets: resp,
-              eventId: this.eventId,
-            });
-            if (resp && resp.length > 0) {
-              this.currentBets = resp;
-            } else {
-              this.currentBets = resp;
+          .subscribe(
+            {
+              next: (value) => (resp) => {
+                this.utillsService.currentBets.next({
+                  bets: resp,
+                  eventId: this.eventId,
+                });
+                if (resp && resp.length > 0) {
+                  this.currentBets = resp;
+                } else {
+                  this.currentBets = resp;
+                }
+              },
+              error: (error) => this.catchError(error),
             }
-          })
-          .catch((err) => {
-            this.catchError(err)
-          });
+          )
+
       }
     }
   }
@@ -455,7 +451,7 @@ export class MarketDetailsComponent
     if (this.marketId == undefined || this.marketId.length <= 0) return;
     this.sportService
       .directSinglemarketbook(this.marketId, 'MarketDetailsComponent')
-      .then((resp) => {
+      .subscribe((resp) => {
         if (resp) {
           if (this.data?.description?.bettingType === 'LINE') {
             let m = this.data.runners;
@@ -1026,9 +1022,7 @@ export class MarketDetailsComponent
           }
         }
       })
-      .catch((err) => {
-        this.catchError(err)
-      });
+
   }
 
 
@@ -1043,23 +1037,26 @@ export class MarketDetailsComponent
         }
         this.sportService
           .matchUnmatchAllSports(marketIdes, 'MarketDetailsComponent')
-          .then((resp) => {
-            this.matchedUnmatched = resp;
-            if (
-              this.clientMatchSize !== this.matchedUnmatched.matchedSize ||
-              this.clientUnmatchSize !== this.matchedUnmatched.unMatchedSize
-            ) {
-              this.LoadCurrentBets();
-              this.GetMarketPosition(this.marketId);
-              this.GetSportMarketLiability(this.marketId);
-              this.GetWalllet();
-              this.clientMatchSize = this.matchedUnmatched.matchedSize;
-              this.clientUnmatchSize = this.matchedUnmatched.unMatchedSize;
+          .subscribe(
+            {
+              next: (resp) => {
+                this.matchedUnmatched = resp;
+                if (
+                  this.clientMatchSize !== this.matchedUnmatched.matchedSize ||
+                  this.clientUnmatchSize !== this.matchedUnmatched.unMatchedSize
+                ) {
+                  this.LoadCurrentBets();
+                  this.GetMarketPosition(this.marketId);
+                  this.GetSportMarketLiability(this.marketId);
+                  this.GetWalllet();
+                  this.clientMatchSize = this.matchedUnmatched.matchedSize;
+                  this.clientUnmatchSize = this.matchedUnmatched.unMatchedSize;
+                }
+              },
+              error: (error) => this.catchError(error),
             }
-          })
-          .catch((err) => {
-            this.catchError(err)
-          });
+          )
+
       }
     }
   }
@@ -1069,7 +1066,7 @@ export class MarketDetailsComponent
   }
 
 
-  cancelBets(event) {
+  cancelBets(event: any) {
     this.GetSportMarketLiability(event.marketId);
   }
 
@@ -1084,7 +1081,7 @@ export class MarketDetailsComponent
   }
 
   get isOneClickOn() {
-    return this.storageService.secureStorage.getItem('OCB') && this.isOneClickBetGlobal
+    return this.storageService.getItem('OCB') && this.isOneClickBetGlobal
   }
   placebet(
     m: MarketCatalogueSS,
@@ -1133,9 +1130,9 @@ export class MarketDetailsComponent
 
   }
 
-  oneClickBetObj = {}
-  async placeOneClickBet(betslip) {
-    let betSize = this.storageService.secureStorage.getItem('OCBSelectedVal');
+  oneClickBetObj: any = {}
+  async placeOneClickBet(betslip: any) {
+    let betSize = this.storageService.getItem('OCBSelectedVal');
     betslip.size = betSize
     try {
       this.oneClickBetObj[betslip.oneClickType] = true
@@ -1148,9 +1145,9 @@ export class MarketDetailsComponent
     this.oneClickBetObj[betslip.oneClickType] = false
   }
 
-  catchError(err) {
+  catchError(err: any) {
     if (err && err.status && err.status == 401) {
-      this.storageService.secureStorage.removeItem('token');
+      this.storageService.removeItem('token');
       this.timerService.clearTimer();
       this.genericService.openLoginModal()
 
@@ -1159,7 +1156,7 @@ export class MarketDetailsComponent
     }
   }
 
-  betStatus(resp, marketId) {
+  betStatus(resp: any, marketId: any) {
     let betstatus = resp.status;
     const message = resp.message || resp.response.message;
     if (betstatus) {
@@ -1191,11 +1188,14 @@ export class MarketDetailsComponent
     if (this.checkauthservice.IsLogin()) {
       if (marketID !== '') {
         this.sportService
-          .clientpositionsports(marketID.replace('1.', '10.'), 'MarketDetailsComponent')
-          .then((resp: ClientPosition[]) => this.HandleRunnerPosition(resp))
-          .catch((err) => {
-            this.catchError(err)
-          });
+          .clientpositionsports(marketID.replace('1.', '10.'))
+          .subscribe(
+            {
+              next: (resp: ClientPosition[]) => this.HandleRunnerPosition(resp),
+              error: (error) => this.catchError(error),
+            }
+          )
+
       }
     }
   }
@@ -1230,22 +1230,25 @@ export class MarketDetailsComponent
       this.showStreamAgent = true;
     }
   }
-  private GetSportMarketLiability(mkts) {
+  private GetSportMarketLiability(mkts: any) {
     if (this.checkauthservice.IsLogin()) {
       this.sportService
-        .SportsMarketliability(mkts, 'MarketDetailsComponent')
-        .then((resp) => {
-          if (resp && resp.length > 0) {
-            resp.forEach((x: any) => {
-              if (x.marketId == this.data.marketId) {
-                this.data.liability = x.libility;
+        .SportsMarketliability(mkts)
+        .subscribe(
+          {
+            next: (resp: any) => {
+              if (resp && resp.length > 0) {
+                resp.forEach((x: any) => {
+                  if (x.marketId == this.data.marketId) {
+                    this.data.liability = x.libility;
+                  }
+                });
               }
-            });
+            },
+            error: (error) => this.catchError(error),
           }
-        })
-        .catch((err) => {
-          this.catchError(err)
-        });
+        )
+
     }
 
   }

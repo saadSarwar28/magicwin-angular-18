@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { BackendService } from 'src/app/services/backend.service';
+import { BackendService } from '../../services/backend.service';
 import { NextRaceTimerService } from '../../services/timer.service';
 import { _window } from '../../services/backend.service';
-import * as M from "materialize-css";
-import { StorageService } from 'src/app/services/storage.service';
+import { StorageService } from '../../services/storage.service';
 @Component({
   selector: 'app-next-races',
   templateUrl: './next-races.component.html',
@@ -40,24 +39,11 @@ export class NextRacesComponent implements OnInit {
     this.nextRaceTimer.clearTimer()
   }
   LoadNextRaceData() {
-    this.sportsService.GetNextRace("NextRacesComponent").then((resp => {
-
+    this.sportsService.GetNextRace("NextRacesComponent").subscribe(((resp: any) => {
       if (resp && resp.length > 0) {
         this.nextRaces = resp;
       }
-    })).catch((err) => {
-
-      if (err.status == 401) {
-        this.nextRaceTimer.clearTimer();
-        // this.router.navigate(['signin']);
-        this.storageService.secureStorage.removeItem('token');
-        window.location.href = window.location.origin
-
-      } else {
-        console.log(err)
-        this.router.navigate([err.status]);
-      }
-    });
+    }))
   }
 
   // splitOnSpace(trackName: any) {

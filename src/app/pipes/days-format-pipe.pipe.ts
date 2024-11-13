@@ -3,6 +3,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'daysFormatPipe',
+  standalone: true,
 })
 export class DaysFormatPipePipe implements PipeTransform {
   transform(value: any) {

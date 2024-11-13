@@ -2,14 +2,13 @@ import {
   _window,
   BackendService,
   CasinoRequest,
-} from 'src/app/services/backend.service';
+} from '../../../services/backend.service';
 import { Component, OnInit } from '@angular/core';
-import { ModalService } from 'src/app/shared/services/modal.service';
-import * as M from 'materialize-css';
+import { ModalService } from '../../../shared/services/modal.service';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { Router } from '@angular/router';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
-import { ToastService } from 'src/app/services/toast.service';
+import { CheckAuthService } from '../../../services/check-auth.service';
+import { ToastService } from '../../../services/toast.service';
 import { GenericService } from "../../../services/generic.service";
 
 @Component({
@@ -59,8 +58,8 @@ export class FavCasinoComponent implements OnInit {
       .then((res) => {
         this.gameList = res;
 
-        this.gameList.forEach((group) => {
-          group.data.forEach((game) => {
+        this.gameList.forEach((group: any) => {
+          group.data.forEach((game: any) => {
             this.favouriteGames.add(game.GameCode);
           });
         });
@@ -73,7 +72,7 @@ export class FavCasinoComponent implements OnInit {
       });
   }
 
-  setRouteBeforeLogin(provider, gameId, tableId, isCheckUrl, routerLink) {
+  setRouteBeforeLogin(provider: any, gameId: any, tableId: any, isCheckUrl: any, routerLink: any) {
     let routeObj = {
       provider,
       gameId,
@@ -190,7 +189,7 @@ export class FavCasinoComponent implements OnInit {
       } else {
         // this.navigateToGame();
         let gameId = this.tempGameDetail.GameCode;
-        let tableId;
+        let tableId: any;
         if (this.tempGameDetail.GameCode.includes('?')) {
           gameId = this.tempGameDetail.GameCode.split('?')?.[0];
           tableId = this.getParameterByName(
@@ -204,14 +203,14 @@ export class FavCasinoComponent implements OnInit {
   }
 
   openProviderModal() {
-    var elems = document.getElementById('provider-modal');
-    if (elems) {
-      var model = M?.Modal?.init(elems);
-      model.open();
-    }
+    // var elems = document.getElementById('provider-modal');
+    // if (elems) {
+    //   var model = M?.Modal?.init(elems);
+    //   model.open();
+    // }
   }
 
-  getParameterByName(name, url = window.location.href) {
+  getParameterByName(name: any, url = window.location.href) {
     name = name.replace(/[\[\]]/g, '\\$&');
     var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
       results = regex.exec(url);
@@ -294,14 +293,14 @@ export class FavCasinoComponent implements OnInit {
     );
   }
 
-  openMsgModal(error) {
-    var elems = document.getElementById('msg-modal');
-    (document.getElementById('casinoErrorMessage') as any).innerHTML = error;
-    if (elems) {
-      var model = M?.Modal?.init(elems);
-      model.open();
-    }
-    document.body.style.overflow = 'unset';
+  openMsgModal(error: any) {
+    // var elems = document.getElementById('msg-modal');
+    // (document.getElementById('casinoErrorMessage') as any).innerHTML = error;
+    // if (elems) {
+    //   var model = M?.Modal?.init(elems);
+    //   model.open();
+    // }
+    // document.body.style.overflow = 'unset';
   }
 
   openLoginModal() {

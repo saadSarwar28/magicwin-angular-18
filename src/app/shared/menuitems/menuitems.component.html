@@ -1,0 +1,131 @@
+<div class="menu-items-compo">
+  <div class="header-top">
+    <div class="back-btn pointer" (click)="closeModal()">
+      <img [src]="menuItemBackImg" />
+    </div>
+    <img *ngIf="!isLogin" class="menuLogo" [src]="siteLogo" (click)="routerLink('/home',false)" />
+    <div class="account-deatils fs-13" *ngIf="isLogin">
+      <div class="d-flex justify-content-between align-items-center flex-column gap-1">
+        <span class="balance-text">Balance</span>
+        <span class="balance-value">₹{{paymentDetails?.balance | number : '1.0-0'}}</span>
+      </div>
+      <div class="d-flex justify-content-between align-items-center flex-column gap-1">
+        <span class="liability-text">Liability</span>
+        <span class="liability-value">₹{{paymentDetails?.liability | number : '1.0-0'}}</span>
+      </div>
+      <button class="btn deposit" (click)="routerLink(depositLink,true)" *ngIf="isb2c && isLogin">
+        <span class="deposit-text fs-13"> {{"deposit"|translate}}</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="modal-overlays bgimg">
+    <div class="conatiner-mod">
+      <div *ngIf="Menuhome" class="section_card border-0 ">
+        <div class="flex-container">
+          <div *ngFor="let data of Menuhome" (click)="routeToLink(data)" class="flex-item flex-item-1">
+            <img [src]="bannercdnLanding + 'banners/' + data.id + '.png'" />
+            <span>{{ data.text }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="showMenuBanner" class="image-banner" (click)="routerLink('/sports/competitionsmarkets/101480',false)">
+        <img src="{{cdnUrl}}kheloyar/IPLMenu.webp" alt="">
+      </div>
+      <div *ngIf="MenuCasino" class="section_card">
+        <span class="p_title ">Casinos</span>
+        <div class="flex-container">
+          <div *ngFor="let data of MenuCasino" (click)="routeToLink(data)" class="flex-item flex-item-1">
+            <img [src]="bannercdnLanding + 'banners/' + data.id + '.png'" />
+            <span>{{ data.text }}</span>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="MenuMultiplayer" class="section_card" style="margin-top: 10px;">
+        <span class="p_title ">Multiplayer</span>
+        <div class="flex-container">
+          <div *ngFor="let data of MenuMultiplayer" (click)="routeToLink(data)" class="flex-item flex-item-1">
+            <img [src]="bannercdnLanding + 'banners/' + data.id + '.png'" />
+            <span>{{ data.text }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="Menusports" class="section_card" style="margin-top: 10px;">
+        <span class="p_title ">Sports</span>
+        <div class="flex-container">
+          <div *ngFor="let data of Menusports" (click)="routeToLink(data)" class="flex-item flex-item-1">
+            <img [src]="bannercdnLanding + 'banners/' + data.id + '.png'" />
+            <span>{{ data.text }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="MenuEsports" class="section_card" style="margin-top: 10px;">
+        <span class="p_title ">ESports</span>
+        <div class="flex-container">
+          <div *ngFor="let data of MenuEsports" (click)="routeToLink(data)" class="flex-item flex-item-1">
+            <img [src]="bannercdnLanding + 'banners/' + data.id + '.png'" />
+            <span>{{ data.text }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="MenuPopularGames" class="section_card" style="margin-top: 10px;">
+        <span class="p_title ">Popular Games</span>
+        <div class="flex-container">
+          <div *ngFor="let data of MenuPopularGames" (click)="routeToLink(data)" class="flex-item flex-item-1">
+            <img [src]="bannercdnLanding + 'banners/' + data.id + '.png'" />
+            <span>{{ data.text }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="MenuProvider" class="section_card" style="margin-top: 10px;">
+        <span class="p_title ">Providers</span>
+        <div class="flex-container">
+          <div *ngFor="let data of MenuProvider" (click)="routeToLink(data)" class="flex-item flex-item-1">
+            <img [src]="bannercdnLanding + 'banners/' + data.id + '.png'" />
+            <span>{{ data.text }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section_card accessibility" style="margin-top: 10px;">
+        <span class="p_title ">Accessibility</span>
+        <div class="flex-container">
+          <div (click)="openMyMartkesModal()" class="flex-item flex-item-1">
+            <img src="https://iriscdn.b-cdn.net/kheloyar/menuItems/mymarkets.svg" />
+            <span>My Markets</span>
+          </div>
+          <div *ngIf="isb2c" (click)="routerLink('/reports/withdraw',true)" class="flex-item flex-item-1">
+            <img src="https://iriscdn.b-cdn.net/kheloyar/Icon 3D/withdraw.webp" />
+            <span>Withdraw</span>
+          </div>
+
+          <div (click)="forWhatsapp()" *ngIf="showWhatsapp" class="flex-item flex-item-1">
+            <img src="https://iriscdn.b-cdn.net/kheloyar/Icon 3D/support.webp" />
+            <span>Support</span>
+          </div>
+          <div (click)="openSetting()" class="flex-item flex-item-1">
+            <img src="https://iriscdn.b-cdn.net/kheloyar/menuItems/setting.svg" style="height: 27px  !important;" />
+            <span>Settings</span>
+          </div>
+        </div>
+        <div class="flex-container mt-2 " *ngIf="isShowDownlaodApp">
+          <a class="btn buttons download d-flex align-items-center justify-content-center" [href]="appLinkLive">
+            <i class="bi bi-download  fs-18"></i>
+            <span>Download App</span>
+          </a>
+        </div>
+        <div *ngIf="isLogin" class="flex-container mb-2">
+          <div class="btn buttons logout " (click)="logout()">
+            Logout
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

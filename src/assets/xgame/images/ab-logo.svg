@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="63" height="44" viewBox="0 0 63 44">
+  <defs>
+    <linearGradient id="a" x1="0%" x2="100.022%" y1="49.987%" y2="49.987%">
+      <stop offset="0%" stop-color="#253B7B"/>
+      <stop offset="26%" stop-color="#0067AB"/>
+      <stop offset="100%" stop-color="#00A6E2"/>
+    </linearGradient>
+    <linearGradient id="b" x1="99.925%" x2=".003%" y1="50.017%" y2="50.034%">
+      <stop offset="0%" stop-color="#253B7B"/>
+      <stop offset="26%" stop-color="#0067AB"/>
+      <stop offset="100%" stop-color="#00A6E2"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" fill-rule="evenodd">
+    <path fill="#A5CDEE"
+          d="M51.144 25.843c5.596.666 8.469-1.194 8.469-1.194s1.761 2.389 1.512 3.606c-1.044 4.393-4.537 4.575-4.537 4.575l-5.444-6.987z"/>
+    <path fill="#FFF"
+          d="M53.519 29.216s4.793-.212 6.638-3.078l.575 1.172c-1.233 3.546-5.112 4.28-5.112 4.28l-2.101-2.374z"/>
+    <path fill="url(#a)"
+          d="M34.932 5.731l9.874 12.74 1.225-6.184c8.892 1.837 14.056 15.968 14.056 15.968s9.073-13.768-12.68-22.917L48.527 0 34.931 5.731z"
+          transform="translate(1)"/>
+    <path stroke="#FFF" stroke-width=".756" d="M36.469 5.898c19.197 3.175 27.038 12.921 25.155 22.524"/>
+    <path fill="#A5CDEE"
+          d="M45.459 18.025c-5.596-.657-8.431 1.248-8.431 1.248s-1.762-2.397-1.474-3.607c1.043-4.393 4.536-4.536 4.536-4.536l5.369 6.895z"/>
+    <path fill="#FFF"
+          d="M42.979 14.812s-4.703.076-6.548 2.934l-.575-1.225c1.233-3.546 5.217-4.129 5.217-4.129l1.906 2.42z"/>
+    <path fill="url(#b)"
+          d="M59.732 38.183l-9.898-12.74-1.224 6.192c-8.892-1.845-14.056-15.969-14.056-15.969S25.465 29.435 47.24 38.561l-1.119 5.36 13.61-5.738z"
+          transform="translate(1)"/>
+    <path stroke="#FFF" stroke-width=".756" d="M60.172 38.017C40.975 34.857 33.134 25.102 35.024 15.5"/>
+    <text fill="#005BA1" font-family="Arial-BlackItalic, Arial Black" font-size="18.85" font-style="italic"
+          font-weight="700" transform="translate(1)">
+      <tspan x=".302" y="30.504">AB</tspan>
+    </text>
+  </g>
+</svg>

@@ -1,0 +1,191 @@
+.otherFoter {
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+}
+.site-ui-inn {
+  display: flex;
+  width: auto;
+  list-style: none;
+  margin: 0;
+  height: 100%;
+  justify-content: space-between;
+  align-items: center;
+  /* border-radius: 25px; */
+  padding: 4px 0px;
+}
+.active .name-style {
+  color: var(--main-clr);
+}
+
+.site_footer {
+  transition: bottom 0.3s;
+  background: var(--site-footer-bg);
+  position: fixed;
+  bottom: -7px;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+  padding-bottom: 7px;
+}
+.site_footer_inn {
+  z-index: 10000000000000000000;
+}
+.site_footer_inn img {
+  height: 20px;
+  max-width: 18px;
+}
+.nav-bottom-site li {
+  border-radius: 2px;
+  margin: 1px;
+  padding: 4px 0px 0px 0px;
+  width: 100%;
+}
+.dark-bottom.nav-bottom-site {
+  background: linear-gradient(-180deg, #000000 20%, #2c2c2c 91%);
+}
+.dark-bottom.nav-bottom-site li {
+  background: transparent;
+}
+
+.blink_me {
+  animation: blinker 2s cubic-bezier(0, 0, 0.75, -0.37) infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+.specialtext {
+  background: linear-gradient(#00fbf6, #c35ff2);
+  -webkit-text-fill-color: transparent;
+}
+
+.new_casino_icon {
+  height: 18px;
+  width: 18px;
+}
+
+.sport {
+  width: 18px !important;
+  height: 18px !important;
+  background-position: center !important;
+  background-size: contain !important;
+}
+.site_footer_inn li a {
+  text-decoration: none;
+  color: var(--site-footer-clr);
+  font-size: 10px;
+}
+.whatsApp-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  .whatsapp-methods {
+    .close-icon {
+      height: 34px;
+      width: 34px;
+      position: absolute;
+      bottom: 120px;
+      background: var(--site-footer-wp-close-icon-bg);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .bi-x-lg {
+        color: var(--site-footer-wp-close-icon-clr);
+      }
+    }
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    background: var(--cardBg) 70;
+    padding-bottom: 15px;
+    min-width: 378px;
+    position: absolute;
+    bottom: 40px;
+    width: 100vw;
+    .content {
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      position: absolute;
+      .whatsapp {
+        width: 116px;
+        height: 107px;
+        background: var(--site-footer-item-bg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 4px;
+        font-size: 14px;
+        border-radius: 5px;
+        text-align: center;
+        color: var(--site-footer-wp-clr);
+
+        .item {
+          i {
+            font-size: 20px;
+          }
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 37px;
+          height: 37px;
+          background: var(--site-footer-wp-bg);
+          border-radius: 50%;
+        }
+        .item.telegram {
+          background: var(--site-footer-tele-bg);
+          i {
+            font-size: 20px;
+            color: var(--site-footer-tele-clr);
+          }
+        }
+      }
+    }
+  }
+  .whatsApp {
+    width: 34px;
+    height: 34px;
+    background: var(--site-footer-wp-blink-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    i {
+      font-size: 24px;
+      color: var(--site-footer-wp-clr);
+    }
+  }
+  .circle {
+    border-radius: 50%;
+    animation: fadeCircle 3s infinite;
+  }
+  @keyframes fadeCircle {
+    0% {
+      /* opacity: 1; */
+      box-shadow: 0 0 0 0 var(--site-footer-wp-blink-bg);
+    }
+    100% {
+      /* opacity: 0; */
+      box-shadow: 0 0 37px 37px rgba(52, 152, 219, 0);
+    }
+  }
+}
+
+.liveCasinoss {
+  display: inline-table;
+  z-index: 100000;
+  background-size: 18px auto;
+  width: 18px !important;
+  height: 20px !important;
+  background-image: url("https://iriscdn.b-cdn.net/kheloyar/WhiteIcons/sports-icon.svg");
+}

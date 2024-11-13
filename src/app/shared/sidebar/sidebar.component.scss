@@ -1,0 +1,126 @@
+.sidenav {
+  padding: 10px 7px 2px 7px;
+  background: var(--sidenavBg);
+  .form-control {
+    background: var(--side-bar-search-bg);
+    color: var(--side-bar-search-clr);
+    &:focus {
+      box-shadow: none;
+      color: var(--side-bar-search-clr) !important;
+      background: var(--side-bar-search-bg);
+    }
+  }
+  .side-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+    img {
+      max-width: 15rem;
+      position: relative;
+      padding: 10px;
+    }
+  }
+  .social-links-wrap {
+    color: var(--sidebar-social-text-clr);
+    .sociallink{
+      cursor: pointer;
+      margin: 3px 0px;
+      img{
+        width: 60px;
+      }
+    }
+  }
+  .sidebar-card {
+    border-radius: 10px;
+    border-radius: 10px;
+    background: var(--sidebarCardBg);
+    padding: 10px;
+    margin-top: 20px;
+  }
+  .popular-icon {
+    height: 19px !important;
+    margin-right: 4px;
+    max-width: unset !important;
+  }
+  .sidenav {
+    padding-bottom: 150px;
+  }
+  li {
+    list-style: none;
+  }
+  .lvl-2 {
+    font-size: 13px;
+  }
+  .lvl-3 {
+    font-size: 13px;
+    margin-top: 6px;
+  }
+  .lvl-4 {
+    font-size: 13px;
+    margin: 4px 4px;
+  }
+  .lvl-5 {
+    font-size: 13px;
+  }
+  label,
+  li > a {
+    height: 30px;
+    line-height: 19px;
+    padding: 0 4px;
+    align-items: center;
+    color: var(--sidebarListClr);
+    display: flex;
+    gap: 5px;
+    text-wrap: wrap;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  .search-box {
+    position: relative;
+    height: 30px;
+    .list-cont {
+      width: 100%;
+      position: absolute;
+      top: 40px;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 4px;
+      border-radius: 4px;
+      background: var(--side-bar-search-result-bg);
+      left: -5px;
+      padding: 10px;
+      .list-sugg p {
+        border-bottom: 1px solid var(--searchItemBorder);
+        color: var(--side-bar-search-result-clr);
+        margin-bottom: 0px;
+        padding: 8px 0px;
+        font-size: 13px;
+        text-wrap: wrap;
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+  .side-logo {
+    display: none !important;
+  }
+  .extra-menus {
+    margin-bottom: 150px;
+  }
+  .lvl-2 {
+    font-size: 12px !important;
+  }
+}
+
+#TopCompetitions,
+#CountryWise {
+  background-color: var(--sidebar-competition-bg-clr);
+}

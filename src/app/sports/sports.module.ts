@@ -6,7 +6,6 @@ import { SportsRoutingModule } from './sports-routing.module';
 import { LivestreamComponent } from './livestream/livestream.component';
 import { EventmarketsComponent } from './eventmarkets/eventmarkets.component';
 import { NotfoundComponent } from './notfound/notfound.component';
-import { SharedModule } from "../shared/shared.module";
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -18,7 +17,6 @@ import { RacemarketComponent } from './racemarket/racemarket.component';
 import { BasketballscorecardComponent } from './basketballscorecard/basketballscorecard.component';
 import { SoccerscorecardComponent } from './soccerscorecard/soccerscorecard.component';
 import { MymarketsComponent } from './mymarkets/mymarkets.component';
-import { RateHighlightDirective } from '../rate-highlight.directive';
 import { TranslateModule } from '@ngx-translate/core';
 import { NextRacesComponent } from './next-races/next-races.component';
 import { Safe1Pipe } from '../pipes/safe.pipe';
@@ -30,7 +28,6 @@ import { DirectiveModule } from '../directives/directive.module';
 import { PremiumRacePipe } from '../pipes/premium-race.pipe';
 import { SortByDatePipe } from '../pipes/sortByDate.pipe';
 import { OtherracesComponent } from './otherraces/otherraces.component';
-import { TimeremainingComponent } from '../shared/reuse/time-remaining.component';
 import { FancyBookmakerComponent } from './fancy-bookmaker/fancy-bookmaker.component';
 import { TennisscorecardComponent } from './tennisscorecard/tennisscorecard.component';
 import { MybetsComponent } from './my-bets/my-bets.component';
@@ -41,6 +38,7 @@ import { SportsBookComponent } from './sports-book/sports-book.component';
 import { MomentModule } from 'ngx-moment';
 import { FancyDataComponent } from './fancy-data/fancy-data.component';
 import { BookmakerDataComponent } from './bookmaker-data/bookmaker-data.component';
+import { SharedModule } from '../shared/shared.module';
 
 
 
@@ -49,6 +47,7 @@ import { BookmakerDataComponent } from './bookmaker-data/bookmaker-data.componen
 @NgModule({
   declarations: [
     Safe1Pipe,
+
     DaysFormatPipePipe,
     RaceScheduleComponent,
     NotfoundComponent,
@@ -64,14 +63,12 @@ import { BookmakerDataComponent } from './bookmaker-data/bookmaker-data.componen
     BookmakerComponent,
     CompetitionMarketsComponent,
     MymarketsComponent,
-    RateHighlightDirective,
     SortByPipe,
     NextRacesComponent,
     LotterymarketComponent,
     PremiumRacePipe,
     SortByDatePipe,
     OtherracesComponent,
-    TimeremainingComponent,
     FancyBookmakerComponent,
     MybetsComponent,
     LineMarketsComponent,

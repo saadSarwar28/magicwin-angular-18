@@ -8,20 +8,20 @@ import {
   Output,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { _window, BackendService } from 'src/app/services/backend.service';
+import { _window, BackendService } from '../../../services/backend.service';
 import {
   SetAmount,
   shortenLargeNumber,
-} from 'src/app/services/shortenLargeNumber';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
-import { ToastService } from 'src/app/services/toast.service';
-import { UtillsService } from 'src/app/services/utills.service';
-import { GenericService } from 'src/app/services/generic.service';
-import { WalletService } from 'src/app/services/wallet.service';
-import { StorageService } from 'src/app/services/storage.service';
-import { ScoreTimerService, TimerService } from 'src/app/services/timer.service';
-import { SportsIdMapperService } from 'src/app/services/sportsIdMapper.service';
-import { MarketCatalogueSS, MarketRunners } from 'src/app/models/models';
+} from '../../../services/shortenLargeNumber';
+import { CheckAuthService } from '../../../services/check-auth.service';
+import { ToastService } from '../../../services/toast.service';
+import { UtillsService } from '../../../services/utills.service';
+import { GenericService } from '../../../services/generic.service';
+import { WalletService } from '../../../services/wallet.service';
+import { StorageService } from '../../../services/storage.service';
+import { ScoreTimerService, TimerService } from '../../../services/timer.service';
+import { SportsIdMapperService } from '../../../services/sportsIdMapper.service';
+import { MarketCatalogueSS, MarketRunners } from '../../../models/models';
 
 @Component({
   selector: 'app-inplay-upcoming-matches',
@@ -88,7 +88,7 @@ export class InplayUpcomingMatchesComponent implements OnInit {
   ];
 
   activeSport: string | null = 'Cricket';
-  @Input() selectedId;
+  @Input() selectedId: any;
   @Input() setPageNumber = 0;
   @Output() dataEmitter: EventEmitter<string> = new EventEmitter<string>();
   sitename: string = ''
@@ -187,7 +187,7 @@ export class InplayUpcomingMatchesComponent implements OnInit {
     });
   }
 
-  routeToMarket(link) {
+  routeToMarket(link: any) {
     this.router.navigate([link]);
   }
 
@@ -211,47 +211,52 @@ export class InplayUpcomingMatchesComponent implements OnInit {
     if (navigator.onLine == true && document.hidden == false) {
       this.backendService
         .popularbyid(id, this.setPageNumber, 'UpcomingComponent')
-        .then((resp) => {
-          if (resp && resp.length > 0) {
-            this.loadingData = false;
-            this.not_virtual = resp.filter((x: any) =>
-              x.marketId.startsWith('1.')
-            );
-            this.marketIds = this.not_virtual.map(x => x.marketId)
-            this.eventIds = this.eventIds.concat(
-              resp.filter((x: any) => x.inplay).map((x: any) => x.version)
-            );
-            this.inPlayMarketIds = this.inPlayMarketIds.concat(
-              this.not_virtual.filter((x: any) => x.inplay).map((x: any) => x.marketId)
-            )
+        .subscribe(
+          {
+            next: (resp) => {
+              if (resp && resp.length > 0) {
+                this.loadingData = false;
+                this.not_virtual = resp.filter((x: any) =>
+                  x.marketId.startsWith('1.')
+                );
+                this.marketIds = this.not_virtual.map((x: any) => x.marketId)
+                this.eventIds = this.eventIds.concat(
+                  resp.filter((x: any) => x.inplay).map((x: any) => x.version)
+                );
+                this.inPlayMarketIds = this.inPlayMarketIds.concat(
+                  this.not_virtual.filter((x: any) => x.inplay).map((x: any) => x.marketId)
+                )
 
-            this.GetScore();
-            this.GetMarketRates();
-            setTimeout(() => {
-              this.GetSportMarketLiability(this.inPlayMarketIds.join(','));
-            }, 500)
-            this.scoreTimerService.SetTimer(
-              setInterval(() => {
                 this.GetScore();
                 this.GetMarketRates();
-              }, this.sInterval)
-            );
+                setTimeout(() => {
+                  this.GetSportMarketLiability(this.inPlayMarketIds.join(','));
+                }, 500)
+                this.scoreTimerService.SetTimer(
+                  setInterval(() => {
+                    this.GetScore();
+                    this.GetMarketRates();
+                  }, this.sInterval)
+                );
 
-          } else {
-            this.not_virtual = [];
-            this.loadingData = false;
+              } else {
+                this.not_virtual = [];
+                this.loadingData = false;
+              }
+            },
+            error: (error) => {
+              this.catchError(error)
+              this.loadingData = false;
+            },
           }
-        })
-        .catch((err) => {
-          this.catchError(err)
-          this.loadingData = false;
-        });
+        )
+
     }
   }
 
 
-  async placeOneClickBet(betslip) {
-    let betSize = this.storageService.secureStorage.getItem('OCBSelectedVal');
+  async placeOneClickBet(betslip: any) {
+    let betSize = this.storageService.getItem('OCBSelectedVal');
     betslip.size = betSize
     try {
       this.placeBet = true
@@ -276,7 +281,7 @@ export class InplayUpcomingMatchesComponent implements OnInit {
       return
     }
     let price: any = (type == 'back') ? (r.back[0].price) : r.lay[0].price;
-    this.not_virtual.forEach((x) => {
+    this.not_virtual.forEach((x: any) => {
       x.betslip = null;
     });
     if (r == undefined || price == 0 || price == "") return;
@@ -307,14 +312,14 @@ export class InplayUpcomingMatchesComponent implements OnInit {
 
   }
   get isOneClickOn() {
-    return this.storageService.secureStorage.getItem('OCB') && this.isOneClickBetGlobal
+    return this.storageService.getItem('OCB') && this.isOneClickBetGlobal
   }
 
-  catchError(err) {
+  catchError(err: any) {
     if (err.status && err.status == 401) {
       this.timerService.clearTimer();
       this.scoreTimerService.clearTimer();
-      this.storageService.secureStorage.removeItem('token');
+      this.storageService.removeItem('token');
       this.genericService.openLoginModal()
 
     } else {
@@ -322,7 +327,7 @@ export class InplayUpcomingMatchesComponent implements OnInit {
     }
   }
 
-  betStatus(resp, marketId) {
+  betStatus(resp: any, marketId: any) {
     let betstatus = resp.status;
     const message = resp.message || resp.response.message;
     if (betstatus) {
@@ -344,27 +349,30 @@ export class InplayUpcomingMatchesComponent implements OnInit {
     }
 
   }
-  GetSportMarketLiability(marketIds) {
+  GetSportMarketLiability(marketIds: any) {
     if (this.checkauthservice.IsLogin()) {
       this.backendService
-        .SportsMarketliability(marketIds, 'UpcomingComponent')
-        .then((resp) => {
-          if (resp && resp.length > 0) {
-            resp.forEach((x: any) => {
-              if (this.not_virtual && this.not_virtual.length > 0) {
-                let l = this.not_virtual.filter(
-                  (lm: any) => lm.marketId == x.marketId
-                );
-                if (l && l.length > 0) {
-                  l[0].marketLiability = x.libility;
-                }
+        .SportsMarketliability(marketIds)
+        .subscribe(
+          {
+            next: (resp: any) => {
+              if (resp && resp.length > 0) {
+                resp.forEach((x: any) => {
+                  if (this.not_virtual && this.not_virtual.length > 0) {
+                    let l = this.not_virtual.filter(
+                      (lm: any) => lm.marketId == x.marketId
+                    );
+                    if (l && l.length > 0) {
+                      l[0].marketLiability = x.libility;
+                    }
+                  }
+                })
               }
-            })
+            },
+            error: (error) => this.catchError(error),
           }
-        })
-        .catch((err) => {
-          this.catchError(err)
-        });
+        )
+
     }
   }
 
@@ -394,7 +402,7 @@ export class InplayUpcomingMatchesComponent implements OnInit {
       this.marketIds = Array.from(new Set(this.marketIds));
       this.backendService
         .marketsbook(this.marketIds.join(','), 'UpcomingComponent')
-        .then((resp) => {
+        .subscribe((resp) => {
           if (resp && resp.length > 0) {
             resp.forEach((rate) => {
               this.not_virtual.forEach((sports: any) => {
@@ -461,9 +469,7 @@ export class InplayUpcomingMatchesComponent implements OnInit {
             });
           }
         })
-        .catch((err) => {
-          this.catchError(err)
-        });
+
     }
   }
 
@@ -475,7 +481,7 @@ export class InplayUpcomingMatchesComponent implements OnInit {
         let scoreData = await this.utillsService.getScore(this.eventIds)
         if (scoreData && scoreData.length > 0) {
           this.scoreData = scoreData
-          scoreData.forEach((s) => {
+          scoreData.forEach((s: any) => {
             let m = this.not_virtual.filter(
               (x: any) => x.version == s.eventId
             );

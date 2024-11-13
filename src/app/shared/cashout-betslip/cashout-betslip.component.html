@@ -1,0 +1,167 @@
+<div class="betslip position-relative" *ngIf="market.betslip">
+
+  <div class="market-overlay position-absolute   d-flex justify-content-center align-items-center sm-fs-12"
+    *ngIf="placingBet">
+    <img [src]="siteLoader" height="100px" alt="Loading..." />
+  </div>
+  <div class="betting-widget mt-1 sm-fs-13" [class]="'side-'+ market.betslip.bType | lowercase">
+    <div class="header d-flex align-items-center justify-content-between mb-2">
+      <div class="bet-side fs-12 " [class]="market.betslip.bType | lowercase">{{market.betslip.bType | uppercase}}</div>
+      <div class="profit" [ngClass]="market.betslip.bType === 'lay' ? 'liabilityClr' : 'text-success'"><span>{{
+          market.betslip.bType === "lay"
+          ? ("Liability:" | translate)
+          : ("Profit:" | translate)
+          }} {{ pl | number : "1.1-2" }}</span></div>
+      <div class="match-rate form-check  d-flex align-items-center">
+        <input class="form-check-input " type="checkbox" id="inlineCheckbox1" value="option1" [(ngModel)]="keepAlive"
+          (change)="setKeepAlive()">
+        <label class="form-check-label mt-1  " for="inlineCheckbox1">Match At Any Rate</label>
+      </div>
+    </div>
+    <div class="content">
+      <div class="controls  position-relative   align-items-center w-100">
+        <div class="sm-order-3  w-100">
+          <span class="text-center odss-title opacity-0  d-none d-lg-block">.</span>
+          <div class="min-max-btns d-flex gap-1">
+            <button class="min w-50 " (click)="addMinBet()">Min</button>
+            <button class="max w-50 " (click)="addMaxBet()">Max</button>
+          </div>
+        </div>
+
+        <div class="sm-order-1 gap-1 w-100 d-flex">
+          <div class="d-flex flex-column w-100">
+            <span class="text-center odss-title  ">Odds</span>
+            <div [class]="'bg-'+ market.betslip.bType | lowercase" class="odds w-100  d-flex">
+              <ng-container *ngIf="r?.lotterySelectionName; else other">
+                <button class="w-100 sm-fs-13  p-2 d-flex justify-content-between">
+                  <span>{{ r?.lotterySelectionName }} </span>
+                  <span>&#64;{{ market.betslip.price }}</span>
+                </button>
+              </ng-container>
+              <ng-template #other>
+                <button [class]="'bg-'+ market.betslip.bType | lowercase" class="decrease " tabindex="-1"
+                  (click)="CDown(market.betslip.price); calcPL('')" [ngClass]="isReadOnly ? 'disabled' : ''"
+                  [disabled]="isReadOnly" *ngIf="market.betslip.bettingType == 'ODDS'">
+                  <i class="bi bi-dash"></i>
+                </button>
+                <input class="form-control " [class]="'light-bg-' + market.betslip.bType | lowercase"
+                  onmouseover="this.select()" [disabled]="market.betslip.bettingType != 'ODDS'" type="number"
+                  placeholder="odds" name="odds" (input)="validateMaxOddsValue($event)"
+                  [(ngModel)]="market.betslip.price" [attr.min]="
+                market.betslip.bettingType == 'LINE' ? market.betslip.linerange.minUnitValue + 0.5 : 1.01
+              " [attr.max]="
+                market.betslip.bettingType == 'LINE' ? market.betslip.linerange.maxUnitValue + 0.5 : 1000
+              " [readOnly]="isReadOnly" />
+                <button [class]="'bg-'+ market.betslip.bType | lowercase" class="increase " [disabled]="isReadOnly"
+                  tabindex="-1" (click)="CUp(market.betslip.price); calcPL('')" [ngClass]="isReadOnly ? 'disabled' : ''"
+                  *ngIf="market.betslip.bettingType == 'ODDS'">
+                  <i class="bi bi-plus"></i>
+                </button>
+              </ng-template>
+
+            </div>
+          </div>
+
+          <div class="w-100 d-flex flex-column ">
+            <span class="text-center stake-title  ">Stake</span>
+            <div [class]="'bg-'+ market.betslip.bType | lowercase" class="stakes d-flex align-items-center">
+              <button [class]="'bg-'+ market.betslip.bType | lowercase" class="decrease " tabindex="-1" class="btn-left"
+                (click)="decreaseValue()">
+                <i class="bi bi-dash"></i>
+              </button>
+              <input onmouseover="this.select()" [class]="'light-bg-' + market.betslip.bType | lowercase"
+                class="form-control " type="number" name="stake" [(ngModel)]="market.betslip.size"
+                placeholder="{{ 'Stake' | translate }}" (keydown)="validateInput($event)"
+                (input)="validateMaxStakeValue($event)" max="1000000" />
+              <button [class]="'bg-'+ market.betslip.bType | lowercase" tabindex="-1" class="increase "
+                (click)="increaseValue()">
+                <i class="bi bi-plus"></i>
+              </button>
+            </div>
+
+          </div>
+        </div>
+        <div class="shortcuts mob-stake sm-order-2 d-flex d-flex d-lg-none">
+          <button [class]="'light-bg-' + market.betslip.bType | lowercase"
+            (click)="addValueToStack(market.betslip.stakeButtons.stakeVal1)">
+            + {{ market.betslip.stakeButtons.stakeVal1 | shortennum }}
+          </button>
+          <button [class]="'light-bg-' + market.betslip.bType | lowercase"
+            (click)="addValueToStack(market.betslip.stakeButtons.stakeVal2)">
+            + {{ market.betslip.stakeButtons.stakeVal2 | shortennum }}
+          </button>
+          <button [class]="'light-bg-' + market.betslip.bType | lowercase"
+            (click)="addValueToStack(market.betslip.stakeButtons.stakeVal3)">
+            + {{ market.betslip.stakeButtons.stakeVal3 | shortennum }}
+          </button>
+          <button [class]="'light-bg-' + market.betslip.bType | lowercase"
+            (click)="addValueToStack(market.betslip.stakeButtons.stakeVal4)">
+            + {{ market.betslip.stakeButtons.stakeVal4 | shortennum }}
+          </button>
+          <button [class]="'light-bg-' + market.betslip.bType | lowercase"
+            (click)="addValueToStack(market.betslip.stakeButtons.stakeVal5)">
+            + {{ market.betslip.stakeButtons.stakeVal5 | shortennum }}
+          </button>
+          <button [class]="'light-bg-' + market.betslip.bType | lowercase"
+            (click)="addValueToStack(market.betslip.stakeButtons.stakeVal6)">
+            + {{ market.betslip.stakeButtons.stakeVal6 | shortennum }}
+          </button>
+          <button [class]="'light-bg-' + market.betslip.bType | lowercase"
+            (click)="addValueToStack(market.betslip.stakeButtons.stakeVal7)">
+            + {{ market.betslip.stakeButtons.stakeVal7 | shortennum }}
+          </button>
+          <button [class]="'light-bg-' + market.betslip.bType | lowercase"
+            (click)="addValueToStack(market.betslip.stakeButtons.stakeVal8)">
+            + {{ market.betslip.stakeButtons.stakeVal8 | shortennum }}
+          </button>
+        </div>
+        <div class="sm-order-3  w-100">
+          <span class="text-center odss-title opacity-0  d-none d-lg-block">.</span>
+          <div class="clear-edit-bts d-flex gap-1">
+            <button class="edit-stake w-100 " routerLink="/reports/stakebuttons">Edit Stake</button>
+            <button class="clear w-100 " (click)="clearStack()">Clear</button>
+          </div>
+        </div>
+
+      </div>
+      <div class="shortcuts mt-2 d-none d-lg-flex  mb-2">
+        <button [class]="'light-bg-' + market.betslip.bType | lowercase"
+          (click)="addValueToStack(market.betslip.stakeButtons.stakeVal1)">
+          + {{ market.betslip.stakeButtons.stakeVal1 | shortennum }}
+        </button>
+        <button [class]="'light-bg-' + market.betslip.bType | lowercase"
+          (click)="addValueToStack(market.betslip.stakeButtons.stakeVal2)">
+          + {{ market.betslip.stakeButtons.stakeVal2 | shortennum }}
+        </button>
+        <button [class]="'light-bg-' + market.betslip.bType | lowercase"
+          (click)="addValueToStack(market.betslip.stakeButtons.stakeVal3)">
+          + {{ market.betslip.stakeButtons.stakeVal3 | shortennum }}
+        </button>
+        <button [class]="'light-bg-' + market.betslip.bType | lowercase"
+          (click)="addValueToStack(market.betslip.stakeButtons.stakeVal4)">
+          + {{ market.betslip.stakeButtons.stakeVal4 | shortennum }}
+        </button>
+        <button [class]="'light-bg-' + market.betslip.bType | lowercase"
+          (click)="addValueToStack(market.betslip.stakeButtons.stakeVal5)">
+          + {{ market.betslip.stakeButtons.stakeVal5 | shortennum }}
+        </button>
+        <button [class]="'light-bg-' + market.betslip.bType | lowercase"
+          (click)="addValueToStack(market.betslip.stakeButtons.stakeVal6)">
+          + {{ market.betslip.stakeButtons.stakeVal6 | shortennum }}
+        </button>
+        <button [class]="'light-bg-' + market.betslip.bType | lowercase"
+          (click)="addValueToStack(market.betslip.stakeButtons.stakeVal7)">
+          + {{ market.betslip.stakeButtons.stakeVal7 | shortennum }}
+        </button>
+        <button [class]="'light-bg-' + market.betslip.bType | lowercase"
+          (click)="addValueToStack(market.betslip.stakeButtons.stakeVal8)">
+          + {{ market.betslip.stakeButtons.stakeVal8 | shortennum }}
+        </button>
+      </div>
+    </div>
+    <div class="footer">
+      <button class="cancel " (click)="cancelBetSlip()">Cancel</button>
+      <button class="submit " (click)="pb()">Submit</button>
+    </div>
+  </div>
+</div>

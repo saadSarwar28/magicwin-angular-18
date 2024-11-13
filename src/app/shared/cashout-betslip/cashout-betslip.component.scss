@@ -1,0 +1,207 @@
+.betslip {
+  .side-back {
+    background: var(--betslip-back-bg);
+    border: 1px solid var(--betslip-back-border);
+    color: var(--betslip-back-text);
+  }
+  .side-lay {
+    border: 1px solid var(--betslip-lay-border);
+    background: var(--betslip-lay-bg);
+    color: var(--betslip-lay-text); 
+  }
+  .bg-lay {
+    background: var(--betslip-lay-odd-stake-btn-bg);
+    color: var(--betslip-lay-odd-stake-btn-clr);
+  }
+  .bg-back {
+    background: var(--betslip-back-odd-stake-btn-bg);
+    color: var(--betslip-back-odd-stake-btn-clr);
+  }
+  .light-bg-lay {
+    background: var(--betslip-lay-odd-stake-bg) !important;
+    color: var(--betslip-lay-odd-stake-clr) !important;
+  }
+  .light-bg-back {
+    background: var(--betslip-back-odd-stake-bg) !important;
+    color: var(--betslip-back-odd-stake-clr) !important;
+  }
+  .betting-widget {
+    border-radius: 8px;
+    padding: 5px 10px;
+    margin: auto;
+    .header {
+      .bet-side {
+        padding: 5px 17px 5px 5px;
+        border-top-right-radius: 55px;
+      }
+      .match-rate {
+        display: flex;
+        align-items: center;
+        input[type="checkbox"] {
+          margin-right: 8px;
+        }
+      }
+    }
+    .form-check-input {
+      flex-shrink: 0;
+      width: 18px !important;
+      height: 18px !important;
+    }
+    .content {
+      display: flex;
+      flex-direction: column;
+
+      .controls {
+        display: flex;
+        gap: 8px;
+        .form-control {
+          border: none !important;
+        }
+        button {
+          color: var(--betslip-action-btns-clr);
+          border: none;
+          padding: 8px;
+          border-radius: 4px;
+          cursor: pointer;
+
+          &.min {
+            background: var(--betslip-min-btn-bg);
+          }
+          &.max {
+            background: var(--betslip-max-btn-bg);
+          }
+
+          &.edit-stake {
+            background: var(--betslip-edit-stake-btn-bg);
+          }
+
+          &.clear {
+            background: var(--betslip-clear-btn-bg);
+          }
+        }
+
+        .odds,
+        .stakes {
+          display: flex;
+          align-items: center;
+          border-radius: 4px;
+          input {
+            border: none;
+            width: 100%;
+            text-align: center;
+            border-radius: 4px;
+            padding: 8px;
+          }
+
+          button {
+            border: none;
+            padding: 8px;
+            width: 34.588px;
+            cursor: pointer;
+            font-size: 15px;
+            align-items: center;
+            display: flex;
+            padding: 8px;
+          }
+        }
+      }
+
+      .shortcuts {
+        display: flex;
+        justify-content: space-between;
+        gap: 4px;
+        button {
+          // background: var(--betslip-back-odd-stake-bg);
+          // color: var(--betslip-back-odd-stake-clr);
+          border: none;
+          padding: 8px;
+          border-radius: 4px;
+          cursor: pointer;
+          flex: 1;
+          &:last-child {
+            margin-right: 0;
+          }
+        }
+      }
+      .lottery-btn {
+        height: 40px !important;
+        .lottery-price {
+          background: var(--betslip-lottery-bg);
+          color: var(--betslip-lottery-clr);
+          padding: 3px 14px;
+          border-radius: 4px;
+        }
+      }
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 7px;
+      button {
+        padding: 8px;
+        border-radius: 4px;
+        border: none;
+        cursor: pointer;
+        color: var(--betslip-action-btns-clr);
+
+        &.cancel {
+          width: 33.2%;
+          background: var(--betslip-cancel-btn-bg);
+        }
+
+        &.submit {
+          width: 67%;
+          background: var(--betslip-submit-btn-bg);
+        }
+      }
+    }
+  }
+
+  @media (max-width: 992px) {
+    .mob-stake {
+      width: 100%;
+      display: grid !important;
+      grid-template-columns: repeat(4, 2fr);
+    }
+    .footer {
+      gap: 2px !important;
+      button {
+        padding: 8px !important;
+        &.cancel {
+          width: 24.4% !important;
+        }
+
+        &.submit {
+          width: 75% !important;
+        }
+      }
+    }
+    .controls {
+      flex-direction: column;
+      .clear-edit-bts,
+      .min-max-btns {
+        width: 50% !important;
+      }
+      .clear-edit-bts {
+        top: 164px;
+        position: absolute;
+        right: -3px;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .betting-widget {
+      padding: 5px 4px !important;
+    }
+    .controls {
+      .clear-edit-bts {
+        top: 151px;
+        position: absolute;
+        right: -3px;
+        padding: 0px 3px 0px 0px;
+      }
+    }
+  }
+}

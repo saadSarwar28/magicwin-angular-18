@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BackendService } from 'src/app/services/backend.service';
-import { StorageService } from 'src/app/services/storage.service';
+import { BackendService } from '../../services/backend.service';
+import { StorageService } from '../../services/storage.service';
 @Component({
   selector: 'app-raceschedule',
   templateUrl: './raceSchedule.component.html',
@@ -23,7 +23,7 @@ export class RaceScheduleComponent implements OnInit {
   selectedData: any = {};
   isOpen(index: number, data: any) {
     this.selectedData = data;
-    this.racingSchedule[this.selectedIndex].childs.forEach((element, ind) => {
+    this.racingSchedule[this.selectedIndex].childs.forEach((element: any, ind: any) => {
       if (index == ind) {
         element.toggle = !element.toggle;
         this.activeIndex = element.toggle ? index : null;
@@ -34,7 +34,7 @@ export class RaceScheduleComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.params.subscribe(p => {
+    this.route.params.subscribe((p: any) => {
       this.type = p.id1;
       if (this.router.url.includes('horse-racing')) {
         this.sportsType = "Horse Racing";
@@ -69,7 +69,7 @@ export class RaceScheduleComponent implements OnInit {
   }
 
   LoadRaceData() {
-    this.backendService.raceschedule(this.type.toUpperCase(), parseInt(this.sportsId), "RaceScheduleComponent").then((resp) => {
+    this.backendService.raceschedule(this.type.toUpperCase(), parseInt(this.sportsId), "RaceScheduleComponent").subscribe((resp) => {
       if (resp && resp.length > 0) {
         this.racingSchedule = resp;
         this.isOpen(0, this.racingSchedule[this.selectedIndex]?.childs[0])
@@ -77,14 +77,7 @@ export class RaceScheduleComponent implements OnInit {
       else {
         this.racingSchedule = undefined
       }
-    }).catch(err => {
-      if (err.status == 401) {
-        this.storageService.secureStorage.removeItem('token');
-        window.location.href = window.location.origin
-      } else {
-        console.log(err)
-      }
-    });;
+    })
   }
 
 }

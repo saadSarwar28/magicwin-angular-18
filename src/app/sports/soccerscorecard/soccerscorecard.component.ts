@@ -1,10 +1,9 @@
-import { BackendService } from 'src/app/services/backend.service';
+import { BackendService } from '../../services/backend.service';
 import { ScoreCardTimerService } from '../../services/timer.service';
 import { Component, OnDestroy, Input, OnInit, ElementRef, EventEmitter, Output } from '@angular/core';
 import { _window } from '../../services/backend.service'
 import { Router } from '@angular/router';
-import * as M from "materialize-css";
-import { StorageService } from 'src/app/services/storage.service';
+import { StorageService } from '../../services/storage.service';
 @Component({
   selector: 'app-soccerscorecard',
   templateUrl: './soccerscorecard.component.html',
@@ -53,7 +52,7 @@ export class SoccerscorecardComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.betService.timeLineNew1(parseInt(this.evtid!), "SoccerscorecardComponent").then(
+    this.betService.timeLineNew1(parseInt(this.evtid!), '').subscribe(
       (d: any) => {
         this.data = d;
         if (d[0]?.score) {
@@ -82,22 +81,7 @@ export class SoccerscorecardComponent implements OnInit, OnDestroy {
         } else {
           this.timeLineData = null;
         }
-      },
-      error => {
-        console.log('get menu get. error:' + error);
       }
-    ).catch(err => {
-      if (err.status == 401) {
-        this.storageService.secureStorage.removeItem('token');
-        window.location.href = window.location.origin
-        var elems = document.getElementById('login-modal');
-        if (elems) {
-          var model = M?.Modal?.init(elems);
-          model.open();
-        }
-      } else {
-        console.log(err)
-      }
-    });
+    )
   }
 }

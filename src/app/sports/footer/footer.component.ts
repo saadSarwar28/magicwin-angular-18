@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { _window } from 'src/app/services/backend.service';
+import { _window } from '../../services/backend.service';
 import { Router, Event, NavigationEnd } from '@angular/router';
 import { CheckAuthService } from '../../services/check-auth.service';
-import { VideoModalService } from 'src/app/shared/services/video-modal.service';
-import { UtillsService } from 'src/app/services/utills.service';
-import { GenericService } from 'src/app/services/generic.service';
+import { UtillsService } from '../../services/utills.service';
+import { GenericService } from '../../services/generic.service';
 import { MatDialog } from '@angular/material/dialog';
+import { VideoModalService } from '../../services/video-modal.service';
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',
@@ -244,7 +244,7 @@ export class FooterComponent implements OnInit {
     this.videoModalService.open(str);
   }
 
-  routeToLink(link, data: any) {
+  routeToLink(link: any, data: any) {
     if (this.checkauthservice.IsLogin()) {
       switch (true) {
         case data.text?.includes('Sports Book'):

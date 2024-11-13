@@ -1,0 +1,105 @@
+<div class="user-info-setting d-flex align-items-center gap-1 side-menus status-bar">
+  <ng-container *ngIf="isLogin && !landingPage && isMobile">
+    <div class="status-item oneclick pointer" [ngClass]="OCBEnabled ? 'activeted' : ''"
+      (click)="openOneClickBet($event)">
+      <img [src]="
+      OCBEnabled
+        ? 'https://iriscdn.b-cdn.net/kheloyar/oneclick-icon.gif'
+        : 'https://iriscdn.b-cdn.net/kheloyar/oneclick-tap.svg'
+    " alt="" />
+      One Click Bet
+    </div>
+    <div class="one-click-section" *ngIf="openOBC" appClickOutside (clickOutside)="openOBC = false">
+      <app-one-click-bet (oneClickEmit)="openOBC = false"></app-one-click-bet>
+    </div>
+  </ng-container>
+  <div appClickOutside (clickOutside)="closePopup()">
+    <div class="status-bar">
+      <div *ngIf="isb2c" class="status-item deposit-btn fs-lap-12 pointer" [routerLink]="navigateValue">
+        Deposit
+      </div>
+      <ng-container *ngIf="(!isMobile || landingPage) && isLogin">
+        <div class=" status-item lib d-flex flex-column fs-lap-12">
+          <span class="lib-text">Liability</span>
+          <span class="lib-value" *ngIf="paymentDetails">
+            {{ paymentDetails.liability | number : "1.0-0" }}
+          </span>
+        </div>
+        <div class="status-item balance fs-lap-12">
+          <span class="balance-text">Balance</span>
+          <span class="balance-value" *ngIf="paymentDetails">
+            {{ paymentDetails.balance | number : "1.0-0" }}
+          </span>
+        </div>
+      </ng-container>
+      <div class="settings">
+        <span class="gear-icon bi bi-gear fs-13" (click)="openSetting()"></span>
+        <!-- <img src="https://iriscdn.b-cdn.net/kheloyar/menuItems/setting.svg"  height="27px" alt=""> -->
+      </div>
+    </div>
+
+    <div class="menu-container custom-scrollbar" *ngIf="openSettingMenu" (clickOutside)="closePopup()">
+      <div class="menu-header">
+        <span>{{ username }}</span>
+      </div>
+      <div class="menu-content">
+        <div class="balance-info">
+          <div class="balance-title fs-lap-14">Balance Information</div>
+          <div class="credit-info fs-lap-14">
+            <div>Available Credit</div>
+            <div class="balance-value" *ngIf="paymentDetails">
+              {{ paymentDetails.balance | number : "1.0-0" }}
+            </div>
+          </div>
+          <div class="liability-info fs-lap-14">
+            <div>Liability</div>
+            <div class="lib-value" *ngIf="paymentDetails">
+
+              {{ paymentDetails.liability | number : "1.0-0" }}
+            </div>
+          </div>
+        </div>
+        <div class="action-buttons" *ngIf="isb2c">
+          <button class="deposit-btn fs-lap-14" (click)="routerLink(navigateValue)">Deposit</button>
+          <button class="withdraw-btn fs-lap-14" (click)="routerLink('/reports/withdraw')">Withdraw</button>
+        </div>
+        <div *ngIf="showOneClickOptions && (landingPage && isMobile) || !isMobile" class="oneclick-comp">
+          <app-one-click-bet (oneClickEmit)="onSaveOneClickBet()"></app-one-click-bet>
+        </div>
+        <ul class="menu-list">
+          <li *ngIf="!isIframe" class="fs-lap-14" (click)="routerLink('/reports/changepassword')">Change Password</li>
+          <li class="fs-lap-14" (click)="showHideReport=!showHideReport">
+            <div class="d-flex justify-content-between">
+              Reports
+              <i class="bi bi-chevron-down fs-15 "
+                [style]="!showHideReport ? 'transform: rotate(90deg)' : 'transform: rotate(0deg)'"></i>
+            </div>
+            <ul class="menu-list" *ngIf="showHideReport">
+              <li *ngFor="let a of reportSectionArr" (click)="routerLink(a.link)">{{ a.text | translate }}</li>
+            </ul>
+          </li>
+          <li class="fs-lap-14" (click)="showHideAccount=!showHideAccount">
+            <div class="d-flex justify-content-between">
+              {{ "accounts" | translate}}
+              <i class="bi bi-chevron-down fs-15 "
+                [style]="!showHideAccount ? 'transform: rotate(90deg)' : 'transform: rotate(0deg)'"></i>
+            </div>
+            <ul class="menu-list" *ngIf="showHideAccount">
+              <ng-container *ngFor="let a of accountSectionArr">
+                <li *ngIf="a.text != 'KYC' || (a.text == 'KYC' && enableKYC)" [routerLink]="[a.link]">{{ a.text |
+                  translate }} </li>
+              </ng-container>
+            </ul>
+          </li>
+          <li class="fs-lap-14" *ngIf="isShowDownlaodApp">
+            <a [href]="apkLink">
+
+              {{ "Download App" | translate }}
+            </a>
+          </li>
+          <li *ngIf="!isIframe" class="fs-lap-14" (click)="logout()">Logout</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

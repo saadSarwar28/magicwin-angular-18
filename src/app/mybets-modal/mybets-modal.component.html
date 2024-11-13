@@ -1,0 +1,122 @@
+<div class="mybets-modal-compo">
+  <div class="bets-widget mb-0 mt-2 border-0 p-0">
+    <div class="header p-0 bg-transparent mb-2  d-flex justify-content-between align-items-center bb-1">
+      <h1 class="title fs-14 text-theme mb-0">This Event Bets</h1>
+      <i class="bi bi-x-lg fs-16 my-bets-modal-close-icon-clr me-3" (click)="closeModal()"></i>
+    </div>
+    <div class="unmatched-bets">
+      <div class="unmatched-header p-1 mb-1 d-flex align-items-end "
+        [ngClass]="haveUnmatched ? 'justify-content-center' : 'justify-content-between'">
+        <h6 class="title fs-12 matched-bets-headings w-100 text-center ms-1 mb-0">Unmatched Bets</h6>
+        <button class="btn fs-12 btn-danger cancel-all" *ngIf="haveUnmatched" (click)="cancelBets(false)">Cancel
+          All</button>
+      </div>
+      <table class="table position-relative">
+        <div
+          class="market-overlay position-absolute bg-theme  d-flex justify-content-center align-items-center sm-fs-14"
+          *ngIf="cancellingBet">
+          <img [src]="siteLoader" height="30px" alt="Loading..." />
+        </div>
+        <thead>
+          <tr>
+            <th style="width:70%;padding-left: 8px;">{{ "runnername" | translate }}</th>
+            <th>{{ "betprice" | translate }}</th>
+            <th>{{ "betsize" | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let un of currentBets | filterBets : 'betStatus' : 'Un-Matched Bets'"
+            [ngClass]="un.side | lowercase">
+            <td>
+              <span class="cancel-bet">
+                <span class="pointer" (click)="cancelBets(un,true)"><i class="bi bi-x-lg "></i></span>
+                {{ un.fullMarketName ? un.fullMarketName : un.runnerName}}
+              </span>
+            </td>
+            <td class="text-center">{{ un.betPrice }}</td>
+            <td class="text-center">
+              {{ un.betSize | roundoff }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="matched-bets matched-bets" [ngClass]="toggleMatcedBets ? '': 'heightAuto' ">
+      <div class="matched-header p-1 mb-1 d-flex align-items-center justify-content-center">
+        <h6 class="title fs-12 matched-bets-headings mb-0 ms-1">Matched Bets</h6>
+      </div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th style="width:70%;padding-left: 8px;">{{ "runnername" | translate }}</th>
+            <th>{{ "betprice" | translate }}</th>
+            <th>{{ "betsize" | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let m of currentBets | filterBets : 'betStatus' : 'Matched Bets'" [ngClass]="m.side | lowercase">
+            <td [attr.title]="m.betId" style="padding-left: 8px">
+              {{ m.fullMarketName ? m.fullMarketName : m.runnerName}}
+            </td>
+            <td class="text-center">{{ m.betPrice }}</td>
+            <td class="text-center">
+              {{ m.betSize | roundoff }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="header d-flex mt-2  justify-content-between  border-0">
+    <h1 class="modal-title fs-14 text-theme">{{'Other Markets'|translate}}
+    </h1>
+    <div class="d-flex gap-1  align-items-center justify-content-end me-1" *ngIf="marketData && marketData.length>0">
+      <span class="d-flex gap-1 align-items-center  reload-btn rounded-1 fs-13  pointer" (click)="LoadData()">
+        <i class="bi bi-arrow-clockwise" [class.rotate]="rotate"></i>
+        {{'reload'|translate}}
+      </span>
+    </div>
+  </div>
+  <div class="modal-body">
+    <div class="d-flex position-relative mt-2" *ngIf="loadingData">
+      <div class="overlay position-absolute z-2 d-flex justify-content-center align-items-center sm-fs-14">
+        <img [src]="siteLoader" height="100px" alt="Loading..." />
+      </div>
+    </div>
+    <div class="my-market-table" [ngClass]="toggleMarketData ? '': 'heightAuto' "
+      *ngIf="marketData && marketData.length>0">
+      <table class="table table-responsive" *ngIf="marketData && marketData.length>0 && !loadingData">
+        <thead>
+          <tr>
+            <th class="sm-fs-11">{{'marketid'|translate}}</th>
+            <th class="sm-fs-11">{{'marketname'|translate}} </th>
+            <th class="sm-fs-11">{{'liability'|translate}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor='let m of marketData'>
+            <td class="sm-fs-12">
+              <p>{{m.marketID ? m.marketID:'N /A'}}</p>
+            </td>
+            <td class="sm-fs-12">
+              <a class="text-primary pointer" (click)="routeToMarket(m)">{{m.menuPath}}</a>
+            </td>
+            <td class="sm-fs-12">
+              <p class="liabilityClr">{{m.liability | roundoff}}</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="see-more market-see-more" *ngIf="!loadingData && marketData && marketData.length>3"
+      (click)="toggleMarketData = !toggleMarketData">
+      <span>{{toggleMarketData ? 'Show More' : 'See Less'}}</span>
+      <i class="bi bi-chevron-down fs-15"
+        [style.transform]="'rotate(' + (!toggleMarketData ? '180deg' : '0deg') + ')'"></i>
+    </div>
+    <div class="d-flex align-items-center justify-content-center" *ngIf="!loadingData && marketData.length == 0">
+      <h5 class="fs-15 sm-fs-13">You have no
+        markets yet</h5>
+    </div>
+  </div>
+</div>

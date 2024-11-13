@@ -1,16 +1,15 @@
 
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import * as signalR from "@microsoft/signalr";
-import { environment } from '../../../environments/environment';
-import { BettingResponse, ClientParameters, ClientPosition, ClientWallet, CurrentBetsInput, LineLiablityMulti, MatchedUnmatched } from '../..//models/models';
-import { BackendService, _window } from '../..//services/backend.service';
-import { CheckAuthService } from '../..//services/check-auth.service';
-import { TimerService } from '../..//services/timer.service';
-import { StorageService } from '../..//services/storage.service';
-import { SetAmount, shortenLargeNumber } from '../..//services/shortenLargeNumber';
-import { ToastService } from '../..//services/toast.service';
-import { UtillsService } from '../..//services/utills.service';
-import { WalletService } from '../..//services/wallet.service';
+import { BettingResponse, ClientParameters, ClientPosition, ClientWallet, CurrentBetsInput, LineLiablityMulti, MatchedUnmatched } from '../../models/models';
+import { BackendService, _window } from '../../services/backend.service';
+import { CheckAuthService } from '../../services/check-auth.service';
+import { TimerService } from '../../services/timer.service';
+import { StorageService } from '../../services/storage.service';
+import { SetAmount, shortenLargeNumber } from '../../services/shortenLargeNumber';
+import { ToastService } from '../../services/toast.service';
+import { UtillsService } from '../../services/utills.service';
+import { WalletService } from '../../services/wallet.service';
 
 
 @Component({
@@ -53,8 +52,6 @@ export class OtherracesComponent implements OnInit, OnDestroy {
   matchedUnmatched!: MatchedUnmatched;
   clientMatchSize: any;
   clientUnmatchSize: any;
-  private baseUrl: string = environment.apiurl;
-  apiUrl = this.baseUrl + _window().otherracesordersplaced;
   isCollapsedStates: boolean[] = [];
   betslip: any;
   isDataLoad: boolean = false
@@ -101,12 +98,11 @@ export class OtherracesComponent implements OnInit, OnDestroy {
       .withAutomaticReconnect()
       .build();
     this.hubConnection
-      .start()
-      .then(() => {
+      .start().then(() => {
         this.isLoading = false
         this.LoadCurrentBets();
       })
-      .catch((err) => console.error('Error while starting SignalR connection:', err));
+      .catch((err: any) => console.error('Error while starting SignalR connection:', err));
     this.hubConnection.on("ReceiveData", (data: any) => {
       this.populateRates(JSON.parse(data));
       this.GetClientParameters();
@@ -200,7 +196,7 @@ export class OtherracesComponent implements OnInit, OnDestroy {
     return "";
   }
 
-  toggleCollapse(data) {
+  toggleCollapse(data: any) {
     data.tabOpen = !data.tabOpen
   }
 
@@ -209,7 +205,7 @@ export class OtherracesComponent implements OnInit, OnDestroy {
   GetClientParameters() {
     if (this.checkauthservice.IsLogin()) {
       if (navigator.onLine == true && document.hidden == false) {
-        this.checkauthservice.clientParameters.subscribe(clientParams => {
+        this.checkauthservice.clientParameters.subscribe((clientParams: any) => {
           if (clientParams) {
             this.cBuyRate = clientParams?.cBuyRate;
             this.cTotalShare = clientParams.pShare + clientParams.cShare;
@@ -248,16 +244,13 @@ export class OtherracesComponent implements OnInit, OnDestroy {
                 this.clientMatchSize = this.matchedUnmatched.matchedSize;
                 this.clientUnmatchSize = this.matchedUnmatched.unMatchedSize;
               }
-            })
-            .catch((err) => {
+            }, err => {
               if (err.status == 401) {
                 this.storageService.removeItem('token');
                 window.location.href = window.location.href;
                 this.timerService.clearTimer();
-              } else {
-                console.error(err);
               }
-            });
+            })
         } else {
           this.sportsService
             .matchUnmatchAllSports(this.data.marketId, 'OtherracesComponent')
@@ -271,14 +264,15 @@ export class OtherracesComponent implements OnInit, OnDestroy {
                 this.clientMatchSize = this.matchedUnmatched.matchedSize;
                 this.clientUnmatchSize = this.matchedUnmatched.unMatchedSize;
               }
-            })
-            .catch((err) => {
+            }, err => {
               if (err.status == 401) {
+                this.storageService.removeItem('token');
+                window.location.href = window.location.href;
                 this.timerService.clearTimer();
-              } else {
-                console.error(err);
               }
-            });
+            }
+            )
+
         }
       }
     }
@@ -386,22 +380,8 @@ export class OtherracesComponent implements OnInit, OnDestroy {
             sound: true,
           });
         }
+        this.placingBet = false
       })
-      // .catch((err) => {
-      //   if (err.status == 401) {
-      //     this.storageService.removeItem('token');
-      //     window.location.href = window.location.origin;
-      //   } else {
-      //     console.log(err);
-      //     this.toasterService.show(err, {
-      //       classname: 'red darken-1 text-light',
-      //       delay: 1500,
-      //       sound: true,
-      //     });
-      //   }
-      // }).finally(() => {
-      //   this.placingBet = false
-      // })
 
   }
 
@@ -421,7 +401,7 @@ export class OtherracesComponent implements OnInit, OnDestroy {
   }
 
   selectedM: any;
-  raceNo;
+  raceNo: any;
   placebet(m: RaceMarket, r: RaceRunner, type: string, price: any, raceNo: number) {
     if (!this.checkauthservice.IsLogin()) {
       return;
@@ -540,7 +520,7 @@ export class OtherracesComponent implements OnInit, OnDestroy {
 
         let body = new CurrentBetsInput('10', '10', false);
 
-        this.sportsService.localmarketcurrentbets("10", "otherracesComponent").subscribe(resp => {
+        this.sportsService.localmarketcurrentbets("10", "otherracesComponent").subscribe((resp: any) => {
           if (resp && resp.length > 0) {
             this.currentBets = resp;
 
@@ -554,19 +534,18 @@ export class OtherracesComponent implements OnInit, OnDestroy {
           else {
             this.currentBets = resp;
           }
-        })
-        // .catch((err: any) => {
-        //   if (err.status == 401) {
-        //     this.storageService.removeItem('token');
-        //     window.location.href = window.location.href;
+        }, err => {
+          if (err.status == 401) {
+            this.storageService.removeItem('token');
+            window.location.href = window.location.href;
 
-        //     if (!this.readOnly) {
-        //       this.timerService.clearTimer();
-        //     }
-        //   } else {
-        //     console.error(err);
-        //   }
-        // }).finally(() => this.sendingrequest = false);
+            if (!this.readOnly) {
+              this.timerService.clearTimer();
+            }
+          }
+          this.sendingrequest = false
+        })
+
       }
     }
   }
@@ -587,17 +566,17 @@ export class OtherracesComponent implements OnInit, OnDestroy {
       this.sportsService
         .clientpositionsports(
           mktids.join(","),
-          'otherracesComponent'
         )
-        .subscribe((resp: ClientPosition[]) => this.HandleRunnerPosition(resp))
-        .catch((err) => {
-          if (err.status == 401) {
+        .subscribe((resp: ClientPosition[]) => this.HandleRunnerPosition(resp)
+          , (err) => {
+            if (err.status == 401) {
 
-            this.timerService.clearTimer();
-          } else {
-            console.error(err);
-          }
-        });
+              this.timerService.clearTimer();
+            } else {
+              console.error(err);
+            }
+          });
+
     }
   }
 
@@ -605,16 +584,9 @@ export class OtherracesComponent implements OnInit, OnDestroy {
     if (this.checkauthservice.IsLogin()) {
       const mktids = this.markets.map(x => x.marketId);
       this.sportsService
-        .SportsMarketliability(mktids.join(','), 'otherracesComponent')
+        .SportsMarketliability(mktids.join(','))
         .subscribe((resp: LineLiablityMulti[]) => this.HandleMarketLiability(resp))
-        // .catch((err) => {
-        //   if (err.status == 401) {
 
-        //     this.timerService.clearTimer();
-        //   } else {
-        //     console.error(err);
-        //   }
-        // });
     }
   }
 

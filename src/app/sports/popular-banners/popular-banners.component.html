@@ -2,7 +2,7 @@
   <div class="popularBanners scrollable-list " [ngClass]="!isMagicwin ? 'bd-popular-banners-margin': ''">
     <div class="item d-flex align-items-center justify-content-between position-relative pointer"
       *ngFor="let item of topPopularData;let index = index" (click)="routeToLink(item)">
-      <img  [src]="cdnSportsLanding + 'banners/' + item.id + '.png'" [lazyLoad]="cdnSportsLanding + 'banners/' + item.id + '.png'" />
+      <img [defaultImage]="defaultImage" [lazyLoad]="cdnSportsLanding + 'banners/' + item.id + '.png'" />
       <span class="d-flex d-md-none" [ngClass]="
     index == 0 || index == 3
       ? 'odd-banner'

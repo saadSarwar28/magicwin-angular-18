@@ -9,19 +9,20 @@ import {
   MarketCatalogueSS,
   MarketRunners,
   SportsBettingModel,
-} from 'src/app/models/models';
-import { _window, BackendService } from 'src/app/services/backend.service';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
+} from '../../../models/models';
+import { _window, BackendService } from '../../../services/backend.service';
+import { CheckAuthService } from '../../../services/check-auth.service';
 import {
   SetAmount,
   shortenLargeNumber,
-} from 'src/app/services/shortenLargeNumber';
-import { SportService } from 'src/app/services/sport.service';
-import { StorageService } from 'src/app/services/storage.service';
-import { TimerService } from 'src/app/services/timer.service';
-import { ToastService } from 'src/app/services/toast.service';
-import { UtillsService } from 'src/app/services/utills.service';
-import { iFrameResizer } from 'src/assets/lmtScore/sports-radar';
+} from '../../../services/shortenLargeNumber';
+import { SportService } from '../../../services/sport.service';
+import { StorageService } from '../../../services/storage.service';
+import { TimerService } from '../../../services/timer.service';
+import { ToastService } from '../../../services/toast.service';
+import { UtillsService } from '../../../services/utills.service';
+import { iFrameResizer } from '../../../../assets/lmtScore/sports-radar';
+
 
 @Component({
   selector: 'app-current-sports',
@@ -80,7 +81,7 @@ export class CurrentSportsComponent implements OnInit {
           if (res && res.length > 0) {
             this.tmpSportList = res;
             this.sportList = this.getSportListGroupByVersionId();
-            this.marketIds = res?.map((item) => item.marketId);
+            this.marketIds = res?.map((item: any) => item.marketId);
             this.GetMarketRates();
             this.timerService.SetTimer(
               setInterval(() => {
@@ -116,8 +117,8 @@ export class CurrentSportsComponent implements OnInit {
           try {
             md?.runners?.forEach((runner: any) => {
               let currentSport;
-              let currentSports = this.sportList?.filter((x) =>
-                x.details?.find((x) => x.marketId == md?.marketId)
+              let currentSports = this.sportList?.filter((x: any) =>
+                x.details?.find((x: any) => x.marketId == md?.marketId)
               );
               if (currentSports?.length > 0) {
                 currentSport = currentSports[0];
@@ -507,7 +508,7 @@ export class CurrentSportsComponent implements OnInit {
       .finally(() => { });
   }
 
-  getRunnersBySelectionId(data, targetSelectionId) {
+  getRunnersBySelectionId(data: any, targetSelectionId: any) {
     for (let detail of data?.details) {
       // console.log(`Checking detail: ${detail.marketType}`);
       for (let runner of detail.runners) {
@@ -521,7 +522,7 @@ export class CurrentSportsComponent implements OnInit {
     return null; // If no matching runner is found
   }
 
-  LoadCurrentBets(sport) {
+  LoadCurrentBets(sport: any) {
     if (this.checkauthservice.IsLogin()) {
       // this.sportList?.forEach((sport) => {
       this.loadingData = true;
@@ -576,7 +577,7 @@ export class CurrentSportsComponent implements OnInit {
     }
   }
 
-  clickToMarket(sport) {
+  clickToMarket(sport: any) {
     this.router.navigate([sport?.routerLink]);
   }
 
@@ -660,7 +661,7 @@ export class CurrentSportsComponent implements OnInit {
 
     switch (betOn) {
       case 'local':
-        let modellocal;
+        let modellocal: any;
         if (mktType === 'LINE' || bettingType === 'LINE') {
           price = price ? parseInt(price) - 0.5 : price;
           modellocal = new SportsBettingModel(
@@ -736,7 +737,7 @@ export class CurrentSportsComponent implements OnInit {
           });
         break;
       case 'bf':
-        let model;
+        let model: any;
         if (mktType === 'LINE' || bettingType === 'LINE') {
           price = price ? parseInt(price) - 0.5 : price;
           model = new SportsBettingModel(
@@ -811,7 +812,7 @@ export class CurrentSportsComponent implements OnInit {
     }
   }
 
-  betPlacedStatus(event, sport) {
+  betPlacedStatus(event: any, sport: any) {
     if (event == 'yes') {
       this.clearPreviousBetSlip(sport);
       this.getClientPosition(sport);
@@ -819,27 +820,27 @@ export class CurrentSportsComponent implements OnInit {
     }
   }
 
-  reloadMyBet(sport) {
+  reloadMyBet(sport: any) {
     this.LoadCurrentBets(sport);
   }
-  clearPreviousBetSlip(sport) {
-    sport?.details?.forEach((detail) => {
+  clearPreviousBetSlip(sport: any) {
+    sport?.details?.forEach((detail: any) => {
       detail?.runners?.forEach((r: any) => (r.betslip = null));
     });
   }
   //#endregion
 
-  getClientPosition(sport) {
-    const marketIds = sport?.details?.map((item) => item.marketId);
+  getClientPosition(sport: any) {
+    const marketIds = sport?.details?.map((item: any) => item.marketId);
 
     this.sportService
       .clientpositionsports(marketIds.toString(), 'CricketComponent')
       .then((resp: ClientPosition[]) => {
         resp?.forEach((p: any) => {
-          let runners = sport?.details?.find((x) => x.marketId == p.marketId);
+          let runners = sport?.details?.find((x: any) => x.marketId == p.marketId);
 
           let currentRunner = runners?.runners?.find(
-            (x) => x.selectionId == p.runnerId
+            (x: any) => x.selectionId == p.runnerId
           );
 
           if (currentRunner && p.position) {
@@ -897,7 +898,7 @@ export class CurrentSportsComponent implements OnInit {
     return groupedMarkets;
   }
 
-  GetMarketDetail(sport) {
+  GetMarketDetail(sport: any) {
     if (sport?.marketId)
       this.sportService
         .marketdetail(sport?.marketId, 'CricketComponent')
@@ -919,7 +920,7 @@ export class CurrentSportsComponent implements OnInit {
         .finally(() => { });
   }
 
-  getStream(sport) {
+  getStream(sport: any) {
     if (sport?.channelId && this.IPAddress) {
       let liveTvUrl =
         _window().streamurl + `?chid=${sport.channelId}&ip=${this.IPAddress}`;
@@ -929,14 +930,14 @@ export class CurrentSportsComponent implements OnInit {
   }
 
   getIpAddress() {
-    this.utillsService.ipaddress.subscribe((data) => {
+    this.utillsService.ipaddress.subscribe((data: any) => {
       if (data) {
         this.IPAddress = data;
       }
     });
   }
 
-  GetLMT(id: any, sport) {
+  GetLMT(id: any, sport: any) {
     if (id && id > 0) {
       let themeMode;
       themeMode =

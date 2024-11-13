@@ -9,24 +9,24 @@ import {
 import {
   BookMaker,
   ClientPosition,
-} from 'src/app/models/models';
-import { BackendService, _window } from 'src/app/services/backend.service';
-import { StorageService } from 'src/app/services/storage.service';
+} from '../../models/models';
+import { BackendService, _window } from '../../services/backend.service';
+import { StorageService } from '../../services/storage.service';
 import {
   LotterytimerService,
-} from 'src/app/services/timer.service';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
-import { ToastService } from 'src/app/services/toast.service';
-import { UtillsService } from 'src/app/services/utills.service';
-import { GenericService } from 'src/app/services/generic.service';
+} from '../../services/timer.service';
+import { CheckAuthService } from '../../services/check-auth.service';
+import { ToastService } from '../../services/toast.service';
+import { UtillsService } from '../../services/utills.service';
+import { GenericService } from '../../services/generic.service';
 @Component({
   selector: 'app-lotterymarket',
   templateUrl: './lotterymarket.component.html',
   styleUrls: ['./lotterymarket.component.scss'],
 })
 export class LotterymarketComponent implements OnInit, OnDestroy {
-  @Input() fancyRate;
-  @Input() eventId;
+  @Input() fancyRate: any;
+  @Input() eventId: any;
   @Output() loadBets: EventEmitter<any> = new EventEmitter<any>();
 
   lotteryData: any = {};
@@ -57,7 +57,7 @@ export class LotterymarketComponent implements OnInit, OnDestroy {
     if (_window().siteLoader) {
       this.siteLoader = _window().siteLoader;
     }
-    this.isOneClickBetClient = this.storageService.secureStorage.getItem('OCB');
+    this.isOneClickBetClient = this.storageService.getItem('OCB');
     if (_window().hideOCBonComp) {
       this.isOneClickBetGlobal = true;
     }
@@ -81,7 +81,7 @@ export class LotterymarketComponent implements OnInit, OnDestroy {
     if (navigator.onLine == true && document.hidden == false) {
       this.sportService
         .LotteryMarkets(this.eventId || 0, 'LotterymarketComponent')
-        .then((resp) => {
+        .subscribe((resp) => {
           if (resp) {
             this.lotteryHandling(resp);
             if (this.callFirstTime) {
@@ -92,20 +92,18 @@ export class LotterymarketComponent implements OnInit, OnDestroy {
             this.callFirstTime = false
           }
         })
-        .catch((err) => {
-          this.catchError(err)
-        });
+
     }
   }
   lotteryCollapse: boolean = true;
   collapseLottery() {
     this.lotteryCollapse = !this.lotteryCollapse;
     if (this.lotteryCollapse) {
-      this.lotteryData.forEach((market) => {
+      this.lotteryData.forEach((market: any) => {
         market.collapse = false;
       });
     } else {
-      this.lotteryData.forEach((market) => {
+      this.lotteryData.forEach((market: any) => {
         market.collapse = true;
       });
     }
@@ -230,8 +228,8 @@ export class LotterymarketComponent implements OnInit, OnDestroy {
     }
   }
   placeBetMarketId: string = ""
-  async placeOneClickBet(betslip) {
-    let betSize = this.storageService.secureStorage.getItem('OCBSelectedVal');
+  async placeOneClickBet(betslip: any) {
+    let betSize = this.storageService.getItem('OCBSelectedVal');
     betslip.size = betSize
     try {
       this.placeBetMarketId = betslip.marketId
@@ -244,9 +242,9 @@ export class LotterymarketComponent implements OnInit, OnDestroy {
     this.placeBetMarketId = ""
   }
 
-  catchError(err) {
+  catchError(err: any) {
     if (err && err.status && err.status == 401) {
-      this.storageService.secureStorage.removeItem('token');
+      this.storageService.removeItem('token');
       clearInterval(this.lotteryInterval)
       this.genericService.openLoginModal()
 
@@ -255,7 +253,7 @@ export class LotterymarketComponent implements OnInit, OnDestroy {
     }
   }
 
-  betStatus(resp) {
+  betStatus(resp: any) {
     let betstatus = resp.status;
     const translatedResponse = resp.message || resp.response.message;
     if (betstatus) {
@@ -279,22 +277,25 @@ export class LotterymarketComponent implements OnInit, OnDestroy {
 
   }
   get isOneClickOn() {
-    return this.storageService.secureStorage.getItem('OCB') && this.isOneClickBetGlobal
+    return this.storageService.getItem('OCB') && this.isOneClickBetGlobal
   }
 
 
 
 
-  private GetMarketPosition(mkts) {
+  private GetMarketPosition(mkts: any) {
     if (navigator.onLine == true && document.hidden == false) {
       if (this.checkauthservice.IsLogin()) {
         if (this.lotteryData && this.lotteryData && this.lotteryData.length > 0) {
           this.sportService
-            .clientpositionsports(mkts, 'LotterymarketComponent')
-            .then((resp: ClientPosition[]) => this.HandleRunnerPosition(resp))
-            .catch((err) => {
-              this.catchError(err)
-            });
+            .clientpositionsports(mkts)
+            .subscribe(
+              {
+                next: (resp: ClientPosition[]) => this.HandleRunnerPosition(resp),
+                error: (error) => this.catchError(error),
+              }
+            )
+
         }
       }
     }
@@ -329,28 +330,31 @@ export class LotterymarketComponent implements OnInit, OnDestroy {
     }
   }
 
-  GetSportMarketLiability(mkts) {
+  GetSportMarketLiability(mkts: any) {
     if (navigator.onLine == true && document.hidden == false) {
 
       if (this.checkauthservice.IsLogin()) {
         if (this.lotteryData && this.lotteryData.length > 0) {
           this.sportService
-            .SportsMarketliability(mkts, 'LotterymarketComponent')
-            .then((resp: any) => {
-              if (resp && resp.length > 0) {
-                resp.forEach((x: any) => {
-                  let f = this.lotteryData.filter(
-                    (xx: any) => xx.marketId == x.marketId.split('.')[1]
-                  );
-                  if (f && f.length > 0) {
-                    f[0].liability = x.libility;
+            .SportsMarketliability(mkts)
+            .subscribe(
+              {
+                next: (resp: any) => {
+                  if (resp && resp.length > 0) {
+                    resp.forEach((x: any) => {
+                      let f = this.lotteryData.filter(
+                        (xx: any) => xx.marketId == x.marketId.split('.')[1]
+                      );
+                      if (f && f.length > 0) {
+                        f[0].liability = x.libility;
+                      }
+                    });
                   }
-                });
+                },
+                error: (error) => this.catchError(error),
               }
-            })
-            .catch((err) => {
-              this.catchError(err)
-            });
+            )
+
         }
       }
     }

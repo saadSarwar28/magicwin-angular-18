@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { _window } from 'src/app/services/backend.service';
-import { BettingService, CancellAllOrders, CancelOrders } from 'src/app/services/betting.service';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
-import { GenericService } from 'src/app/services/generic.service';
-import { ToastService } from 'src/app/services/toast.service';
+import { _window } from '../../services/backend.service';
+
+import { CheckAuthService } from '../../services/check-auth.service';
+import { GenericService } from '../../services/generic.service';
+import { ToastService } from '../../services/toast.service';
+import { BettingService, CancellAllOrders, CancelOrders } from '../../services/betting.service';
 @Component({
   selector: 'app-mybets',
   templateUrl: './my-bets.component.html',
@@ -33,7 +34,7 @@ export class MybetsComponent implements OnInit, OnChanges {
     if (_window().siteLoader) {
       this.siteLoader = _window().siteLoader;
     }
-    if (this.currentBets.some((x) => x.betStatus == 'Un-Matched Bets')) {
+    if (this.currentBets.some((x: any) => x.betStatus == 'Un-Matched Bets')) {
       this.haveUnmatched = true;
     } else {
       this.haveUnmatched = false;
@@ -42,7 +43,7 @@ export class MybetsComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['currentBets']) {
-      if (this.currentBets.some((x) => x.betStatus == 'Un-Matched Bets')) {
+      if (this.currentBets.some((x: any) => x.betStatus == 'Un-Matched Bets')) {
         this.haveUnmatched = true;
       } else {
         this.haveUnmatched = false;
@@ -72,18 +73,18 @@ export class MybetsComponent implements OnInit, OnChanges {
         un = [unMatchBet]
       } else {
         un = this.currentBets.filter(
-          (x) => x.betStatus == 'Un-Matched Bets'
+          (x: any) => x.betStatus == 'Un-Matched Bets'
         );
       }
       if (un && un.length > 0) {
         this.cancellingBet = true;
         const orders: CancelOrders[] = [];
-        let marketIds = un.map(a => a.marketId);
+        let marketIds = un.map((a: any) => a.marketId);
         marketIds = [...new Set(marketIds)];
-        marketIds.forEach((mktId) => {
+        marketIds.forEach((mktId: any) => {
           const betArr = un
-            .filter((x) => x.marketId == mktId)
-            .map((x) => x.betId);
+            .filter((x: any) => x.marketId == mktId)
+            .map((x: any) => x.betId);
           if (betArr && betArr.length > 0) {
             orders.push(new CancelOrders(mktId, betArr));
           }
@@ -92,27 +93,34 @@ export class MybetsComponent implements OnInit, OnChanges {
           .cancellallOrdersSports(
             new CancellAllOrders(this.eventId, 'MYBETS', orders)
           )
-          .then((resp: any) => {
-            this.loadBets.emit()
-            this.cancelBet.emit(marketIds)
-            this.toasterService.show(resp.message, {
-              classname: 'bg-success text-light',
-              delay: 3000,
-              sound: true,
-            });
-          })
-          .catch((err) => {
-            if (err.status == 401) {
-              this.genericService.openLoginModal()
-            } else {
-              console.log(err);
-              this.toasterService.show(err, {
-                classname: 'bg-danger text-light',
-                delay: 1500,
-                sound: true,
-              });
+          .subscribe(
+            {
+              next: (resp: any) => {
+                this.loadBets.emit()
+                this.cancelBet.emit(marketIds)
+                this.toasterService.show(resp.message, {
+                  classname: 'bg-success text-light',
+                  delay: 3000,
+                  sound: true,
+                });
+                this.cancellingBet = false;
+              },
+              error: (err) => {
+                this.cancellingBet = false;
+                if (err.status == 401) {
+                  this.genericService.openLoginModal()
+                } else {
+                  console.log(err);
+                  this.toasterService.show(err, {
+                    classname: 'bg-danger text-light',
+                    delay: 1500,
+                    sound: true,
+                  });
+                }
+              },
             }
-          }).finally(() => { this.cancellingBet = false; });
+          )
+
       }
     }
   }

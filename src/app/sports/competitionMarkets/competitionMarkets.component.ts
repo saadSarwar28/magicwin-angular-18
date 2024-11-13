@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
-import { StorageService } from 'src/app/services/storage.service';
+import { StorageService } from '../../services/storage.service';
 import {
   DirectCopetitionMarket,
   MarketCatalogueSS,
@@ -7,12 +7,12 @@ import {
 } from '../../models/models';
 import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { ScoreTimerService, TimerService } from '../../services/timer.service';
-import { _window, BackendService } from 'src/app/services/backend.service';
-import { ToastService } from 'src/app/services/toast.service';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
-import { UtillsService } from 'src/app/services/utills.service';
-import { GenericService } from 'src/app/services/generic.service';
-import { WalletService } from 'src/app/services/wallet.service';
+import { _window, BackendService } from '../../services/backend.service';
+import { ToastService } from '../../services/toast.service';
+import { CheckAuthService } from '../../services/check-auth.service';
+import { UtillsService } from '../../services/utills.service';
+import { GenericService } from '../../services/generic.service';
+import { WalletService } from '../../services/wallet.service';
 import { SportsIdMapperService } from "../../services/sportsIdMapper.service";
 @Component({
   selector: 'app-competitionMarkets',
@@ -66,7 +66,7 @@ export class CompetitionMarketsComponent implements OnInit, OnDestroy {
     })
 
 
-    this.route.params.subscribe((p) => {
+    this.route.params.subscribe((p: any) => {
       this.sportsId = p.id;
       this.sportsId = this.sportsId.split('-')[this.sportsId.split('-').length - 1]
       this.checkPathandLoaddata();
@@ -83,14 +83,14 @@ export class CompetitionMarketsComponent implements OnInit, OnDestroy {
     this.scoreTimerService.clearTimer();
     this.elementRef.nativeElement.remove();
   }
-  routeToMarket(link) {
+  routeToMarket(link: any) {
     link ? this.router.navigate([link]) : {};
   }
 
   ngOnInit(): void {
     sessionStorage.clear();
     this.sportsId = this.route.snapshot.paramMap.get('id') || '';
-    this.route.params.subscribe((p) => {
+    this.route.params.subscribe((p: any) => {
       this.sportsId = p.id;
       // console.log(" p.id", p.id)
     })
@@ -115,7 +115,7 @@ export class CompetitionMarketsComponent implements OnInit, OnDestroy {
         parseInt(this.sportsId),
         'CompetitionMarketsComponent'
       )
-      .then((resp) => {
+      .subscribe((resp) => {
         this.data = resp;
         this.isLoading = false
         resp.competitions?.forEach((x: any) => {
@@ -143,19 +143,21 @@ export class CompetitionMarketsComponent implements OnInit, OnDestroy {
             this.GetScore();
           }, 1000)
         );
-      })
-      .catch((err) => {
+      }, err => {
         this.isLoading = false
         this.catchError(err)
-      });
+      }
+
+      )
+
   }
 
   GetSportMarketLiability(marketIds: string) {
     if (this.checkauthservice.IsLogin()) {
       if (marketIds != "") {
         this.sportsService
-          .SportsMarketliability(marketIds, 'CompetitionMarketsComponent')
-          .then((resp) => {
+          .SportsMarketliability(marketIds)
+          .subscribe((resp: any) => {
             if (resp && resp.length > 0) {
               resp.forEach((x: any) => {
                 this.data?.competitions?.forEach((event: any) => {
@@ -168,10 +170,11 @@ export class CompetitionMarketsComponent implements OnInit, OnDestroy {
                 })
               })
             }
-          })
-          .catch((err) => {
+          }, (err) => {
             this.catchError(err)
-          });
+          }
+          )
+
       }
     }
   }
@@ -180,9 +183,9 @@ export class CompetitionMarketsComponent implements OnInit, OnDestroy {
   GetWalllet() {
     this.walletService.loadBalance()
   }
-  oneClickBetObj = {}
-  async placeOneClickBet(betslip) {
-    let betSize = this.storageService.secureStorage.getItem('OCBSelectedVal');
+  oneClickBetObj: any = {}
+  async placeOneClickBet(betslip: any) {
+    let betSize = this.storageService.getItem('OCBSelectedVal');
     betslip.size = betSize
     try {
       this.oneClickBetObj[betslip.oneClickType] = true
@@ -253,13 +256,13 @@ export class CompetitionMarketsComponent implements OnInit, OnDestroy {
   }
 
   get isOneClickOn() {
-    return this.storageService.secureStorage.getItem('OCB') && this.isOneClickBetGlobal
+    return this.storageService.getItem('OCB') && this.isOneClickBetGlobal
   }
-  catchError(err) {
+  catchError(err: any) {
     if (err.status && err.status == 401) {
       this.timerService.clearTimer();
       this.scoreTimerService.clearTimer();
-      this.storageService.secureStorage.removeItem('token');
+      this.storageService.removeItem('token');
       this.genericService.openLoginModal()
 
 
@@ -268,7 +271,7 @@ export class CompetitionMarketsComponent implements OnInit, OnDestroy {
     }
   }
 
-  betStatus(resp, marketId) {
+  betStatus(resp: any, marketId: any) {
     let betstatus = resp.status;
     const message = resp.message || resp.response.message;
     if (betstatus) {
@@ -297,7 +300,7 @@ export class CompetitionMarketsComponent implements OnInit, OnDestroy {
       if (this.marketIds.length > 0) {
         this.sportsService
           .marketsbook(this.marketIds.join(','), 'CompetitionMarketsComponent')
-          .then((resp) => {
+          .subscribe((resp) => {
             if (resp && resp.length > 0) {
               resp.forEach((rate) => {
                 let market = this.data?.competitions?.forEach((sports: any, indexx: any) => {
@@ -354,10 +357,11 @@ export class CompetitionMarketsComponent implements OnInit, OnDestroy {
                 });
               });
             }
-          })
-          .catch((err) => {
+          }, (err) => {
             this.catchError(err)
-          });
+          }
+          )
+
       }
 
     }
@@ -373,7 +377,7 @@ export class CompetitionMarketsComponent implements OnInit, OnDestroy {
         let scoreData = await this.utilsService.getScore(eventIds)
         if (scoreData && scoreData.length > 0) {
           this.scoreData = scoreData
-          scoreData.forEach((s) => {
+          scoreData.forEach((s: any) => {
             this.data.competitions?.forEach((sp: DirectCopetitionMarket) => {
               let m = sp.markets?.filter((a: any) => a.version == s.eventId);
               if (m && m.length > 0) {

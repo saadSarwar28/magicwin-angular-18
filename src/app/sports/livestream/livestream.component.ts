@@ -3,9 +3,9 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, OnInit } from '@angu
 import { Router } from '@angular/router';
 import { BackendService } from '../../services/backend.service';
 import { TimerService } from '../../services/timer.service';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
+import { CheckAuthService } from '../../services/check-auth.service';
 import { _window } from '../../services/backend.service'
-import { StorageService } from 'src/app/services/storage.service';
+import { StorageService } from '../../services/storage.service';
 declare function iFrameResize(): any;
 @Component({
   selector: 'app-livestream',
@@ -50,7 +50,8 @@ export class LivestreamComponent implements OnInit, AfterViewInit {
 
     this.sportsService
       .GetTv()
-      .then((resp) => {
+      .subscribe((resp) => {
+        this.showLoader = false
         if (resp) {
           if (resp.ipAddress) this.ip = resp.ipAddress;
           this.data = resp.data;
@@ -70,17 +71,7 @@ export class LivestreamComponent implements OnInit, AfterViewInit {
           });
         }
       })
-      .catch((err) => {
-        if (err.status == 401) {
-          this.timerService.clearTimer();
-          this.storageService.secureStorage.removeItem('token');
-          window.location.href = window.location.origin
 
-        } else {
-          console.log(err)
-        }
-      })
-      .finally(() => (this.showLoader = false));
   }
 
 
