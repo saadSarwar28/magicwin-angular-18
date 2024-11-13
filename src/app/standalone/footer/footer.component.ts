@@ -8,7 +8,7 @@ import { GenericService } from '../../services/generic.service';
 import { VideoModalService } from '../../services/video-modal.service';
 import { PlatformService } from '../../services/platform.service';
 import { CommonModule } from '@angular/common';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { HttpClientModule } from '@angular/common/http';
 
 @Component({
@@ -151,7 +151,7 @@ export class FooterComponent implements OnInit {
         if (event instanceof NavigationEnd) {
           let sportsBookNew =
             typeof this.browserService.getWindow().sportsbookParameter ==
-            'string'
+              'string'
               ? JSON.parse(this.browserService.getWindow().sportsbookParameter)
               : this.browserService.getWindow().sportsbookParameter;
           if (
