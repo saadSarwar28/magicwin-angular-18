@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, Renderer2 } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, HostListener, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, NavigationStart, ParamMap, Router, RouterOutlet } from '@angular/router';
 import { PlatformService } from './services/platform.service';
 import { BrowserService } from './services/browser.service';
@@ -15,13 +15,17 @@ import { AuthService } from './services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { StorageService } from './services/storage.service';
 import { jwtDecode } from 'jwt-decode';
+import { FooterComponent } from './standalone/footer/footer.component';
+import { SidebarComponent } from './standalone/sidebar/sidebar.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule],
+  imports: [RouterOutlet, CommonModule, FooterComponent, SidebarComponent, TranslateModule],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
+  schemas: []
 })
 export class AppComponent implements OnInit{
 

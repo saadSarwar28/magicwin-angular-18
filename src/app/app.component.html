@@ -1,21 +1,30 @@
-<ng-container *ngIf="isIframe && (currentToken == null)">
-  <span class="session-expired">Session Expired</span>
-</ng-container>
-<div class="d-flex" style="min-height: 100vh" *ngIf="(isIframe && currentToken) || !isIframe">
-  <div class="sidebar custom-scrollbar" [class.open]="toogleSide && !defualtOpenInMob">
-<!--    <app-sidebar></app-sidebar>-->
+@if (isIframe && (currentToken == null)) {
+<span class="session-expired">Session Expired</span>
+}
+<div
+  class="d-flex"
+  style="min-height: 100vh"
+  *ngIf="(isIframe && currentToken) || !isIframe"
+>
+  <div
+    class="sidebar custom-scrollbar"
+    [class.open]="toogleSide && !defualtOpenInMob"
+  >
+    <app-sidebar></app-sidebar>
   </div>
   <div class="content" [class.sidebar-open]="toogleSide && !defualtOpenInMob">
-<!--    <navbartop (toggleSideBar)="toggle($event)"></navbartop>-->
+    <!--    <navbartop (toggleSideBar)="toggle($event)"></navbartop>-->
     <div class="router-outlet">
       <router-outlet></router-outlet>
     </div>
     <ng-container *ngIf="!isIframe">
-<!--      <app-footer *ngIf="(isMobile && landingPage) || !isMobile && isSidebarOpen"></app-footer>-->
+      @if ((isMobile && landingPage) || (!isMobile && isSidebarOpen)) {
+        <app-footer></app-footer>
+      }
     </ng-container>
   </div>
 </div>
-<!--<app-nav-bottom class="d-block d-lg-none " *ngIf="showBalanceLiabilityNavbar && isMobile"></app-nav-bottom>-->
+<!-- <app-nav-bottom class="d-block d-lg-none " *ngIf="showBalanceLiabilityNavbar && isMobile"></app-nav-bottom> -->
 <!--<app-sitefooter class="d-block d-lg-none " *ngIf="!showBalanceLiabilityNavbar && isMobile"></app-sitefooter>-->
 
 <!-- <app-toasts aria-live="polite" aria-atomic="true"></app-toasts> -->

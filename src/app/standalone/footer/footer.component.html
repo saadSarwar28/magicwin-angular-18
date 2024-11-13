@@ -1,0 +1,109 @@
+<footer class="footer-compo">
+  <ng-container *ngIf="isShowTutorial">
+    <div class="tut-class  ">
+      <span>{{ "tutorials" | translate }}</span>
+    </div>
+    <div class="tutorials  " *ngIf="tutorialText">
+      <span class="special_border" *ngFor="let item of tutorialText">
+        <div (click)="openVideoModal(item)" class="tutorial-btn">
+          <span class="tut-span w-100">
+            <a class="d-flex justify-content-between align-items-center">
+              {{ item.text | translate }}
+              <!-- <svg width="25px" height="15px" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-top: -3px">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M5.5 7H15.5C16.3284 7 17 7.67157 17 8.5V10.5L19.2764 9.3618C19.6088 9.19558 20 9.43733 20 9.80902V15.2785C20 15.6276 19.6513 15.8692 19.3244 15.7467L17 14.875V16.5C17 17.3284 16.3284 18 15.5 18H5.5C4.67157 18 4 17.3284 4 16.5V8.5C4 7.67157 4.67157 7 5.5 7Z"
+                fill="#fff"/>
+              </svg> -->
+              <img src="https://iriscdn.b-cdn.net/indiexch.com/play-icon.svg" alt=""/>
+            </a>
+          </span>
+        </div>
+      </span>
+    </div>
+  </ng-container>
+  <div class="d-flex d-lg-none flex-column justify-content-center align-items-center ">
+    <button type="button" class="btn btn-support  d-flex align-items-center justify-content-center mt-3 gap-2   w-80"
+            (click)="forWhatsapp()">
+      <img class="filter-white" [src]="supportIcon" alt="chat icon" width="20px"/>
+      <span class=" fs-13">24/7 Customer Support</span>
+    </button>
+    <div class="download-btn fs-13 btn d-flex align-items-center justify-content-center mt-2  w-80"
+         *ngIf="isShowDownlaodApp">
+      <a class="d-flex align-items-center justify-content-center gap-2 w-100" [href]="apkLink">
+        <i class="bi bi-download  fs-18"></i>
+        <span>Download App</span>
+      </a>
+    </div>
+  </div>
+  <div class="footer-content mt-4">
+    <!-- Logo and Description -->
+    <div class="footer-section">
+      <img [src]="siteLogo" routerLink="/" [alt]="sitename + '_Logo'" class="footer-logo">
+      <p class="footer-description sm-fs-14">
+        {{ footerSiteDescription | translate }}
+      </p>
+    </div>
+
+    <!-- Primary Links -->
+    <div class="d-flex">
+      <div class="footer-section">
+        <h3 class="sm-fs-14">PRIMARY</h3>
+        <ul class="footer-links d-flex flex-column" *ngIf="footerPrimary">
+          <li (click)="routeToLink(primary.link,primary)" class="pointer sm-fs-14"
+              *ngFor="let primary of footerPrimary">
+            {{ primary.text }}
+          </li>
+        </ul>
+      </div>
+      <!-- Settings Links -->
+      <div class="footer-section">
+        <h3 class="sm-fs-14">SETTINGS</h3>
+        <ul class="footer-links  d-flex flex-column" *ngIf="footerSetting">
+          <li (click)="routeToLink(setting.link,setting)" class="pointer sm-fs-14"
+              *ngFor="let setting of footerSetting">
+            {{ setting.text }}
+          </li>
+
+        </ul>
+      </div>
+    </div>
+    <!-- Community Links -->
+    <div class="footer-section">
+      <h3 class="text-center sm-fs-14">JOIN OUR COMMUNITY</h3>
+      <div class="social-icons">
+        <a *ngFor="let item of socialData" [href]="item.link"><img [alt]="item.text + '_' + sitename" [src]="
+          cdnSportsLanding + 'banners/' + item.id + '.png'"/></a>
+      </div>
+      <div class="d-none d-lg-flex flex-column justify-content-center align-items-center ">
+        <button type="button" class="btn btn-support  d-flex align-items-center justify-content-center mt-3 gap-2  w-support-btn"
+          (click)="forWhatsapp()">
+          <img class="filter-white" [src]="supportIcon" alt="chat icon" width="20px" />
+          <span class=" fs-13">24/7 Customer Support</span>
+        </button>
+        <div class="download-btn fs-13 btn d-flex align-items-center justify-content-center mt-2 w-support-btn"
+          *ngIf="isShowDownloadAppInWeb">
+          <a class="d-flex align-items-center justify-content-center gap-2 w-75" [href]="apkLink">
+            <i class="bi bi-download  fs-18"></i>
+            <span>Download App</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payment Options -->
+  <div class="footer-payment" *ngIf="depositImgs">
+    <h3 class="sm-fs-14">EASY PAYMENT OPTIONS</h3>
+    <div class="payment-icons">
+      <div class="payment-icons d-flex">
+        <img (click)="goToDeposit()" *ngFor="let item of depositImgs" [alt]="item.text + '_' + sitename"
+             [src]="cdnSportsLanding + 'banners/' + item.id + '.png'"/>
+      </div>
+    </div>
+  </div>
+
+  <!-- Copyright -->
+  <div class="footer-bottom">
+    <p class="fs-14"> {{ footerSiteCopywrite | translate }}</p>
+  </div>
+</footer>
