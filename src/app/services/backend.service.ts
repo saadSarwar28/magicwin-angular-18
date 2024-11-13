@@ -102,12 +102,16 @@ import {
 } from "../models/models";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable } from "rxjs/internal/Observable";
+import { SportsIdMapperService } from "./sportsIdMapper.service";
 @Injectable({
   providedIn: "root",
 })
 export class BackendService {
   gameUrl?: undefined;
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private sportsMapperService: SportsIdMapperService
+  ) { }
 
   private baseUrl: string = "your-base-url";
 
@@ -233,7 +237,7 @@ export class BackendService {
 
   // manualPaymentPost
   manualPayment_POST(
-    file: FileParameter | undefined,
+    file: FileParameter | any,
     amount: number | any,
     paymentMethod: string | undefined,
     transactoinId: string | undefined,
@@ -295,7 +299,7 @@ export class BackendService {
   // Client KYC
 
   clientKYC_POST(
-    file: FileParameter | undefined,
+    file: FileParameter | any,
     paymentMethod: string | undefined,
     recap: string
   ): Observable<BettingResponse> {
@@ -724,7 +728,8 @@ export class BackendService {
   }
 
   LotteryOrdersplaced(
-    body: FancyModel | undefined
+    body: FancyModel | undefined,
+    from?: string
   ): Observable<BettingResponse> {
     let url_: string = "";
     if (_window().lotteryordersplaced) {
@@ -2033,7 +2038,7 @@ export class BackendService {
   // Add bank with kyc
 
   addclientbankaccountwithkyc(
-    image_File: FileParameter | undefined,
+    image_File: FileParameter | any,
     image_PaymentMethod: string | undefined,
     haveKyc: boolean | undefined,
     accountNo: string | undefined,
@@ -2093,7 +2098,7 @@ export class BackendService {
 
   updatebankdetailkyc(
     accountNo: string | undefined,
-    file: FileParameter | undefined,
+    file: FileParameter | any,
     paymentMethod: string | undefined
   ): Observable<BettingResponse> {
     let url_ = this.baseUrl + "/exchangeapi/client/updatebankdetailkyc";

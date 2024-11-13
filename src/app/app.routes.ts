@@ -1,18 +1,20 @@
-import { Routes } from '@angular/router';
-import { ErrorpageComponent } from './errorpage/errorpage.component';
-import { IframeGuard } from './services/Iframe.guard';
-import { ChangePasswordFirstTimeComponent } from './user/change-password-first-time/change-password-first-time.component';
-import { LandingPageComponent } from './landing-page/landing-page.component';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+// import { ErrorpageComponent } from './errorpage/errorpage.component';
+// import { ChangePasswordFirstTimeComponent } from './user/change-password-first-time/change-password-first-time.component';
+// import { LandingPageComponent } from './landing-page/landing-page.component';
 import { SettingsComponent } from './settings/settings.component';
-import { AuthguardService } from './services/authguard.service';
+// import { AuthguardService } from './services/authguard.service';
+// import { IsB2CGuard } from './services/isB2c.guard';
+// import { IframeGuard } from './services/Iframe.guard';
+
 
 export const routes: Routes = [
-
-  { path: '', component: LandingPageComponent, canActivate: [IframeGuard] },
+  // { path: '', component: LandingPageComponent, canActivate: [IframeGuard] },
   {
     path: 'setting',
     component: SettingsComponent,
-    canActivate: [AuthguardService],
+    // canActivate: [AuthguardService],
   },
   // {
   //   path: 'deposit',
@@ -20,12 +22,11 @@ export const routes: Routes = [
   //     import('./new-deposit/deposit.module').then((m) => m.DepositModule),
   //   canActivate: [IsB2CGuard, AuthguardService],
   // },
-  {
-    path: 'sports',
-    loadChildren: () =>
-      import('./sports/sports.module').then((m) => m.SportsModule),
-  },
-
+  // {
+  //   path: 'sports',
+  //   loadChildren: () =>
+  //     import('./sports/sports.module').then((m) => m.SportsModule),
+  // },
   // {
   //   path: 'games',
   //   loadChildren: () =>
@@ -76,13 +77,13 @@ export const routes: Routes = [
   //   loadChildren: () =>
   //     import('./shared/blogs/blogs.module').then((m) => m.BlogsModule),
   // },
-  { path: '404', component: ErrorpageComponent },
-  {
-    path: 'user',
-    loadChildren: () => import('./user/user.module').then((m) => m.UserModule),
-    canActivate: [IframeGuard]
-  },
-  { path: 'change-password', component: ChangePasswordFirstTimeComponent, canActivate: [IframeGuard] },
+  // { path: '404', component: ErrorpageComponent },
+  // {
+  //   path: 'user',
+  //   loadChildren: () => import('./user/user.module').then((m) => m.UserModule),
+  //   canActivate: [IframeGuard]
+  // },
+  // { path: 'change-password', component: ChangePasswordFirstTimeComponent, canActivate: [IframeGuard] },
   {
     path: '**',
     redirectTo: '',

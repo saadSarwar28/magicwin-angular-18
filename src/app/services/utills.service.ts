@@ -151,7 +151,7 @@ export class UtillsService {
         r.size,
         'BACK'
       );
-      return this.bettingservice.SportsBookOrdersplacedSingle(modellocal, undefined)
+      return this.bettingservice.SportsBookOrdersplacedSingle(modellocal)
     } else {
       modellocal = new LocalMarketBet(
         Number(r.eventId),
@@ -234,28 +234,29 @@ export class UtillsService {
 
 
   getBanners() {
-    this.sportsService.GetBanners('darker_theme').then(d => {
-      if (d) {
-        if (Array.isArray(d)) {
-          d.forEach((banner: any) => {
-            if (Array.isArray(banner.data)) {
-              banner.data.forEach((bannerDetail: any) => {
-                if (bannerDetail.link.includes('casinos')) {
-                  bannerDetail.link = bannerDetail.link.replace('casinos', 'casino')
+    this.sportsService.GetBanners('darker_theme').subscribe(
+      {
+        next: d => {
+          if (d) {
+            if (Array.isArray(d)) {
+              d.forEach((banner: any) => {
+                if (Array.isArray(banner.data)) {
+                  banner.data.forEach((bannerDetail: any) => {
+                    if (bannerDetail.link.includes('casinos')) {
+                      bannerDetail.link = bannerDetail.link.replace('casinos', 'casino')
+                    }
+                  })
                 }
               })
             }
-          })
-        }
-        //  this.skeltonLoaderForMobi.next(false)
-        this.bannerData.next(Array.from(d));
-        this.bannerArray = Array.from(d)
+            this.skeltonLoaderForMobi.next(false)
+            this.bannerData.next(Array.from(d));
+            this.bannerArray = Array.from(d)
+          }
+        },
+        error: (error) => this.skeltonLoaderForMobi.next(false),
       }
-    }).catch(er =>
-      console.error(er)
-    ).finally(() => {
-      this.skeltonLoaderForMobi.next(false)
-    })
+    )
 
     // }
 
@@ -265,15 +266,19 @@ export class UtillsService {
   getDepositDetails() {
     this.sportsService
       .getDepositDetails('upi')
-      .then((data) => {
-        this.bankDetails.next(Array.from(data))
-      }).catch((err) => {
-        this.errorMessage = true
-      })
+      .subscribe(
+        {
+          next: (data) => {
+            this.bankDetails.next(Array.from(data))
+            this.errorMessage = true
+          },
+          error: (error) => this.errorMessage = true
+        }
+      )
   }
 
   getConfig() {
-    this.sportsService.getGetConfig().then(data => {
+    this.sportsService.getGetConfig().subscribe(data => {
       if (data) {
         let data2 = [
           {
@@ -302,7 +307,7 @@ export class UtillsService {
         this.configData.next(Array.from(data));
         this.configArray = Array.from(data)
       }
-    }).catch(er => console.error(er));
+    })
 
   }
 
@@ -332,17 +337,9 @@ export class UtillsService {
 
 
   getStackButtons() {
-    this.sportsService.stakesGet("StakeButtonsComponent").then((response: ClientStake) => {
+    this.sportsService.stakesGet("StakeButtonsComponent").subscribe((response: ClientStake) => {
       if (response) {
         this.stakesValues.next(response);
-      }
-    }).catch(err => {
-      if (err.status == 401) {
-        this.storageService.secureStorage.removeItem('token');
-        window.location.href = window.location.origin
-      } else {
-        console.log(err);
-        this.toasterService.show(err, { classname: 'bg-danger text-light' });
       }
     })
   }
@@ -605,30 +602,34 @@ export class UtillsService {
           undefined,
           tableId
         ),
-        undefined
       )
-      .then((x) => {
-        if (x.url) {
-          this.sportsService.gameUrl = x.url;
-          this.navigateToGame();
-        } else {
-          let err =
-            Object.keys(x.msg).length > 0
-              ? x.msg.message || x.msg
-              : x.msg || x.message;
-          this.openMsgModal(err);
+      .subscribe(
+        {
+          next: (x) => {
+            if (x.url) {
+              this.sportsService.gameUrl = x.url;
+              this.navigateToGame();
+            } else {
+              let err =
+                Object.keys(x.msg).length > 0
+                  ? x.msg.message || x.msg
+                  : x.msg || x.message;
+              this.openMsgModal(err);
+            }
+          },
+          error: (err) => {
+            this.openMsgModal('');
+            if (err.status == 401) {
+              this.openLoginModal();
+            } else {
+              console.error(err);
+            }
+          }
         }
-      })
-      .catch((err) => {
-        this.openMsgModal('');
-        console.log(err, 'in error')
-        if (err.status == 401) {
-          this.openLoginModal();
-        } else {
-          console.error(err);
-        }
-      })
-      .finally(() => { });
+
+
+      )
+
 
   }
   openMsgModal(error) {

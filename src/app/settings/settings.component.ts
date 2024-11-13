@@ -10,10 +10,14 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { UtillsService } from '../services/utills.service';
 import { GenericService } from '../services/generic.service';
 import { WalletService } from '../services/wallet.service';
+import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.component.html',
   styleUrls: [],
+  standalone: true,
+  imports: [TranslateModule, CommonModule]
 })
 export class SettingsComponent implements OnInit, OnDestroy {
 

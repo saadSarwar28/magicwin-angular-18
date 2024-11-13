@@ -4716,7 +4716,6 @@ export interface IProblemDetails {
 }
 
 export class ApiException extends Error {
-  message: string;
   status: number;
   response: string;
   headers: { [key: string]: any; };
@@ -7121,7 +7120,7 @@ export interface IClientkBankAccounts {
 
 export class RequetedAmount implements IRequetedAmount {
   accountNo?: string | undefined;
-  amount?: number | string;
+  amount?: number | any;
   id?: number;
   recaptcha?: string;
   constructor(data?: IRequetedAmount) {
