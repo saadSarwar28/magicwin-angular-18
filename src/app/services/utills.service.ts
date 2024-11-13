@@ -70,14 +70,15 @@ export class UtillsService {
 
   // // Don't Touch    ///////
 
+ 
   // ==================================Start Betting Methods ====================================================
 
 
   placeBet(r: any, looksabha?: boolean) {
     let keepAlive =
-      this.storageService.getItem('keepAlive') == null
+      this.storageService.secureStorage.getItem('keepAlive') == null
         ? false
-        : this.storageService.getItem('keepAlive');
+        : this.storageService.secureStorage.getItem('keepAlive');
     let modellocal;
     if (r.bettingOn === 'Otherraces') {
       modellocal = {
@@ -135,7 +136,7 @@ export class UtillsService {
         r.bType
       );
       return this.bettingservice
-        .LotteryOrdersplaced(modellocal)
+        .LotteryOrdersplaced(modellocal, 'PartialBetslipComponent')
 
     }
     else if (r.bettingOn === 'fn') {
@@ -242,29 +243,29 @@ export class UtillsService {
 
 
   getBanners() {
-    this.sportsService.GetBanners('darker_theme').subscribe(d => {
-      if (d) {
-        if (Array.isArray(d)) {
-          d.forEach((banner: any) => {
-            if (Array.isArray(banner.data)) {
-              banner.data.forEach((bannerDetail: any) => {
-                if (bannerDetail.link.includes('casinos')) {
-                  bannerDetail.link = bannerDetail.link.replace('casinos', 'casino')
+    this.sportsService.GetBanners('darker_theme').subscribe(
+      {
+        next: d => {
+          if (d) {
+            if (Array.isArray(d)) {
+              d.forEach((banner: any) => {
+                if (Array.isArray(banner.data)) {
+                  banner.data.forEach((bannerDetail: any) => {
+                    if (bannerDetail.link.includes('casinos')) {
+                      bannerDetail.link = bannerDetail.link.replace('casinos', 'casino')
+                    }
+                  })
                 }
               })
             }
-          })
-        }
-        //  this.skeltonLoaderForMobi.next(false)
-        this.bannerData.next(Array.from(d));
-        this.bannerArray = Array.from(d)
+              this.skeltonLoaderForMobi.next(false)
+            this.bannerData.next(Array.from(d));
+            this.bannerArray = Array.from(d)
+          }
+        },
+       error: (error) => this.skeltonLoaderForMobi.next(false),
       }
-    })
-    // .catch(er =>
-    //   console.error(er)
-    // ).finally(() => {
-    //   this.skeltonLoaderForMobi.next(false)
-    // })
+      )
 
     // }
 
@@ -274,12 +275,15 @@ export class UtillsService {
   getDepositDetails() {
     this.sportsService
       .getDepositDetails('upi')
-      .subscribe((data) => {
-        this.bankDetails.next(Array.from(data))
-      })
-      // .catch((err) => {
-      //   this.errorMessage = true
-      // })
+      .subscribe(
+        {
+          next: (data) => {
+            this.bankDetails.next(Array.from(data))
+            this.errorMessage = true
+          },
+           error: (error) =>  this.errorMessage = true
+        }
+        )
   }
 
   getConfig() {
@@ -297,12 +301,12 @@ export class UtillsService {
 
           }
         ]
-        let pin: any = data.find((item: any) => item.type === 'WPIN');
+        let pin: any = data.find((item) => item.type === 'WPIN');
         if (pin && pin.data && pin.data.length > 0) {
           this.checkPin = pin.data[0].id;
           this.clientPhone = pin.data[0].link;
         }
-        let PGData: any = data.find((item: any) => item.type === 'PG');
+        let PGData: any = data.find((item) => item.type === 'PG');
         let id = PGData.data[0].id;
         let link = PGData.data[0].link;
         this.depositLink = link;
@@ -313,7 +317,6 @@ export class UtillsService {
         this.configArray = Array.from(data)
       }
     })
-    // .catch(er => console.error(er));
 
   }
 
@@ -330,10 +333,9 @@ export class UtillsService {
       .catch(error => console.error('Error fetching IP address:', error));
 
   }
-
   getCurrentCountry() {
     const cookies = document.cookie;
-    const cookieObj = cookies.split(';').reduce((acc : any, cookie) => {
+    const cookieObj = cookies.split(';').reduce((acc, cookie) => {
       const [key, value] = cookie.trim().split('=');
       acc[key] = decodeURIComponent(value);
       return acc;
@@ -349,15 +351,6 @@ export class UtillsService {
         this.stakesValues.next(response);
       }
     })
-    // .catch(err => {
-    //   if (err.status == 401) {
-    //     this.storageService.removeItem('token');
-    //     window.location.href = window.location.origin
-    //   } else {
-    //     console.log(err);
-    //     this.toasterService.show(err, { classname: 'bg-danger text-light' });
-    //   }
-    // })
   }
 
 
@@ -430,7 +423,7 @@ export class UtillsService {
     }
   }
 
-  getVirtualScoreFormatedWay(m : any) {
+  getVirtualScoreFormatedWay(m) {
     // Step 1: Parse the HTML string
     const parser = new DOMParser();
     const doc = parser.parseFromString(m, 'text/html');
@@ -444,12 +437,12 @@ export class UtillsService {
 
   openMyMartkesModal() {
     if (this.checkauthservice.IsLogin()) {
-      // this.dialogRef.open(MymarketsComponent, {
-      //   width: '700px',
-      //   maxHeight: '70vh',
-      //   maxWidth: '95vw',
-      //   panelClass: 'my-markets-dialog',
-      // });
+      this.dialogRef.open(MymarketsComponent, {
+        width: '700px',
+        maxHeight: '70vh',
+        maxWidth: '95vw',
+        panelClass: 'my-markets-dialog',
+      });
     } else {
       this.openLoginModal()
     }
@@ -558,10 +551,10 @@ export class UtillsService {
 
   isLiveCasino: boolean = false
   isCheckUrl: boolean = false
-  tempProvider : any;
-  tempGameId : any
-  tempTableId : any
-  openProviderModal(isLiveCasino? : any) {
+  tempProvider;
+  tempGameId
+  tempTableId
+  openProviderModal(isLiveCasino?) {
     // this.isLiveCasino = isLiveCasino;
     // var elems = document.getElementById('provider-modal');
 
@@ -619,31 +612,36 @@ export class UtillsService {
           tableId
         ),
       )
-      .subscribe((x: any) => {
-        if (x.url) {
-          this.sportsService.gameUrl = x.url;
-          this.navigateToGame();
-        } else {
-          let err =
-            Object.keys(x.msg).length > 0
-              ? x.msg.message || x.msg
-              : x.msg || x.message;
-          this.openMsgModal(err);
+      .subscribe(
+        {
+          next: (x) => {
+            if (x.url) {
+              this.sportsService.gameUrl = x.url;
+              this.navigateToGame();
+            } else {
+              let err =
+                Object.keys(x.msg).length > 0
+                  ? x.msg.message || x.msg
+                  : x.msg || x.message;
+              this.openMsgModal(err);
+            }
+          },
+        error:(err) => {
+          this.openMsgModal('');
+          if (err.status == 401) {
+            this.openLoginModal();
+          } else {
+            console.error(err);
+          }
         }
-      })
-      // .catch((err: any) => {
-      //   this.openMsgModal('');
-      //   console.log(err, 'in error')
-      //   if (err.status == 401) {
-      //     this.openLoginModal();
-      //   } else {
-      //     console.error(err);
-      //   }
-      // })
-      // .finally(() => { });
+        }
+     
+    
+    )
+    
 
   }
-  openMsgModal(error: any) {
+  openMsgModal(error) {
     this.toasterService.show(error, {
       classname: 'bg-danger text-light',
       delay: 1500,
@@ -687,11 +685,11 @@ export class UtillsService {
 
 
   setRouteBeforeLogin(
-    provider : any,
-    gameId : any,
-    tableId : any,
-    isCheckUrl : any,
-    routerLink : any,
+    provider,
+    gameId,
+    tableId,
+    isCheckUrl,
+    routerLink,
     menuItem = false,
     rummy = false
   ) {
