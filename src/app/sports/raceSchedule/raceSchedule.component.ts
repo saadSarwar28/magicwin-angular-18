@@ -69,7 +69,7 @@ export class RaceScheduleComponent implements OnInit {
   }
 
   LoadRaceData() {
-    this.backendService.raceschedule(this.type.toUpperCase(), parseInt(this.sportsId), "RaceScheduleComponent").then((resp) => {
+    this.backendService.raceschedule(this.type.toUpperCase(), parseInt(this.sportsId), "RaceScheduleComponent").subscribe((resp) => {
       if (resp && resp.length > 0) {
         this.racingSchedule = resp;
         this.isOpen(0, this.racingSchedule[this.selectedIndex]?.childs[0])
@@ -77,14 +77,7 @@ export class RaceScheduleComponent implements OnInit {
       else {
         this.racingSchedule = undefined
       }
-    }).catch(err => {
-      if (err.status == 401) {
-        this.storageService.secureStorage.removeItem('token');
-        window.location.href = window.location.origin
-      } else {
-        console.log(err)
-      }
-    });;
+    })
   }
 
 }

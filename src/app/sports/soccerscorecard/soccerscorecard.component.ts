@@ -52,7 +52,7 @@ export class SoccerscorecardComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.betService.timeLineNew1(parseInt(this.evtid!), "SoccerscorecardComponent").then(
+    this.betService.timeLineNew1(parseInt(this.evtid!)).subscribe(
       (d: any) => {
         this.data = d;
         if (d[0]?.score) {
@@ -85,18 +85,6 @@ export class SoccerscorecardComponent implements OnInit, OnDestroy {
       error => {
         console.log('get menu get. error:' + error);
       }
-    ).catch(err => {
-      if (err.status == 401) {
-        this.storageService.secureStorage.removeItem('token');
-        window.location.href = window.location.origin
-        // var elems = document.getElementById('login-modal');
-        // if (elems) {
-        //   var model = M?.Modal?.init(elems);
-        //   model.open();
-        // }
-      } else {
-        console.log(err)
-      }
-    });
+    )
   }
 }

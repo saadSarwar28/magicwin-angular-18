@@ -60,21 +60,12 @@ export class RacetodayscardComponent implements OnInit {
         this.sportsId,
         'RaceScheduleComponent'
       )
-      .then((resp) => {
+      .subscribe((resp) => {
         if (resp.length > 0) {
           this.racingSchedule = resp;
           //
         }
       })
-      .catch((err) => {
-        if (err.status == 401) {
-          // this.router.navigate(['signin']);
-          this.storageService.secureStorage.removeItem('token');
-          window.location.href = window.location.origin;
 
-        } else {
-          console.log(err);
-        }
-      });
   }
 }

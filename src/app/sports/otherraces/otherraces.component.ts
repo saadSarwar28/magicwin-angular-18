@@ -586,14 +586,7 @@ export class OtherracesComponent implements OnInit, OnDestroy {
       this.sportsService
         .SportsMarketliability(mktids.join(','))
         .subscribe((resp: LineLiablityMulti[]) => this.HandleMarketLiability(resp))
-        .catch((err) => {
-          if (err.status == 401) {
 
-            this.timerService.clearTimer();
-          } else {
-            console.error(err);
-          }
-        });
     }
   }
 

@@ -58,7 +58,7 @@ import { NavMenusComponent } from './reuse/nav-menus.component';
 import { LoginSignButtonsComponent } from './reuse/login-sigup.-buttons.component';
 import { VirtualCricketComponent } from '../sports/virtual-cricket/virtual-cricket.component';
 import { VirtualScorePipe } from '../pipes/virtualScore.pipe';
-import { MatDialogModule } from '@angular/material/dialog';
+// import { MatDialogModule } from '@angular/material/dialog';
 import { StreamComponent } from './stream.component';
 import { DownloadAppModalComponent } from "./show-download-app-modal/download-app-modal.component";
 import { SkeltonLoaderComponent } from './skelton-loader/skelton-loader.component';
@@ -127,7 +127,7 @@ import { ProviderBannerComponent } from './provider-banner/provider-banner.compo
     CarouselModule,
     LazyLoadImageModule,
     MomentModule,
-    MatDialogModule
+    // MatDialogModule
   ],
   exports: [
     WalletComponent,

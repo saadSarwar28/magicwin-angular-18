@@ -356,7 +356,7 @@ export class BackendService {
     return this.http.get<XGameDetails>(url_);
   }
 
-  GetNextRace(): Observable<NextRaceWithStatus> {
+  GetNextRace(from: string): Observable<NextRaceWithStatus> {
     let url_: string = "";
     if (_window().nextrace) {
       url_ = this.baseUrl + _window().nextrace;
@@ -566,7 +566,7 @@ export class BackendService {
    * @param body (optional) Sports Market Id
    * @return Success
    */
-  clientpositionsports(body: string | undefined): Observable<ClientPosition[]> {
+  clientpositionsports(body: string | undefined, from?: string): Observable<ClientPosition[]> {
     let url_: string = "";
     if (_window().clientpositionsports) {
       url_ = this.baseUrl + _window().clientpositionsports;
@@ -657,14 +657,14 @@ export class BackendService {
   localmarketcurrentbets(
     body: string | undefined,
     from: String
-  ): Observable<CurrentBets> {
+  ): Observable<CurrentBets[]> {
     let url_: string = "";
     if (_window().localmarketcurrentbets) {
       url_ = this.baseUrl + _window().localmarketcurrentbets;
       url_ = url_.replace(/[?&]$/, "");
     }
 
-    return this.http.post<CurrentBets>(url_, body);
+    return this.http.post<CurrentBets[]>(url_, body);
   }
 
   /**
@@ -802,15 +802,16 @@ export class BackendService {
    * @return Success
    */
   SportsMarketliability(
-    body: string | undefined
-  ): Observable<LineLiablityMulti> {
+    body: string | undefined,
+    from?: string
+  ): Observable<LineLiablityMulti[]> {
     let url_: string = "";
     if (_window().sportsmarketliability) {
       url_ = this.baseUrl + _window().sportsmarketliability;
       url_ = url_.replace(/[?&]$/, "");
     }
 
-    return this.http.post<LineLiablityMulti>(url_, body);
+    return this.http.post<LineLiablityMulti[]>(url_, body);
   }
 
   /**

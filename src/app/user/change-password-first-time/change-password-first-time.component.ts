@@ -137,32 +137,38 @@ export class ChangePasswordFirstTimeComponent implements OnInit {
                       token
                     )
                   )
-                  .then((resp) => {
-                    if (resp.status) {
-                      sessionStorage.removeItem('token');
-                      this.toasterService.show(resp.message, {
-                        classname: 'bg-success text-light',
-                      });
-                      this.showLoader = false;
-                      this.passwordForm.reset();
-                      this.onclose();
-                      this.router.navigate(['/']);
-                    } else {
-                      this.passwordForm.controls['current_pass'].setErrors({
-                        error: resp.message,
-                      });
-                    }
-                  })
-                  .catch((err) => {
-                    if (err.status == 401) {
-                      this.storageService.secureStorage.removeItem('token');
-                      window.location.href = window.location.origin;
+                  .subscribe(
+                    {
+                      next: (resp) => {
+                        if (resp.status) {
+                          sessionStorage.removeItem('token');
+                          this.toasterService.show(resp.message, {
+                            classname: 'bg-success text-light',
+                          });
+                          this.showLoader = false;
+                          this.passwordForm.reset();
+                          this.onclose();
+                          this.router.navigate(['/']);
+                        } else {
+                          this.passwordForm.controls['current_pass'].setErrors({
+                            error: resp.message,
+                          });
+                        }
+                        this.showLoader = false
+                      },
+                      error: (err) => {
+                        this.showLoader = false
+                        if (err.status == 401) {
+                          this.storageService.secureStorage.removeItem('token');
+                          window.location.href = window.location.origin;
 
-                    } else {
-                      console.log(err);
+                        } else {
+                          console.log(err);
+                        }
+                      },
                     }
-                  })
-                  .finally(() => (this.showLoader = false));
+                  )
+
               }
             }
           });

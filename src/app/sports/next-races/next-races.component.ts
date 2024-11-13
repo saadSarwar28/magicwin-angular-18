@@ -39,24 +39,11 @@ export class NextRacesComponent implements OnInit {
     this.nextRaceTimer.clearTimer()
   }
   LoadNextRaceData() {
-    this.sportsService.GetNextRace("NextRacesComponent").then((resp => {
-
+    this.sportsService.GetNextRace("NextRacesComponent").subscribe(((resp: any) => {
       if (resp && resp.length > 0) {
         this.nextRaces = resp;
       }
-    })).catch((err) => {
-
-      if (err.status == 401) {
-        this.nextRaceTimer.clearTimer();
-        // this.router.navigate(['signin']);
-        this.storageService.secureStorage.removeItem('token');
-        window.location.href = window.location.origin
-
-      } else {
-        console.log(err)
-        this.router.navigate([err.status]);
-      }
-    });
+    }))
   }
 
   // splitOnSpace(trackName: any) {

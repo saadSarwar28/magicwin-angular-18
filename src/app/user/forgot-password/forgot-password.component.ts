@@ -175,47 +175,56 @@ export class ForgotPasswordComponent implements OnInit {
 
   signinMethod() {
     let c: any
-    this.signService.authenticate(new AuthenticateRequest(String(this.signupForm.controls['username'].value), String(this.signupForm.controls['password'].value)), c, "LoginComponent").then(resp => {
-      if (resp) {
-        if (resp.code && resp.code != 200) {
-          const translatedResponse = this.toasterTranslationMethod(resp.message);
-          this.signupForm.setErrors({ 'Invalid': translatedResponse });
-          return;
+    this.signService.authenticate(new AuthenticateRequest(String(this.signupForm.controls['username'].value), String(this.signupForm.controls['password'].value)), c, "LoginComponent")
+      .subscribe(
+        {
+
+          next: (resp) => {
+            if (resp) {
+              if (resp.code && resp.code != 200) {
+                const translatedResponse = this.toasterTranslationMethod(resp.message);
+                this.signupForm.setErrors({ 'Invalid': translatedResponse });
+                return;
+              }
+              else if (resp && resp.token) {
+                this.storageService.secureStorage.setItem('client', resp.userName)
+                this.storageService.secureStorage.setItem('token', resp.token)
+                localStorage.setItem('showAgreementOnce', 'showAgreementOnce');
+                this.showLoader = false;
+                this.router.navigate(['sports']).then(() => {
+                  window.location.reload();
+                });
+                return
+              }
+              else {
+                if (resp.Code == 500) {
+                  this.toasterService.show(resp.Message, { classname: 'bg-danger text-light', delay: 1500 });
+                  sessionStorage.setItem("token", resp.id);
+                  this.router.navigate(['/change-password']);
+                } else if (resp.Code == 600) {
+                  this.hideLoginForm = true;
+                  setInterval(() => {
+                    this.startCountDown();
+                  }, 1000);
+                  this.showOtpForm = true;
+                }
+                else if (!resp.status) {
+                  const translatedResponse = this.toasterTranslationMethod(resp.message);
+                  this.signupForm.controls['username'].setErrors({ 'error': translatedResponse });
+                }
+              }
+            }
+            this.showLoader = false
+          },
+          error: (er) => {
+            this.showLoader = false
+            if (er.response.message) {
+              const translatedResponse = this.toasterTranslationMethod(er.response.message);
+              this.signupForm.setErrors({ 'Invalid': translatedResponse });
+            }
+          },
         }
-        else if (resp && resp.token) {
-          this.storageService.secureStorage.setItem('client', resp.userName)
-          this.storageService.secureStorage.setItem('token', resp.token)
-          localStorage.setItem('showAgreementOnce', 'showAgreementOnce');
-          this.showLoader = false;
-          this.router.navigate(['sports']).then(() => {
-            window.location.reload();
-          });
-          return
-        }
-        else {
-          if (resp.Code == 500) {
-            this.toasterService.show(resp.Message, { classname: 'bg-danger text-light', delay: 1500 });
-            sessionStorage.setItem("token", resp.id);
-            this.router.navigate(['/change-password']);
-          } else if (resp.Code == 600) {
-            this.hideLoginForm = true;
-            setInterval(() => {
-              this.startCountDown();
-            }, 1000);
-            this.showOtpForm = true;
-          }
-          else if (!resp.status) {
-            const translatedResponse = this.toasterTranslationMethod(resp.message);
-            this.signupForm.controls['username'].setErrors({ 'error': translatedResponse });
-          }
-        }
-      }
-    }).catch(er => {
-      if (er.response.message) {
-        const translatedResponse = this.toasterTranslationMethod(er.response.message);
-        this.signupForm.setErrors({ 'Invalid': translatedResponse });
-      }
-    }).finally(() => this.showLoader = false);
+      )
   }
 
   private mapStackButtons(stakes: any) {
@@ -267,7 +276,7 @@ export class ForgotPasswordComponent implements OnInit {
       this.recaptchaV3Service.execute('importantAction')
         .subscribe((token) => {
           ClientGetPhoneNumber.recaptcha = token;
-          this.signService.Getphonenumber(ClientGetPhoneNumber).then(resp => {
+          this.signService.Getphonenumber(ClientGetPhoneNumber).subscribe(resp => {
             if (resp?.status == false) {
               this.signupForm.controls['username'].setErrors({ 'error': resp.message });
             }
@@ -312,7 +321,7 @@ export class ForgotPasswordComponent implements OnInit {
       this.recaptchaV3Service.execute('importantAction')
         .subscribe((token) => {
           UserPhoneCheckingForOTP.recaptcha = token;
-          this.signService.Checkuserphone(this.requestIdForgotPassword, UserPhoneCheckingForOTP).then(resp => {
+          this.signService.Checkuserphone(this.requestIdForgotPassword, UserPhoneCheckingForOTP).subscribe(resp => {
             //  this.signUpScreen = [false, true];
 
             if (resp?.status == false) {
@@ -357,7 +366,7 @@ export class ForgotPasswordComponent implements OnInit {
       this.recaptchaV3Service.execute('importantAction')
         .subscribe((token) => {
           UserPhoneCheckingForOTP.recaptcha = token;
-          this.signService.Verifyotpphone(this.requestIdForgotPassword, UserPhoneCheckingForOTP).then(resp => {
+          this.signService.Verifyotpphone(this.requestIdForgotPassword, UserPhoneCheckingForOTP).subscribe(resp => {
             if (resp?.status == false) {
               this.showOtpError = true;
               this.otpError = resp?.message
@@ -400,7 +409,7 @@ export class ForgotPasswordComponent implements OnInit {
       this.recaptchaV3Service.execute('importantAction')
         .subscribe((token) => {
           UserPhoneCheckingForOTP.recaptcha = token;
-          this.signService.Newpassword(this.requestIdForgotPassword, UserPhoneCheckingForOTP).then(resp => {
+          this.signService.Newpassword(this.requestIdForgotPassword, UserPhoneCheckingForOTP).subscribe(resp => {
             if (resp?.status == false) {
               this.signupForm.controls['password'].setErrors({ 'error': resp.message });
             }

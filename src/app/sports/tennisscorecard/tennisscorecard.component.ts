@@ -61,7 +61,7 @@ export class TennisscorecardComponent implements OnInit, OnDestroy {
         return;
       }
       if (this.evtid) {
-        this.betService.timeLineNew1(parseInt(this.evtid), "TennisscorecardComponent").then(
+        this.betService.timeLineNew1(parseInt(this.evtid)).subscribe(
           (resp: any) => {
 
             if (Object.keys(resp).length > 0) {
@@ -72,10 +72,7 @@ export class TennisscorecardComponent implements OnInit, OnDestroy {
               this.result = d.score;
             }
           },
-          error => {
-            console.error('get menu get. error:' + error);
 
-          }
         );
       }
     }

@@ -173,23 +173,19 @@ export class SportsbyidComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.sportsId == 'inplay') {
       this.backendService
         .inplayevents(_page, 'SportsbyidComponent')
-        .then((resp: any) => {
+        .subscribe((resp: any) => {
           resp.competitions = resp
           this.isLoading = false
           this.sortMarketData(resp)
         })
-        .catch((err) => {
-          this.catchError(err)
-        });
+
     } else if (this.sportsId == 'all') {
-      this.backendService.getdefaultpage(_page, 'SportsbyidComponent').then((resp: any) => {
+      this.backendService.getdefaultpage(_page, 'SportsbyidComponent').subscribe((resp: any) => {
         resp.competitions = resp
         this.isLoading = false
         this.sortMarketData(resp)
       })
-        .catch((err) => {
-          this.catchError(err)
-        });
+
     }
 
 
@@ -220,13 +216,11 @@ export class SportsbyidComponent implements OnInit, OnDestroy, AfterViewInit {
       }
       this.backendService
         .sportsbyid(this.sportsId, _page, 'SportsbyidComponent')
-        .then((resp: any) => {
+        .subscribe((resp: any) => {
           this.isLoading = false
           this.sortMarketData(resp)
         })
-        .catch((err) => {
-          this.catchError(err)
-        });
+
     }
 
   }
@@ -286,23 +280,26 @@ export class SportsbyidComponent implements OnInit, OnDestroy, AfterViewInit {
       if (marketIds != "") {
         this.backendService
           .SportsMarketliability(marketIds, 'UpcomingComponent')
-          .then((resp) => {
-            if (resp && resp.length > 0) {
-              resp.forEach((x: any) => {
-                this.data.forEach((event: any) => {
-                  let l = event.markets.filter(
-                    (lm: any) => lm.marketId == x.marketId
-                  );
-                  if (l && l.length > 0) {
-                    l[0].marketLiability = x.libility;
-                  }
-                })
-              })
+          .subscribe(
+            {
+              next: (resp) => {
+                if (resp && resp.length > 0) {
+                  resp.forEach((x: any) => {
+                    this.data.forEach((event: any) => {
+                      let l = event.markets.filter(
+                        (lm: any) => lm.marketId == x.marketId
+                      );
+                      if (l && l.length > 0) {
+                        l[0].marketLiability = x.libility;
+                      }
+                    })
+                  })
+                }
+              },
+              error: (error) => this.catchError(error),
             }
-          })
-          .catch((err) => {
-            this.catchError(err)
-          });
+          )
+
       }
     }
   }
@@ -572,18 +569,21 @@ export class SportsbyidComponent implements OnInit, OnDestroy, AfterViewInit {
 
       this.backendService
         .marketsbook(this.marketIds.join(','), 'SportsbyidComponent')
-        .then((resp) => {
-          if (resp && resp.length > 0) {
-            resp?.forEach((rate) => {
-              this.data?.forEach((sports: any, indexx: number) => {
-                this.populateRate(rate, sports.markets, indexx)
-              });
-            });
+        .subscribe(
+          {
+            next: (resp) => {
+              if (resp && resp.length > 0) {
+                resp?.forEach((rate) => {
+                  this.data?.forEach((sports: any, indexx: number) => {
+                    this.populateRate(rate, sports.markets, indexx)
+                  });
+                });
+              }
+            },
+            error: (error) => this.catchError(error),
           }
-        })
-        .catch((err) => {
-          this.catchError(err)
-        });
+        )
+
     }
   }
 

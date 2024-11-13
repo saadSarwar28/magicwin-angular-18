@@ -235,12 +235,9 @@ export class RacemarketComponent implements OnInit, OnDestroy {
     if (navigator.onLine == true && document.hidden == false) {
       if (this.srcData == undefined) {
         if (this.eventId != '') {
-          this.sportsService.TvOnBookmaker(parseInt(this.eventId)).then((resp) => {
+          this.sportsService.TvOnBookmaker(parseInt(this.eventId)).subscribe((resp) => {
             this.srcData = resp;
             this.getChannelData(parseInt(this.eventId || 0), resp.ipAddress)
-          }).catch(err => {
-            this.toasterService.show(err, { classname: 'bg-danger text-light', delay: 1500 });
-            console.error(err);
           })
         }
       }
@@ -249,10 +246,8 @@ export class RacemarketComponent implements OnInit, OnDestroy {
   LoadData() {
     this.sportsService
       .racemarket(this.marketId, 'RacemarketComponent')
-      .then((resp: MarketDetail) => this.HandleMarketDetail(resp))
-      .catch((err) => {
-        this.catchError(err)
-      });
+      .subscribe((resp: MarketDetail) => this.HandleMarketDetail(resp))
+
   }
 
   routeToRacingMarket() {
@@ -340,12 +335,10 @@ export class RacemarketComponent implements OnInit, OnDestroy {
             this.sportsId.replace('1.', '10.'),
             'RacemarketComponent'
           )
-          .then((resp: CurrentBets[]) => {
+          .subscribe((resp: CurrentBets[]) => {
             this.HandleCurrentBets(resp);
           })
-          .catch((err) => {
-            this.catchError(err)
-          });
+
       }
     }
   }
@@ -372,10 +365,8 @@ export class RacemarketComponent implements OnInit, OnDestroy {
     if (this.marketId == undefined || this.marketId.length <= 0) return;
     this.sportsService
       .directSinglemarketbook(this.marketId, 'RacemarketComponent')
-      .then((resp: MarketBook) => this.HandleMarketBook(resp))
-      .catch((err) => {
-        this.catchError(err)
-      });
+      .subscribe((resp: MarketBook) => this.HandleMarketBook(resp))
+
   }
 
   HandleMarketBook(resp: MarketBook): any {
@@ -559,10 +550,13 @@ export class RacemarketComponent implements OnInit, OnDestroy {
           this.sportsId.replace('1.', '10.'),
           'RacemarketComponent'
         )
-        .then((resp: ClientPosition[]) => this.HandleRunnerPosition(resp))
-        .catch((err) => {
-          this.catchError(err)
-        });
+        .subscribe(
+          {
+            next: (resp: ClientPosition[]) => this.HandleRunnerPosition(resp),
+            error: (error) => this.catchError(error),
+          }
+        )
+
 
     }
   }
@@ -614,10 +608,12 @@ export class RacemarketComponent implements OnInit, OnDestroy {
           this.sportsId.replace('1.', '10.'),
           'RacemarketComponent'
         )
-        .then((resp: LineLiablityMulti[]) => this.HandleMarketLiability(resp))
-        .catch((err) => {
-          this.catchError(err)
-        });
+        .subscribe(
+          {
+            next: (resp: LineLiablityMulti[]) => this.HandleMarketLiability(resp),
+            error: (error) => this.catchError(error),
+          }
+        )
     }
   }
 
@@ -659,23 +655,26 @@ export class RacemarketComponent implements OnInit, OnDestroy {
             this.sportsId.replace('1.', '10.'),
             'RacemarketComponent'
           )
-          .then((resp) => {
-            this.matchedUnmatched = resp;
-            if (
-              this.clientMatchSize !== this.matchedUnmatched.matchedSize ||
-              this.clientUnmatchSize !== this.matchedUnmatched.unMatchedSize
-            ) {
-              this.LoadCurrentBets()
-              this.GetMarketPosition();
-              this.GetSportMarketLiability();
-              this.GetWalllet();
-              this.clientMatchSize = this.matchedUnmatched.matchedSize;
-              this.clientUnmatchSize = this.matchedUnmatched.unMatchedSize;
+          .subscribe(
+            {
+              next: (resp) => {
+                this.matchedUnmatched = resp;
+                if (
+                  this.clientMatchSize !== this.matchedUnmatched.matchedSize ||
+                  this.clientUnmatchSize !== this.matchedUnmatched.unMatchedSize
+                ) {
+                  this.LoadCurrentBets()
+                  this.GetMarketPosition();
+                  this.GetSportMarketLiability();
+                  this.GetWalllet();
+                  this.clientMatchSize = this.matchedUnmatched.matchedSize;
+                  this.clientUnmatchSize = this.matchedUnmatched.unMatchedSize;
+                }
+              },
+              error: (error) => this.catchError(error),
             }
-          })
-          .catch((err) => {
-            this.catchError(err)
-          });
+          )
+
 
       }
     }

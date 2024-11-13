@@ -308,20 +308,20 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
             };
             this.backendService
               .RequestOTP('PHONE', CheckRequestOTP)
-              .then((response) => {
-                this.showLoader = false;
-                if (response.status) {
-                  this.startTimer();
-                  this.toasterService.show('Check your Inbox for OTP',
-                    { classname: 'bg-success text-light', delay: 3000 }
-                  );
-                  this.showOtpForm = true;
-                }
-              })
-              .catch((err) => {
-                this.showLoader = false;
-
-              });
+              .subscribe(
+                {
+                  next: (response) => {
+                    this.showLoader = false;
+                    if (response.status) {
+                      this.startTimer();
+                      this.toasterService.show('Check your Inbox for OTP',
+                        { classname: 'bg-success text-light', delay: 3000 }
+                      );
+                      this.showOtpForm = true;
+                    }
+                  },
+                  error: (error) => this.showLoader = false,
+                })
           });
       } catch (error) {
         this.showLoader = false;
@@ -416,7 +416,7 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
         .execute('importantAction')
         .subscribe((token) => {
           SignupOTPModal.recaptcha = token;
-          this.backendService.SignupRequest(SignupOTPModal).then((resp) => {
+          this.backendService.SignupRequest(SignupOTPModal).subscribe((resp) => {
             if (resp.status) {
               this.toasterService.show(resp?.message, {
                 classname: 'bg-success text-light',
@@ -466,7 +466,7 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
           c,
           'LoginComponent'
         )
-        .then((resp) => {
+        .subscribe((resp) => {
           if (resp) {
             this.showLoader = false;
             if (resp.code && resp.code != 200) {
@@ -521,13 +521,10 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
               }
             }
           }
+          this.showLoader = false
         })
-        .catch((er) => {
-          if (er.response.message) {
 
-          }
-        })
-        .finally(() => (this.showLoader = false));
+
     });
   }
   startCountDown(): any {
@@ -566,7 +563,7 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
 
             this.backendService
               .CheckUserNameAndPhone('PHONE', CheckUserNameModel)
-              .then((response) => {
+              .subscribe((response) => {
                 if (response.status) {
                   this.startTimer();
                   if (response.otpRequired) {
@@ -577,9 +574,7 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
                   }
                 }
               })
-              .catch((err) => {
 
-              });
           });
       } catch (error) {
         this.showLoader = false;
