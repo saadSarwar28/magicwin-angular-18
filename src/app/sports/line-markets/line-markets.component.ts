@@ -1,23 +1,41 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { _window } from 'src/app/services/backend.service';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
-import { GenericService } from 'src/app/services/generic.service';
-import { StorageService } from 'src/app/services/storage.service';
-import { ToastService } from 'src/app/services/toast.service';
-import { UtillsService } from 'src/app/services/utills.service';
-import { BookpositionComponent } from 'src/app/shared/bookposition/bookposition.component';
+import { _window } from '../../services/backend.service';
+import { CheckAuthService } from '../../services/check-auth.service';
+import { GenericService } from '../../services/generic.service';
+import { StorageService } from '../../services/storage.service';
+import { ToastService } from '../../services/toast.service';
+import { UtillsService } from '../../services/utills.service';
+import { BookpositionComponent } from '../../shared/bookposition/bookposition.component';
+import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
+import { ShortennumPipe } from '../../pipes/shortennum.pipe';
+import { RoundoffPipe } from '../../pipes/roundoff.pipe';
+import { GroupAndSortLineMarketsPipe } from '../../pipes/lineMarketPipe';
+import { OddsbuttonComponent } from '../../shared/reuse/oddsbutton.component';
+import { PartialBetslipComponent } from '../../shared/partial-betslip/partial-betslip.component';
 
 @Component({
   selector: 'app-line-markets',
   templateUrl: './line-markets.component.html',
-  styleUrls: ['./line-markets.component.scss']
+  styleUrls: ['./line-markets.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    TranslateModule,
+    ShortennumPipe,
+    RoundoffPipe,
+    GroupAndSortLineMarketsPipe,
+    OddsbuttonComponent,
+    PartialBetslipComponent
+
+  ]
 })
 export class LineMarketsComponent implements OnInit {
 
   @Input() lineData: any
-  @Input() localMarketRate;
-  @Input() lineRate;
+  @Input() localMarketRate: any;
+  @Input() lineRate: any;
   @Input() eventId: any;
   siteLoader: string = ""
   isOneClickBetGlobal: boolean = false
@@ -78,15 +96,15 @@ export class LineMarketsComponent implements OnInit {
     }
   }
 
-  oneClickBetObj = {
+  oneClickBetObj: any = {
     lineMarkets: false,
     tiedMatch: false,
     completedMatch: false,
     toWinToss: false
   }
 
-  async placeOneClickBet(betslip) {
-    let betSize = this.storageService.secureStorage.getItem('OCBSelectedVal');
+  async placeOneClickBet(betslip: any) {
+    let betSize = this.storageService.getItem('OCBSelectedVal');
     betslip.size = betSize
     try {
       this.oneClickBetObj[betslip.oneClickType] = true
@@ -99,16 +117,16 @@ export class LineMarketsComponent implements OnInit {
     this.oneClickBetObj[betslip.oneClickType] = false
   }
 
-  catchError(err) {
+  catchError(err: any) {
     if (err && err.status && err.status == 401) {
-      this.storageService.secureStorage.removeItem('token');
+      this.storageService.removeItem('token');
       this.genericService.openLoginModal()
     } else {
       console.log(err);
     }
   }
 
-  betStatus(resp, marketId) {
+  betStatus(resp: any, marketId: any) {
     let betstatus = resp.status;
     const message = resp.message || resp.response.message;
     if (betstatus) {
@@ -129,7 +147,7 @@ export class LineMarketsComponent implements OnInit {
   }
 
   get isOneClickOn() {
-    return this.storageService.secureStorage.getItem('OCB') && this.isOneClickBetGlobal
+    return this.storageService.getItem('OCB') && this.isOneClickBetGlobal
   }
 
   placebetLine(oneClickType: string, r: any, type: string, price: any) {

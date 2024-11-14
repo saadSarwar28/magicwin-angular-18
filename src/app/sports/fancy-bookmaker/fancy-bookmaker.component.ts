@@ -1,13 +1,13 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { BookMaker, ClientParameters, ClientPosition } from 'src/app/models/models';
-import { _window, BackendService } from 'src/app/services/backend.service';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
-import { GenericService } from 'src/app/services/generic.service';
-import { StorageService } from 'src/app/services/storage.service';
-import { FancytimerService, TimerService } from 'src/app/services/timer.service';
-import { ToastService } from 'src/app/services/toast.service';
-import { UtillsService } from 'src/app/services/utills.service';
-import { BookpositionComponent } from 'src/app/shared/bookposition/bookposition.component';
+import { BookMaker, ClientParameters, ClientPosition } from '../../models/models';
+import { _window, BackendService } from '../../services/backend.service';
+import { CheckAuthService } from '../../services/check-auth.service';
+import { GenericService } from '../../services/generic.service';
+import { StorageService } from '../../services/storage.service';
+import { FancytimerService, TimerService } from '../../services/timer.service';
+import { ToastService } from '../../services/toast.service';
+import { UtillsService } from '../../services/utills.service';
+import { BookpositionComponent } from '../../shared/bookposition/bookposition.component';
 
 @Component({
   selector: 'app-fancy-bookmaker',
@@ -17,9 +17,9 @@ import { BookpositionComponent } from 'src/app/shared/bookposition/bookposition.
 export class FancyBookmakerComponent implements OnInit, OnDestroy {
 
   fancyData: any = {};
-  @Input() eventId;
-  @Input() fancyVersion;
-  @Input() lineData?;
+  @Input() eventId: any;
+  @Input() fancyVersion: any;
+  @Input() lineData?: any;
   @Input() localMarketRate?: any
   @Output() loadBets: EventEmitter<any> = new EventEmitter<any>();
 
@@ -68,7 +68,7 @@ export class FancyBookmakerComponent implements OnInit, OnDestroy {
   GetClientParameters() {
     if (navigator.onLine == true && document.hidden == false) {
       if (this.isLoggedIn) {
-        let clientParams = this.storageService.secureStorage.getItem('clientParams');
+        let clientParams = this.storageService.getItem('clientParams');
         if (clientParams != null) {
           this.bookMakerRate = clientParams.bookMakerRate;
           this.fancyRate = clientParams.fancyRate;
@@ -109,7 +109,7 @@ export class FancyBookmakerComponent implements OnInit, OnDestroy {
     });
     this.fancyData.bookMaker.forEach((l: any) => {
       l.betslip = null;
-      l.runners.forEach((runner) => {
+      l.runners.forEach((runner: any) => {
         runner.betslip = null;
       });
     });
@@ -140,10 +140,10 @@ export class FancyBookmakerComponent implements OnInit, OnDestroy {
       r.betslip = null;
     }
   }
-  oneClickBetObj = {
+  oneClickBetObj: any = {
   }
-  async placeOneClickBet(betslip) {
-    let betSize = this.storageService.secureStorage.getItem('OCBSelectedVal');
+  async placeOneClickBet(betslip: any) {
+    let betSize = this.storageService.getItem('OCBSelectedVal');
     betslip.size = betSize
     try {
       this.oneClickBetObj[betslip.oneClickType] = true
@@ -156,9 +156,9 @@ export class FancyBookmakerComponent implements OnInit, OnDestroy {
     this.oneClickBetObj[betslip.oneClickType] = false
   }
 
-  catchError(err) {
+  catchError(err: any) {
     if (err && err.status && err.status == 401) {
-      this.storageService.secureStorage.removeItem('token');
+      this.storageService.removeItem('token');
       this.fancyTimerService.clearTimer();
       this.timerService.clearTimer()
       this.genericService.openLoginModal()
@@ -168,7 +168,7 @@ export class FancyBookmakerComponent implements OnInit, OnDestroy {
     }
   }
 
-  betStatus(resp, betslip) {
+  betStatus(resp: any, betslip: any) {
     let betstatus = resp.status;
     const message = resp.message || resp.response.message;
     if (betstatus) {
@@ -196,7 +196,7 @@ export class FancyBookmakerComponent implements OnInit, OnDestroy {
   }
 
   get isOneClickOn() {
-    return this.storageService.secureStorage.getItem('OCB') && this.isOneClickBetGlobal
+    return this.storageService.getItem('OCB') && this.isOneClickBetGlobal
   }
 
   placebetBookmaker(category: string, r: BookMaker, type: string, odds: any, marketId: string) {
@@ -334,16 +334,19 @@ export class FancyBookmakerComponent implements OnInit, OnDestroy {
     }
   }
 
-  private GetMarketPosition(mkts) {
+  private GetMarketPosition(mkts: any) {
     if (navigator.onLine == true && document.hidden == false) {
       if (this.checkauthservice.IsLogin()) {
         if (this.fancyData && this.fancyData.bookMaker && this.fancyData.bookMaker.length > 0) {
           this.sportService
-            .clientpositionsports(mkts, 'FancyBookmakerComponent')
-            .then((resp: ClientPosition[]) => this.HandleRunnerPosition(resp))
-            .catch((err) => {
-              this.catchError(err)
-            });
+            .clientpositionsports(mkts)
+            .subscribe(
+              {
+                next: (value) => (resp: ClientPosition[]) => this.HandleRunnerPosition(resp),
+                error: (error) => this.catchError(error),
+              }
+            )
+
         }
       }
     }
@@ -369,7 +372,7 @@ export class FancyBookmakerComponent implements OnInit, OnDestroy {
     }
   }
 
-  callBookmakerPosLib(marketId) {
+  callBookmakerPosLib(marketId: any) {
     this.GetMarketPosition(marketId)
     this.getSportsbookLiability(marketId)
     this.loadBets.emit()
@@ -433,25 +436,27 @@ export class FancyBookmakerComponent implements OnInit, OnDestroy {
       this.sportService
         .FancyMarketsAny(
           this.fancyVersion,
-          this.eventId,
-          'FancyBookmakerComponent'
+          this.eventId
         )
-        .then((resp) => {
-          if (resp) {
-            this.fancyHandling(resp);
-            if (this.callFirstTime) {
-              let ids = this.fancyData.bookMaker.map((x: any) => '6.' + x.marketId).join(',')
-              this.getSportsbookLiability(ids)
+        .subscribe(
+          {
+            next: (resp) => {
+              if (resp) {
+                this.fancyHandling(resp);
+                if (this.callFirstTime) {
+                  let ids = this.fancyData.bookMaker.map((x: any) => '6.' + x.marketId).join(',')
+                  this.getSportsbookLiability(ids)
 
-              this.GetMarketPosition(ids);
-              this.GetFancyMarketLiability()
-            }
-            this.callFirstTime = false
+                  this.GetMarketPosition(ids);
+                  this.GetFancyMarketLiability()
+                }
+                this.callFirstTime = false
+              }
+            },
+            error: (error) => this.catchError(error),
           }
-        })
-        .catch((err) => {
-          this.catchError(err)
-        });
+        )
+
     }
     this.fancyTimerService.SetTimer(
       setInterval(() => {
@@ -460,8 +465,8 @@ export class FancyBookmakerComponent implements OnInit, OnDestroy {
     );
   }
 
-  reorderArrayBySequence(array, sequence) {
-    let remainingItems = array.filter((item) => !sequence.includes(item));
+  reorderArrayBySequence(array: any, sequence: any) {
+    let remainingItems = array.filter((item: any) => !sequence.includes(item));
     return sequence.concat(remainingItems);
   }
   fancyHandling(d: any) {
@@ -505,10 +510,10 @@ export class FancyBookmakerComponent implements OnInit, OnDestroy {
         let fancyData = fancyMarketsData;
         if (fancyData && fancyData.length > 0) {
           this.otherCategories = fancyData.filter(
-            (item) => item.catagory === 'ODD/EVEN'
+            (item: any) => item.catagory === 'ODD/EVEN'
           );
           let filteredCategory = Array.from(
-            new Set(fancyData.map((x) => x.catagory))
+            new Set(fancyData.map((x: any) => x.catagory))
           );
           //let catagory = filteredCategory.filter((cat) => cat !== 'ODD/EVEN');
           let catagory = Array.from(
@@ -519,7 +524,7 @@ export class FancyBookmakerComponent implements OnInit, OnDestroy {
           );
           catagory = this.reorderArrayBySequence(catagory, sequence);
           //console.log("sequence", catagory)
-          let updatedFiterData = this.fancyDataFilters.filter((x) =>
+          let updatedFiterData = this.fancyDataFilters.filter((x: any) =>
             catagory.includes(x)
           );
           if (this.fancyDataFilters && this.fancyDataFilters.length <= 0) {
@@ -580,7 +585,7 @@ export class FancyBookmakerComponent implements OnInit, OnDestroy {
             //remove closed Categories
 
             let catFound = this.fancyDataFilters.filter(
-              (ff) => !filteredCategory.includes(ff)
+              (ff: any) => !filteredCategory.includes(ff)
             );
             if (catFound && catFound?.length > 0) {
               catFound?.forEach((el: any) => {
@@ -651,14 +656,14 @@ export class FancyBookmakerComponent implements OnInit, OnDestroy {
         }
         if (bookMakerData && bookMakerData.length > 0) {
           if (this.fancyData.bookMaker && this.fancyData.bookMaker.length > 0) {
-            bookMakerData.forEach((newMdata) => {
+            bookMakerData.forEach((newMdata: any) => {
               var filterm = this.fancyData.bookMaker.filter(
-                (x) => x.marketId == newMdata.marketId
+                (x: any) => x.marketId == newMdata.marketId
               );
               if (filterm && filterm.length > 0) {
-                newMdata.runners.forEach((newRun) => {
+                newMdata.runners.forEach((newRun: any) => {
                   var filterrun = filterm[0].runners.filter(
-                    (x) => x.selectionId == newRun.selectionId
+                    (x: any) => x.selectionId == newRun.selectionId
                   );
                   if (filterrun && filterrun.length > 0) {
                     filterrun[0].SelectionStatus = newRun.SelectionStatus;
@@ -712,47 +717,53 @@ export class FancyBookmakerComponent implements OnInit, OnDestroy {
     if (this.checkauthservice.IsLogin()) {
       if (marketid !== '') {
         this.sportService
-          .SportsMarketliability(marketid, 'CricketComponent')
-          .then((resp) => {
-            if (resp && resp.length > 0) {
-              resp.forEach((x: any) => {
-                let f = this.fancyData.bookMaker.filter(
-                  (xx: any) => xx.marketId == x.marketId.split('.')[1]
-                );
-                if (f && f.length > 0) {
-                  f[0].liability = x.libility;
+          .SportsMarketliability(marketid)
+          .subscribe(
+            {
+              next: (resp: any) => {
+                if (resp && resp.length > 0) {
+                  resp.forEach((x: any) => {
+                    let f = this.fancyData.bookMaker.filter(
+                      (xx: any) => xx.marketId == x.marketId.split('.')[1]
+                    );
+                    if (f && f.length > 0) {
+                      f[0].liability = x.libility;
+                    }
+                  });
                 }
-              });
+              },
+              error: (error) => this.catchError(error),
             }
-          })
-          .catch((err) => {
-            this.catchError(err)
-          });
+          )
+
       }
     }
   }
   GetFancyMarketLiability() {
     if (this.checkauthservice.IsLogin()) {
       this.sportService
-        .FancyMarketsLiability(this.eventId, 'FancyBookmakerComponent')
-        .then((x: any) => {
-          if (x && x.length > 0) {
-            x.forEach((e: any) => {
-              if (this.fancyData.fancy && this.fancyData.fancy.length > 0) {
-                let f = this.fancyData.fancy.filter(
-                  (a: any) => a.marketId == e.marketId.split('.')[1]
-                );
-                if (f && f.length > 0) {
-                  f[0].position = parseFloat(e.position);
-                  f[0].position2 = parseFloat(e.position2);
-                }
+        .FancyMarketsLiability(this.eventId)
+        .subscribe(
+          {
+            next: (x: any) => {
+              if (x && x.length > 0) {
+                x.forEach((e: any) => {
+                  if (this.fancyData.fancy && this.fancyData.fancy.length > 0) {
+                    let f = this.fancyData.fancy.filter(
+                      (a: any) => a.marketId == e.marketId.split('.')[1]
+                    );
+                    if (f && f.length > 0) {
+                      f[0].position = parseFloat(e.position);
+                      f[0].position2 = parseFloat(e.position2);
+                    }
+                  }
+                });
               }
-            });
+            },
+            error: (error) => this.catchError(error),
           }
-        })
-        .catch((err) => {
-          this.catchError(err)
-        });
+        )
+
     }
   }
   ngOnDestroy(): void {

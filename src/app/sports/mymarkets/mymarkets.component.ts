@@ -5,11 +5,21 @@ import { CheckAuthService } from '../../services/check-auth.service';
 import { _window } from '../../services/backend.service';
 import { StorageService } from '../../services/storage.service';
 import { SportsIdMapperService } from "../../services/sportsIdMapper.service";
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { RoundoffPipe } from '../../pipes/roundoff.pipe';
 @Component({
   selector: 'app-mymarkets',
   templateUrl: './mymarkets.component.html',
-  styleUrls: []
+  styleUrls: [],
+  standalone: true,
+  imports: [
+    TranslateModule,
+    CommonModule,
+    RoundoffPipe,
+    MatDialogModule
+  ]
 })
 export class MymarketsComponent implements OnInit {
 
@@ -46,27 +56,34 @@ export class MymarketsComponent implements OnInit {
       setTimeout(() => {
         this.rotate = false
       }, 500)
-      this.backendService.MyMarkets().then(res => {
-        if (res && res.length > 0) {
-          this.marketData = res
-          this.marketData.forEach(element => {
-            if (element.marketID.includes('10.')) {
-              element.marketID.replace('10.', '1.')
+      this.backendService.MyMarkets().subscribe(
+        {
+          next: (res) => {
+            this.loadingData = false;
+            if (res && res.length > 0) {
+              this.marketData = res
+              this.marketData.forEach(element => {
+                if (element.marketID.includes('10.')) {
+                  element.marketID.replace('10.', '1.')
+                }
+              });
             }
-          });
-        }
-      }).catch(err => {
-        if (err.status == 401) {
-          // this.router.navigate(['signin']);
-          this.storageService.secureStorage.removeItem('token');
-          window.location.href = window.location.origin
+          },
+          error: (err) => {
+            {
+              this.loadingData = false;
+              if (err.status == 401) {
+                // this.router.navigate(['signin']);
+                this.storageService.removeItem('token');
+                window.location.href = window.location.origin
 
-        } else {
-          console.log(err)
+              } else {
+                console.log(err)
+              }
+            }
+          },
         }
-      }).finally(() => { this.loadingData = false; });
-    } else {
-
+      )
     }
   }
   bookmaker = [4, 6, 18, 19]

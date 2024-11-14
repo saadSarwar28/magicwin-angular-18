@@ -1,15 +1,21 @@
-import { BackendService } from 'src/app/services/backend.service';
+import { BackendService } from '../../services/backend.service';
 import { ScoreCardTimerService } from '../../services/timer.service';
 import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { _window } from '../../services/backend.service'
 import { Router } from '@angular/router';
-import * as M from 'materialize-css';
-import { StorageService } from 'src/app/services/storage.service';
+import { StorageService } from '../../services/storage.service';
+import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: 'app-cricketscorecard',
   templateUrl: './cricketscorecard.component.html',
   styleUrls: ['./cricketscorecard.component.scss'],
-  changeDetection: ChangeDetectionStrategy.Default
+  changeDetection: ChangeDetectionStrategy.Default,
+  standalone: true,
+  imports: [
+    CommonModule,
+    TranslateModule
+  ]
 })
 export class CricketscorecardComponent implements OnInit {
   ngOnDestroy() {
@@ -52,53 +58,49 @@ export class CricketscorecardComponent implements OnInit {
       this.scoreTimerService.clearTimer();
       return;
     }
-    this.betService.timeLineNew1(Number(this.evtid), "CricketscorecardComponent").then(
-      (resp: any) => {
-        if (resp) {
-          if (Array.isArray(resp)) {
-            console.log(resp, "cricket Score card")
-            this.matchType = resp[0].matchType;
-            this.matchType = this.matchType.replace(/_/g, " ").toLowerCase()
-            this.team1 = resp[0].score.home.name;
-            this.team2 = resp[0].score.away.name;
-            let d = resp[0];
-            this.data = d
-            this.result = d.score;
-          } else {
-            if (Object?.keys(resp)?.length > 0) {
-              if (resp.matchType) {
-                this.matchType = resp.matchType;
-                this.matchType = this.matchType.replace(/_/g, " ").toLowerCase()
-              }
-              if (resp.score.home.name) {
-                this.team1 = resp.score.home.name;
-              }
-              if (resp.score.away.name) {
-                this.team2 = resp.score.away.name;
-              }
-              let d = resp;
+    this.betService.timeLineNew1(Number(this.evtid), '').subscribe(
+      {
+        next: (resp: any) => {
+          if (resp) {
+            if (Array.isArray(resp)) {
+              console.log(resp, "cricket Score card")
+              this.matchType = resp[0].matchType;
+              this.matchType = this.matchType.replace(/_/g, " ").toLowerCase()
+              this.team1 = resp[0].score.home.name;
+              this.team2 = resp[0].score.away.name;
+              let d = resp[0];
               this.data = d
               this.result = d.score;
             } else {
-              if (this.mktName?.includes(' v ')) {
-                this.team1 = this.mktName?.split(' v ')[0];
-                this.team2 = this.mktName?.split(' v ')[1];
+              if (Object?.keys(resp)?.length > 0) {
+                if (resp.matchType) {
+                  this.matchType = resp.matchType;
+                  this.matchType = this.matchType.replace(/_/g, " ").toLowerCase()
+                }
+                if (resp.score.home.name) {
+                  this.team1 = resp.score.home.name;
+                }
+                if (resp.score.away.name) {
+                  this.team2 = resp.score.away.name;
+                }
+                let d = resp;
+                this.data = d
+                this.result = d.score;
+              } else {
+                if (this.mktName?.includes(' v ')) {
+                  this.team1 = this.mktName?.split(' v ')[0];
+                  this.team2 = this.mktName?.split(' v ')[1];
+                }
               }
             }
           }
+        },
+        error: (error) => {
+          console.log('get menu get. error:' + error);
         }
-      },
-      error => {
-        console.log('get menu get. error:' + error);
+      }
 
-      }
-    ).catch(err => {
-      if (err.status == 401) {
-        this.storageService.secureStorage.removeItem('token');
-      } else {
-        console.log(err)
-      }
-    });;
+    )
   }
 
 }

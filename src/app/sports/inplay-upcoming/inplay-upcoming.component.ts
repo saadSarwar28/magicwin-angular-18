@@ -6,22 +6,33 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { StorageService } from '../../services/storage.service';
-import { BackendService } from 'src/app/services/backend.service';
+import { BackendService } from '../../services/backend.service';
 import { TimerService, ScoreTimerService } from '../../services/timer.service';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
+import { CheckAuthService } from '../../services/check-auth.service';
 import { _window } from '../../services/backend.service';
 import { SportsIdMapperService } from "../../services/sportsIdMapper.service";
-import { UtillsService } from 'src/app/services/utills.service';
-import { GenericService } from 'src/app/services/generic.service';
-import { WalletService } from 'src/app/services/wallet.service';
+import { UtillsService } from '../../services/utills.service';
+import { GenericService } from '../../services/generic.service';
+import { WalletService } from '../../services/wallet.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { VirtualCricketComponent } from '../virtual-cricket/virtual-cricket.component';
+import { InplayUpcomingMatchesComponent } from './inplay-upcoming-matches/inplay-upcoming-matches.component';
+import { LazyLoadImageModule } from 'ng-lazyload-image';
 
 @Component({
   selector: 'app-inplay-upcoming',
   templateUrl: './inplay-upcoming.component.html',
   styles: [
-
-
   ],
+  standalone: true,
+  imports: [
+    TranslateModule,
+    CommonModule,
+    InplayUpcomingMatchesComponent,
+    VirtualCricketComponent,
+    LazyLoadImageModule
+  ]
 })
 export class InplayUpcomingComponent implements OnInit, OnDestroy {
   today: Date = new Date();
@@ -181,7 +192,7 @@ export class InplayUpcomingComponent implements OnInit, OnDestroy {
       this.virtualEventIds = []
       this.backendService
         .popularbyid('4', 5, 'VirtualCricketComponent')
-        .then((resp) => {
+        .subscribe((resp) => {
           if (resp && resp.length > 0) {
             this.virtual = resp;
             this.virtualEventIds = resp
@@ -197,9 +208,7 @@ export class InplayUpcomingComponent implements OnInit, OnDestroy {
             }, this.sInterval)
           );
         })
-        .catch((err) => {
-          this.catchError(err)
-        });
+
     }
   }
 
@@ -236,7 +245,7 @@ export class InplayUpcomingComponent implements OnInit, OnDestroy {
     });
   }
 
-  routeToMarket(link) {
+  routeToMarket(link: any) {
     this.router.navigate([link]);
   }
 
@@ -248,7 +257,7 @@ export class InplayUpcomingComponent implements OnInit, OnDestroy {
     ) {
       this.genericService.openLoginModal();
     } else {
-      this.router.navigate([item.link]); 
+      this.router.navigate([item.link]);
     }
   }
 
@@ -258,11 +267,11 @@ export class InplayUpcomingComponent implements OnInit, OnDestroy {
   loadingData: boolean = true;
   inPlayMarketIds: string[] = []
 
-  catchError(err) {
+  catchError(err: any) {
     if (err.status && err.status == 401) {
       this.timerService.clearTimer();
       this.scoreTimerService.clearTimer();
-      this.storageService.secureStorage.removeItem('token');
+      this.storageService.removeItem('token');
       this.genericService.openLoginModal()
 
     } else {
@@ -294,7 +303,7 @@ export class InplayUpcomingComponent implements OnInit, OnDestroy {
         let scoreData = await this.utillsService.getScore(eventIds)
         if (scoreData && scoreData.length > 0) {
           this.scoreData = scoreData
-          scoreData.forEach((s) => {
+          scoreData.forEach((s: any) => {
             let m = this.not_virtual.filter(
               (x: any) => x.version == s.eventId
             );

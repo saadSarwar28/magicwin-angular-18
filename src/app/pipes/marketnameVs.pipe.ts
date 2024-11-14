@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({ name: 'marketName' })
+@Pipe({ name: 'marketName', standalone: true })
 export class MarketNamePipe implements PipeTransform {
   transform(value: string, id?: string): string {
     let imgs = [

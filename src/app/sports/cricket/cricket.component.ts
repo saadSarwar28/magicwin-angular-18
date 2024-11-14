@@ -1,7 +1,7 @@
 import {
   BackendService,
   SportsBookMarkets,
-} from 'src/app/services/backend.service';
+} from '../../services/backend.service';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -17,15 +17,14 @@ import {
   SportsBooktimerService,
   LotterytimerService,
 } from '../../services/timer.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { environment } from '.././../../environments/environment';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import {
   shortenLargeNumber,
   SetAmount,
 } from '../../services/shortenLargeNumber';
 import { BookpositionComponent } from '../../shared/bookposition/bookposition.component';
 import { StorageService } from '../../services/storage.service';
-import { ToastService } from 'src/app/services/toast.service';
+import { ToastService } from '../../services/toast.service';
 import {
   MatchedUnmatched,
   ClientPosition,
@@ -36,23 +35,76 @@ import {
   MarketCatalogueSS,
   MarketRunners,
   MatchUnModel,
-} from 'src/app/models/models';
+} from '../../models/models';
 import { iFrameResizer } from '../../../assets/lmtScore/sports-radar';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
+import { CheckAuthService } from '../../services/check-auth.service';
 import { _window } from '../../services/backend.service';
-import { UtillsService } from 'src/app/services/utills.service';
+import { UtillsService } from '../../services/utills.service';
 import { RecentMarketsService } from '../../services/recent-markets.service';
 import { DeviceDetectorService } from 'ngx-device-detector';
-import { GetStatusService } from 'src/app/services/get-status.service';
+import { GetStatusService } from '../../services/get-status.service';
 import { HttpClient } from '@angular/common/http';
-import { GenericService } from 'src/app/services/generic.service';
-import { WalletService } from 'src/app/services/wallet.service';
+import { GenericService } from '../../services/generic.service';
+import { WalletService } from '../../services/wallet.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { MomentModule } from 'ngx-moment';
+import { OddsbuttonComponent } from '../../shared/reuse/oddsbutton.component';
+import { PartialBetslipComponent } from '../../shared/partial-betslip/partial-betslip.component';
+import { TeamsScoreComponent } from '../../shared/reuse/teams-score.component';
+import { SkeltonLoaderComponent } from '../../shared/skelton-loader/skelton-loader.component';
+import { CricketscorecardComponent } from '../cricketscorecard/cricketscorecard.component';
+import { OrderbyPipe } from '../../pipes/orderby.pipe';
+import { MarketNamePipe } from '../../pipes/marketnameVs.pipe';
+import { RoundoffPipe } from '../../pipes/roundoff.pipe';
+import { RemoveUnderscorePipe } from '../../pipes/removeUnderscore.pipe';
+import { OrderbyrunnerPipe } from '../../pipes/orderbyrunner.pipe';
+import { StreamComponent } from '../../shared/stream.component';
+import { TimeremainingComponent } from '../../shared/reuse/time-remaining.component';
+import { ShortennumPipe } from '../../pipes/shortennum.pipe';
+import { SafePipe } from '../../pipes/safe.pipe';
+import { CashoutBetslipComponent } from '../../shared/cashout-betslip/cashout-betslip.component';
+import { BookmakerDataComponent } from '../bookmaker-data/bookmaker-data.component';
+import { FancyDataComponent } from '../fancy-data/fancy-data.component';
+import { LineMarketsComponent } from '../line-markets/line-markets.component';
+import { LotterymarketComponent } from '../lotterymarket/lotterymarket.component';
+import { MybetsComponent } from '../my-bets/my-bets.component';
+import { SportsBookComponent } from '../sports-book/sports-book.component';
 declare function iFrameResize(): any;
 @Component({
   selector: 'app-cricket',
   templateUrl: './cricket.component.html',
   styleUrls: ['./cricket.component.scss'],
   changeDetection: ChangeDetectionStrategy.Default,
+  standalone: true,
+  imports: [
+    TranslateModule,
+    CommonModule,
+    MomentModule,
+    OddsbuttonComponent,
+    PartialBetslipComponent,
+    TeamsScoreComponent,
+    SkeltonLoaderComponent,
+    CricketscorecardComponent,
+    TimeremainingComponent,
+    CashoutBetslipComponent,
+    BookmakerDataComponent,
+    FancyDataComponent,
+    StreamComponent,
+    LineMarketsComponent,
+    LotterymarketComponent,
+    SportsBookComponent,
+    MybetsComponent,
+    OrderbyPipe,
+    ShortennumPipe,
+    MarketNamePipe,
+    RoundoffPipe,
+    RouterModule,
+    SafePipe,
+    RemoveUnderscorePipe,
+    OrderbyrunnerPipe
+
+  ]
 })
 export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
   dataInBetFairScoreCard: any = false;
@@ -96,8 +148,7 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
   cTotalShare = 0;
   localMarketRate = 1;
 
-  lineRule = environment.linerules;
-  bookmakerRule = environment.bookmakerRules;
+
   matchId: any = 0;
   otherMarkets: any;
   srcData: any;
@@ -150,7 +201,7 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {
     this.deviceInfo = this.deviceService.getDeviceInfo();
 
-    this.isOneClickBetClient = this.storageService.secureStorage.getItem('OCB');
+    this.isOneClickBetClient = this.storageService.getItem('OCB');
     if (_window().hideOCBonComp) {
       this.isOneClickBetGlobal = true;
     }
@@ -210,7 +261,7 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
       this.localMarketRate = _window().locMarketRates;
       console.log('dsd', this.localMarketRate);
     }
-    this.route.params.subscribe((p) => {
+    this.route.params.subscribe((p: any) => {
       this.marketId = p.id.split('-')[p.id.split('-').length - 1];
       this.clientMatchSize = null;
       this.clientUnmatchSize = null;
@@ -235,15 +286,14 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
   loadFancyData() {
     if (navigator.onLine == true && document.hidden == false) {
       this.sportService
-        .FancyMarketsAny(this.fancyVersion, this.eventId, 'CricketComponent')
-        .then((resp) => {
+        .FancyMarketsAny(this.fancyVersion, this.eventId)
+        .subscribe((resp) => {
           if (resp) {
             this.fancyResponse = resp;
           }
-        })
-        .catch((err) => {
-          this.catchError(err);
-        });
+        }
+        )
+
     }
     this.fancyTimerService.SetTimer(
       setInterval(() => {
@@ -266,21 +316,21 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
   routeToTournament(data: any) {
     this.router.navigate([
       '/sports/tournament/' +
-        data.competition.name
-          .trim()
-          .toLowerCase()
-          .split(' ')
-          .join('-')
-          .replace(/[^a-z0-9-]/g, '') +
-        '-' +
-        data.competition.id,
+      data.competition.name
+        .trim()
+        .toLowerCase()
+        .split(' ')
+        .join('-')
+        .replace(/[^a-z0-9-]/g, '') +
+      '-' +
+      data.competition.id,
     ]);
   }
 
   getusername() {
     let random = Math.floor(Math.random() * 10000000 + 1);
     this.username =
-      this.storageService.secureStorage.getItem('client') || random;
+      this.storageService.getItem('client') || random;
     return this.username;
   }
 
@@ -320,26 +370,20 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
       }
       this.sportService
         .TvOnBookmaker(parseInt(this.eventId || 0))
-        .then((resp) => {
+        .subscribe((resp) => {
           if (resp && resp.ipAddress) {
             this.srcData = resp;
             this.getChannelData(parseInt(this.eventId || 0), resp.ipAddress);
           }
         })
-        .catch((err) => {
-          this.toasterService.show(err, {
-            classname: 'bg-danger text-light',
-            delay: 1500,
-          });
-          console.error(err);
-        });
+
     }
   }
 
   GetClientParameters() {
     if (navigator.onLine == true && document.hidden == false) {
       if (this.isLoggedIn) {
-        this.checkauthservice.clientParameters.subscribe((clientParams) => {
+        this.checkauthservice.clientParameters.subscribe((clientParams: any) => {
           if (clientParams) {
             this.bookMakerRate = clientParams.bookMakerRate;
             this.fancyRate = clientParams.fancyRate;
@@ -375,7 +419,7 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   // GetClientParams() {
-  //   let clientParams = this.storageService.secureStorage.getItem('clientParams');
+  //   let clientParams = this.storageService.getItem('clientParams');
   //   if (clientParams != null) {
   //     return (this.cTotalShare = clientParams.pShare + clientParams.cShare);
   //   } else {
@@ -407,7 +451,7 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       this.checkUserAgent();
     }
-    this.utillsService.ipaddress.subscribe((data) => {
+    this.utillsService.ipaddress.subscribe((data: any) => {
       if (data) {
         this.getIPAddress = data;
       }
@@ -434,7 +478,7 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
       if (!this.marketId.includes('.')) {
         this.sportService
           .geteventmarkets(this.marketId, 'CRICKET COMPONENT')
-          .then((res: any) => {
+          .subscribe((res: any) => {
             if (res.id == '4') {
               res.competition.event.markets.forEach(
                 (market: any, index: number) => {
@@ -458,7 +502,7 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
   LoadLineMarketData() {
     this.sportService
       .linemarketsundermo(this.eventId || 0, 'CricketComponent')
-      .then((resp) => {
+      .subscribe((resp) => {
         if (resp && resp.length > 0) {
           this.lineData = resp;
           this.lineMarkets = resp.filter((el) =>
@@ -469,14 +513,12 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
           );
           this.marketIds = resp.map((id: any) => id.marketId);
           this.getSportsbookLiability(
-            this.lineData.map((item) => item.marketId).join(',')
+            this.lineData.map((item: any) => item.marketId).join(',')
           );
         }
         this.marketIds.push(this.data.marketId);
       })
-      .catch((err) => {
-        this.catchError(err);
-      });
+
   }
 
   getChannelId: any = '';
@@ -484,7 +526,7 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
   LoadData() {
     this.sportService
       .marketdetail(this.marketId, 'CricketComponent')
-      .then((resp) => {
+      .subscribe((resp) => {
         if (resp) {
           this.isLoad = true;
           this.data = resp;
@@ -509,15 +551,11 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
             }, this.interval)
           );
         }
-      })
-      .then(() => {
         this.GetLMT(this.matchId);
         this.LoadLineMarketData();
         this.loadFancyData();
-      }) // Line Markets Call
-      .catch((err) => {
-        this.catchError(err);
-      });
+      })
+
   }
 
   changeToMarket(m: string) {
@@ -541,7 +579,7 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
             ),
             'CricketComponent'
           )
-          .then((resp) => {
+          .subscribe((resp: any) => {
             this.utillsService.currentBets.next({
               bets: resp,
               eventId: this.eventId,
@@ -553,9 +591,7 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
               this.currentBets = [];
             }
           })
-          .catch((err) => {
-            this.catchError(err);
-          });
+
       }
     }
   }
@@ -570,7 +606,7 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
       let uniq: any = [...new Set(this.marketIds)];
       this.sportService
         .directMarketsbook(uniq.join(','), 'CricketComponent')
-        .then((resp) => {
+        .subscribe((resp) => {
           if (resp && resp.length > 0) {
             resp.forEach((md: any) => {
               let totalshare = this.cTotalShare;
@@ -1168,9 +1204,7 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
             });
           }
         })
-        .catch((err) => {
-          this.catchError(err);
-        });
+
     }
   }
 
@@ -1188,25 +1222,28 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
         };
         this.sportService
           .matchUnmatchAllSports(mUmModal, 'CricketComponent')
-          .then((resp) => {
-            this.matchedUnmatched = resp;
-            if (
-              this.clientMatchSize !== this.matchedUnmatched.matchedSize ||
-              this.clientUnmatchSize !== this.matchedUnmatched.unMatchedSize
-            ) {
-              setTimeout(() => {
-                this.GetMarketPosition();
-                this.GetSportMarketLiability();
-                this.LoadCurrentBets();
-              }, 900);
-              this.GetWalllet();
-              this.clientMatchSize = this.matchedUnmatched.matchedSize;
-              this.clientUnmatchSize = this.matchedUnmatched.unMatchedSize;
-            }
+          .subscribe({
+            next: (resp) => {
+              this.matchedUnmatched = resp;
+              if (
+                this.clientMatchSize !== this.matchedUnmatched.matchedSize ||
+                this.clientUnmatchSize !== this.matchedUnmatched.unMatchedSize
+              ) {
+                setTimeout(() => {
+                  this.GetMarketPosition();
+                  this.GetSportMarketLiability();
+                  this.LoadCurrentBets();
+                }, 900);
+                this.GetWalllet();
+                this.clientMatchSize = this.matchedUnmatched.matchedSize;
+                this.clientUnmatchSize = this.matchedUnmatched.unMatchedSize;
+              }
+            },
+            error: (error) => this.catchError(error),
           })
-          .catch((err) => {
-            this.catchError(err);
-          });
+        // .catch((err) => {
+        //   this.catchError(err);
+        // });
       }
     }
   }
@@ -1241,7 +1278,7 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  callPosLibCurrBets(marketId) {
+  callPosLibCurrBets(marketId: any) {
     this.GetMarketPosition();
     this.getSportsbookLiability(marketId);
     this.LoadCurrentBets();
@@ -1250,7 +1287,7 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
 
   get isOneClickOn() {
     return (
-      this.storageService.secureStorage.getItem('OCB') &&
+      this.storageService.getItem('OCB') &&
       this.isOneClickBetGlobal
     );
   }
@@ -1297,7 +1334,7 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  oneClickBetObj = {
+  oneClickBetObj: any = {
     odds: false,
     lineMarkets: false,
     tiedMatch: false,
@@ -1305,8 +1342,8 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
     toWinToss: false,
   };
 
-  async placeOneClickBet(betslip) {
-    let betSize = this.storageService.secureStorage.getItem('OCBSelectedVal');
+  async placeOneClickBet(betslip: any) {
+    let betSize = this.storageService.getItem('OCBSelectedVal');
     betslip.size = betSize;
     try {
       this.oneClickBetObj[betslip.oneClickType] = true;
@@ -1318,9 +1355,9 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
     this.oneClickBetObj[betslip.oneClickType] = false;
   }
 
-  catchError(err) {
+  catchError(err: any) {
     if (err && err.status && err.status == 401) {
-      this.storageService.secureStorage.removeItem('token');
+      this.storageService.removeItem('token');
       this.timerService.clearTimer();
       this.fancyTimerService.clearTimer();
       this.genericService.openLoginModal();
@@ -1329,7 +1366,7 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  betStatus(resp, marketId) {
+  betStatus(resp: any, marketId: any) {
     let betstatus = resp.status;
     const message = resp.message || resp.response.message;
     if (betstatus) {
@@ -1449,11 +1486,14 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
       }
       let allMarkets = [...new Set(oddsMkts), ...new Set(otherLineIds)];
       this.sportService
-        .clientpositionsports(allMarkets.join(','), 'CricketComponent')
-        .then((resp: ClientPosition[]) => this.HandleRunnerPosition(resp))
-        .catch((err) => {
-          this.catchError(err);
-        });
+        .clientpositionsports(allMarkets.join(','))
+        .subscribe({
+          next: (res) => {
+            this.HandleRunnerPosition(res)
+          },
+          error: (err) => this.catchError(err),
+        })
+
     }
   }
 
@@ -1510,7 +1550,7 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
     if (id > 0) {
       this.sportService
         .sportsBookCall(id, 'CricketComponent')
-        .then((data: SportsBookMarkets[]) => {
+        .subscribe((data: SportsBookMarkets[]) => {
           if (data && data.length > 0) {
             // this.sportsBooks = data;
             data.forEach((market: SportsBookMarkets) => {
@@ -1547,7 +1587,7 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
     ) {
       this.sportService
         .sportsBookCall(id, 'Cricket Component')
-        .then((data: SportsBookMarkets[]) => {
+        .subscribe((data: SportsBookMarkets[]) => {
           if (data && data.length > 0) {
             data.forEach((market: SportsBookMarkets) => {
               if (market.marketId) {
@@ -1574,7 +1614,7 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  onVisibilityChange(visible: boolean) {
+  onVisibilityChange(visible: any) {
     this.sportsBookVisible = visible;
   }
 
@@ -1632,34 +1672,40 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.checkauthservice.IsLogin()) {
       if (marketid !== '') {
         this.sportService
-          .SportsMarketliability(marketid, 'CricketComponent')
-          .then((resp) => {
-            if (resp && resp.length > 0) {
-              resp.forEach((x: any) => {
-                // for sports books
-                let market = this.sportsBookMarketsMap.get(x.marketId);
-                market ? (market.liability = x.libility) : {};
+          .SportsMarketliability(marketid)
+          .subscribe(
+            {
+              next: (resp: any) => {
+                if (resp && resp.length > 0) {
+                  resp.forEach((x: any) => {
+                    // for sports books
+                    let market = this.sportsBookMarketsMap.get(x.marketId);
+                    market ? (market.liability = x.libility) : {};
 
-                // for line markets
-                if (this.lineData && this.lineData.length > 0) {
-                  let l = this.lineData.filter(
-                    (lm: any) => lm.marketId == x.marketId
-                  );
-                  if (l && l.length > 0) {
-                    l[0].marketLiability = x.libility;
-                  }
+                    // for line markets
+                    if (this.lineData && this.lineData.length > 0) {
+                      let l = this.lineData.filter(
+                        (lm: any) => lm.marketId == x.marketId
+                      );
+                      if (l && l.length > 0) {
+                        l[0].marketLiability = x.libility;
+                      }
+                    }
+                    if (this.data) {
+                      if (this.data.marketId === x.marketId) {
+                        this.data.marketLiability = x.libility;
+                      }
+                    }
+                  });
                 }
-                if (this.data) {
-                  if (this.data.marketId === x.marketId) {
-                    this.data.marketLiability = x.libility;
-                  }
-                }
-              });
+              },
+              error: (err) => {
+                this.catchError(err);
+              }
             }
-          })
-          .catch((err) => {
-            this.catchError(err);
-          });
+
+          )
+
       }
     }
   }
@@ -1668,11 +1714,15 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.checkauthservice.IsLogin()) {
       if (marketID !== '') {
         this.sportService
-          .clientpositionsports(marketID, 'CricketComponent')
-          .then((resp: ClientPosition[]) => this.HandleSportsBookPosition(resp))
-          .catch((err) => {
-            this.catchError(err);
-          });
+          .clientpositionsports(marketID)
+          .subscribe({
+            next: (resp: ClientPosition[]) => this.HandleSportsBookPosition(resp),
+            error: (err) => {
+              this.catchError(err);
+            }
+          }
+          )
+
       }
     }
   }
@@ -1683,10 +1733,10 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
         let market = this.sportsBookMarketsMap.get(x.marketId);
         market
           ? market.updateRunnerPosition({
-              runnerId: x.runnerId,
-              position: x.position,
-              position2: x.position2,
-            })
+            runnerId: x.runnerId,
+            position: x.position,
+            position2: x.position2,
+          })
           : {};
       });
     }
@@ -1703,11 +1753,5 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
     iFrameResizer('stats');
   }
 
-  splitNegativeSign(position: any) {
-    if (Math.sign(position) == -1) {
-      return '-';
-    } else {
-      return;
-    }
-  }
+
 }

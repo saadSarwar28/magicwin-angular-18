@@ -1,13 +1,14 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'roundoff'
+  name: 'roundoff',
+  standalone: true,
 })
 export class RoundoffPipe implements PipeTransform {
 
   transform(value: any): any {
     if (isNaN(value)) {
-      return ;
+      return;
     }
     const roundedValue = Math.round(value);
     if (value - roundedValue >= 0.5) {

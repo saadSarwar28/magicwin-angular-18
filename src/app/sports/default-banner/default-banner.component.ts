@@ -1,19 +1,29 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { SlidesOutputData } from 'ngx-owl-carousel-o';
+import { CarouselModule, SlidesOutputData } from 'ngx-owl-carousel-o';
 import { _window } from '../../services/backend.service';
-import { UtillsService } from 'src/app/services/utills.service';
+import { UtillsService } from '../../services/utills.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { SkeltonLoaderComponent } from '../../shared/skelton-loader/skelton-loader.component';
 @Component({
   selector: 'app-default-banner',
   templateUrl: './default-banner.component.html',
   styleUrls: ['./default-banner.component.scss'],
+  standalone: true,
+  imports: [
+    TranslateModule,
+    CommonModule,
+    CarouselModule,
+    SkeltonLoaderComponent,
+  ]
 })
 export class DefaultBannerComponent implements OnInit {
   bannerurl: any;
   isCheckUrl: boolean | undefined;
   cdnSportsSrc: any;
   active: number | undefined = 0;
-  bannerData;
+  bannerData: any;
   activeSlides: SlidesOutputData | undefined;
   carouselOptions: any;
   defaultImage: any;
@@ -29,7 +39,7 @@ export class DefaultBannerComponent implements OnInit {
     if (_window().isMultipleBanner) {
       this.isMultipleBanner = _window().isMultipleBanner;
     }
-    
+
 
     this.carouselOptions = {
       loop: true,

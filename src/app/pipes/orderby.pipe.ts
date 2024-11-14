@@ -1,7 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'orderBy'
+  name: 'orderBy',
+  standalone: true,
 })
 export class OrderbyPipe implements PipeTransform {
 
@@ -9,11 +10,11 @@ export class OrderbyPipe implements PipeTransform {
 
     if (propertyName) {
       value.sort((a: any, b: any) => {
-        if( a[propertyName]== 3 && b[propertyName] == 2)
+        if (a[propertyName] == 3 && b[propertyName] == 2)
           return -1
-        else if(a[propertyName]== 1 && b[propertyName] == 2)
+        else if (a[propertyName] == 1 && b[propertyName] == 2)
           return -1
-        else if(a[propertyName]==1 && b[propertyName] == 3)
+        else if (a[propertyName] == 1 && b[propertyName] == 3)
           return -1
         else
           return 0

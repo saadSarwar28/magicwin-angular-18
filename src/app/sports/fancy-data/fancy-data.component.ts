@@ -1,26 +1,49 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { BookMaker } from 'src/app/models/models';
-import { _window, BackendService } from 'src/app/services/backend.service';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
-import { GenericService } from 'src/app/services/generic.service';
-import { StorageService } from 'src/app/services/storage.service';
-import { FancytimerService, TimerService } from 'src/app/services/timer.service';
-import { ToastService } from 'src/app/services/toast.service';
-import { UtillsService } from 'src/app/services/utills.service';
-import { BookpositionComponent } from 'src/app/shared/bookposition/bookposition.component';
+import { BookMaker } from '../../models/models';
+import { _window, BackendService } from '../../services/backend.service';
+import { CheckAuthService } from '../../services/check-auth.service';
+import { GenericService } from '../../services/generic.service';
+import { StorageService } from '../../services/storage.service';
+import { FancytimerService, TimerService } from '../../services/timer.service';
+import { ToastService } from '../../services/toast.service';
+import { UtillsService } from '../../services/utills.service';
+import { BookpositionComponent } from '../../shared/bookposition/bookposition.component';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { OddsbuttonComponent } from '../../shared/reuse/oddsbutton.component';
+import { SortByPipe } from '../../pipes/sort-by.pipe';
+import { GroupByPipe } from '../../pipes/group-by.pipe';
+import { PartialBetslipComponent } from '../../shared/partial-betslip/partial-betslip.component';
+import { RemoveUnderscorePipe } from '../../pipes/removeUnderscore.pipe';
+import { FilterFancyMarketsPipe } from '../../pipes/filter-fancy-markets.pipe';
+import { TruncPipe } from '../../pipes/trunc.pipe';
 
 @Component({
   selector: 'app-fancy-data',
   templateUrl: './fancy-data.component.html',
-  styleUrls: ['./fancy-data.component.css']
+  styleUrls: ['./fancy-data.component.css'],
+  standalone: true,
+  imports: [
+    TranslateModule,
+    CommonModule,
+    OddsbuttonComponent,
+    SortByPipe,
+    GroupByPipe,
+    PartialBetslipComponent,
+    RemoveUnderscorePipe,
+    FilterFancyMarketsPipe,
+    TruncPipe
+
+
+  ]
 })
 export class FancyDataComponent implements OnInit, OnChanges {
 
   fancyData: any = {};
-  @Input() eventId;
-  @Input() fancyRate;
-  @Input() fancyResponse?;
+  @Input() eventId: any;
+  @Input() fancyRate: any;
+  @Input() fancyResponse?: any;
   @Output() loadBets: EventEmitter<any> = new EventEmitter<any>();
 
   otherCategories: any = [];
@@ -72,11 +95,11 @@ export class FancyDataComponent implements OnInit, OnChanges {
     }
   }
   isLoggedIn: any = false;
-  oneClickBetObj = {
+  oneClickBetObj: any = {
 
   }
-  async placeOneClickBet(betslip) {
-    let betSize = this.storageService.secureStorage.getItem('OCBSelectedVal');
+  async placeOneClickBet(betslip: any) {
+    let betSize = this.storageService.getItem('OCBSelectedVal');
     betslip.size = betSize
     try {
       this.oneClickBetObj[betslip.oneClickType] = true
@@ -89,9 +112,9 @@ export class FancyDataComponent implements OnInit, OnChanges {
     this.oneClickBetObj[betslip.oneClickType] = false
   }
 
-  catchError(err) {
+  catchError(err: any) {
     if (err && err.status && err.status == 401) {
-      this.storageService.secureStorage.removeItem('token');
+      this.storageService.removeItem('token');
       this.fancyTimerService.clearTimer();
       this.timerService.clearTimer()
       this.genericService.openLoginModal()
@@ -106,7 +129,7 @@ export class FancyDataComponent implements OnInit, OnChanges {
     item.collapse = !item.collapse
   }
 
-  betStatus(resp, betslip) {
+  betStatus(resp: any, betslip: any) {
     let betstatus = resp.status;
     const message = resp.message || resp.response.message;
     if (betstatus) {
@@ -129,7 +152,7 @@ export class FancyDataComponent implements OnInit, OnChanges {
   }
 
   get isOneClickOn() {
-    return this.storageService.secureStorage.getItem('OCB') && this.isOneClickBetGlobal
+    return this.storageService.getItem('OCB') && this.isOneClickBetGlobal
   }
 
   placeBetFancy(catagory: string, r: BookMaker, type: string, odds: any, runs: any) {
@@ -230,8 +253,8 @@ export class FancyDataComponent implements OnInit, OnChanges {
   fancyDataFilters: any = [];
   fancyFilter = 'ALL';
   callFirstTime: boolean = true
-  reorderArrayBySequence(array, sequence) {
-    let remainingItems = array.filter((item) => !sequence.includes(item));
+  reorderArrayBySequence(array: any, sequence: any) {
+    let remainingItems = array.filter((item: any) => !sequence.includes(item));
     return sequence.concat(remainingItems);
   }
 
@@ -278,10 +301,10 @@ export class FancyDataComponent implements OnInit, OnChanges {
           let fancyData = fancyMarketsData;
           if (fancyData && fancyData.length > 0) {
             this.otherCategories = fancyData.filter(
-              (item) => item.catagory === 'ODD/EVEN'
+              (item: any) => item.catagory === 'ODD/EVEN'
             );
             let filteredCategory = Array.from(
-              new Set(fancyData.map((x) => x.catagory))
+              new Set(fancyData.map((x: any) => x.catagory))
             );
             //let catagory = filteredCategory.filter((cat) => cat !== 'ODD/EVEN');
             let catagory = Array.from(
@@ -292,7 +315,7 @@ export class FancyDataComponent implements OnInit, OnChanges {
             );
             catagory = this.reorderArrayBySequence(catagory, sequence);
             //console.log("sequence", catagory)
-            let updatedFiterData = this.fancyDataFilters.filter((x) =>
+            let updatedFiterData = this.fancyDataFilters.filter((x: any) =>
               catagory.includes(x)
             );
             if (this.fancyDataFilters && this.fancyDataFilters.length <= 0) {
@@ -353,7 +376,7 @@ export class FancyDataComponent implements OnInit, OnChanges {
               //remove closed Categories
 
               let catFound = this.fancyDataFilters.filter(
-                (ff) => !filteredCategory.includes(ff)
+                (ff: any) => !filteredCategory.includes(ff)
               );
               if (catFound && catFound?.length > 0) {
                 catFound?.forEach((el: any) => {
@@ -386,25 +409,28 @@ export class FancyDataComponent implements OnInit, OnChanges {
   GetFancyMarketLiability() {
     if (this.checkauthservice.IsLogin()) {
       this.sportService
-        .FancyMarketsLiability(this.eventId, 'FancyDataComponent')
-        .then((x: any) => {
-          if (x && x.length > 0) {
-            x.forEach((e: any) => {
-              if (this.fancyData.fancy && this.fancyData.fancy.length > 0) {
-                let f = this.fancyData.fancy.filter(
-                  (a: any) => a.marketId == e.marketId.split('.')[1]
-                );
-                if (f && f.length > 0) {
-                  f[0].position = parseFloat(e.position);
-                  f[0].position2 = parseFloat(e.position2);
-                }
+        .FancyMarketsLiability(this.eventId)
+        .subscribe(
+          {
+            next: (x: any) => {
+              if (x && x.length > 0) {
+                x.forEach((e: any) => {
+                  if (this.fancyData.fancy && this.fancyData.fancy.length > 0) {
+                    let f = this.fancyData.fancy.filter(
+                      (a: any) => a.marketId == e.marketId.split('.')[1]
+                    );
+                    if (f && f.length > 0) {
+                      f[0].position = parseFloat(e.position);
+                      f[0].position2 = parseFloat(e.position2);
+                    }
+                  }
+                });
               }
-            });
+            },
+            error: (error) => this.catchError(error),
           }
-        })
-        .catch((err) => {
-          this.catchError(err)
-        });
+        )
+
     }
   }
   ngOnDestroy(): void {

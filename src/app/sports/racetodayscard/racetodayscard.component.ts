@@ -1,10 +1,19 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { BackendService } from 'src/app/services/backend.service';
-import { StorageService } from 'src/app/services/storage.service';
+import { BackendService } from '../../services/backend.service';
+import { StorageService } from '../../services/storage.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-racetodayscard',
   templateUrl: './racetodayscard.component.html',
   styleUrls: ['./racetodayscard.component.scss'],
+  standalone: true,
+  imports: [
+    TranslateModule,
+    CommonModule,
+    RouterModule
+  ]
 })
 export class RacetodayscardComponent implements OnInit {
   @Input() sportsId: any;
@@ -24,7 +33,7 @@ export class RacetodayscardComponent implements OnInit {
   selectedData: any = {};
   isOpen(index: number, data: any) {
     this.selectedData = data;
-    this.racingSchedule[this.selectedIndex].childs.forEach((element, ind) => {
+    this.racingSchedule[this.selectedIndex].childs.forEach((element: any, ind: any) => {
       if (index == ind) {
         element.toggle = !element.toggle;
         this.activeIndex = element.toggle ? index : null;
@@ -47,7 +56,7 @@ export class RacetodayscardComponent implements OnInit {
     }
 
   }
-  activeTab
+  activeTab: any
   changeIndex(d: string) {
     this.selectedIndex = this.racingSchedule.findIndex((x: any) => x.date == d);
     this.activeTab = 0; // Reset the active tab to the first tab whenever the selected date changes
@@ -60,21 +69,12 @@ export class RacetodayscardComponent implements OnInit {
         this.sportsId,
         'RaceScheduleComponent'
       )
-      .then((resp) => {
+      .subscribe((resp) => {
         if (resp.length > 0) {
           this.racingSchedule = resp;
           //
         }
       })
-      .catch((err) => {
-        if (err.status == 401) {
-          // this.router.navigate(['signin']);
-          this.storageService.secureStorage.removeItem('token');
-          window.location.href = window.location.origin;
 
-        } else {
-          console.log(err);
-        }
-      });
   }
 }

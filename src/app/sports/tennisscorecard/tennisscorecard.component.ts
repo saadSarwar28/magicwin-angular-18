@@ -1,12 +1,19 @@
 import { Component, OnInit, Input, OnDestroy, ElementRef } from '@angular/core';
 import { _window, BackendService } from '../../services/backend.service';
 import { ScoreCardTimerService } from '../../services/timer.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-tennisscorecard',
   templateUrl: './tennisscorecard.component.html',
-  styleUrls: ['./tennisscorecard.component.scss']
+  styleUrls: ['./tennisscorecard.component.scss'],
+  standalone: true,
+  imports: [
+    TranslateModule,
+    CommonModule,
+  ]
 })
 export class TennisscorecardComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
@@ -61,7 +68,7 @@ export class TennisscorecardComponent implements OnInit, OnDestroy {
         return;
       }
       if (this.evtid) {
-        this.betService.timeLineNew1(parseInt(this.evtid), "TennisscorecardComponent").subscribe(
+        this.betService.timeLineNew1(parseInt(this.evtid), '').subscribe(
           (resp: any) => {
 
             if (Object.keys(resp).length > 0) {
@@ -72,10 +79,7 @@ export class TennisscorecardComponent implements OnInit, OnDestroy {
               this.result = d.score;
             }
           },
-          error => {
-            console.error('get menu get. error:' + error);
 
-          }
         );
       }
     }

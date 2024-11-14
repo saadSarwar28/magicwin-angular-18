@@ -17,6 +17,7 @@ import { HttpClientModule } from '@angular/common/http';
   imports: [CommonModule, RouterModule, TranslateModule, HttpClientModule],
   templateUrl: './footer.component.html',
   styleUrl: './footer.component.scss',
+
 })
 export class FooterComponent implements OnInit {
   storedTheme: any = 'darker_theme';

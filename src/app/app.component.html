@@ -1,17 +1,10 @@
 @if (isIframe && (currentToken == null)) {
   <span class="session-expired">Session Expired</span>
 }
-<div
-  class="d-flex"
-  style="min-height: 100vh"
-  *ngIf="(isIframe && currentToken) || !isIframe"
->
-  <div
-    class="sidebar custom-scrollbar"
-    [class.open]="toogleSide && !defualtOpenInMob"
-  >
+<div class="d-flex" style="min-height: 100vh" *ngIf="(isIframe && currentToken) || !isIframe">
+  <div class="sidebar custom-scrollbar" [class.open]="toogleSide && !defualtOpenInMob">
     @if (isBrowser) {
-      <app-sidebar></app-sidebar>
+    <app-sidebar></app-sidebar>
     }
   </div>
   <div class="content" [class.sidebar-open]="toogleSide && !defualtOpenInMob">

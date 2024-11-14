@@ -1,6 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CheckAuthService } from "../../services/check-auth.service";
 import { GenericService } from "../../services/generic.service";
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { PartialBetslipComponent } from '../../shared/partial-betslip/partial-betslip.component';
+import { SortByPipe } from '../../pipes/sort-by.pipe';
 
 @Component({
   selector: 'app-sports-book',
@@ -97,7 +101,8 @@ import { GenericService } from "../../services/generic.service";
           font-size: 12px;
         }
       }
-    `
+    `,
+
   ],
   template: `
     <div style="margin-top: 1px">
@@ -154,6 +159,13 @@ import { GenericService } from "../../services/generic.service";
       </div>
     </div>
   `,
+  standalone: true,
+  imports: [
+    TranslateModule,
+    CommonModule,
+    PartialBetslipComponent,
+    SortByPipe
+  ]
 })
 export class SportsBookComponent implements OnInit {
 

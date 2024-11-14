@@ -1,11 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { _window } from 'src/app/services/backend.service';
-import { UtillsService } from 'src/app/services/utills.service';
+import { _window } from '../../services/backend.service';
+import { UtillsService } from '../../services/utills.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { SkeltonLoaderComponent } from '../../shared/skelton-loader/skelton-loader.component';
 
 @Component({
   selector: 'app-sports-nav',
   templateUrl: './sports-nav.component.html',
-  styleUrls: []
+  styleUrls: [],
+  standalone: true,
+  imports: [
+    TranslateModule,
+    CommonModule,
+    SkeltonLoaderComponent
+  ]
 })
 export class SportsNavComponent implements OnInit {
   sportsNavData: any[] = []

@@ -1,14 +1,17 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ScoreCardTimerService } from '../../services/timer.service';
-import { BackendService } from 'src/app/services/backend.service';
+import { BackendService } from '../../services/backend.service';
 import { _window } from '../../services/backend.service'
 import { Router } from '@angular/router';
-import * as M from "materialize-css";
-import { StorageService } from 'src/app/services/storage.service';
+import { StorageService } from '../../services/storage.service';
+import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: 'app-basketballscorecard',
   templateUrl: './basketballscorecard.component.html',
-  styleUrls: ['./basketballscorecard.component.scss']
+  styleUrls: ['./basketballscorecard.component.scss'],
+  standalone: true,
+  imports: [CommonModule, TranslateModule]
 })
 export class BasketballscorecardComponent implements OnInit {
   @Input() evtid: string | undefined;
@@ -54,7 +57,7 @@ export class BasketballscorecardComponent implements OnInit {
       return;
     }
 
-    this.betService.timeLineNew1(parseInt(this.evtid!), "SoccerscorecardComponent").then(
+    this.betService.timeLineNew1(parseInt(this.evtid!), '').subscribe(
       (d: any) => {
 
         this.data = d;
@@ -82,14 +85,6 @@ export class BasketballscorecardComponent implements OnInit {
         console.log('get menu get. error:' + error);
 
       }
-    ).catch(err => {
-      if (err.status == 401) {
-        // this.router.navigate(['signin']);
-        this.storageService.secureStorage.removeItem('token');
-        window.location.href = window.location.origin
-      } else {
-        console.log(err)
-      }
-    });
+    )
   }
 }

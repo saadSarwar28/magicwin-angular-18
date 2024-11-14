@@ -1,17 +1,27 @@
 
 import { AfterViewInit, ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { BackendService } from '../../services/backend.service';
 import { TimerService } from '../../services/timer.service';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
+import { CheckAuthService } from '../../services/check-auth.service';
 import { _window } from '../../services/backend.service'
-import { StorageService } from 'src/app/services/storage.service';
+import { StorageService } from '../../services/storage.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { SafePipe } from '../../pipes/safe.pipe';
 declare function iFrameResize(): any;
 @Component({
   selector: 'app-livestream',
   templateUrl: './livestream.component.html',
   styleUrls: ['./livestream.component.scss'],
   changeDetection: ChangeDetectionStrategy.Default,
+  standalone: true,
+  imports: [
+    TranslateModule,
+    CommonModule,
+    RouterModule,
+    SafePipe
+  ]
 })
 export class LivestreamComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
@@ -50,7 +60,8 @@ export class LivestreamComponent implements OnInit, AfterViewInit {
 
     this.sportsService
       .GetTv()
-      .then((resp) => {
+      .subscribe((resp) => {
+        this.showLoader = false
         if (resp) {
           if (resp.ipAddress) this.ip = resp.ipAddress;
           this.data = resp.data;
@@ -70,17 +81,7 @@ export class LivestreamComponent implements OnInit, AfterViewInit {
           });
         }
       })
-      .catch((err) => {
-        if (err.status == 401) {
-          this.timerService.clearTimer();
-          this.storageService.secureStorage.removeItem('token');
-          window.location.href = window.location.origin
 
-        } else {
-          console.log(err)
-        }
-      })
-      .finally(() => (this.showLoader = false));
   }
 
 

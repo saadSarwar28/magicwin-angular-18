@@ -9,7 +9,8 @@ interface GroupedMarket {
   collapse: boolean
 }
 @Pipe({
-  name: 'groupAndSortLineMarkets'
+  name: 'groupAndSortLineMarkets',
+  standalone: true,
 })
 export class GroupAndSortLineMarketsPipe implements PipeTransform {
   showLineOtherMarkets: boolean = false
@@ -50,16 +51,16 @@ export class GroupAndSortLineMarketsPipe implements PipeTransform {
       markets.forEach((market: any) => {
         if (this.showLineOtherMarkets) {
           if (market.marketName === 'To Win the Toss') {
-            groupedMarkets.toWinToss.data.push(market);
+            groupedMarkets['toWinToss'].data.push(market);
           } else if (market.marketName === 'Completed Match') {
-            groupedMarkets.completedMatch.data.push(market);
+            groupedMarkets['completedMatch'].data.push(market);
           } else if (market.marketName === 'Tied Match') {
-            groupedMarkets.tiedMatch.data.push(market);
+            groupedMarkets['tiedMatch'].data.push(market);
           }
         }
         if (!allMarkets.includes(market.marketName)) {
           market.runnerName = market.marketName;
-          groupedMarkets.lineMarkets.data.push(market);
+          groupedMarkets['lineMarkets'].data.push(market);
         }
       });
     }

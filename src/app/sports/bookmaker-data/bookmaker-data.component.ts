@@ -1,22 +1,45 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
-import { BookMaker, ClientPosition } from 'src/app/models/models';
-import { _window, BackendService } from 'src/app/services/backend.service';
-import { CheckAuthService } from 'src/app/services/check-auth.service';
-import { GenericService } from 'src/app/services/generic.service';
-import { StorageService } from 'src/app/services/storage.service';
-import { FancytimerService, TimerService } from 'src/app/services/timer.service';
-import { ToastService } from 'src/app/services/toast.service';
-import { UtillsService } from 'src/app/services/utills.service';
-import { BookpositionComponent } from 'src/app/shared/bookposition/bookposition.component';
+import { BookMaker, ClientPosition } from '../../models/models';
+import { _window, BackendService } from '../../services/backend.service';
+import { CheckAuthService } from '../../services/check-auth.service';
+import { GenericService } from '../../services/generic.service';
+import { StorageService } from '../../services/storage.service';
+import { FancytimerService, TimerService } from '../../services/timer.service';
+import { ToastService } from '../../services/toast.service';
+import { UtillsService } from '../../services/utills.service';
+import { BookpositionComponent } from '../../shared/bookposition/bookposition.component';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { ShortennumPipe } from '../../pipes/shortennum.pipe';
+import { RoundoffPipe } from '../../pipes/roundoff.pipe';
+import { OddsbuttonComponent } from '../../shared/reuse/oddsbutton.component';
+import { PartialBetslipComponent } from '../../shared/partial-betslip/partial-betslip.component';
+import { CashoutBetslipComponent } from '../../shared/cashout-betslip/cashout-betslip.component';
+import { RemoveUnderscorePipe } from '../../pipes/removeUnderscore.pipe';
+import { TruncPipe } from '../../pipes/trunc.pipe';
+import { OrderbyrunnerPipe } from '../../pipes/orderbyrunner.pipe';
 @Component({
   selector: 'app-bookmaker-data',
   templateUrl: './bookmaker-data.component.html',
-  styleUrls: []
+  styleUrls: [],
+  standalone: true,
+  imports: [
+    ShortennumPipe,
+    TranslateModule,
+    CommonModule,
+    OddsbuttonComponent,
+    PartialBetslipComponent,
+    CashoutBetslipComponent,
+    RemoveUnderscorePipe,
+    RoundoffPipe,
+    TruncPipe,
+    OrderbyrunnerPipe
+  ]
 })
 export class BookmakerDataComponent implements OnInit {
   fancyData: any = {};
-  @Input() eventId;
-  @Input() fancyResponse?;
+  @Input() eventId: any;
+  @Input() fancyResponse?: any;
   @Input() bookMakerRate: number = 1;
   @Output() loadBets: EventEmitter<any> = new EventEmitter<any>();
 
@@ -87,7 +110,7 @@ export class BookmakerDataComponent implements OnInit {
     });
     this.fancyData.bookMaker.forEach((l: any) => {
       l.betslip = null;
-      l.runners.forEach((runner) => {
+      l.runners.forEach((runner: any) => {
         runner.betslip = null;
       });
     });
@@ -119,10 +142,10 @@ export class BookmakerDataComponent implements OnInit {
       r.betslip = null;
     }
   }
-  oneClickBetObj = {
+  oneClickBetObj: any = {
   }
-  async placeOneClickBet(betslip) {
-    let betSize = this.storageService.secureStorage.getItem('OCBSelectedVal');
+  async placeOneClickBet(betslip: any) {
+    let betSize = this.storageService.getItem('OCBSelectedVal');
     betslip.size = betSize
     try {
       this.oneClickBetObj[betslip.oneClickType] = true
@@ -135,9 +158,9 @@ export class BookmakerDataComponent implements OnInit {
     this.oneClickBetObj[betslip.oneClickType] = false
   }
 
-  catchError(err) {
+  catchError(err: any) {
     if (err && err.status && err.status == 401) {
-      this.storageService.secureStorage.removeItem('token');
+      this.storageService.removeItem('token');
       this.fancyTimerService.clearTimer();
       this.timerService.clearTimer()
       this.genericService.openLoginModal()
@@ -147,7 +170,7 @@ export class BookmakerDataComponent implements OnInit {
     }
   }
 
-  betStatus(resp, betslip) {
+  betStatus(resp: any, betslip: any) {
     let betstatus = resp.status;
     const message = resp.message || resp.response.message;
     if (betstatus) {
@@ -168,7 +191,7 @@ export class BookmakerDataComponent implements OnInit {
   }
 
   get isOneClickOn() {
-    return this.storageService.secureStorage.getItem('OCB') && this.isOneClickBetGlobal
+    return this.storageService.getItem('OCB') && this.isOneClickBetGlobal
   }
 
   placebetBookmaker(category: string, r: BookMaker, type: string, odds: any, marketId: string) {
@@ -234,16 +257,17 @@ export class BookmakerDataComponent implements OnInit {
 
 
 
-  private GetMarketPosition(mkts) {
+  private GetMarketPosition(mkts: any) {
     if (navigator.onLine == true && document.hidden == false) {
       if (this.checkauthservice.IsLogin()) {
         if (this.fancyData && this.fancyData.bookMaker && this.fancyData.bookMaker.length > 0) {
           this.sportService
-            .clientpositionsports(mkts, 'FancyBookmakerComponent')
-            .then((resp: ClientPosition[]) => this.HandleRunnerPosition(resp))
-            .catch((err) => {
-              this.catchError(err)
-            });
+            .clientpositionsports(mkts)
+            .subscribe((resp: ClientPosition[]) => this.HandleRunnerPosition(resp)
+              , err => {
+                this.catchError(err)
+              }
+            )
         }
       }
     }
@@ -268,7 +292,7 @@ export class BookmakerDataComponent implements OnInit {
     }
   }
 
-  callBookmakerPosLib(marketId) {
+  callBookmakerPosLib(marketId: any) {
     this.GetMarketPosition(marketId)
     this.getSportsbookLiability(marketId)
     this.loadBets.emit()
@@ -343,14 +367,14 @@ export class BookmakerDataComponent implements OnInit {
           }
           if (bookMakerData && bookMakerData.length > 0) {
             if (this.fancyData.bookMaker && this.fancyData.bookMaker.length > 0) {
-              bookMakerData.forEach((newMdata) => {
+              bookMakerData.forEach((newMdata: any) => {
                 var filterm = this.fancyData.bookMaker.filter(
-                  (x) => x.marketId == newMdata.marketId
+                  (x: any) => x.marketId == newMdata.marketId
                 );
                 if (filterm && filterm.length > 0) {
-                  newMdata.runners.forEach((newRun) => {
+                  newMdata.runners.forEach((newRun: any) => {
                     var filterrun = filterm[0].runners.filter(
-                      (x) => x.selectionId == newRun.selectionId
+                      (x: any) => x.selectionId == newRun.selectionId
                     );
                     if (filterrun && filterrun.length > 0) {
                       filterrun[0].SelectionStatus = newRun.SelectionStatus;
@@ -410,8 +434,8 @@ export class BookmakerDataComponent implements OnInit {
     if (this.checkauthservice.IsLogin()) {
       if (marketid !== '') {
         this.sportService
-          .SportsMarketliability(marketid, 'BookmakerDataComponent')
-          .then((resp) => {
+          .SportsMarketliability(marketid)
+          .subscribe((resp: any) => {
             if (resp && resp.length > 0) {
               resp.forEach((x: any) => {
                 let f = this.fancyData.bookMaker.filter(
@@ -422,10 +446,13 @@ export class BookmakerDataComponent implements OnInit {
                 }
               });
             }
-          })
-          .catch((err) => {
-            this.catchError(err)
-          });
+          },
+            err => {
+              this.catchError(err)
+
+            }
+          )
+
       }
     }
   }

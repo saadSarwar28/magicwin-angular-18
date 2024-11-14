@@ -1,7 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'filterRaceByType'
+  name: 'filterRaceByType',
+  standalone: true,
 })
 export class PremiumRacePipe implements PipeTransform {
 
