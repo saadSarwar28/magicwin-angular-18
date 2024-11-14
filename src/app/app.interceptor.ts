@@ -26,12 +26,11 @@ export const AppInterceptor: HttpInterceptorFn = (request, next) => {
 
   return next(modifiedRequest).pipe(
     tap((response) => {
-
       if (response instanceof HttpResponse) {
         // Extract the JSON data and return it
         const jsonData = response.body as CustomError;
-        console.log('Response from Server:', jsonData.data);
-        if ('code' in jsonData && jsonData.code == 200) {
+        // console.log('Response from Server:', jsonData);
+        if (jsonData && jsonData.code == 200) {
           return jsonData.data;
         } else if (jsonData.code == 401) {
           localStorage.removeItem('jwtToken');
@@ -44,7 +43,7 @@ export const AppInterceptor: HttpInterceptorFn = (request, next) => {
 
     }),
     catchError((error: HttpErrorResponse) => {
-
+      // console.log(error,  ' <<<<<<<<<<<<<<< in error ')
       if (!error.headers.get('content-type')?.includes('application/json')) {
         return throwError(() => new CustomError(error.statusText ?? "Response format not recognized", error.status, null));
       }

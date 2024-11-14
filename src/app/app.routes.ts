@@ -5,9 +5,9 @@ export const routes: Routes = [
   {
     path: '', component: LandingPageComponent
   },
-  // {
-  //   path: 'sports',
-  //   loadChildren: () =>
-  //     import('./sports/sports.module').then((m) => m.SportsModule),
-  // },
+  {
+    path: 'sports',
+    loadChildren: () =>
+      import('./sports/sports.module').then((m) => m.SportsModule),
+  },
 ];

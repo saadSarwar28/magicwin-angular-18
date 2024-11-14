@@ -84,8 +84,6 @@ declare function iFrameResize(): any;
     RoundoffPipe,
     OrderbyrunnerPipe,
     SafePipe
-
-
   ]
 })
 export class EventmarketsComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -1331,10 +1329,10 @@ export class EventmarketsComponent implements OnInit, OnDestroy, AfterViewInit {
               next: (x: any) => {
                 if (x && x.length > 0) {
                   x.forEach((e: any) => {
-                    let sportMarket = this.sportsBookMarketsMap.get(e.marketId)
-                    if (sportMarket) {
-                      e.position < e.position2 ? sportMarket.liability = Number(Number(e.position).toFixed(2)) : sportMarket.liability = Number(Number(e.position2).toFixed(2))
-                    }
+                    // let sportMarket = this.sportsBookMarketsMap.get(e.marketId)
+                    // if (sportMarket) {
+                    //   e.position < e.position2 ? sportMarket.liability = Number(Number(e.position).toFixed(2)) : sportMarket.liability = Number(Number(e.position2).toFixed(2))
+                    // }
                   });
                 }
               },

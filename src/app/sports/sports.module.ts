@@ -77,7 +77,8 @@ import { RoundoffPipe } from '../pipes/roundoff.pipe';
     TranslateModule,
     FormsModule,
     RoundoffPipe,
-    MymarketsComponent
+    MymarketsComponent,
+    SportsRoutingModule
     // ReactiveFormsModule,
     // RouterModule,
     // CommonModule,

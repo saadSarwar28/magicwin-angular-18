@@ -1,3 +1,5 @@
+import { BrowserService } from './../../services/browser.service';
+import { PlatformService } from './../../services/platform.service';
 import {
   AfterViewInit,
   Component,
@@ -29,8 +31,8 @@ import { WalletService } from '../../services/wallet.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { SkeltonLoaderComponent } from '../../shared/skelton-loader/skelton-loader.component';
-import { NavMenusComponent } from '../../shared/reuse/nav-menus.component';
-import { RacetodayscardComponent } from '../racetodayscard/racetodayscard.component';
+import { NavMenusComponent } from '../../standalone/nav-menus/nav-menus.component';
+import { RacetodayscardComponent } from '../../standalone/racetodayscard/racetodayscard.component';
 import { MatchStartTimeComponent } from '../../shared/reuse/matchStartTime.component';
 import { TeamsScoreComponent } from '../../shared/reuse/teams-score.component';
 import { MomentModule } from 'ngx-moment';
@@ -98,38 +100,44 @@ export class SportsbyidComponent implements OnInit, OnDestroy, AfterViewInit {
     private utillsService: UtillsService,
     private toasterService: ToastService,
     private genericService: GenericService,
-    private walletService: WalletService
+    private walletService: WalletService,
+    private PlatformService: PlatformService,
+    private BrowserService: BrowserService
   ) {
-    if (_window().sportsbyidtimer) {
-      this.interval = _window().sportsbyidtimer;
-    }
-    if (_window().scoretimer) {
-      this.sInterval = _window().scoretimer;
-    }
-    if (_window().siteLoader) {
-      this.siteLoader = _window().siteLoader;
-    }
-    if (_window().hideOCBonComp) {
-      this.isOneClickBetGlobal = true;
-    }
-    if (_window().isIframe) {
-      this.isIframe = _window().isIframe;
-    }
-    if (this.checkauthservice.IsLogin()) {
-      this.isLoggedIn = true;
-    }
-    if (this.checkauthservice.HaveStakes()) {
-      this.cBuyRate = this.checkauthservice.cBuyRate;
-      this.cTotalShare = this.checkauthservice.cTotalShare;
-      this.currencyCode = this.checkauthservice.currencyCode;
+    if (this.PlatformService.isBrowser()) {
+      if (this.BrowserService.getWindow().sportsbyidtimer) {
+        this.interval = this.BrowserService.getWindow().sportsbyidtimer;
+      }
+      if (this.BrowserService.getWindow().scoretimer) {
+        this.sInterval = this.BrowserService.getWindow().scoretimer;
+      }
+      if (this.BrowserService.getWindow().siteLoader) {
+        this.siteLoader = this.BrowserService.getWindow().siteLoader;
+      }
+      if (this.BrowserService.getWindow().hideOCBonComp) {
+        this.isOneClickBetGlobal = true;
+      }
+      if (this.BrowserService.getWindow().isIframe) {
+        this.isIframe = this.BrowserService.getWindow().isIframe;
+      }
+      if (this.checkauthservice.IsLogin()) {
+        this.isLoggedIn = true;
+      }
+      if (this.checkauthservice.HaveStakes()) {
+        this.cBuyRate = this.checkauthservice.cBuyRate;
+        this.cTotalShare = this.checkauthservice.cTotalShare;
+        this.currencyCode = this.checkauthservice.currencyCode;
+      }
     }
   }
 
   ngAfterViewInit() {
-    if (this.deviceService.isMobile(navigator.userAgent)) {
-      setTimeout(() => {
-        window.scroll(0, 0)
-      }, 500)
+    if (this.PlatformService.isBrowser()) {
+      if (this.deviceService.isMobile(navigator.userAgent)) {
+        setTimeout(() => {
+          window.scroll(0, 0)
+        }, 500)
+      }
     }
   }
 
@@ -149,19 +157,21 @@ export class SportsbyidComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.route.params.subscribe((p: any) => {
-      this.sportsId = p.id;
-      this.timerService.clearTimer();
-      this.scoreTimerService.clearTimer();
-      this.isLoading = true
-      this.LoadData(0);
-    });
-    if (this.isIframe) {
-      this.utillsService.bannerData.subscribe((d: any) => {
-        if (d) {
-          this.outerNav = this.utillsService.returnFormatedData(d, 'TopLiveCasino')
-        }
-      })
+    if (this.PlatformService.isBrowser()) {
+      this.route.params.subscribe((p: any) => {
+        this.sportsId = p.id;
+        this.timerService.clearTimer();
+        this.scoreTimerService.clearTimer();
+        this.isLoading = true
+        this.LoadData(0);
+      });
+      if (this.isIframe) {
+        this.utillsService.bannerData.subscribe((d: any) => {
+          if (d) {
+            this.outerNav = this.utillsService.returnFormatedData(d, 'TopLiveCasino')
+          }
+        })
+      }
     }
   }
 
@@ -216,9 +226,7 @@ export class SportsbyidComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isLoading = false
         this.sortMarketData(resp)
       })
-
     }
-
 
     else {
       let ids = [
@@ -410,7 +418,7 @@ export class SportsbyidComponent implements OnInit, OnDestroy, AfterViewInit {
       }
       m[0].status = rate.status;
       if (rate.status == 'CLOSED') {
-        this.interval = _window().closedmarketinterval;
+        this.interval = this.BrowserService.getWindow().closedmarketinterval;
       }
       if (rate.status == 'CLOSED') {
         let indexToRemove = markets.findIndex((obj: any) => obj.marketId == rate.marketId);

@@ -18,7 +18,6 @@ import { PreloaderComponent } from './preloader/preloader.component';
 import { ProductsTabComponent } from './products-tab/products-tab.component';
 import { FilterFancyMarketsPipe } from '../pipes/filter-fancy-markets.pipe';
 import { ProviderModalComponent } from './provider-modal/provider-modal.component';
-import { RacetodayscardComponent } from '../sports/racetodayscard/racetodayscard.component';
 import { RoundoffPipe } from '../pipes/roundoff.pipe';
 import { MenuitemsComponent } from './menuitems/menuitems.component';
 import { ClickOutsideDirective } from '../directives/click-out-side.directive';
