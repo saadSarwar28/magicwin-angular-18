@@ -15,6 +15,7 @@ export const AppInterceptor: HttpInterceptorFn = (request, next) => {
       setHeaders: {
         Authorization: `Bearer ${jwtToken}`,
         Accept: 'application/json', // Set the Accept header to JSON format
+        'Content-Type': 'application/json'
       },
     }) : request.clone({
       setHeaders:{

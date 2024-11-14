@@ -7,6 +7,9 @@
  * Made By MaterializeCSS.com
  */
 
+@import "ngx-owl-carousel-o/lib/styles/scss/owl.carousel";
+@import "ngx-owl-carousel-o/lib/styles/scss/owl.theme.default";
+
 /* latin */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 //@import "/src/styles-crm.scss";
@@ -952,9 +955,7 @@ ul {
 }
 
 ::placeholder {
-  color: var(
-      --placeholdeClr
-  ) !important; /* Change this to your desired color */
+  color: var(--placeholdeClr) !important; /* Change this to your desired color */
   opacity: 1; /* This makes sure the color is fully applied */
 }
 
@@ -2897,10 +2898,7 @@ ul {
     width: 3.3em !important;
     height: 3.3em !important;
   }
-  .chaport-container
-  .chaport-launcher
-  .chaport-launcher-button
-  .chaport-launcher-chat-icon {
+  .chaport-container .chaport-launcher .chaport-launcher-button .chaport-launcher-chat-icon {
     width: 2em !important;
     height: 2em !important;
     margin-top: 0.0714285714em !important;

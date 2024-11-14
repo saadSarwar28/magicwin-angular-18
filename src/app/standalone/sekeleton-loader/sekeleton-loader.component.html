@@ -1,0 +1,167 @@
+<ng-container *ngIf="loaderType == 'navMenu'">
+  <div class="skeleton-all-menues   mt-2">
+    <div class="skeleton-nav-item  skeleton-item "></div>
+    <div class="skeleton-nav-item  skeleton-item "></div>
+    <div class="skeleton-nav-item  skeleton-item "></div>
+    <div class="skeleton-nav-item  skeleton-item "></div>
+    <div class="skeleton-nav-item  skeleton-item  lap-d-none"></div>
+    <div class="skeleton-nav-item  skeleton-item  lap-d-none"></div>
+    <div class="skeleton-nav-item  skeleton-item  d-lg-flex d-none"></div>
+    <div class="skeleton-nav-item  skeleton-item  d-lg-flex d-none"></div>
+    <div class="skeleton-nav-item  skeleton-item  d-lg-flex d-none"></div>
+    <div class="skeleton-nav-item  skeleton-item  d-lg-flex d-none"></div>
+    <div class="skeleton-nav-item  skeleton-item  d-lg-flex d-none"></div>
+    <div class="skeleton-nav-item  skeleton-item  d-lg-flex d-none"></div>
+    <div class="skeleton-nav-item  skeleton-item  d-lg-flex d-none"></div>
+    <div class="skeleton-nav-item  skeleton-item  d-lg-flex d-none"></div>
+  </div>
+</ng-container>
+<ng-container *ngIf="loaderType == 'sidebar'">
+  <div class="sidebar-skeleton mt-3">
+    <div class="skeleton-menu skeleton-item"></div>
+    <div class="skeleton-menu skeleton-item"></div>
+    <div class="skeleton-menu skeleton-item"></div>
+    <div class="skeleton-menu skeleton-item"></div>
+    <div class="skeleton-menu skeleton-item"></div>
+    <div class="skeleton-menu skeleton-item"></div>
+  </div>
+</ng-container>
+<ng-container *ngIf="loaderType == 'defaultBanner'">
+  <div class="banners-skeleton-loader">
+    <div class="skeleton-banner skeleton-item  w-100 d-none d-lg-flex"></div>
+    <div class="skeleton-banner skeleton-item  w-100 d-none d-lg-flex"></div>
+    <div class="skeleton-banner skeleton-item  w-100"></div>
+  </div>
+</ng-container>
+<ng-container *ngIf="loaderType == 'casinoNavData'">
+  <div class="casino-nav-skeleton mt-2">
+    <div class="nav-skeleton skeleton-item"></div>
+    <div class="nav-skeleton skeleton-item"></div>
+    <div class="nav-skeleton skeleton-item"></div>
+    <div class="nav-skeleton skeleton-item"></div>
+  </div>
+</ng-container>
+<ng-container *ngIf="loaderType == 'topPopularData'">
+  <div class="top-popular-skeleton mt-2 mb-2">
+    <div class="skeleton-popular-card skeleton-item d-none d-md-block"></div>
+    <div class="skeleton-popular-card skeleton-item d-none d-md-block"></div>
+    <div class="skeleton-popular-card skeleton-item"></div>
+    <div class="skeleton-popular-card skeleton-item"></div>
+  </div>
+</ng-container>
+<ng-container *ngIf="loaderType == 'sportsLoading'">
+  <div class="sportsLoading">
+    <ng-container *ngFor="let i of [0,0,0,0,0,0,0,0,0,0]">
+      <div class="team-name-sm skeleton-item d-flex d-md-none mt-2"></div>
+      <div class="skeleton-score-odds mt-2">
+        <div class="skeleton-score skeleton-item d-none d-md-block"></div>
+        <div class="skeleton-team-name skeleton-item d-none d-md-block"></div>
+        <div class="skeleton-odds skeleton-item desktop-odds"></div>
+        <div class="skeleton-odds skeleton-item desktop-odds"></div>
+        <div class="skeleton-odds skeleton-item desktop-odds"></div>
+        <div class="skeleton-odds skeleton-item desktop-odds"></div>
+        <div class="skeleton-odds skeleton-item desktop-odds"></div>
+        <div class="skeleton-odds skeleton-item desktop-odds"></div>
+      </div>
+    </ng-container>
+  </div>
+</ng-container>
+<ng-container *ngIf="loaderType == 'marketLoading'">
+  <div class="marketLoading">
+    <ng-container *ngFor="let i of [0,0,0]">
+      <div class="skeleton-header d-flex justify-content-between mt-2">
+        <div class="d-flex gap-3 align-items-center">
+          <div class="skeleton-item skeleton-match-odds-title"></div>
+          <div class="skeleton-item skeleton-cashout-btn"></div>
+        </div>
+      </div>
+      <div class="skeleton-score-odds mt-1">
+        <div class="skeleton-team-name skeleton-item"></div>
+        <div class="skeleton-odds skeleton-item  d-none d-md-flex lap-d-none"></div>
+        <div class="skeleton-odds skeleton-item  d-none d-md-flex lap-d-none"></div>
+        <div class="skeleton-odds skeleton-item  d-none d-md-block"></div>
+        <div class="skeleton-odds skeleton-item  d-none d-md-block"></div>
+        <div class="skeleton-odds skeleton-item "></div>
+        <div class="skeleton-odds skeleton-item "></div>
+      </div>
+      <div class="skeleton-score-odds mt-1">
+        <div class="skeleton-team-name skeleton-item"></div>
+        <div class="skeleton-odds skeleton-item  d-none d-md-flex lap-d-none"></div>
+        <div class="skeleton-odds skeleton-item  d-none d-md-flex lap-d-none"></div>
+        <div class="skeleton-odds skeleton-item  d-none d-md-block"></div>
+        <div class="skeleton-odds skeleton-item  d-none d-md-block"></div>
+        <div class="skeleton-odds skeleton-item "></div>
+        <div class="skeleton-odds skeleton-item "></div>
+      </div>
+      <div class="skeleton-score-odds mt-1">
+        <div class="skeleton-team-name skeleton-item"></div>
+        <div class="skeleton-odds skeleton-item  d-none d-md-flex lap-d-none"></div>
+        <div class="skeleton-odds skeleton-item  d-none d-md-flex lap-d-none"></div>
+        <div class="skeleton-odds skeleton-item  d-none d-md-block"></div>
+        <div class="skeleton-odds skeleton-item  d-none d-md-block"></div>
+        <div class="skeleton-odds skeleton-item "></div>
+        <div class="skeleton-odds skeleton-item "></div>
+      </div>
+    </ng-container>
+  </div>
+</ng-container>
+<ng-container *ngIf="loaderType == 'gameSlider'">
+  <div class="skeleton-games-cards-container">
+    <div class="d-flex justify-content-between">
+      <div class="skeleton-title skeleton-item"></div>
+      <div class="skeleton-see-more skeleton-item"></div>
+    </div>
+    <div class="skeleton-game-cards">
+      <div class="skeleton-game-item skeleton-item"></div>
+      <div class="skeleton-game-item skeleton-item"></div>
+      <div class="skeleton-game-item skeleton-item"></div>
+      <div class="skeleton-game-item skeleton-item"></div>
+      <div class="skeleton-game-item skeleton-item d-lg-flex d-none"></div>
+      <div class="skeleton-game-item skeleton-item d-lg-flex d-none"></div>
+      <div class="skeleton-game-item skeleton-item d-lg-flex d-none"></div>
+      <div class="skeleton-game-item skeleton-item d-lg-flex d-none"></div>
+    </div>
+  </div>
+</ng-container>
+<ng-container *ngIf="loaderType == 'casinoLoader'">
+  <div class="skeleton-casino-cards-container" *ngFor="let i of [0,0,0]">
+    <div class="d-flex justify-content-between">
+      <div class="skeleton-title skeleton-item"></div>
+      <div class="skeleton-see-more skeleton-item"></div>
+    </div>
+    <div class="skeleton-game-cards ">
+      <div class="skeleton-game-item skeleton-item"></div>
+      <div class="skeleton-game-item skeleton-item"></div>
+      <div class="skeleton-game-item  skeleton-item d-none d-md-block d-xxl-none"></div>
+      <div class="skeleton-game-item  skeleton-item d-none d-md-block d-xxl-none"></div>
+      <div class="skeleton-game-item skeleton-item d-xxl-block d-none"></div>
+      <div class="skeleton-game-item skeleton-item d-xxl-block d-none"></div>
+      <div class="skeleton-game-item skeleton-item d-xxl-block d-none"></div>
+      <div class="skeleton-game-item skeleton-item d-xxl-block d-none"></div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="loaderType == 'navMenus'">
+  <div class="skeleton-menu-container mt-2">
+    <div class="skeleton-menu-item  skeleton-item"></div>
+    <div class="skeleton-menu-item  skeleton-item"></div>
+    <div class="skeleton-menu-item  skeleton-item"></div>
+    <div class="skeleton-menu-item  skeleton-item"></div>
+    <div class="skeleton-menu-item  skeleton-item "></div>
+    <div class="skeleton-menu-item  skeleton-item "></div>
+    <div class="skeleton-menu-item  skeleton-item d-none d-md-flex"></div>
+    <div class="skeleton-menu-item  skeleton-item d-none d-md-flex"></div>
+    <div class="skeleton-menu-item  skeleton-item d-none d-md-flex"></div>
+    <div class="skeleton-menu-item  skeleton-item d-md-flex d-none"></div>
+    <div class="skeleton-menu-item  skeleton-item d-md-flex d-none"></div>
+    <div class="skeleton-menu-item  skeleton-item d-lg-flex d-none"></div>
+
+  </div>
+</ng-container>
+<ng-container *ngIf="loaderType == 'myBets'">
+  <div class="myBets p-2 mt-2">
+    <div class="skeleton-mybets-box skeleton-item">
+    </div>
+  </div>
+</ng-container>

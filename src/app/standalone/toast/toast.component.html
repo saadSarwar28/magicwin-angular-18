@@ -1,0 +1,14 @@
+<div class="toast-container">
+  <div
+    *ngFor="let toast of toasts; let i = index"
+    class="toast"
+    [ngClass]="toast.classname"
+    [@fadeOut]
+    (@fadeOut.done)="removeToast(i)"
+  >
+    <ng-container *ngIf="isTemplate(toast); else text">
+      <ng-container *ngTemplateOutlet="toast.textOrTpl"></ng-container>
+    </ng-container>
+    <ng-template #text>{{ toast.textOrTpl }}</ng-template>
+  </div>
+</div>

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { _window } from './backend.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,12 +20,6 @@ export class TimerService {
       window.clearInterval(this.source.timer);
     }
   }
-}
-
-
-function _window() : any {
-  // return the global native browser window object
-  return window;
 }
 
 

@@ -1,0 +1,101 @@
+.bottom-nav-container {
+  position: fixed;
+  bottom: -1px;
+  width: 100%;
+  padding: 0px 8px;
+  display: flex;
+  align-items: center;
+  background: var(--navBottomBg);
+  min-height: 51px;
+  z-index: 999999999999;
+}
+
+.button-outer {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.right-portion span {
+  margin-top: 0px;
+  width: 37px;
+  height: 37px;
+  background: var(--homeBackIconBg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 27px;
+}
+
+.flex-bottom {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  /* padding: 3px 0px; */
+  align-items: center;
+  align-content: center;
+  flex-wrap: wrap;
+}
+
+.inner-liability {
+  display: flex;
+  flex-direction: column;
+  padding: 4px 2px;
+  margin-left: 9px;
+
+    .liability {
+      color: var(--footerLiability);
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 500;
+    }
+
+    .balance {
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    color: var(--footerBalance);
+    }
+
+    p {
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 500;
+      margin: 0px;
+      color: white;
+    }
+}
+
+.mlt-10 {
+  margin-top: 5px;
+  margin-right: 0.5rem;
+}
+
+.right-portion {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.btn-nav-btm {
+  width: 20px;
+}
+
+.mybets {
+    display: flex;
+    flex-direction: column;
+    width: 48px;
+    color:var(--nav-bottom-mybets-clr);
+}
+img {
+  height: 21px;
+}
+
+span {
+  font-size: 12px;
+}
+
+.home-icon {
+  max-width: 22% !important;
+}

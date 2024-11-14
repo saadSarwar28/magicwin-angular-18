@@ -1,0 +1,25 @@
+.toast-container {
+  position: fixed;
+  top: 40px;
+  right: 10px;
+  z-index: 1050;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #343a40;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 400px) {
+  .toast-container {
+    width: 250px;
+  }
+}

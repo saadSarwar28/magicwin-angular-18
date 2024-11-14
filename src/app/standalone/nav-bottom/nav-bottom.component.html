@@ -1,0 +1,44 @@
+<div class="bottom-nav-container">
+  <div class="flex-bottom">
+    <div class="button-outer">
+      <!-- <div class="home"> -->
+      <img
+        (click)="goToHome()"
+        [src]="navbottomIcon"
+        style="max-width: 22% !important"
+        class="home-icon"
+      />
+      <!-- <span>Home</span> -->
+      <!-- </div> -->
+      <div class="walletbg inner-liability" *ngIf="isLogin">
+
+        <p> Balance: <span class="balance-value">{{ paymentDetails?.balance | number : "1.0-0" }}</span></p>
+        <p>Liability : <span class="liabilityClr">{{ paymentDetails?.liability | number : "1.0-0" }}</span></p>
+      </div>
+    </div>
+    <ng-container *ngIf="showMyBets">
+      <div class="mybets" *ngIf="currentBets && currentBets.length > 0" (click)="openBetModal ? openBetsModal()  : closeModal()">
+       <ng-container  *ngIf="openBetModal">
+       <img
+          [src]="navBottomMyBets"
+          alt="mybets-icon"
+        />
+       <span>My Bets</span>
+       </ng-container>
+        <img
+          [src]="closeBottomNav"
+          alt=""
+          *ngIf="!openBetModal"
+        />
+      </div>
+    </ng-container>
+    <div class="button-outer d-flex right-portion">
+      <span (click)="back()">
+        <img class="btn-nav-btm " [src]="navBottomBack"/>
+      </span>
+      <span *ngIf="!isIframe" class="mlt-10" (click)="display ? closeModal() : onOpenModal()">
+        <img class="btn-nav-btm " style="width: 16px;" [src]="display ? closeBottomNav : menuBottomNav"/>
+      </span>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,10 @@
+<div class="navbar-menu" *ngIf="navMenus && navMenus.length>0">
+  <a *ngFor="let item of navMenus" class="fs-lap-12 sm-fs-13 pointer menu-item" (click)="routeToLink(item)">
+    <img class="image" height="22" [src]="cdnSportsLanding + 'banners/' + item.id + '.png'"
+         [alt]="item.text + '_'+ sitename"/>
+    {{ item.text | translate }}
+  </a>
+</div>
+<ng-container *ngIf="utillsService.skeltonLoaderForMobi | async">
+  <app-skeleton-loader [loaderType]="'navMenus'"></app-skeleton-loader>
+</ng-container>

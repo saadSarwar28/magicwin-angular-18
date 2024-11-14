@@ -1,0 +1,87 @@
+<div class="main-wrapper">
+  <div class="ocbArea">
+    <span class="ocbText fs-14 ">{{
+      OCBEnabled ? "One Click Bet is on" : "One Click Bet is off"
+      }}</span>
+    <span><input type="checkbox" id="switch" (change)="OCBSetting()" [checked]="OCBEnabled" /><label
+        for="switch">Toggle</label></span>
+  </div>
+  <div class="ocbValueButtons" *ngIf="OCBEnabled">
+    <div class="radioButton">
+      <label for="{{ ocbButonsArray.stakeVal1 }}">
+        <input type="radio" id="{{ ocbButonsArray.stakeVal1 }}" (change)="OCBSettingValue($event)"
+          [checked]="selectedOCBValue == ocbButonsArray.stakeVal1" name="alignment1"
+          value="{{ ocbButonsArray.stakeVal1 }}" class="peer radio" />
+        <div class="icon fs-14">
+          {{ ocbButonsArray.stakeVal1 | number : "1.0-0" }}
+        </div>
+      </label>
+      <label for="{{ ocbButonsArray.stakeVal2 }}">
+        <input type="radio" id="{{ ocbButonsArray.stakeVal2 }}" (change)="OCBSettingValue($event)"
+          [checked]="selectedOCBValue == ocbButonsArray.stakeVal2" name="alignment2"
+          value="{{ ocbButonsArray.stakeVal2 }}" class="peer radio" />
+        <div class="icon fs-14">
+          {{ ocbButonsArray.stakeVal2 | number : "1.0-0" }}
+        </div>
+      </label>
+      <label for="{{ ocbButonsArray.stakeVal3 }}">
+        <input type="radio" id="{{ ocbButonsArray.stakeVal3 }}" (change)="OCBSettingValue($event)"
+          [checked]="selectedOCBValue == ocbButonsArray.stakeVal3" name="alignment3"
+          value="{{ ocbButonsArray.stakeVal3 }}" class="peer radio" />
+        <div class="icon fs-14">
+          {{ ocbButonsArray.stakeVal3 | number : "1.0-0" }}
+        </div>
+      </label>
+      <label for="{{ ocbButonsArray.stakeVal4 }}">
+        <input type="radio" id="{{ ocbButonsArray.stakeVal4 }}" (change)="OCBSettingValue($event)"
+          [checked]="selectedOCBValue == ocbButonsArray.stakeVal4" name="alignment4"
+          value="{{ ocbButonsArray.stakeVal4 }}" class="peer radio" />
+        <div class="icon fs-14">
+          {{ ocbButonsArray.stakeVal4 | number : "1.0-0" }}
+        </div>
+      </label>
+      <label for="{{ ocbButonsArray.stakeVal5 }}">
+        <input type="radio" id="{{ ocbButonsArray.stakeVal5 }}" (change)="OCBSettingValue($event)"
+          [checked]="selectedOCBValue == ocbButonsArray.stakeVal5" name="alignment5"
+          value="{{ ocbButonsArray.stakeVal5 }}" class="peer radio" />
+        <div class="icon fs-14">
+          {{ ocbButonsArray.stakeVal5 | number : "1.0-0" }}
+        </div>
+      </label>
+      <label for="{{ ocbButonsArray.stakeVal6 }}">
+        <input type="radio" id="{{ ocbButonsArray.stakeVal6 }}" (change)="OCBSettingValue($event)"
+          [checked]="selectedOCBValue == ocbButonsArray.stakeVal6" name="alignment6"
+          value="{{ ocbButonsArray.stakeVal6 }}" class="peer radio" />
+        <div class="icon fs-14">
+          {{ ocbButonsArray.stakeVal6 | number : "1.0-0" }}
+        </div>
+      </label>
+      <label for="{{ ocbButonsArray.stakeVal7 }}">
+        <input type="radio" id="{{ ocbButonsArray.stakeVal7 }}" (change)="OCBSettingValue($event)"
+          [checked]="selectedOCBValue == ocbButonsArray.stakeVal7" name="alignment7"
+          value="{{ ocbButonsArray.stakeVal7 }}" class="peer radio" />
+        <div class="icon fs-14">
+          {{ ocbButonsArray.stakeVal7 | number : "1.0-0" }}
+        </div>
+      </label>
+      <label for="{{ ocbButonsArray.stakeVal8 }}">
+        <input type="radio" id="{{ ocbButonsArray.stakeVal8 }}" (change)="OCBSettingValue($event)"
+          [checked]="selectedOCBValue == ocbButonsArray.stakeVal8" name="alignment8"
+          value="{{ ocbButonsArray.stakeVal8 }}" class="peer radio" />
+        <div class="icon fs-14">
+          {{ ocbButonsArray.stakeVal8 | number : "1.0-0" }}
+        </div>
+      </label>
+    </div>
+    <div class="one-click-buttons">
+
+      <div class="custom" routerLink="/reports/stakebuttons">
+        Edit Bet Stake
+      </div>
+      <div class="custom save" (click)="save()">
+        Save
+      </div>
+    </div>
+
+  </div>
+</div>

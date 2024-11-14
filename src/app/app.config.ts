@@ -7,6 +7,7 @@ import { HttpClient, provideHttpClient, withFetch, withInterceptors } from '@ang
 import { AppInterceptor } from './app.interceptor';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -23,6 +24,7 @@ export const appConfig: ApplicationConfig = {
       deps: [HttpClient]
     },
     TranslateService,
-    importProvidersFrom(TranslateModule.forRoot())
+    importProvidersFrom(TranslateModule.forRoot()),
+    provideAnimations()
   ]
 };

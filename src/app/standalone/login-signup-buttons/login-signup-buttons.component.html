@@ -1,0 +1,28 @@
+<div class="login-component-btns-compo">
+  <div class="button-group">
+    <ng-container *ngIf="showDemoIdBtn && !hideDemoButton">
+      <div class="btn demo-submit fs-lap-15" (click)="loginWithDemo()">
+        <a>Demo</a>
+      </div>
+    </ng-container>
+    <div class="login-signup-group">
+      <div class="btn login-submit fs-lap-13" (click)="openLoginModal()">
+        <i class="bi bi-box-arrow-in-left sm-fs-15"></i> Login
+      </div>
+      <div
+        class="btn signup-submit fs-lap-13"
+        *ngIf="isb2c && isShowSignUp && !isWhatsappLink"
+        routerLink="/user/signup"
+      >
+        <i class="bi bi-person-plus sm-fs-15"></i> Signup
+      </div>
+      <div
+        class="btn signup-submit fs-lap-13"
+        *ngIf="isWhatsappLink && isShowSignUp"
+        (click)="forWhatsAppSupport()"
+      >
+        <i class="bi bi-person-plus sm-fs-15"></i> Signup
+      </div>
+    </div>
+  </div>
+</div>

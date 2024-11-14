@@ -1,5 +1,5 @@
 @if (isIframe && (currentToken == null)) {
-<span class="session-expired">Session Expired</span>
+  <span class="session-expired">Session Expired</span>
 }
 <div
   class="d-flex"
@@ -15,31 +15,33 @@
     }
   </div>
   <div class="content" [class.sidebar-open]="toogleSide && !defualtOpenInMob">
-    <!--    <navbartop (toggleSideBar)="toggle($event)"></navbartop>-->
+    @if (isBrowser) {
+      <app-navbartop (toggleSideBar)="toggle($event)"></app-navbartop>
+    }
     <div class="router-outlet">
       <router-outlet></router-outlet>
     </div>
     <ng-container *ngIf="!isIframe">
       @if ((isMobile && landingPage) || (!isMobile && isSidebarOpen)) {
-      <app-footer></app-footer>
+        <app-footer></app-footer>
       }
     </ng-container>
   </div>
 </div>
-<!-- <app-nav-bottom class="d-block d-lg-none " *ngIf="showBalanceLiabilityNavbar && isMobile"></app-nav-bottom> -->
-<!--<app-sitefooter class="d-block d-lg-none " *ngIf="!showBalanceLiabilityNavbar && isMobile"></app-sitefooter>-->
+<app-nav-bottom class="d-block d-lg-none " *ngIf="showBalanceLiabilityNavbar && isMobile"></app-nav-bottom>
+<app-sitefooter class="d-block d-lg-none " *ngIf="!showBalanceLiabilityNavbar && isMobile"></app-sitefooter>
 
 <!-- <app-toasts aria-live="polite" aria-atomic="true"></app-toasts> -->
-<!--<app-toast [toasts]="toastService.toasts"></app-toast>-->
+<app-toast [toasts]="toastService.toasts"></app-toast>
 
-<!--<div class="d-lg-block d-none" *ngIf="showWhatsAppIconWithText">-->
-<!--  <a   class="float bounce" [ngStyle]="{ bottom: !isLogin == true ? '82px' : '148px' }"-->
-<!--       (click)="forWhatsapp()" target="_blank">-->
-<!--    <img [alt]="'Whatsapp-'+ title" src="{{ cdnUrl }}kheloyar/clientweb/images/WA.svg" class="my-flaot bounce" />-->
-<!--  </a>-->
-<!--  <a *ngIf="!isLogin " style="text-decoration: none !important"-->
-<!--     class="in-image float2 ext-bottom" (click)="forWhatsapp()" target="_blank">-->
-<!--    <img src="{{ cdnUrl }}kheloyar/clientweb/images/WA.svg" [alt]="'Whatsapp-'+ title"/>-->
-<!--    <a class="" target="_blank"> Get an ID on Whatsapp </a>-->
-<!--  </a>-->
-<!--</div>-->
+<div class="d-lg-block d-none" *ngIf="showWhatsAppIconWithText">
+  <a   class="float bounce" [ngStyle]="{ bottom: !isLogin == true ? '82px' : '148px' }"
+    (click)="forWhatsapp()" target="_blank">
+    <img [alt]="'Whatsapp-'+ title" src="{{ cdnUrl }}kheloyar/clientweb/images/WA.svg" class="my-flaot bounce" />
+  </a>
+  <a *ngIf="!isLogin " style="text-decoration: none !important"
+    class="in-image float2 ext-bottom" (click)="forWhatsapp()" target="_blank">
+    <img src="{{ cdnUrl }}kheloyar/clientweb/images/WA.svg" [alt]="'Whatsapp-'+ title"/>
+    <a class="" target="_blank"> Get an ID on Whatsapp </a>
+  </a>
+</div>
