@@ -11,7 +11,7 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, TranslateModule, HttpClientModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, SkeltonLoaderComponent, RouterModule, TranslateModule, HttpClientModule],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss'
 })
@@ -58,7 +58,7 @@ export class SidebarComponent {
     //debugger
     if (this.platformService.isBrowser()) {
       this.apkLink = this.browserService.getWindow().apkLink ||
-      'https://drive.google.com/file/d/1zqP0opcg_lKEj60O-iURLLNHXERHfcjU/view?usp=drivesdk';
+        'https://drive.google.com/file/d/1zqP0opcg_lKEj60O-iURLLNHXERHfcjU/view?usp=drivesdk';
     }
     this.deviceInfo = this.deviceService.getDeviceInfo();
     this.isLogin = this.checkauthservice.IsLogin();
@@ -187,15 +187,15 @@ export class SidebarComponent {
                       }
                     }
                   })
-                  // .catch((err) => {
-                  //   if (err.status == 401) {
-                  //     // this.router.navigate(['signin']);
-                  //     this.storageService.removeItem('token');
-                  //     window.location.href = window.location.origin;
-                  //   } else {
-                  //     console.log(err);
-                  //   }
-                  // });
+                // .catch((err) => {
+                //   if (err.status == 401) {
+                //     // this.router.navigate(['signin']);
+                //     this.storageService.removeItem('token');
+                //     window.location.href = window.location.origin;
+                //   } else {
+                //     console.log(err);
+                //   }
+                // });
               }
             }
             else {
@@ -209,16 +209,16 @@ export class SidebarComponent {
                       this.data = resp;
                       this.showLoader = false;
                     })
-                    // .catch((er) => {
-                    //   if (er.status == 401) {
-                    //     // this.router.navigate(['signin']);
-                    //     this.storageService.removeItem('token');
-                    //     window.location.href = window.location.origin;
+                  // .catch((er) => {
+                  //   if (er.status == 401) {
+                  //     // this.router.navigate(['signin']);
+                  //     this.storageService.removeItem('token');
+                  //     window.location.href = window.location.origin;
 
-                    //   } else {
-                    //     console.log(er);
-                    //   }
-                    // })
+                  //   } else {
+                  //     console.log(er);
+                  //   }
+                  // })
                 }
               }
 
@@ -309,14 +309,14 @@ export class SidebarComponent {
           this.data = resp;
           this.showLoader = false;
         })
-        // .catch((err) => {
-        //   if (err.status == 401) {
-        //     this.storageService.removeItem('token');
-        //     window.location.href = window.location.origin;
-        //   } else {
-        //     console.log(err);
-        //   }
-        // });
+      // .catch((err) => {
+      //   if (err.status == 401) {
+      //     this.storageService.removeItem('token');
+      //     window.location.href = window.location.origin;
+      //   } else {
+      //     console.log(err);
+      //   }
+      // });
     }
   }
   getPopularsports() {
@@ -368,12 +368,12 @@ export class SidebarComponent {
           this.genericService.openLoginModal();
         }
       })
-      // .catch((err) => {
-      //   this.toastService.show(err, {
-      //     classname: 'bg-danger text-light',
-      //     delay: 1000,
-      //   });
-      // });
+    // .catch((err) => {
+    //   this.toastService.show(err, {
+    //     classname: 'bg-danger text-light',
+    //     delay: 1000,
+    //   });
+    // });
   }
   FindLast(xs: any): any {
     return xs.reduce((acc: any, x: any) => {
@@ -595,15 +595,15 @@ export class SidebarComponent {
               }
             }
           })
-          // .catch((err) => {
-          //   if (err.status == 401) {
-          //     // this.router.navigate(['signin']);
-          //     this.storageService.removeItem('token');
-          //     window.location.href = window.location.origin;
-          //   } else {
-          //     console.log(err);
-          //   }
-          // });
+        // .catch((err) => {
+        //   if (err.status == 401) {
+        //     // this.router.navigate(['signin']);
+        //     this.storageService.removeItem('token');
+        //     window.location.href = window.location.origin;
+        //   } else {
+        //     console.log(err);
+        //   }
+        // });
         break;
       case 'getcompetition':
         this.backendService
@@ -1841,7 +1841,7 @@ export class SidebarComponent {
       this.genericService.openLoginModal();
     }
   }
-}import { Observable } from 'rxjs';
+} import { Observable } from 'rxjs';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NavigationStart, RouterModule } from '@angular/router';
@@ -1853,4 +1853,5 @@ import { GenericService } from '../../services/generic.service';
 import { UtillsService } from '../../services/utills.service';
 import { BrowserService } from '../../services/browser.service';
 import { PlatformService } from '../../services/platform.service';
+import { SkeltonLoaderComponent } from '../../shared/skelton-loader/skelton-loader.component';
 

@@ -1,10 +1,19 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { BackendService } from '../../services/backend.service';
 import { StorageService } from '../../services/storage.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-racetodayscard',
   templateUrl: './racetodayscard.component.html',
   styleUrls: ['./racetodayscard.component.scss'],
+  standalone: true,
+  imports: [
+    TranslateModule,
+    CommonModule,
+    RouterModule
+  ]
 })
 export class RacetodayscardComponent implements OnInit {
   @Input() sportsId: any;

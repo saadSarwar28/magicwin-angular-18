@@ -18,12 +18,30 @@ import { UtillsService } from '../../services/utills.service';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { GetStatusService } from '../../services/get-status.service';
 import { CurrentBets, CurrentBetsInput } from '../../models/models';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { SkeltonLoaderComponent } from '../../shared/skelton-loader/skelton-loader.component';
+import { BookmakerDataComponent } from '../bookmaker-data/bookmaker-data.component';
+import { FancyDataComponent } from '../fancy-data/fancy-data.component';
+import { MybetsComponent } from '../my-bets/my-bets.component';
+import { Safe1Pipe } from '../../pipes/safe.pipe';
 declare function iFrameResize(): any;
 @Component({
   selector: 'app-bookmaker',
   templateUrl: './bookmaker.component.html',
   styleUrls: ['./bookmaker.component.scss'],
   changeDetection: ChangeDetectionStrategy.Default,
+  standalone: true,
+  imports: [
+    BookmakerDataComponent,
+    SkeltonLoaderComponent,
+    FancyDataComponent,
+    Safe1Pipe,
+    TranslateModule,
+    CommonModule,
+    MybetsComponent
+
+  ]
 })
 export class BookmakerComponent implements OnInit, OnDestroy {
   srcData: any;

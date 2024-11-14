@@ -19,10 +19,26 @@ import { CheckAuthService } from '../../services/check-auth.service';
 import { ToastService } from '../../services/toast.service';
 import { UtillsService } from '../../services/utills.service';
 import { GenericService } from '../../services/generic.service';
+import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
+import { OrderbyrunnerPipe } from '../../pipes/orderbyrunner.pipe';
+import { TruncPipe } from '../../pipes/trunc.pipe';
+import { ShortennumPipe } from '../../pipes/shortennum.pipe';
+import { PartialBetslipComponent } from '../../shared/partial-betslip/partial-betslip.component';
 @Component({
   selector: 'app-lotterymarket',
   templateUrl: './lotterymarket.component.html',
   styleUrls: ['./lotterymarket.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    TranslateModule,
+    ShortennumPipe,
+    TruncPipe,
+    OrderbyrunnerPipe,
+    PartialBetslipComponent
+
+  ]
 })
 export class LotterymarketComponent implements OnInit, OnDestroy {
   @Input() fancyRate: any;

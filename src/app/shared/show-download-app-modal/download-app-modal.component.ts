@@ -1,6 +1,8 @@
 import { Component, Input, OnInit, } from '@angular/core';
 import { _window } from '../../services/backend.service';
 import { MatDialog } from '@angular/material/dialog';
+import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-download-app-modal',
@@ -32,6 +34,8 @@ import { MatDialog } from '@angular/material/dialog';
       align-items: center;
     }
   `],
+  standalone: true,
+  imports: [CommonModule, TranslateModule]
 })
 export class DownloadAppModalComponent implements OnInit {
   @Input() navMenus: any;

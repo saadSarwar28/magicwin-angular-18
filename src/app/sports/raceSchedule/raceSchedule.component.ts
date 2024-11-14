@@ -1,12 +1,22 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { BackendService } from '../../services/backend.service';
 import { StorageService } from '../../services/storage.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { DaysFormatPipePipe } from '../../pipes/days-format-pipe.pipe';
 @Component({
   selector: 'app-raceschedule',
   templateUrl: './raceSchedule.component.html',
   styleUrls: ['./raceSchedule.component.scss'],
-  changeDetection: ChangeDetectionStrategy.Default
+  changeDetection: ChangeDetectionStrategy.Default,
+  standalone: true,
+  imports: [
+    TranslateModule,
+    CommonModule,
+    RouterModule,
+    DaysFormatPipePipe
+  ]
 })
 export class RaceScheduleComponent implements OnInit {
   sportsId: string = "";

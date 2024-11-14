@@ -8,7 +8,7 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { iFrameResizer } from '../../../assets/lmtScore/sports-radar';
 import { StorageService } from '../../services/storage.service';
 import {
@@ -34,11 +34,51 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 import { GetStatusService } from '../../services/get-status.service';
 import { GenericService } from '../../services/generic.service';
 import { WalletService } from '../../services/wallet.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { MomentModule } from 'ngx-moment';
+import { OddsbuttonComponent } from '../../shared/reuse/oddsbutton.component';
+import { PartialBetslipComponent } from '../../shared/partial-betslip/partial-betslip.component';
+import { TeamsScoreComponent } from '../../shared/reuse/teams-score.component';
+import { SkeltonLoaderComponent } from '../../shared/skelton-loader/skelton-loader.component';
+import { CricketscorecardComponent } from '../cricketscorecard/cricketscorecard.component';
+import { TimeremainingComponent } from '../../shared/reuse/time-remaining.component';
+import { CashoutBetslipComponent } from '../../shared/cashout-betslip/cashout-betslip.component';
+import { BookmakerDataComponent } from '../bookmaker-data/bookmaker-data.component';
+import { FancyDataComponent } from '../fancy-data/fancy-data.component';
+import { StreamComponent } from '../../shared/stream.component';
+import { ShortennumPipe } from '../../pipes/shortennum.pipe';
+import { RoundoffPipe } from '../../pipes/roundoff.pipe';
+import { RemoveUnderscorePipe } from '../../pipes/removeUnderscore.pipe';
+import { OrderbyrunnerPipe } from '../../pipes/orderbyrunner.pipe';
+import { MybetsComponent } from '../my-bets/my-bets.component';
 declare function iFrameResize(): any;
 @Component({
   selector: 'app-marketDetails',
   templateUrl: './marketDetails.component.html',
   styleUrls: ['./marketDetails.component.css'],
+  standalone: true,
+  imports: [
+    TranslateModule,
+    CommonModule,
+    MomentModule,
+    OddsbuttonComponent,
+    PartialBetslipComponent,
+    SkeltonLoaderComponent,
+    CricketscorecardComponent,
+    TimeremainingComponent,
+    CashoutBetslipComponent,
+    BookmakerDataComponent,
+    FancyDataComponent,
+    StreamComponent,
+    MybetsComponent,
+    ShortennumPipe,
+    RoundoffPipe,
+    RouterModule,
+    RemoveUnderscorePipe,
+    OrderbyrunnerPipe
+
+  ]
 })
 export class MarketDetailsComponent
   implements OnInit, OnDestroy, AfterViewInit {

@@ -2,12 +2,21 @@ import { ChangeDetectionStrategy, Component, Inject, Input, OnInit } from '@angu
 import { BackendService } from '../../services/backend.service';
 import { ClientPosition, FancyMarketLiabilty } from '../../models/models';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-bookposition',
   templateUrl: './bookposition.component.html',
   styleUrls: [],
-  changeDetection: ChangeDetectionStrategy.Default
+  changeDetection: ChangeDetectionStrategy.Default,
+  standalone: true,
+  imports: [
+    TranslateModule,
+    CommonModule,
+
+
+  ]
 })
 export class BookpositionComponent implements OnInit {
   @Input() marketId: string | undefined;

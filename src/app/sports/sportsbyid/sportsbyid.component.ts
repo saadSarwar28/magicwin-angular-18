@@ -21,17 +21,48 @@ import { TimerService, ScoreTimerService } from '../../services/timer.service';
 import { CheckAuthService } from '../../services/check-auth.service';
 import { _window } from '../../services/backend.service';
 import { UtillsService } from '../../services/utills.service';
-import { GetStatusService } from '../../services/get-status.service';
 import { ToastService } from '../../services/toast.service';
 import { GenericService } from '../../services/generic.service';
 import { DeviceDetectorService } from "ngx-device-detector";
 import { SportsIdMapperService } from "../../services/sportsIdMapper.service";
 import { WalletService } from '../../services/wallet.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { SkeltonLoaderComponent } from '../../shared/skelton-loader/skelton-loader.component';
+import { NavMenusComponent } from '../../shared/reuse/nav-menus.component';
+import { RacetodayscardComponent } from '../racetodayscard/racetodayscard.component';
+import { MatchStartTimeComponent } from '../../shared/reuse/matchStartTime.component';
+import { TeamsScoreComponent } from '../../shared/reuse/teams-score.component';
+import { MomentModule } from 'ngx-moment';
+import { MarketNamePipe } from '../../pipes/marketnameVs.pipe';
+import { RoundoffPipe } from '../../pipes/roundoff.pipe';
+import { OddsbuttonComponent } from '../../shared/reuse/oddsbutton.component';
+import { OrderbyPipe } from '../../pipes/orderby.pipe';
+import { PartialBetslipComponent } from '../../shared/partial-betslip/partial-betslip.component';
+import { VirtualCricketComponent } from '../virtual-cricket/virtual-cricket.component';
 
 @Component({
   selector: 'app-sportsbyid',
   templateUrl: './sportsbyid.component.html',
   styleUrls: [],
+  standalone: true,
+  imports: [
+    TranslateModule,
+    CommonModule,
+    SkeltonLoaderComponent,
+    NavMenusComponent,
+    RacetodayscardComponent,
+    MatchStartTimeComponent,
+    TeamsScoreComponent,
+    OddsbuttonComponent,
+    MomentModule,
+    MarketNamePipe,
+    RoundoffPipe,
+    OrderbyPipe,
+    PartialBetslipComponent,
+    VirtualCricketComponent
+
+  ]
 })
 export class SportsbyidComponent implements OnInit, OnDestroy, AfterViewInit {
   today: Date = new Date();

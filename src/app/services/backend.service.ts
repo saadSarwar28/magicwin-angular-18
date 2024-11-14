@@ -763,7 +763,7 @@ export class BackendService {
   /**
    * @return Success
    */
-  GetWallet(): Observable<ClientWallet> {
+  GetWallet(from: string): Observable<ClientWallet> {
     let url_: string = "";
     if (this.BrowserService.getWindow().getwallet) {
       url_ = this.baseUrl + this.BrowserService.getWindow().getwallet;

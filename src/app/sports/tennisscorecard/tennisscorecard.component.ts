@@ -1,12 +1,19 @@
 import { Component, OnInit, Input, OnDestroy, ElementRef } from '@angular/core';
 import { _window, BackendService } from '../../services/backend.service';
 import { ScoreCardTimerService } from '../../services/timer.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-tennisscorecard',
   templateUrl: './tennisscorecard.component.html',
-  styleUrls: ['./tennisscorecard.component.scss']
+  styleUrls: ['./tennisscorecard.component.scss'],
+  standalone: true,
+  imports: [
+    TranslateModule,
+    CommonModule,
+  ]
 })
 export class TennisscorecardComponent implements OnInit, OnDestroy {
   ngOnDestroy() {

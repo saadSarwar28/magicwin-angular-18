@@ -9,7 +9,7 @@ import {
   OnInit,
   Renderer2,
 } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import {
   SetAmount,
   shortenLargeNumber,
@@ -36,6 +36,19 @@ import { GetStatusService } from '../../services/get-status.service';
 import { HttpClient } from "@angular/common/http";
 import { GenericService } from '../../services/generic.service';
 import { WalletService } from '../../services/wallet.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { MomentModule } from 'ngx-moment';
+import { PartialBetslipComponent } from '../../shared/partial-betslip/partial-betslip.component';
+import { SkeltonLoaderComponent } from '../../shared/skelton-loader/skelton-loader.component';
+import { StreamComponent } from '../../shared/stream.component';
+import { TimeremainingComponent } from '../../shared/reuse/time-remaining.component';
+import { OddsbuttonComponent } from '../../shared/reuse/oddsbutton.component';
+import { ShortennumPipe } from '../../pipes/shortennum.pipe';
+import { RoundoffPipe } from '../../pipes/roundoff.pipe';
+import { MybetsComponent } from '../my-bets/my-bets.component';
+import { ExtractNumberPipe } from '../../pipes/safe.pipe';
+import { OrderbyrunnerPipe } from '../../pipes/orderbyrunner.pipe';
 @Component({
   selector: 'app-racemarket',
   templateUrl: './racemarket.component.html',
@@ -69,6 +82,23 @@ import { WalletService } from '../../services/wallet.service';
 `
   ],
   changeDetection: ChangeDetectionStrategy.Default,
+  standalone: true,
+  imports: [
+    TranslateModule,
+    CommonModule,
+    RouterModule,
+    MomentModule,
+    PartialBetslipComponent,
+    SkeltonLoaderComponent,
+    StreamComponent,
+    TimeremainingComponent,
+    OddsbuttonComponent,
+    MybetsComponent,
+    ShortennumPipe,
+    RoundoffPipe,
+    ExtractNumberPipe,
+    OrderbyrunnerPipe
+  ]
 })
 export class RacemarketComponent implements OnInit, OnDestroy {
   cdnSilkSrc: any;

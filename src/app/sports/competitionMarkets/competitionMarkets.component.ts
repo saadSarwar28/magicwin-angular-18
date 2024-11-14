@@ -14,10 +14,37 @@ import { UtillsService } from '../../services/utills.service';
 import { GenericService } from '../../services/generic.service';
 import { WalletService } from '../../services/wallet.service';
 import { SportsIdMapperService } from "../../services/sportsIdMapper.service";
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { OddsbuttonComponent } from '../../shared/reuse/oddsbutton.component';
+import { PartialBetslipComponent } from '../../shared/partial-betslip/partial-betslip.component';
+import { TeamsScoreComponent } from '../../shared/reuse/teams-score.component';
+import { SkeltonLoaderComponent } from '../../shared/skelton-loader/skelton-loader.component';
+import { MatchStartTimeComponent } from '../../shared/reuse/matchStartTime.component';
+import { MomentModule } from 'ngx-moment';
+import { GroupByPipe } from '../../pipes/group-by.pipe';
+import { VirtualCricketComponent } from '../virtual-cricket/virtual-cricket.component';
+import { OrderbyPipe } from '../../pipes/orderby.pipe';
+import { MarketNamePipe } from '../../pipes/marketnameVs.pipe';
 @Component({
   selector: 'app-competitionMarkets',
   templateUrl: './competitionMarkets.component.html',
   styleUrls: ['./competitionMarkets.component.scss'],
+  standalone: true,
+  imports: [
+    TranslateModule,
+    CommonModule,
+    MomentModule,
+    OddsbuttonComponent,
+    PartialBetslipComponent,
+    TeamsScoreComponent,
+    SkeltonLoaderComponent,
+    MatchStartTimeComponent,
+    VirtualCricketComponent,
+    GroupByPipe,
+    OrderbyPipe,
+    MarketNamePipe
+  ]
 })
 export class CompetitionMarketsComponent implements OnInit, OnDestroy {
   today: Date = new Date();

@@ -25,22 +25,27 @@ export class WalletService {
     if (this.checkauthservice.IsLogin()) {
       this.bettingservice
         .GetWallet('WalletComponent')
-        .then((resp) => {
-          this.walletDetail.next(resp)
-        })
-        .catch((err) => {
-          if (err.status == 401) {
-            // window.location.href = window.location.origin;
-            this.storageService.secureStorage.removeItem('token');
-            this.storageService.secureStorage.removeItem('client');
-            this.storageService.secureStorage.removeItem('iframeLoggedin')
-            localStorage.removeItem('showAgreementOnce');
-            localStorage.removeItem('routeCasino');
+        .subscribe(
+          {
+            next: (resp) => {
+              this.walletDetail.next(resp)
+            },
+            error: (err) => {
+              if (err.status == 401) {
+                // window.location.href = window.location.origin;
+                this.storageService.removeItem('token');
+                this.storageService.removeItem('client');
+                this.storageService.removeItem('iframeLoggedin')
+                localStorage.removeItem('showAgreementOnce');
+                localStorage.removeItem('routeCasino');
 
-          } else {
-            console.error(JSON.stringify(err));
+              } else {
+                console.error(JSON.stringify(err));
+              }
+            }
           }
-        })
+        )
+
     }
   }
   walletTimer: any = 1000;

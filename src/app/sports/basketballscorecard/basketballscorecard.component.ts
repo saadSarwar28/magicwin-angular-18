@@ -4,10 +4,14 @@ import { BackendService } from '../../services/backend.service';
 import { _window } from '../../services/backend.service'
 import { Router } from '@angular/router';
 import { StorageService } from '../../services/storage.service';
+import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: 'app-basketballscorecard',
   templateUrl: './basketballscorecard.component.html',
-  styleUrls: ['./basketballscorecard.component.scss']
+  styleUrls: ['./basketballscorecard.component.scss'],
+  standalone: true,
+  imports: [CommonModule, TranslateModule]
 })
 export class BasketballscorecardComponent implements OnInit {
   @Input() evtid: string | undefined;
@@ -53,7 +57,7 @@ export class BasketballscorecardComponent implements OnInit {
       return;
     }
 
-    this.betService.timeLineNew1(parseInt(this.evtid!)).subscribe(
+    this.betService.timeLineNew1(parseInt(this.evtid!), '').subscribe(
       (d: any) => {
 
         this.data = d;

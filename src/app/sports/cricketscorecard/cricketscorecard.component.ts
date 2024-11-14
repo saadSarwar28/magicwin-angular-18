@@ -4,11 +4,18 @@ import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, On
 import { _window } from '../../services/backend.service'
 import { Router } from '@angular/router';
 import { StorageService } from '../../services/storage.service';
+import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: 'app-cricketscorecard',
   templateUrl: './cricketscorecard.component.html',
   styleUrls: ['./cricketscorecard.component.scss'],
-  changeDetection: ChangeDetectionStrategy.Default
+  changeDetection: ChangeDetectionStrategy.Default,
+  standalone: true,
+  imports: [
+    CommonModule,
+    TranslateModule
+  ]
 })
 export class CricketscorecardComponent implements OnInit {
   ngOnDestroy() {

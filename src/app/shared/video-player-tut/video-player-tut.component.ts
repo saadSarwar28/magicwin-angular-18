@@ -1,11 +1,15 @@
+import { CommonModule } from '@angular/common';
 import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
 import videojs from 'video.js';
 
 @Component({
   selector: 'app-video-player-tut',
   templateUrl: './video-player-tut.component.html',
   styleUrls: ['./video-player-tut.component.css'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  standalone: true,
+  imports: [CommonModule, TranslateModule]
 })
 export class VideoPlayerComponentTut implements OnInit, OnDestroy {
   @ViewChild('target', { static: true }) target!: ElementRef;

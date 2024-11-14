@@ -10,6 +10,8 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { GenericService } from "../../services/generic.service";
 import { MymarketsComponent } from '../../sports/mymarkets/mymarkets.component';
 import { MatDialog } from '@angular/material/dialog';
+import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: 'app-sitefooter',
   templateUrl: './sitefooter.component.html',
@@ -29,7 +31,9 @@ import { MatDialog } from '@angular/material/dialog';
         animate('0.5s')
       ])
     ])
-  ]
+  ],
+  standalone: true,
+  imports: [CommonModule, TranslateModule]
 })
 export class SitefooterComponent implements OnInit {
   dropdown: number = 0;

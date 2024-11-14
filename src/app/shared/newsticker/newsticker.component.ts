@@ -3,11 +3,18 @@ import { BackendService, _window } from '../../services/backend.service';
 import { StorageService } from '../../services/storage.service';
 import { UtillsService } from "../../services/utills.service";
 import { NewsTimerService } from "../../services/timer.service";
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-newsticker',
   templateUrl: './newsticker.component.html',
-  styleUrls: ['./newsticker.component.css']
+  styleUrls: ['./newsticker.component.css'],
+  standalone: true,
+  imports: [
+    TranslateModule,
+    CommonModule,
+  ]
 })
 export class NewstickerComponent implements OnInit, OnDestroy {
   news: string = "";

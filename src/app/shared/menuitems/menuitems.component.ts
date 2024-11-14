@@ -15,11 +15,18 @@ import { UtillsService } from '../../services/utills.service';
 import { GenericService } from '../../services/generic.service';
 import { WalletService } from '../../services/wallet.service';
 import { SettingsComponent } from '../../settings/settings.component';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-menuitems',
   templateUrl: './menuitems.component.html',
   styleUrls: ['./menuitems.component.scss'],
+  standalone: true,
+  imports: [
+    TranslateModule,
+    CommonModule,
+  ]
 })
 export class MenuitemsComponent implements OnInit {
   cdnUrl: any = 'https://iriscdn.b-cdn.net/';

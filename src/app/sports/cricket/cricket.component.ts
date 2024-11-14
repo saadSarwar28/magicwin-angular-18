@@ -17,7 +17,7 @@ import {
   SportsBooktimerService,
   LotterytimerService,
 } from '../../services/timer.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import {
   shortenLargeNumber,
   SetAmount,
@@ -46,12 +46,65 @@ import { GetStatusService } from '../../services/get-status.service';
 import { HttpClient } from '@angular/common/http';
 import { GenericService } from '../../services/generic.service';
 import { WalletService } from '../../services/wallet.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { MomentModule } from 'ngx-moment';
+import { OddsbuttonComponent } from '../../shared/reuse/oddsbutton.component';
+import { PartialBetslipComponent } from '../../shared/partial-betslip/partial-betslip.component';
+import { TeamsScoreComponent } from '../../shared/reuse/teams-score.component';
+import { SkeltonLoaderComponent } from '../../shared/skelton-loader/skelton-loader.component';
+import { CricketscorecardComponent } from '../cricketscorecard/cricketscorecard.component';
+import { OrderbyPipe } from '../../pipes/orderby.pipe';
+import { MarketNamePipe } from '../../pipes/marketnameVs.pipe';
+import { RoundoffPipe } from '../../pipes/roundoff.pipe';
+import { RemoveUnderscorePipe } from '../../pipes/removeUnderscore.pipe';
+import { OrderbyrunnerPipe } from '../../pipes/orderbyrunner.pipe';
+import { StreamComponent } from '../../shared/stream.component';
+import { TimeremainingComponent } from '../../shared/reuse/time-remaining.component';
+import { ShortennumPipe } from '../../pipes/shortennum.pipe';
+import { SafePipe } from '../../pipes/safe.pipe';
+import { CashoutBetslipComponent } from '../../shared/cashout-betslip/cashout-betslip.component';
+import { BookmakerDataComponent } from '../bookmaker-data/bookmaker-data.component';
+import { FancyDataComponent } from '../fancy-data/fancy-data.component';
+import { LineMarketsComponent } from '../line-markets/line-markets.component';
+import { LotterymarketComponent } from '../lotterymarket/lotterymarket.component';
+import { MybetsComponent } from '../my-bets/my-bets.component';
+import { SportsBookComponent } from '../sports-book/sports-book.component';
 declare function iFrameResize(): any;
 @Component({
   selector: 'app-cricket',
   templateUrl: './cricket.component.html',
   styleUrls: ['./cricket.component.scss'],
   changeDetection: ChangeDetectionStrategy.Default,
+  standalone: true,
+  imports: [
+    TranslateModule,
+    CommonModule,
+    MomentModule,
+    OddsbuttonComponent,
+    PartialBetslipComponent,
+    TeamsScoreComponent,
+    SkeltonLoaderComponent,
+    CricketscorecardComponent,
+    TimeremainingComponent,
+    CashoutBetslipComponent,
+    BookmakerDataComponent,
+    FancyDataComponent,
+    StreamComponent,
+    LineMarketsComponent,
+    LotterymarketComponent,
+    SportsBookComponent,
+    MybetsComponent,
+    OrderbyPipe,
+    ShortennumPipe,
+    MarketNamePipe,
+    RoundoffPipe,
+    RouterModule,
+    SafePipe,
+    RemoveUnderscorePipe,
+    OrderbyrunnerPipe
+
+  ]
 })
 export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
   dataInBetFairScoreCard: any = false;
@@ -1561,7 +1614,7 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  onVisibilityChange(visible: boolean) {
+  onVisibilityChange(visible: any) {
     this.sportsBookVisible = visible;
   }
 
@@ -1700,11 +1753,5 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
     iFrameResizer('stats');
   }
 
-  splitNegativeSign(position: any) {
-    if (Math.sign(position) == -1) {
-      return '-';
-    } else {
-      return;
-    }
-  }
+
 }

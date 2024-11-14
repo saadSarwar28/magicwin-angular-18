@@ -1,13 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { BackendService } from '../../services/backend.service';
 import { NextRaceTimerService } from '../../services/timer.service';
 import { _window } from '../../services/backend.service';
 import { StorageService } from '../../services/storage.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { MomentModule } from 'ngx-moment';
 @Component({
   selector: 'app-next-races',
   templateUrl: './next-races.component.html',
-  styleUrls: ['./next-races.component.css']
+  styleUrls: ['./next-races.component.css'],
+  standalone: true,
+  imports: [
+    TranslateModule,
+    CommonModule,
+    RouterModule,
+    MomentModule
+  ]
 })
 export class NextRacesComponent implements OnInit {
   source: any;

@@ -2,6 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { UtillsService } from '../services/utills.service';
 import { ToastService } from '../services/toast.service';
 import { _window, BackendService } from '../services/backend.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { SafePipe } from '../pipes/safe.pipe';
 
 @Component({
   selector: 'app-stream',
@@ -30,6 +33,12 @@ import { _window, BackendService } from '../services/backend.service';
                 </div>
               </div>
   `,
+  standalone: true,
+  imports: [
+    TranslateModule,
+    CommonModule,
+    SafePipe
+  ]
 })
 export class StreamComponent implements OnInit {
   srcData: any;

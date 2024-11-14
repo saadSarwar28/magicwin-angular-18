@@ -11,23 +11,26 @@ import {
   AfterViewInit,
 } from '@angular/core';
 
-import { Router } from '@angular/router';
 import { ToastService } from '../../services/toast.service';
-import {
-  BettingResponse,
-  CurrentBetResp,
-  FancyModel,
-  LocalMarketBet,
-  SportsBettingModel,
-  SportsBookModelSingle,
-} from '../../models/models';
-import { TranslateService } from '@ngx-translate/core';
+
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { _window } from '../../services/backend.service';
 import { UtillsService } from '../../services/utills.service';
+import { CommonModule } from '@angular/common';
+import { ShortennumPipe } from '../../pipes/shortennum.pipe';
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-cashout-betslip',
   templateUrl: './cashout-betslip.component.html',
   styleUrls: ['./cashout-betslip.component.scss'],
+  standalone: true,
+  imports: [
+    TranslateModule,
+    CommonModule,
+    ShortennumPipe,
+    FormsModule,
+
+  ]
 })
 export class CashoutBetslipComponent implements OnInit, AfterViewInit {
   @Input() market: any;

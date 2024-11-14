@@ -9,11 +9,34 @@ import { FancytimerService, TimerService } from '../../services/timer.service';
 import { ToastService } from '../../services/toast.service';
 import { UtillsService } from '../../services/utills.service';
 import { BookpositionComponent } from '../../shared/bookposition/bookposition.component';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { OddsbuttonComponent } from '../../shared/reuse/oddsbutton.component';
+import { SortByPipe } from '../../pipes/sort-by.pipe';
+import { GroupByPipe } from '../../pipes/group-by.pipe';
+import { PartialBetslipComponent } from '../../shared/partial-betslip/partial-betslip.component';
+import { RemoveUnderscorePipe } from '../../pipes/removeUnderscore.pipe';
+import { FilterFancyMarketsPipe } from '../../pipes/filter-fancy-markets.pipe';
+import { TruncPipe } from '../../pipes/trunc.pipe';
 
 @Component({
   selector: 'app-fancy-data',
   templateUrl: './fancy-data.component.html',
-  styleUrls: ['./fancy-data.component.css']
+  styleUrls: ['./fancy-data.component.css'],
+  standalone: true,
+  imports: [
+    TranslateModule,
+    CommonModule,
+    OddsbuttonComponent,
+    SortByPipe,
+    GroupByPipe,
+    PartialBetslipComponent,
+    RemoveUnderscorePipe,
+    FilterFancyMarketsPipe,
+    TruncPipe
+
+
+  ]
 })
 export class FancyDataComponent implements OnInit, OnChanges {
 

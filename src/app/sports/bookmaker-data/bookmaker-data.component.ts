@@ -8,10 +8,33 @@ import { FancytimerService, TimerService } from '../../services/timer.service';
 import { ToastService } from '../../services/toast.service';
 import { UtillsService } from '../../services/utills.service';
 import { BookpositionComponent } from '../../shared/bookposition/bookposition.component';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { ShortennumPipe } from '../../pipes/shortennum.pipe';
+import { RoundoffPipe } from '../../pipes/roundoff.pipe';
+import { OddsbuttonComponent } from '../../shared/reuse/oddsbutton.component';
+import { PartialBetslipComponent } from '../../shared/partial-betslip/partial-betslip.component';
+import { CashoutBetslipComponent } from '../../shared/cashout-betslip/cashout-betslip.component';
+import { RemoveUnderscorePipe } from '../../pipes/removeUnderscore.pipe';
+import { TruncPipe } from '../../pipes/trunc.pipe';
+import { OrderbyrunnerPipe } from '../../pipes/orderbyrunner.pipe';
 @Component({
   selector: 'app-bookmaker-data',
   templateUrl: './bookmaker-data.component.html',
-  styleUrls: []
+  styleUrls: [],
+  standalone: true,
+  imports: [
+    ShortennumPipe,
+    TranslateModule,
+    CommonModule,
+    OddsbuttonComponent,
+    PartialBetslipComponent,
+    CashoutBetslipComponent,
+    RemoveUnderscorePipe,
+    RoundoffPipe,
+    TruncPipe,
+    OrderbyrunnerPipe
+  ]
 })
 export class BookmakerDataComponent implements OnInit {
   fancyData: any = {};

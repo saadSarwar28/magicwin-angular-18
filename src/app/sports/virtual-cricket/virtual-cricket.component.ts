@@ -3,11 +3,23 @@ import { _window } from '../../services/backend.service';
 import { ScoreTimerService } from '../../services/timer.service';
 import { Router } from '@angular/router';
 import { UtillsService } from '../../services/utills.service';
+import { MatchStartTimeComponent } from '../../shared/reuse/matchStartTime.component';
+import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
+import { MarketNamePipe } from '../../pipes/marketnameVs.pipe';
 
 @Component({
   selector: 'app-virtual-cricket',
   templateUrl: './virtual-cricket.component.html',
-  styleUrls: []
+  styleUrls: [],
+  standalone: true,
+  imports: [
+    MatchStartTimeComponent,
+    CommonModule,
+    TranslateModule,
+    MarketNamePipe
+  ],
+
 })
 export class VirtualCricketComponent implements OnInit, OnDestroy {
   isShowVirtualCricket: boolean = false;

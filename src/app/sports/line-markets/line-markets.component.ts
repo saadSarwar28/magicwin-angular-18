@@ -7,11 +7,29 @@ import { StorageService } from '../../services/storage.service';
 import { ToastService } from '../../services/toast.service';
 import { UtillsService } from '../../services/utills.service';
 import { BookpositionComponent } from '../../shared/bookposition/bookposition.component';
+import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
+import { ShortennumPipe } from '../../pipes/shortennum.pipe';
+import { RoundoffPipe } from '../../pipes/roundoff.pipe';
+import { GroupAndSortLineMarketsPipe } from '../../pipes/lineMarketPipe';
+import { OddsbuttonComponent } from '../../shared/reuse/oddsbutton.component';
+import { PartialBetslipComponent } from '../../shared/partial-betslip/partial-betslip.component';
 
 @Component({
   selector: 'app-line-markets',
   templateUrl: './line-markets.component.html',
-  styleUrls: ['./line-markets.component.scss']
+  styleUrls: ['./line-markets.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    TranslateModule,
+    ShortennumPipe,
+    RoundoffPipe,
+    GroupAndSortLineMarketsPipe,
+    OddsbuttonComponent,
+    PartialBetslipComponent
+
+  ]
 })
 export class LineMarketsComponent implements OnInit {
 

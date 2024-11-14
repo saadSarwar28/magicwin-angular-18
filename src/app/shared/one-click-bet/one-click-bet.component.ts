@@ -3,10 +3,17 @@ import { _window } from '../../services/backend.service';
 import { CheckAuthService } from '../../services/check-auth.service';
 import { StorageService } from '../../services/storage.service';
 import { UtillsService } from '../../services/utills.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-one-click-bet',
   templateUrl: './one-click-bet.component.html',
   styleUrls: ['./one-click-bet.component.scss'],
+  standalone: true,
+  imports: [
+    TranslateModule,
+    CommonModule,
+  ]
 })
 export class OneClickBetComponent implements OnInit {
   ocbButonsArray: any;

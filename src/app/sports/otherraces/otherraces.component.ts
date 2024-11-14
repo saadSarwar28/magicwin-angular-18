@@ -10,6 +10,13 @@ import { SetAmount, shortenLargeNumber } from '../../services/shortenLargeNumber
 import { ToastService } from '../../services/toast.service';
 import { UtillsService } from '../../services/utills.service';
 import { WalletService } from '../../services/wallet.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { PremiumRacePipe } from '../../pipes/premium-race.pipe';
+import { SortByDatePipe } from '../../pipes/sortByDate.pipe';
+import { PartialBetslipComponent } from '../../shared/partial-betslip/partial-betslip.component';
+import { FilterBets } from '../../pipes/filterbets.pipe';
 
 
 @Component({
@@ -17,6 +24,17 @@ import { WalletService } from '../../services/wallet.service';
   styleUrls: ['./otherraces.component.scss'],
   templateUrl: './otherraces.component.html',
   changeDetection: ChangeDetectionStrategy.Default,
+  standalone: true,
+  imports: [
+    TranslateModule,
+    CommonModule,
+    RouterModule,
+    PremiumRacePipe,
+    SortByDatePipe,
+    FilterBets,
+    PartialBetslipComponent,
+
+  ]
 })
 
 

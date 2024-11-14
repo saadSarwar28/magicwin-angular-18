@@ -1,4 +1,4 @@
-import { DOCUMENT } from '@angular/common';
+import { CommonModule, DOCUMENT } from '@angular/common';
 import { Component, Inject, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { of } from 'rxjs';
 import { _window } from '../../services/backend.service';
@@ -8,11 +8,14 @@ import videojs from 'video.js';
 import { ModalService } from '../../shared/services/modal.service';
 import { VideoModalService } from '../../shared/services/video-modal.service';
 import { UtillsService } from '../../services/utills.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-video-modal',
   templateUrl: './video-modal.component.html',
-  styleUrls: ['./video-modal.component.scss']
+  styleUrls: ['./video-modal.component.scss'],
+  standalone: true,
+  imports: [CommonModule, TranslateModule]
 })
 export class VideoModalComponent implements OnInit {
 

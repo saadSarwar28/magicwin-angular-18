@@ -5,10 +5,21 @@ import { CheckAuthService } from '../../services/check-auth.service';
 import { GenericService } from '../../services/generic.service';
 import { ToastService } from '../../services/toast.service';
 import { BettingService, CancellAllOrders, CancelOrders } from '../../services/betting.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { FilterBets } from "../../pipes/filterbets.pipe";
+import { RoundoffPipe } from "../../pipes/roundoff.pipe";
 @Component({
   selector: 'app-mybets',
   templateUrl: './my-bets.component.html',
-  styleUrls: ['./my-bets.component.scss']
+  styleUrls: ['./my-bets.component.scss'],
+  standalone: true,
+  imports: [
+    TranslateModule,
+    CommonModule,
+    FilterBets,
+    RoundoffPipe
+  ]
 })
 export class MybetsComponent implements OnInit, OnChanges {
   @Input() currentBets: any;

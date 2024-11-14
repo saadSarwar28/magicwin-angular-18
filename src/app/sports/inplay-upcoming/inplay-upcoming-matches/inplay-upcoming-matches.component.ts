@@ -7,7 +7,7 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { _window, BackendService } from '../../../services/backend.service';
 import {
   SetAmount,
@@ -22,11 +22,36 @@ import { StorageService } from '../../../services/storage.service';
 import { ScoreTimerService, TimerService } from '../../../services/timer.service';
 import { SportsIdMapperService } from '../../../services/sportsIdMapper.service';
 import { MarketCatalogueSS, MarketRunners } from '../../../models/models';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { MomentModule } from 'ngx-moment';
+import { TeamsScoreComponent } from '../../../shared/reuse/teams-score.component';
+import { MatchStartTimeComponent } from '../../../shared/reuse/matchStartTime.component';
+import { MarketNamePipe } from '../../../pipes/marketnameVs.pipe';
+import { OddsbuttonComponent } from '../../../shared/reuse/oddsbutton.component';
+import { OrderbyPipe } from '../../../pipes/orderby.pipe';
+import { PartialBetslipComponent } from '../../../shared/partial-betslip/partial-betslip.component';
+import { SkeltonLoaderComponent } from '../../../shared/skelton-loader/skelton-loader.component';
 
 @Component({
   selector: 'app-inplay-upcoming-matches',
   templateUrl: './inplay-upcoming-matches.component.html',
-  styleUrls: ['./inplay-upcoming-matches.component.scss']
+  styleUrls: ['./inplay-upcoming-matches.component.scss'],
+  standalone: true,
+  imports: [
+    TranslateModule,
+    CommonModule,
+    MomentModule,
+    TeamsScoreComponent,
+    MatchStartTimeComponent,
+    OddsbuttonComponent,
+    PartialBetslipComponent,
+    SkeltonLoaderComponent,
+    MarketNamePipe,
+    RouterModule,
+    OrderbyPipe
+
+  ]
 })
 export class InplayUpcomingMatchesComponent implements OnInit {
   today: Date = new Date();

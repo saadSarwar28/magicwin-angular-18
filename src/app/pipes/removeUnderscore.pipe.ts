@@ -1,7 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'removeUnderscore'
+  name: 'removeUnderscore',
+  standalone: true,
 })
 export class RemoveUnderscorePipe implements PipeTransform {
   transform(value: string): string {

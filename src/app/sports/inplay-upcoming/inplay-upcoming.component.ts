@@ -14,14 +14,25 @@ import { SportsIdMapperService } from "../../services/sportsIdMapper.service";
 import { UtillsService } from '../../services/utills.service';
 import { GenericService } from '../../services/generic.service';
 import { WalletService } from '../../services/wallet.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { VirtualCricketComponent } from '../virtual-cricket/virtual-cricket.component';
+import { InplayUpcomingMatchesComponent } from './inplay-upcoming-matches/inplay-upcoming-matches.component';
+import { LazyLoadImageModule } from 'ng-lazyload-image';
 
 @Component({
   selector: 'app-inplay-upcoming',
   templateUrl: './inplay-upcoming.component.html',
   styles: [
-
-
   ],
+  standalone: true,
+  imports: [
+    TranslateModule,
+    CommonModule,
+    InplayUpcomingMatchesComponent,
+    VirtualCricketComponent,
+    LazyLoadImageModule
+  ]
 })
 export class InplayUpcomingComponent implements OnInit, OnDestroy {
   today: Date = new Date();

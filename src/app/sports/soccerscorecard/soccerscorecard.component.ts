@@ -4,10 +4,17 @@ import { Component, OnDestroy, Input, OnInit, ElementRef, EventEmitter, Output }
 import { _window } from '../../services/backend.service'
 import { Router } from '@angular/router';
 import { StorageService } from '../../services/storage.service';
+import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: 'app-soccerscorecard',
   templateUrl: './soccerscorecard.component.html',
-  styleUrls: ['./soccerscorecard.component.scss']
+  styleUrls: ['./soccerscorecard.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    TranslateModule
+  ]
 })
 export class SoccerscorecardComponent implements OnInit, OnDestroy {
   ngOnDestroy() {

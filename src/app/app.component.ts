@@ -27,7 +27,7 @@ import { TranslateModule } from '@ngx-translate/core';
   styleUrl: './app.component.scss',
   schemas: []
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
 
   isServer: boolean = false;
   isBrowser: boolean = false;

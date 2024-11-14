@@ -1,5 +1,4 @@
 import { StorageService } from './../../services/storage.service';
-import { BackendService } from '../../services/backend.service';
 import {
   Component,
   EventEmitter,
@@ -10,13 +9,23 @@ import {
   AfterViewInit,
 } from '@angular/core';
 import { ToastService } from '../../services/toast.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { _window } from '../../services/backend.service';
 import { UtillsService } from '../../services/utills.service';
+import { CommonModule } from '@angular/common';
+import { ShortennumPipe } from '../../pipes/shortennum.pipe';
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-partial-betslip',
   templateUrl: './partial-betslip.component.html',
   styleUrls: ['./partial-betslip.component.scss'],
+  standalone: true,
+  imports: [
+    TranslateModule,
+    CommonModule, ShortennumPipe,
+    FormsModule,
+  ]
+
 })
 export class PartialBetslipComponent
   implements OnInit, OnDestroy, AfterViewInit {

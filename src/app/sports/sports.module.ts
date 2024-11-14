@@ -39,6 +39,7 @@ import { MomentModule } from 'ngx-moment';
 import { FancyDataComponent } from './fancy-data/fancy-data.component';
 import { BookmakerDataComponent } from './bookmaker-data/bookmaker-data.component';
 import { SharedModule } from '../shared/shared.module';
+import { RoundoffPipe } from '../pipes/roundoff.pipe';
 
 
 
@@ -46,53 +47,49 @@ import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
-    Safe1Pipe,
 
-    DaysFormatPipePipe,
-    RaceScheduleComponent,
-    NotfoundComponent,
-    LivestreamComponent,
-    SportsbyidComponent,
-    EventmarketsComponent,
-    MarketDetailsComponent,
-    SoccerscorecardComponent,
-    TennisscorecardComponent,
-    RacemarketComponent,
-    BasketballscorecardComponent,
-    CricketComponent,
-    BookmakerComponent,
-    CompetitionMarketsComponent,
-    MymarketsComponent,
-    SortByPipe,
-    NextRacesComponent,
-    LotterymarketComponent,
-    PremiumRacePipe,
-    SortByDatePipe,
-    OtherracesComponent,
-    FancyBookmakerComponent,
-    MybetsComponent,
-    LineMarketsComponent,
-    GroupAndSortLineMarketsPipe,
-    SportsBookComponent,
-    FancyDataComponent,
-    BookmakerDataComponent,
+    // RaceScheduleComponent,
+    // NotfoundComponent,
+    // LivestreamComponent,
+    // SportsbyidComponent,
+    // EventmarketsComponent,
+    // MarketDetailsComponent,
+    // SoccerscorecardComponent,
+    // TennisscorecardComponent,
+    // RacemarketComponent,
+    // BasketballscorecardComponent,
+    // CricketComponent,
+    // MymarketsComponent,
+    // SortByPipe,
+    // NextRacesComponent,
+    // LotterymarketComponent,
+    // PremiumRacePipe,
+    // SortByDatePipe,
+    // OtherracesComponent,
+    // FancyBookmakerComponent,
+    // LineMarketsComponent,
+    // GroupAndSortLineMarketsPipe,
+    // SportsBookComponent,
 
 
   ],
   imports: [
     TranslateModule,
     FormsModule,
-    ReactiveFormsModule,
-    RouterModule,
-    CommonModule,
-    SportsRoutingModule,
-    SharedModule,
-    MomentModule,
-    CarouselModule,
-    DirectiveModule
+    RoundoffPipe,
+    MymarketsComponent
+    // ReactiveFormsModule,
+    // RouterModule,
+    // CommonModule,
+    // SportsRoutingModule,
+    // SharedModule,
+    // DaysFormatPipePipe,
+    // MomentModule,
+    // CarouselModule,
+    // DirectiveModule
   ],
 
-  exports: [Safe1Pipe, SoccerscorecardComponent, BasketballscorecardComponent, TennisscorecardComponent, DaysFormatPipePipe, MybetsComponent,],
+  // exports: [Safe1Pipe, SoccerscorecardComponent, BasketballscorecardComponent, TennisscorecardComponent, DaysFormatPipePipe, MybetsComponent,],
 
 })
 export class SportsModule {

@@ -7,7 +7,7 @@ import {
   Renderer2,
 } from '@angular/core';
 
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { StorageService } from '../../services/storage.service';
 import {
   MatchedUnmatched,
@@ -29,7 +29,7 @@ import {
   shortenLargeNumber,
   SetAmount,
 } from '../../services/shortenLargeNumber';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { UtillsService } from '../../services/utills.service';
 import { RecentMarketsService } from '../../services/recent-markets.service';
 import { DeviceDetectorService } from 'ngx-device-detector';
@@ -37,6 +37,24 @@ import { GetStatusService } from '../../services/get-status.service';
 import { HttpClient } from '@angular/common/http';
 import { GenericService } from '../../services/generic.service';
 import { WalletService } from '../../services/wallet.service';
+import { CommonModule } from '@angular/common';
+import { ShortennumPipe } from '../../pipes/shortennum.pipe';
+import { TimeremainingComponent } from '../../shared/reuse/time-remaining.component';
+import { SoccerscorecardComponent } from '../soccerscorecard/soccerscorecard.component';
+import { BasketballscorecardComponent } from '../basketballscorecard/basketballscorecard.component';
+import { OddsbuttonComponent } from '../../shared/reuse/oddsbutton.component';
+import { PartialBetslipComponent } from '../../shared/partial-betslip/partial-betslip.component';
+import { SkeltonLoaderComponent } from '../../shared/skelton-loader/skelton-loader.component';
+import { BookmakerDataComponent } from '../bookmaker-data/bookmaker-data.component';
+import { FancyDataComponent } from '../fancy-data/fancy-data.component';
+import { MybetsComponent } from '../my-bets/my-bets.component';
+import { SportsBookComponent } from '../sports-book/sports-book.component';
+import { StreamComponent } from '../../shared/stream.component';
+import { CashoutBetslipComponent } from '../../shared/cashout-betslip/cashout-betslip.component';
+import { RoundoffPipe } from '../../pipes/roundoff.pipe';
+import { OrderbyrunnerPipe } from '../../pipes/orderbyrunner.pipe';
+import { TennisscorecardComponent } from '../tennisscorecard/tennisscorecard.component';
+import { SafePipe } from '../../pipes/safe.pipe';
 
 declare function iFrameResize(): any;
 
@@ -44,6 +62,31 @@ declare function iFrameResize(): any;
   selector: 'app-eventmarkets',
   templateUrl: './eventmarkets.component.html',
   styleUrls: ['./eventmarkets.component.scss'],
+  standalone: true,
+  imports: [
+    TranslateModule,
+    CommonModule,
+    OddsbuttonComponent,
+    PartialBetslipComponent,
+    CashoutBetslipComponent,
+    SkeltonLoaderComponent,
+    TimeremainingComponent,
+    SoccerscorecardComponent,
+    BasketballscorecardComponent,
+    TennisscorecardComponent,
+    BookmakerDataComponent,
+    FancyDataComponent,
+    MybetsComponent,
+    SportsBookComponent,
+    StreamComponent,
+    RouterModule,
+    ShortennumPipe,
+    RoundoffPipe,
+    OrderbyrunnerPipe,
+    SafePipe
+
+
+  ]
 })
 export class EventmarketsComponent implements OnInit, OnDestroy, AfterViewInit {
   matchedUnmatched: MatchedUnmatched | undefined;
@@ -277,7 +320,7 @@ export class EventmarketsComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  onVisibilityChange(visible: boolean) {
+  onVisibilityChange(visible: any) {
     this.sportsBookVisible = visible;
   }
 
