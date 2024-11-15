@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { BackendService } from '../../services/backend.service';
+import { PlatformService } from '../../services/platform.service';
 
 @Component({
   selector: 'app-blog-detail',
@@ -15,12 +16,16 @@ export class BlogDetailComponent implements OnInit {
     private metaService: Meta,
     private sanitizer: DomSanitizer,
     private route: ActivatedRoute,
-    private backendService: BackendService
+    private backendService: BackendService,
+    private platformService: PlatformService
   ) {
-    this.route.paramMap.subscribe((params) => {
-      let routeName = params.get('routename');
-      if (routeName) this.getBlogDetail(routeName);
-    });
+    if (this.platformService.isBrowser()) {
+
+      this.route.paramMap.subscribe((params) => {
+        let routeName = params.get('routename');
+        if (routeName) this.getBlogDetail(routeName);
+      });
+    }
   }
 
   ngOnInit(): void { }

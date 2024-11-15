@@ -13,6 +13,7 @@ import { GenericService } from '../../services/generic.service';
 import { GoogleAnalyticsService } from '../../services/google-analytics.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
+import { PlatformService } from '../../services/platform.service';
 
 @Component({
   selector: 'app-login-signup-buttons',
@@ -155,21 +156,25 @@ export class LoginSignButtonsComponent implements OnInit {
     private checkauthService: CheckAuthService,
     private utillsService: UtillsService,
     private genericService: GenericService,
+    private platformService: PlatformService
 
 
   ) {
   }
   ngOnInit(): void {
-    this.demoUser = _window().demoUsername;
-    this.demoPass = _window().demoPassword;
-    this.isLogin = this.checkauthService.IsLogin();
-    if (!this.isLogin && this.isHideDemoOnApp) {
-      this.hideDemoButton = this.utillsService.checkUserAgent();
-    }
-    if (this.demoUser && this.demoPass) {
-      this.showDemoIdBtn = true;
-    } else {
-      this.showDemoIdBtn = false;
+    if (this.platformService.isBrowser()) {
+
+      this.demoUser = _window().demoUsername;
+      this.demoPass = _window().demoPassword;
+      this.isLogin = this.checkauthService.IsLogin();
+      if (!this.isLogin && this.isHideDemoOnApp) {
+        this.hideDemoButton = this.utillsService.checkUserAgent();
+      }
+      if (this.demoUser && this.demoPass) {
+        this.showDemoIdBtn = true;
+      } else {
+        this.showDemoIdBtn = false;
+      }
     }
   }
 

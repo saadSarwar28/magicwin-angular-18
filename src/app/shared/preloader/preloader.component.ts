@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { _window } from '../../services/backend.service';
+import { PlatformService } from '../../services/platform.service';
 
 @Component({
   selector: 'app-preloader',
@@ -9,12 +10,17 @@ import { _window } from '../../services/backend.service';
 export class PreloaderComponent implements OnInit {
   siteLoader: any = '';
   isIframe: boolean = false;
-  constructor() {
-    if (_window().siteLoader) {
-      this.siteLoader = _window().siteLoader;
-    }
-    if (_window().isIframe) {
-      this.isIframe = _window().isIframe;
+  constructor(
+    private platformService: PlatformService
+  ) {
+    if (this.platformService.isBrowser()) {
+
+      if (_window().siteLoader) {
+        this.siteLoader = _window().siteLoader;
+      }
+      if (_window().isIframe) {
+        this.isIframe = _window().isIframe;
+      }
     }
   }
 

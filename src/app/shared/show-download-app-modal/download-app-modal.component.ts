@@ -3,6 +3,7 @@ import { _window } from '../../services/backend.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { PlatformService } from '../../services/platform.service';
 
 @Component({
   selector: 'app-download-app-modal',
@@ -44,14 +45,18 @@ export class DownloadAppModalComponent implements OnInit {
   appLinkPopupImg: string = '';
 
   constructor(
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private platformService: PlatformService
   ) {
-    this.cdnSportsLanding = _window().bannercdnLanding;
-    if (_window().appLinkPopupImg) {
-      this.appLinkPopupImg = _window().appLinkPopupImg;
-    }
-    if (_window().appLinkLive) {
-      this.appLinkLive = _window().appLinkLive;
+    if (this.platformService.isBrowser()) {
+
+      this.cdnSportsLanding = _window().bannercdnLanding;
+      if (_window().appLinkPopupImg) {
+        this.appLinkPopupImg = _window().appLinkPopupImg;
+      }
+      if (_window().appLinkLive) {
+        this.appLinkLive = _window().appLinkLive;
+      }
     }
 
 

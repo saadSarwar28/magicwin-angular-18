@@ -8,6 +8,7 @@ import { ReCaptchaV3Service } from 'ng-recaptcha';
 import { ToastService } from '../../services/toast.service';
 import { stat } from 'fs';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { PlatformService } from '../../services/platform.service';
 
 @Component({
   selector: 'app-createpin',
@@ -21,11 +22,15 @@ export class CreatepinComponent implements OnInit {
     private backendService: BackendService,
     private recaptchaV3Service: ReCaptchaV3Service,
     private toasterService: ToastService,
-    private dialogRef: MatDialogRef<CreatepinComponent>
+    private dialogRef: MatDialogRef<CreatepinComponent>,
+    private platformService: PlatformService
 
   ) {
-    if (_window().siteLoader) {
-      this.siteLoader = _window().siteLoader
+    if (this.platformService.isBrowser()) {
+
+      if (_window().siteLoader) {
+        this.siteLoader = _window().siteLoader
+      }
     }
   }
   isPin: boolean = true

@@ -12,6 +12,7 @@ import { MymarketsComponent } from '../../sports/mymarkets/mymarkets.component';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { PlatformService } from '../../services/platform.service';
 @Component({
   selector: 'app-sitefooter',
   templateUrl: './sitefooter.component.html',
@@ -52,7 +53,8 @@ export class SitefooterComponent implements OnInit {
     private genericService: GenericService,
     private modalService: ModalService,
     private utillsService: UtillsService,
-    private dialogRef: MatDialog
+    private dialogRef: MatDialog,
+    private platformService: PlatformService
 
   ) {
 
@@ -75,89 +77,91 @@ export class SitefooterComponent implements OnInit {
   backObj: any = {}
   cdnSportsLanding: string = ''
   ngOnInit(): void {
-    if (_window().cdnImagesUrl) {
-      this.cdnUrl = _window().cdnImagesUrl;
-    }
-    this.cdnSportsLanding = _window().bannercdnLanding;
+    if (this.platformService.isBrowser()) {
 
-    if (_window().sitename) {
-      this.sitename = _window().sitename;
-    }
-    this.isMagicwin = _window().isMagicwin;
-    if (_window().footerWhatsAppMulti) {
-      this.footerWhatsAppMulti = _window().footerWhatsAppMulti;
-    }
-    this.isLogin = this.checkauthservice.IsLogin();
-    if (_window().isLiveStreamEnable && !this.isLogin) {
-      this.isShowStream = true
-    }
-    else if (!_window().isLiveStreamEnable && !this.isLogin) {
-      this.isShowStream = false
-    }
-
-    if (_window().isLiveStreamEnable && !this.isLogin) {
-      this.showBeforeLive = false
-    }
-    else if (!_window().isLiveStreamEnable && !this.isLogin) {
-      this.showBeforeLive = true
-    }
-    this.router.events.subscribe((event: Event) => {
-      if (event instanceof NavigationEnd) {
-        if (this.router.url.startsWith('/games') || this.router.url.startsWith('/casino')) {
-          this.changeNavColor = true;
-        } else {
-          this.changeNavColor = false;
-        }
+      if (_window().cdnImagesUrl) {
+        this.cdnUrl = _window().cdnImagesUrl;
       }
-    })
-    this.utillsService.configData.subscribe(((res: any) => {
-      if (res) {
-        this.configData = res;
-        let depositLink = this.configData.find((item: any) => item.type === 'deposit');
-        if (depositLink && depositLink.data && depositLink.data.length > 0) {
-          this.depositWpLink = true
-        }
-        let telegramConfig = this.configData.find((item: any) => item.type === 'TGAL');
+      this.cdnSportsLanding = _window().bannercdnLanding;
 
-        if (telegramConfig && telegramConfig.data && telegramConfig.data.length > 0) {
-          this.teleLinkAfterLogin = telegramConfig.data[0].link
-        }
-        let withDrawWpLink = this.configData.find((item: any) => item.type === 'withdraw');
-        if (withDrawWpLink && withDrawWpLink.data && withDrawWpLink.data.length > 0) {
-          this.withDrawWpLink = true
-        }
+      if (_window().sitename) {
+        this.sitename = _window().sitename;
       }
-    }))
-    this.utillsService.bannerData.subscribe(((res: any) => {
-      if (res) {
-        let telegramLink = res.find((item: any) => item.type === 'TGB4');
-        if (telegramLink && telegramLink.data && telegramLink.data.length > 0) {
-          this.teleLinkBefore = telegramLink.data[0].link;
-        }
-        let mobSiteFooterMenu = this.utillsService.returnFormatedData(res, 'mobSiteFooterMenu');
-        for (const element of mobSiteFooterMenu) {
-
-          if (element.text.replace(/ /g, "") == 'Home') {
-            this.homeObj = element
-          }
-          else if (element.text.replace(/ /g, "") == 'Casino') {
-            this.casinoObj = element
-          }
-          else if (element.text.replace(/ /g, "") == 'Sports') {
-            this.sportsObj = element
-          }
-          else if (element.text.replace(/ /g, "") == 'MyMarket') {
-            this.myMarketObj = element
-          } else if (element.text.replace(/ /g, "") == 'Menu') {
-            this.menuObj = element
-          }
-          else {
-            this.backObj = element
-          }
-        }
+      this.isMagicwin = _window().isMagicwin;
+      if (_window().footerWhatsAppMulti) {
+        this.footerWhatsAppMulti = _window().footerWhatsAppMulti;
       }
-    }))
+      this.isLogin = this.checkauthservice.IsLogin();
+      if (_window().isLiveStreamEnable && !this.isLogin) {
+        this.isShowStream = true
+      }
+      else if (!_window().isLiveStreamEnable && !this.isLogin) {
+        this.isShowStream = false
+      }
 
+      if (_window().isLiveStreamEnable && !this.isLogin) {
+        this.showBeforeLive = false
+      }
+      else if (!_window().isLiveStreamEnable && !this.isLogin) {
+        this.showBeforeLive = true
+      }
+      this.router.events.subscribe((event: Event) => {
+        if (event instanceof NavigationEnd) {
+          if (this.router.url.startsWith('/games') || this.router.url.startsWith('/casino')) {
+            this.changeNavColor = true;
+          } else {
+            this.changeNavColor = false;
+          }
+        }
+      })
+      this.utillsService.configData.subscribe(((res: any) => {
+        if (res) {
+          this.configData = res;
+          let depositLink = this.configData.find((item: any) => item.type === 'deposit');
+          if (depositLink && depositLink.data && depositLink.data.length > 0) {
+            this.depositWpLink = true
+          }
+          let telegramConfig = this.configData.find((item: any) => item.type === 'TGAL');
+
+          if (telegramConfig && telegramConfig.data && telegramConfig.data.length > 0) {
+            this.teleLinkAfterLogin = telegramConfig.data[0].link
+          }
+          let withDrawWpLink = this.configData.find((item: any) => item.type === 'withdraw');
+          if (withDrawWpLink && withDrawWpLink.data && withDrawWpLink.data.length > 0) {
+            this.withDrawWpLink = true
+          }
+        }
+      }))
+      this.utillsService.bannerData.subscribe(((res: any) => {
+        if (res) {
+          let telegramLink = res.find((item: any) => item.type === 'TGB4');
+          if (telegramLink && telegramLink.data && telegramLink.data.length > 0) {
+            this.teleLinkBefore = telegramLink.data[0].link;
+          }
+          let mobSiteFooterMenu = this.utillsService.returnFormatedData(res, 'mobSiteFooterMenu');
+          for (const element of mobSiteFooterMenu) {
+
+            if (element.text.replace(/ /g, "") == 'Home') {
+              this.homeObj = element
+            }
+            else if (element.text.replace(/ /g, "") == 'Casino') {
+              this.casinoObj = element
+            }
+            else if (element.text.replace(/ /g, "") == 'Sports') {
+              this.sportsObj = element
+            }
+            else if (element.text.replace(/ /g, "") == 'MyMarket') {
+              this.myMarketObj = element
+            } else if (element.text.replace(/ /g, "") == 'Menu') {
+              this.menuObj = element
+            }
+            else {
+              this.backObj = element
+            }
+          }
+        }
+      }))
+    }
   }
 
   OpenWhatsApp() {

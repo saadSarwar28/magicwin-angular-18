@@ -18,6 +18,7 @@ import { CashoutBetslipComponent } from '../../shared/cashout-betslip/cashout-be
 import { RemoveUnderscorePipe } from '../../pipes/removeUnderscore.pipe';
 import { TruncPipe } from '../../pipes/trunc.pipe';
 import { OrderbyrunnerPipe } from '../../pipes/orderbyrunner.pipe';
+import { PlatformService } from '../../services/platform.service';
 @Component({
   selector: 'app-bookmaker-data',
   templateUrl: './bookmaker-data.component.html',
@@ -57,30 +58,39 @@ export class BookmakerDataComponent implements OnInit {
     private toasterService: ToastService,
     private genericService: GenericService,
     private utillsService: UtillsService,
+    private platformService: PlatformService
+
   ) { }
 
   ngOnInit(): void {
 
-    if (_window().showCashout) {
-      this.showCashout = _window().showCashout;
+
+    if (this.platformService.isBrowser()) {
+      if (_window().showCashout) {
+        this.showCashout = _window().showCashout;
+      }
+      if (_window().minBKFncy) {
+        this.minBKFncy = _window().minBKFncy;
+      }
+      if (_window().siteLoader) {
+        this.siteLoader = _window().siteLoader;
+      }
+      if (_window().hideOCBonComp) {
+        this.isOneClickBetGlobal = true;
+      }
+      this.isLoggedIn = this.checkauthservice.IsLogin()
     }
-    if (_window().minBKFncy) {
-      this.minBKFncy = _window().minBKFncy;
-    }
-    if (_window().siteLoader) {
-      this.siteLoader = _window().siteLoader;
-    }
-    if (_window().hideOCBonComp) {
-      this.isOneClickBetGlobal = true;
-    }
-    this.isLoggedIn = this.checkauthservice.IsLogin()
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
-    //Add '${implements OnChanges}' to the class.
-    if (changes['fancyResponse']) {
-      this.fancyHandling(this.fancyResponse)
+
+
+    if (this.platformService.isBrowser()) {
+      //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
+      //Add '${implements OnChanges}' to the class.
+      if (changes['fancyResponse']) {
+        this.fancyHandling(this.fancyResponse)
+      }
     }
   }
 

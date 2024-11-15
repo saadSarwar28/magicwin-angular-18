@@ -25,6 +25,7 @@ import { OrderbyrunnerPipe } from '../../pipes/orderbyrunner.pipe';
 import { TruncPipe } from '../../pipes/trunc.pipe';
 import { ShortennumPipe } from '../../pipes/shortennum.pipe';
 import { PartialBetslipComponent } from '../../shared/partial-betslip/partial-betslip.component';
+import { PlatformService } from '../../services/platform.service';
 @Component({
   selector: 'app-lotterymarket',
   templateUrl: './lotterymarket.component.html',
@@ -60,22 +61,25 @@ export class LotterymarketComponent implements OnInit, OnDestroy {
     private toasterService: ToastService,
     private utillsService: UtillsService,
     private genericService: GenericService,
+    private platformService: PlatformService
 
 
   ) {
+    if (this.platformService.isBrowser()) {
 
-    if (_window().Lotterytimer) {
-      this.Lotterytimer = _window().Lotterytimer;
-    }
-    if (_window().minBKFncy) {
-      this.minBKFncy = _window().minBKFncy;
-    }
-    if (_window().siteLoader) {
-      this.siteLoader = _window().siteLoader;
-    }
-    this.isOneClickBetClient = this.storageService.getItem('OCB');
-    if (_window().hideOCBonComp) {
-      this.isOneClickBetGlobal = true;
+      if (_window().Lotterytimer) {
+        this.Lotterytimer = _window().Lotterytimer;
+      }
+      if (_window().minBKFncy) {
+        this.minBKFncy = _window().minBKFncy;
+      }
+      if (_window().siteLoader) {
+        this.siteLoader = _window().siteLoader;
+      }
+      this.isOneClickBetClient = this.storageService.getItem('OCB');
+      if (_window().hideOCBonComp) {
+        this.isOneClickBetGlobal = true;
+      }
     }
   }
   ngOnDestroy(): void {
@@ -85,10 +89,13 @@ export class LotterymarketComponent implements OnInit, OnDestroy {
 
   lotteryInterval: any
   ngOnInit(): void {
-    this.loadLotteryData();
-    this.lotteryInterval = setInterval(() => {
+    if (this.platformService.isBrowser()) {
+
       this.loadLotteryData();
-    }, 10000)
+      this.lotteryInterval = setInterval(() => {
+        this.loadLotteryData();
+      }, 10000)
+    }
   }
 
 

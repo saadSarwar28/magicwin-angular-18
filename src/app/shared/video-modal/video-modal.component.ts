@@ -9,6 +9,7 @@ import { ModalService } from '../../shared/services/modal.service';
 import { VideoModalService } from '../../shared/services/video-modal.service';
 import { UtillsService } from '../../services/utills.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { PlatformService } from '../../services/platform.service';
 
 @Component({
   selector: 'app-video-modal',
@@ -26,6 +27,7 @@ export class VideoModalComponent implements OnInit {
   constructor(private storageService: StorageService, private checkauthservice: CheckAuthService,
     @Inject(DOCUMENT) private document: Document,
     private modalService: VideoModalService, private utillsService: UtillsService,
+    private platformService: PlatformService
   ) { }
   @Input()!data: any;
   options: any;
@@ -35,18 +37,21 @@ export class VideoModalComponent implements OnInit {
   tutorialVideoArr: any = []
   cdnSportsLanding: string = '';
   ngOnInit(): void {
-    this.cdnSportsLanding = _window().bannercdnLanding;
-    // this.utillsService.bannerData.subscribe((d: any) => {
-    //   if (d) {
-    //     this.tutorialVideoArr = Array.from(d).filter(
-    //       (x: any) => x.type === 'tutorialVideoArr'
-    //     );
-    //     this.tutorialVideoArr = this.tutorialVideoArr[0]?.data;
-    //   }
-    // });
-    if (this.data) {
-      this.tutorialVideoArr = this.data
+    if (this.platformService.isBrowser()) {
 
+      this.cdnSportsLanding = _window().bannercdnLanding;
+      // this.utillsService.bannerData.subscribe((d: any) => {
+      //   if (d) {
+      //     this.tutorialVideoArr = Array.from(d).filter(
+      //       (x: any) => x.type === 'tutorialVideoArr'
+      //     );
+      //     this.tutorialVideoArr = this.tutorialVideoArr[0]?.data;
+      //   }
+      // });
+      if (this.data) {
+        this.tutorialVideoArr = this.data
+
+      }
     }
 
   }

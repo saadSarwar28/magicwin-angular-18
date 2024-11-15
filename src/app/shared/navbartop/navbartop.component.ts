@@ -12,6 +12,7 @@ import { CheckAuthService } from '../../services/check-auth.service';
 import { _window } from '../../services/backend.service';
 import { UtillsService } from '../../services/utills.service';
 import { WalletService } from '../../services/wallet.service';
+import { PlatformService } from '../../services/platform.service';
 
 @Component({
   selector: 'navbartop',
@@ -37,20 +38,23 @@ export class NavbartopComponent implements OnInit {
     public translate: TranslateService,
     private checkauthservice: CheckAuthService,
     private utillsService: UtillsService,
-    private walletService: WalletService
+    private walletService: WalletService,
+    private platformService: PlatformService
   ) {
+    if (this.platformService.isBrowser()) {
 
-    if (_window().siteLogoMobile) {
-      this.siteLogo = _window().siteLogoMobile;
-    }
-    if (_window().navBarLogo) {
-      this.logoForWeb = _window().navBarLogo;
-    }
-    if (_window().sitename) {
-      this.sitename = _window().sitename;
-    }
-    if (_window().siteLogoHeight) {
-      this.logoHeight = _window().siteLogoHeight;
+      if (_window().siteLogoMobile) {
+        this.siteLogo = _window().siteLogoMobile;
+      }
+      if (_window().navBarLogo) {
+        this.logoForWeb = _window().navBarLogo;
+      }
+      if (_window().sitename) {
+        this.sitename = _window().sitename;
+      }
+      if (_window().siteLogoHeight) {
+        this.logoHeight = _window().siteLogoHeight;
+      }
     }
   }
 
@@ -91,56 +95,58 @@ export class NavbartopComponent implements OnInit {
   hideSideBarOn: string[] = ['casino', 'reports', 'user', 'deposit'];
   isSidebarOpen: boolean = true
   ngOnInit(): void {
+    if (this.platformService.isBrowser()) {
 
-    this.isTabView();
-    this.toggleSideBarFun()
-    if (this.router.url === '/home' || this.router.url === '/') {
-      this.landingPage = true;
-    } else {
-      this.landingPage = false;
-    }
-    if (_window().isIframe) {
-      this.isIframe = _window().isIframe;
-    }
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationStart) {
-        let url: any = event.url;
-        if (url === '/home' || url === '/') {
-          this.landingPage = true;
-        } else {
-          this.landingPage = false;
+      this.isTabView();
+      this.toggleSideBarFun()
+      if (this.router.url === '/home' || this.router.url === '/') {
+        this.landingPage = true;
+      } else {
+        this.landingPage = false;
+      }
+      if (_window().isIframe) {
+        this.isIframe = _window().isIframe;
+      }
+      this.router.events.subscribe((event) => {
+        if (event instanceof NavigationStart) {
+          let url: any = event.url;
+          if (url === '/home' || url === '/') {
+            this.landingPage = true;
+          } else {
+            this.landingPage = false;
+          }
         }
-      }
-      if (event instanceof NavigationEnd) {
-        this.currentUrl = event.urlAfterRedirects.split('/')[1]
-        this.casinoIframe = event.urlAfterRedirects.includes('/casino/detail/')
-        this.isSidebarOpen = !this.hideSideBarOn.includes(this.currentUrl)
-        if (this.hideSideBarOn.includes(this.currentUrl)) {
-          this.toggle = true;
-          this.toggleSideBarMenu()
-        } else {
-          this.toggle = window.innerWidth <= 1200;
-          this.toggleSideBarMenu()
+        if (event instanceof NavigationEnd) {
+          this.currentUrl = event.urlAfterRedirects.split('/')[1]
+          this.casinoIframe = event.urlAfterRedirects.includes('/casino/detail/')
+          this.isSidebarOpen = !this.hideSideBarOn.includes(this.currentUrl)
+          if (this.hideSideBarOn.includes(this.currentUrl)) {
+            this.toggle = true;
+            this.toggleSideBarMenu()
+          } else {
+            this.toggle = window.innerWidth <= 1200;
+            this.toggleSideBarMenu()
+          }
         }
-      }
-    });
-    this.isLogin = this.checkauthservice.IsLogin();
-    this.utillsService.bannerData.subscribe((d: any) => {
-      if (d) {
-        this.innerNav = this.utillsService.returnFormatedData(d, 'TOP_NAV')
-        this.outerNav = this.utillsService.returnFormatedData(d, 'TopLiveCasino')
-      }
-    })
+      });
+      this.isLogin = this.checkauthservice.IsLogin();
+      this.utillsService.bannerData.subscribe((d: any) => {
+        if (d) {
+          this.innerNav = this.utillsService.returnFormatedData(d, 'TOP_NAV')
+          this.outerNav = this.utillsService.returnFormatedData(d, 'TopLiveCasino')
+        }
+      })
 
-    if (this.isLogin) {
-      this.walletService.walletDetail.subscribe(((res: any) => {
-        if (res) {
-          this.paymentDetails = res;
-        }
-      }))
+      if (this.isLogin) {
+        this.walletService.walletDetail.subscribe(((res: any) => {
+          if (res) {
+            this.paymentDetails = res;
+          }
+        }))
 
-      this.walletService.loadBalance();
-      this.walletService.startWalletTimer()
+        this.walletService.loadBalance();
+        this.walletService.startWalletTimer()
+      }
     }
 
   }

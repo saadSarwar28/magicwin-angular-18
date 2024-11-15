@@ -9,6 +9,7 @@ import { UtillsService } from '../../services/utills.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { RecentMarketsComponent } from '../recent-markets/recent-markets.component';
 import { WalletService } from '../../services/wallet.service';
+import { PlatformService } from '../../services/platform.service';
 
 @Component({
   selector: 'app-nav-setting',
@@ -46,60 +47,62 @@ export class NavSettingComponent implements OnInit {
     private meta: Meta,
     private utillsService: UtillsService,
     private bottomSheet: MatBottomSheet,
-    private walletService: WalletService
+    private walletService: WalletService,
+    private platformService: PlatformService
   ) { }
   OCBEnabled: boolean = false;
   isIframe: boolean = false;
 
   ngOnInit(): void {
+    if (this.platformService.isBrowser()) {
 
-    this.OCBEnabled =
-      this.storageService.getItem('OCB') == null
-        ? false
-        : this.storageService.getItem('OCB');
-    this.utillsService.OCBEnabled.next(this.OCBEnabled);
-    this.utillsService.OCBEnabled.subscribe((bool: any) => {
-      this.OCBEnabled = bool;
-    });
-    this.utillsService.configData.subscribe(() => {
-      this.navigateValue = this.utillsService.depositLink
-    })
-    this.walletService.walletDetail.subscribe((data: any) => {
-      if (data) {
-        this.paymentDetails = data
+      this.OCBEnabled =
+        this.storageService.getItem('OCB') == null
+          ? false
+          : this.storageService.getItem('OCB');
+      this.utillsService.OCBEnabled.next(this.OCBEnabled);
+      this.utillsService.OCBEnabled.subscribe((bool: any) => {
+        this.OCBEnabled = bool;
+      });
+      this.utillsService.configData.subscribe(() => {
+        this.navigateValue = this.utillsService.depositLink
+      })
+      this.walletService.walletDetail.subscribe((data: any) => {
+        if (data) {
+          this.paymentDetails = data
+        }
+      })
+      this.utillsService.bannerData.subscribe((d: any) => {
+        if (d) {
+          this.reportSectionArr = Array.from(d).filter(
+            (x: any) => x.type === 'accountSection'
+          );
+          this.reportSectionArr = this.reportSectionArr[0].data;
+          this.accountSectionArr = Array.from(d).filter(
+            (x: any) => x.type === 'accountSectionArr'
+          );
+          this.accountSectionArr = this.accountSectionArr[0].data;
+        }
+      });
+      this.checkauthservice.HaveStakes();
+      if (_window().isb2c) {
+        this.isb2c = _window().isb2c;
       }
-    })
-    this.utillsService.bannerData.subscribe((d: any) => {
-      if (d) {
-        this.reportSectionArr = Array.from(d).filter(
-          (x: any) => x.type === 'accountSection'
-        );
-        this.reportSectionArr = this.reportSectionArr[0].data;
-        this.accountSectionArr = Array.from(d).filter(
-          (x: any) => x.type === 'accountSectionArr'
-        );
-        this.accountSectionArr = this.accountSectionArr[0].data;
+      if (_window().isShowDownlaodApp) {
+        this.isShowDownlaodApp = _window().isShowDownlaodApp;
       }
-    });
-    this.checkauthservice.HaveStakes();
-    if (_window().isb2c) {
-      this.isb2c = _window().isb2c;
+      if (_window().isIframe) {
+        this.isIframe = _window().isIframe;
+      }
+      if (_window().hideOCBonComp) {
+        this.showOneClickOptions = _window().hideOCBonComp;
+      } else {
+        this.showOneClickOptions = false;
+      }
+      this.isreadonly = this.meta.getTag("name='readonly'");
+      this.isLogin = this.checkauthservice.IsLogin();
+      this.username = this.storageService.getItem('client');
     }
-    if (_window().isShowDownlaodApp) {
-      this.isShowDownlaodApp = _window().isShowDownlaodApp;
-    }
-    if (_window().isIframe) {
-      this.isIframe = _window().isIframe;
-    }
-    if (_window().hideOCBonComp) {
-      this.showOneClickOptions = _window().hideOCBonComp;
-    } else {
-      this.showOneClickOptions = false;
-    }
-    this.isreadonly = this.meta.getTag("name='readonly'");
-    this.isLogin = this.checkauthservice.IsLogin();
-    this.username = this.storageService.getItem('client');
-
   }
 
 

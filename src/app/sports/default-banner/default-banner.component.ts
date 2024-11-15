@@ -6,6 +6,7 @@ import { UtillsService } from '../../services/utills.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { SkeltonLoaderComponent } from '../../shared/skelton-loader/skelton-loader.component';
+import { PlatformService } from '../../services/platform.service';
 @Component({
   selector: 'app-default-banner',
   templateUrl: './default-banner.component.html',
@@ -29,42 +30,47 @@ export class DefaultBannerComponent implements OnInit {
   defaultImage: any;
   sitename: string = '';
   isMultipleBanner: boolean = false;
-  constructor(private router: Router, public utillsService: UtillsService) {
-    if (_window().gameLoader) {
-      this.defaultImage = _window().gameLoader;
-    }
-    if (_window().sitename) {
-      this.sitename = _window().sitename;
-    }
-    if (_window().isMultipleBanner) {
-      this.isMultipleBanner = _window().isMultipleBanner;
-    }
+  constructor(private router: Router, public utillsService: UtillsService,
+    private platformService: PlatformService
+  ) {
+    if (this.platformService.isBrowser()) {
+
+      if (_window().gameLoader) {
+        this.defaultImage = _window().gameLoader;
+      }
+      if (_window().sitename) {
+        this.sitename = _window().sitename;
+      }
+      if (_window().isMultipleBanner) {
+        this.isMultipleBanner = _window().isMultipleBanner;
+      }
 
 
-    this.carouselOptions = {
-      loop: true,
-      mouseDrag: true,
-      touchDrag: true,
-      pullDrag: false,
-      dots: false,
-      autoplay: true,
-      navSpeed: 700,
+      this.carouselOptions = {
+        loop: true,
+        mouseDrag: true,
+        touchDrag: true,
+        pullDrag: false,
+        dots: false,
+        autoplay: true,
+        navSpeed: 700,
 
-      responsive: {
-        0: {
-          items: 1,
+        responsive: {
+          0: {
+            items: 1,
+          },
+          600: {
+            items: 1,
+          },
+          1024: {
+            items: this.isMultipleBanner ? 3 : 1,
+          },
+          1200: {
+            items: this.isMultipleBanner ? 3 : 1,
+          },
         },
-        600: {
-          items: 1,
-        },
-        1024: {
-          items: this.isMultipleBanner ? 3 : 1,
-        },
-        1200: {
-          items: this.isMultipleBanner ? 3 : 1,
-        },
-      },
-    };
+      };
+    }
   }
 
   routeToMulti(item: any) {
@@ -81,16 +87,19 @@ export class DefaultBannerComponent implements OnInit {
 
   cdnSportsLanding: string = '';
   ngOnInit() {
-    this.utillsService.bannerData.subscribe((d: any) => {
-      if (d) {
-        if (window.innerWidth < 768) {
-          this.bannerData = this.utillsService.returnFormatedData(d, 'Mbanner');
-        } else {
-          this.bannerData = this.utillsService.returnFormatedData(d, 'banner');
+    if (this.platformService.isBrowser()) {
+
+      this.utillsService.bannerData.subscribe((d: any) => {
+        if (d) {
+          if (window.innerWidth < 768) {
+            this.bannerData = this.utillsService.returnFormatedData(d, 'Mbanner');
+          } else {
+            this.bannerData = this.utillsService.returnFormatedData(d, 'banner');
+          }
         }
-      }
-    });
-    this.cdnSportsLanding = _window().bannercdnLanding;
+      });
+      this.cdnSportsLanding = _window().bannercdnLanding;
+    }
   }
 
   isWhatsAppLink(link: any) {

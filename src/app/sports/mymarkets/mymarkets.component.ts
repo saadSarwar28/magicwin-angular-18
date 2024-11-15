@@ -9,6 +9,7 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { RoundoffPipe } from '../../pipes/roundoff.pipe';
+import { PlatformService } from '../../services/platform.service';
 @Component({
   selector: 'app-mymarkets',
   templateUrl: './mymarkets.component.html',
@@ -31,7 +32,8 @@ export class MymarketsComponent implements OnInit {
     private router: Router,
     private backendService: BackendService,
     private checkauthservice: CheckAuthService,
-    private dialogRef: MatDialogRef<MymarketsComponent>
+    private dialogRef: MatDialogRef<MymarketsComponent>,
+    private platformService: PlatformService
   ) {
   }
 
@@ -43,9 +45,12 @@ export class MymarketsComponent implements OnInit {
 
   rotate: boolean = false
   ngOnInit(): void {
-    this.LoadData();
-    if (_window().siteLoader) {
-      this.siteLoader = _window().siteLoader;
+    if (this.platformService.isBrowser()) {
+
+      this.LoadData();
+      if (_window().siteLoader) {
+        this.siteLoader = _window().siteLoader;
+      }
     }
   }
 

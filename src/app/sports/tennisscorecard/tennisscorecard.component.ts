@@ -3,6 +3,7 @@ import { _window, BackendService } from '../../services/backend.service';
 import { ScoreCardTimerService } from '../../services/timer.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
+import { PlatformService } from '../../services/platform.service';
 
 
 @Component({
@@ -25,10 +26,14 @@ export class TennisscorecardComponent implements OnInit, OnDestroy {
   constructor(
     private betService: BackendService,
     private elementRef: ElementRef,
-    private scoreTimerService: ScoreCardTimerService
+    private scoreTimerService: ScoreCardTimerService,
+    private platformService: PlatformService
   ) {
-    if (_window().scoretimer) {
-      this.interval = _window().scoretimer;
+    if (this.platformService.isBrowser()) {
+
+      if (_window().scoretimer) {
+        this.interval = _window().scoretimer;
+      }
     }
   }
   @Input() evtid: string | undefined;
@@ -44,11 +49,13 @@ export class TennisscorecardComponent implements OnInit, OnDestroy {
   team1: string = "";
   team2: string = "";
   ngOnInit() {
-    if (navigator.onLine == true && document.hidden == false) {
-      this.loadTimeLine();
-      this.scoreTimerService.SetTimer(setInterval(() => { this.loadTimeLine(); }, this.interval));
-    }
+    if (this.platformService.isBrowser()) {
 
+      if (navigator.onLine == true && document.hidden == false) {
+        this.loadTimeLine();
+        this.scoreTimerService.SetTimer(setInterval(() => { this.loadTimeLine(); }, this.interval));
+      }
+    }
   }
   ngAfterViewInit(): void {
     // if(this.mktName.indexOf(' v ')>0){

@@ -8,6 +8,7 @@ import { FancytimerService, TimerService } from '../../services/timer.service';
 import { ToastService } from '../../services/toast.service';
 import { UtillsService } from '../../services/utills.service';
 import { BookpositionComponent } from '../../shared/bookposition/bookposition.component';
+import { PlatformService } from '../../services/platform.service';
 
 @Component({
   selector: 'app-fancy-bookmaker',
@@ -38,29 +39,32 @@ export class FancyBookmakerComponent implements OnInit, OnDestroy {
     private toasterService: ToastService,
     private genericService: GenericService,
     private utillsService: UtillsService,
+    private platformService: PlatformService
   ) { }
 
   ngOnInit(): void {
-    if (_window().fancytimer) {
-      this.fInterval = _window().fancytimer;
-    }
-    if (_window().showCashout) {
-      this.showCashout = _window().showCashout;
-    }
-    if (_window().minBKFncy) {
-      this.minBKFncy = _window().minBKFncy;
-    }
-    if (_window().siteLoader) {
-      this.siteLoader = _window().siteLoader;
-    }
-    if (_window().hideOCBonComp) {
-      this.isOneClickBetGlobal = true;
-    }
-    this.isLoggedIn = this.checkauthservice.IsLogin()
-    this.GetClientParameters()
-    this.loadFancyData()
+    if (this.platformService.isBrowser()) {
 
+      if (_window().fancytimer) {
+        this.fInterval = _window().fancytimer;
+      }
+      if (_window().showCashout) {
+        this.showCashout = _window().showCashout;
+      }
+      if (_window().minBKFncy) {
+        this.minBKFncy = _window().minBKFncy;
+      }
+      if (_window().siteLoader) {
+        this.siteLoader = _window().siteLoader;
+      }
+      if (_window().hideOCBonComp) {
+        this.isOneClickBetGlobal = true;
+      }
+      this.isLoggedIn = this.checkauthservice.IsLogin()
+      this.GetClientParameters()
+      this.loadFancyData()
 
+    }
   }
   isLoggedIn: any = false;
   bookMakerRate: number = 1;

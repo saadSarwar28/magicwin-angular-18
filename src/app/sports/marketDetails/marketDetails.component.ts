@@ -52,6 +52,7 @@ import { RoundoffPipe } from '../../pipes/roundoff.pipe';
 import { RemoveUnderscorePipe } from '../../pipes/removeUnderscore.pipe';
 import { OrderbyrunnerPipe } from '../../pipes/orderbyrunner.pipe';
 import { MybetsComponent } from '../my-bets/my-bets.component';
+import { PlatformService } from '../../services/platform.service';
 declare function iFrameResize(): any;
 @Component({
   selector: 'app-marketDetails',
@@ -84,9 +85,12 @@ export class MarketDetailsComponent
   implements OnInit, OnDestroy, AfterViewInit {
   deviceInfo: any;
   ngAfterViewInit(): void {
-    setTimeout(() => {
-      iFrameResize();
-    }, 5000);
+    if (this.platformService.isBrowser()) {
+
+      setTimeout(() => {
+        iFrameResize();
+      }, 5000);
+    }
   }
   siteLoader: any;
   marketId: string = '';
@@ -139,89 +143,92 @@ export class MarketDetailsComponent
     private deviceService: DeviceDetectorService,
     private genericService: GenericService,
     private fancyTimerService: FancytimerService,
-    private walletService: WalletService
+    private walletService: WalletService,
+    private platformService: PlatformService
 
 
 
   ) {
-    this.deviceInfo = this.deviceService.getDeviceInfo();
+    if (this.platformService.isBrowser()) {
 
-    if (_window().hideOCBonComp) {
-      this.isOneClickBetGlobal = true;
-    }
-    // this.getStreamData();
-    if (_window().siteLoader) {
-      this.siteLoader = _window().siteLoader;
-    }
-    if (_window().isShowStreamMobile) {
-      this.isShowStreamMobile = _window().isShowStreamMobile;
-    }
-    if (_window().byPassStreamScript) {
-      this.byPassStreamScript = _window().byPassStreamScript;
-    }
-    if (_window().hideOCBonComp) {
-      this.isOneClickBetGlobal = true;
-    }
-    if (_window().minBalance) {
-      this.minBalance = _window().minBalance;
-    }
+      this.deviceInfo = this.deviceService.getDeviceInfo();
 
-    if (_window().cdnImagesUrl) {
-      this.cdnUrl = _window().cdnImagesUrl;
-    }
-
-    if (_window().showCashout) {
-      this.showCashout = _window().showCashout;
-    }
-    if (_window().winnerFancyMarketDetails) {
-      this.winnerFancyMarketDetails = _window().winnerFancyMarketDetails;
-    }
-    if (_window().fancyVersion) {
-      this.fancyVersion = _window().fancyVersion;
-    }
-    if (_window().fancytimer) {
-      this.fInterval = _window().fancytimer;
-    }
-    if (this.checkauthservice.IsLogin()) {
-      if (_window().isShowBalanceStream) {
-        this.isShowBalanceStream = _window().isShowBalanceStream;
+      if (_window().hideOCBonComp) {
+        this.isOneClickBetGlobal = true;
       }
-      this.isLoggedIn = true;
-      if (this.isShowBalanceStream) {
-        this.getStatusService.balanceClient$.subscribe((balance) => {
-          this.showStreamOnBalance =
-            balance.balance < this.minBalance ? false : true;
-        });
+      // this.getStreamData();
+      if (_window().siteLoader) {
+        this.siteLoader = _window().siteLoader;
+      }
+      if (_window().isShowStreamMobile) {
+        this.isShowStreamMobile = _window().isShowStreamMobile;
+      }
+      if (_window().byPassStreamScript) {
+        this.byPassStreamScript = _window().byPassStreamScript;
+      }
+      if (_window().hideOCBonComp) {
+        this.isOneClickBetGlobal = true;
+      }
+      if (_window().minBalance) {
+        this.minBalance = _window().minBalance;
+      }
+
+      if (_window().cdnImagesUrl) {
+        this.cdnUrl = _window().cdnImagesUrl;
+      }
+
+      if (_window().showCashout) {
+        this.showCashout = _window().showCashout;
+      }
+      if (_window().winnerFancyMarketDetails) {
+        this.winnerFancyMarketDetails = _window().winnerFancyMarketDetails;
+      }
+      if (_window().fancyVersion) {
+        this.fancyVersion = _window().fancyVersion;
+      }
+      if (_window().fancytimer) {
+        this.fInterval = _window().fancytimer;
+      }
+      if (this.checkauthservice.IsLogin()) {
+        if (_window().isShowBalanceStream) {
+          this.isShowBalanceStream = _window().isShowBalanceStream;
+        }
+        this.isLoggedIn = true;
+        if (this.isShowBalanceStream) {
+          this.getStatusService.balanceClient$.subscribe((balance) => {
+            this.showStreamOnBalance =
+              balance.balance < this.minBalance ? false : true;
+          });
+        }
+      }
+
+      if (_window().hideOCBonComp) {
+        if (!this.storageService.getItem('OCB')) {
+          this.hideOCBonComp = false;
+        } else {
+          this.hideOCBonComp = _window().hideOCBonComp;
+        }
+      }
+
+      this.route.params.subscribe((p: any) => {
+        this.marketId = p.name;
+        this.marketId =
+          this.marketId.split('-')[this.marketId.split('-').length - 1];
+        this.sportsId = this.marketId;
+        this.clientMatchSize = null;
+        this.clientUnmatchSize = null;
+        this.isLoading = true
+        this.data = null;
+        this.checkPathandLoaddata();
+
+      });
+      if (_window().marketdetailtimer) {
+        this.interval = _window().marketdetailtimer;
+      }
+      if (_window().displaylmt) {
+        this.displayLMT = _window().displaylmt;
       }
     }
-
-    if (_window().hideOCBonComp) {
-      if (!this.storageService.getItem('OCB')) {
-        this.hideOCBonComp = false;
-      } else {
-        this.hideOCBonComp = _window().hideOCBonComp;
-      }
-    }
-
-    this.route.params.subscribe((p: any) => {
-      this.marketId = p.name;
-      this.marketId =
-        this.marketId.split('-')[this.marketId.split('-').length - 1];
-      this.sportsId = this.marketId;
-      this.clientMatchSize = null;
-      this.clientUnmatchSize = null;
-      this.isLoading = true
-      this.data = null;
-      this.checkPathandLoaddata();
-
-    });
-    if (_window().marketdetailtimer) {
-      this.interval = _window().marketdetailtimer;
-    }
-    if (_window().displaylmt) {
-      this.displayLMT = _window().displaylmt;
-    }
-
   }
   BetPlaceCashout(status: any) {
     if (status.success) {
@@ -293,20 +300,23 @@ export class MarketDetailsComponent
 
   getIPAddress: any = '';
   ngOnInit(): void {
-    if (this.byPassStreamScript) {
-      this.showStreamAgent = true;
-    } else {
-      this.checkUserAgent();
-    }
-    this.utillsService.ipaddress.subscribe((data: any) => {
-      if (data) {
-        this.getIPAddress = data;
+    if (this.platformService.isBrowser()) {
+
+      if (this.byPassStreamScript) {
+        this.showStreamAgent = true;
+      } else {
+        this.checkUserAgent();
       }
-    });
-    if (!this.checkauthservice.IsLogin()) {
-      this.localMarketRate = _window().locMarketRates;
+      this.utillsService.ipaddress.subscribe((data: any) => {
+        if (data) {
+          this.getIPAddress = data;
+        }
+      });
+      if (!this.checkauthservice.IsLogin()) {
+        this.localMarketRate = _window().locMarketRates;
+      }
+      sessionStorage.clear();
     }
-    sessionStorage.clear();
   }
 
   checkPathandLoaddata() {

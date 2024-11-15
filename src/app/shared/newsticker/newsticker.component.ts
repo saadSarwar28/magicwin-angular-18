@@ -5,6 +5,7 @@ import { UtillsService } from "../../services/utills.service";
 import { NewsTimerService } from "../../services/timer.service";
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
+import { PlatformService } from '../../services/platform.service';
 
 @Component({
   selector: 'app-newsticker',
@@ -20,33 +21,37 @@ export class NewstickerComponent implements OnInit, OnDestroy {
   news: string = "";
   interval = 10000;
 
-  constructor(private sportsService: BackendService, private newsTimerService: NewsTimerService, private storageService: StorageService, private utillsService: UtillsService) {
+  constructor(private sportsService: BackendService, private platformService: PlatformService,
+    private newsTimerService: NewsTimerService, private storageService: StorageService, private utillsService: UtillsService) {
   }
 
   ngOnInit(): void {
-    // if (_window().newsTimer) {
-    //   this.interval = _window().newsTimer
-    // }
-    // this.interval
-    this.getNews();
-    // this.utillsService.bannerData.subscribe((data: any) => {
-    //   if (data) {
-    //     let newsFound = false
-    //     data.forEach((banner: any) => {
-    //       if (banner.type == 'News') {
-    //         if (banner.data[0].link !== '') {
-    //           this.news = banner.data[0].link
-    //           newsFound = true
-    //         }
-    //       }
-    //     })
-    //     if (!newsFound) {
-    //       this.newsTimerService.SetTimer(setInterval(() => {
-    //         this.getNews()
-    //       }, this.interval))
-    //     }
-    //   }
-    // })
+    if (this.platformService.isBrowser()) {
+
+      // if (_window().newsTimer) {
+      //   this.interval = _window().newsTimer
+      // }
+      // this.interval
+      this.getNews();
+      // this.utillsService.bannerData.subscribe((data: any) => {
+      //   if (data) {
+      //     let newsFound = false
+      //     data.forEach((banner: any) => {
+      //       if (banner.type == 'News') {
+      //         if (banner.data[0].link !== '') {
+      //           this.news = banner.data[0].link
+      //           newsFound = true
+      //         }
+      //       }
+      //     })
+      //     if (!newsFound) {
+      //       this.newsTimerService.SetTimer(setInterval(() => {
+      //         this.getNews()
+      //       }, this.interval))
+      //     }
+      //   }
+      // })
+    }
   }
 
 

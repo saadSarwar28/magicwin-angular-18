@@ -1,6 +1,7 @@
 import { Component, OnInit, } from '@angular/core';
 import { Router } from '@angular/router';
 import { _window, BackendService } from '../../services/backend.service';
+import { PlatformService } from '../../services/platform.service';
 
 @Component({
   selector: 'app-blogs',
@@ -13,11 +14,15 @@ export class BlogsComponent implements OnInit {
   loader: boolean = false;
   constructor(
     private backendService: BackendService,
-    private router: Router
+    private router: Router,
+    private platformService: PlatformService
   ) { }
 
   ngOnInit(): void {
-    this.getBlogDetail();
+    if (this.platformService.isBrowser()) {
+
+      this.getBlogDetail();
+    }
   }
 
   getBlogDetail() {

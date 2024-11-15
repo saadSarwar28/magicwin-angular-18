@@ -25,6 +25,7 @@ import { BookmakerDataComponent } from '../bookmaker-data/bookmaker-data.compone
 import { FancyDataComponent } from '../fancy-data/fancy-data.component';
 import { MybetsComponent } from '../my-bets/my-bets.component';
 import { Safe1Pipe } from '../../pipes/safe.pipe';
+import { PlatformService } from '../../services/platform.service';
 declare function iFrameResize(): any;
 @Component({
   selector: 'app-bookmaker',
@@ -78,58 +79,61 @@ export class BookmakerComponent implements OnInit, OnDestroy {
     private getStatusService: GetStatusService,
     private deviceService: DeviceDetectorService,
     private fancyTimerService: FancytimerService,
+    private platformService: PlatformService
 
   ) {
-    this.deviceInfo = this.deviceService.getDeviceInfo();
-    if (_window().siteLoader) {
-      this.siteLoader = _window().siteLoader;
-    }
-    if (_window().minBalance) {
-      this.minBalance = _window().minBalance;
-    }
-    if (_window().isShowBalanceStream) {
-      this.isShowBalanceStream = _window().isShowBalanceStream;
-    }
-    if (_window().cdnImagesUrl) {
-      this.cdnUrl = _window().cdnImagesUrl;
-    }
-    if (_window().isShowStreamMobile) {
-      this.isShowStreamMobile = _window().isShowStreamMobile;
-    }
-    if (_window().byPassStreamScript) {
-      this.byPassStreamScript = _window().byPassStreamScript;
-    }
-    if (_window().bookmakerLMT) {
-      this.bookmakerLMTShow = true;
-    }
-    if (_window().fancytimer) {
-      this.fInterval = _window().fancytimer;
-    }
 
-    if (_window().loksabhafancyVersion) {
-      this.loksabhafancyVersion = _window().loksabhafancyVersion;
-    }
-    this.route.params.subscribe((p) => {
-      this.marketId = null;
-      this.eventId = null;
-      console.log("p", p)
-      this.marketId = this.route.snapshot.paramMap.get('id') || '';
-      this.marketId.includes('election') ? this.election = true : this.election = false
-      if (this.marketId !== '') {
-        this.marketId =
-          this.marketId.split('-')[this.marketId.split('-').length - 1];
+    if (this.platformService.isBrowser()) {
+      this.deviceInfo = this.deviceService.getDeviceInfo();
+      if (_window().siteLoader) {
+        this.siteLoader = _window().siteLoader;
       }
-      this.eventId = this.route.snapshot.paramMap.get('eventid') || '';
-      if (this.eventId !== '') {
-        this.eventId =
-          this.eventId.split('-')[this.eventId.split('-').length - 1];
-        this.loadFancyData()
-        this.isFirstLoad = true
+      if (_window().minBalance) {
+        this.minBalance = _window().minBalance;
+      }
+      if (_window().isShowBalanceStream) {
+        this.isShowBalanceStream = _window().isShowBalanceStream;
+      }
+      if (_window().cdnImagesUrl) {
+        this.cdnUrl = _window().cdnImagesUrl;
+      }
+      if (_window().isShowStreamMobile) {
+        this.isShowStreamMobile = _window().isShowStreamMobile;
+      }
+      if (_window().byPassStreamScript) {
+        this.byPassStreamScript = _window().byPassStreamScript;
+      }
+      if (_window().bookmakerLMT) {
+        this.bookmakerLMTShow = true;
+      }
+      if (_window().fancytimer) {
+        this.fInterval = _window().fancytimer;
       }
 
-      this.LoadCurrentBets()
-    });
+      if (_window().loksabhafancyVersion) {
+        this.loksabhafancyVersion = _window().loksabhafancyVersion;
+      }
+      this.route.params.subscribe((p) => {
+        this.marketId = null;
+        this.eventId = null;
+        console.log("p", p)
+        this.marketId = this.route.snapshot.paramMap.get('id') || '';
+        this.marketId.includes('election') ? this.election = true : this.election = false
+        if (this.marketId !== '') {
+          this.marketId =
+            this.marketId.split('-')[this.marketId.split('-').length - 1];
+        }
+        this.eventId = this.route.snapshot.paramMap.get('eventid') || '';
+        if (this.eventId !== '') {
+          this.eventId =
+            this.eventId.split('-')[this.eventId.split('-').length - 1];
+          this.loadFancyData()
+          this.isFirstLoad = true
+        }
 
+        this.LoadCurrentBets()
+      });
+    }
   }
 
   callFunction() {
@@ -272,32 +276,37 @@ export class BookmakerComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    if (this.byPassStreamScript) {
-      this.showStreamAgent = true;
-    } else {
-      this.checkUserAgent();
-    }
-    if (this.checkauthservice.IsLogin()) {
-      this.isLoggedIn = true;
-      if (this.isShowBalanceStream) {
-        this.getStatusService.balanceClient$.subscribe((balance) => {
-          this.showStreamOnBalance =
-            balance.balance < this.minBalance ? false : true;
-        });
+    if (this.platformService.isBrowser()) {
+      if (this.byPassStreamScript) {
+        this.showStreamAgent = true;
+      } else {
+        this.checkUserAgent();
+      }
+      if (this.checkauthservice.IsLogin()) {
+        this.isLoggedIn = true;
+        if (this.isShowBalanceStream) {
+          this.getStatusService.balanceClient$.subscribe((balance) => {
+            this.showStreamOnBalance =
+              balance.balance < this.minBalance ? false : true;
+          });
+        }
+      }
+      if (_window().bookerScoreCadr) {
+        this.bookmakerlmt = _window().bookerScoreCadr + `${this.eventId}`;
       }
     }
-    if (_window().bookerScoreCadr) {
-      this.bookmakerlmt = _window().bookerScoreCadr + `${this.eventId}`;
-    }
-
 
   }
 
 
   ngAfterViewInit() {
-    setTimeout(() => {
-      iFrameResize();
-    }, 5000);
+
+
+    if (this.platformService.isBrowser()) {
+      setTimeout(() => {
+        iFrameResize();
+      }, 5000);
+    }
   }
 
   toggleLiveShow: any = false;

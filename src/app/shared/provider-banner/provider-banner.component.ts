@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { _window } from '../../services/backend.service';
 import { UtillsService } from '../../services/utills.service';
+import { PlatformService } from '../../services/platform.service';
 
 @Component({
   selector: 'app-provider-banner',
@@ -11,8 +12,14 @@ import { UtillsService } from '../../services/utills.service';
 export class ProviderBannerComponent implements OnInit {
   @Input() bannerData: any;
   cdnSportsLanding: string = '';
-  constructor(private router: Router, public utillsService: UtillsService) {
-    this.cdnSportsLanding = _window().bannercdnLanding;
+  constructor(private router: Router,
+    public utillsService: UtillsService,
+    private platformService: PlatformService
+  ) {
+    if (this.platformService.isBrowser()) {
+
+      this.cdnSportsLanding = _window().bannercdnLanding;
+    }
   }
 
   ngOnInit(): void { }

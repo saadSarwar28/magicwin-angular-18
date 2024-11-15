@@ -19,6 +19,7 @@ import { UtillsService } from '../../services/utills.service';
 import { CommonModule } from '@angular/common';
 import { ShortennumPipe } from '../../pipes/shortennum.pipe';
 import { FormsModule } from '@angular/forms';
+import { PlatformService } from '../../services/platform.service';
 @Component({
   selector: 'app-cashout-betslip',
   templateUrl: './cashout-betslip.component.html',
@@ -47,19 +48,23 @@ export class CashoutBetslipComponent implements OnInit, AfterViewInit {
     private translate: TranslateService,
     private toasterService: ToastService,
     private utilsSerivce: UtillsService,
-    private storageService: StorageService
+    private storageService: StorageService,
+    private platformService: PlatformService
   ) {
-    if (_window().cdnImagesUrl) {
-      this.cdnUrl = _window().cdnImagesUrl;
-    }
-    if (_window().addPlusMinusBetSlip) {
-      this.addPlusMinusBetSlip = _window().addPlusMinusBetSlip;
-    }
-    if (_window().minMaxBetSlip) {
-      this.minMaxBetSlip = _window().minMaxBetSlip;
-    }
-    if (_window().siteLoader) {
-      this.siteLoader = _window().siteLoader;
+    if (this.platformService.isBrowser()) {
+
+      if (_window().cdnImagesUrl) {
+        this.cdnUrl = _window().cdnImagesUrl;
+      }
+      if (_window().addPlusMinusBetSlip) {
+        this.addPlusMinusBetSlip = _window().addPlusMinusBetSlip;
+      }
+      if (_window().minMaxBetSlip) {
+        this.minMaxBetSlip = _window().minMaxBetSlip;
+      }
+      if (_window().siteLoader) {
+        this.siteLoader = _window().siteLoader;
+      }
     }
   }
   ngAfterViewInit(): void { }
@@ -77,139 +82,141 @@ export class CashoutBetslipComponent implements OnInit, AfterViewInit {
   @Input() lineOddsDisable: boolean = false;
   bookmaker: string[] = [];
   ngOnInit(): void {
-    this.looksabha = this.r?.looksabha ? true : false;
-    if (this.market.betslip?.bookMakerMarkets) {
-      this.bookmaker = this.market.betslip?.bookMakerMarkets;
-    } else {
-      this.bookmaker = [];
-    }
+    if (this.platformService.isBrowser()) {
 
-    this.keepAlive =
-      this.storageService.getItem('keepAlive') == null
-        ? false
-        : this.storageService.getItem('keepAlive');
-    if (this.market && this.market.runners && this.market.runners.length < 3) {
-      const initialValue = 0;
-      const sumWithInitial = this.market.runners.reduce(
-        (accumulator: any, currentValue: any) => accumulator + currentValue.position,
-        initialValue
-      );
-      if (sumWithInitial != 0) {
-        let data: any = [];
-        this.market.runners.forEach((element: any) => {
-          data.push({
-            runnerid: element.selectionId,
-            position: element.position,
-            back: this.bookmaker.includes(this.market.marketName)
-              ? element.back[0].price / 100 + 1
-              : element.back[0].price,
-            lay: this.bookmaker.includes(this.market.marketName)
-              ? element.lay[0].price / 100 + 1
-              : element.lay[0].price,
-            stake: 0,
-            side: '',
-            isFav: 0,
+      this.looksabha = this.r?.looksabha ? true : false;
+      if (this.market.betslip?.bookMakerMarkets) {
+        this.bookmaker = this.market.betslip?.bookMakerMarkets;
+      } else {
+        this.bookmaker = [];
+      }
+
+      this.keepAlive =
+        this.storageService.getItem('keepAlive') == null
+          ? false
+          : this.storageService.getItem('keepAlive');
+      if (this.market && this.market.runners && this.market.runners.length < 3) {
+        const initialValue = 0;
+        const sumWithInitial = this.market.runners.reduce(
+          (accumulator: any, currentValue: any) => accumulator + currentValue.position,
+          initialValue
+        );
+        if (sumWithInitial != 0) {
+          let data: any = [];
+          this.market.runners.forEach((element: any) => {
+            data.push({
+              runnerid: element.selectionId,
+              position: element.position,
+              back: this.bookmaker.includes(this.market.marketName)
+                ? element.back[0].price / 100 + 1
+                : element.back[0].price,
+              lay: this.bookmaker.includes(this.market.marketName)
+                ? element.lay[0].price / 100 + 1
+                : element.lay[0].price,
+              stake: 0,
+              side: '',
+              isFav: 0,
+            });
           });
-        });
-        let faviourt: any;
-        if (data && data.length > 0) {
-          if (this.bookmaker.includes(this.market.marketName)) {
-            let backLay = this.market.runners.filter(
-              (item: any) => item.backOdds == 0 && item.layOdds == 0
-            );
-            if (backLay && backLay.length > 0) {
-              faviourt = data.reduce((min: any, obj: any) =>
-                obj['back'] > min['back'] ? obj : min
+          let faviourt: any;
+          if (data && data.length > 0) {
+            if (this.bookmaker.includes(this.market.marketName)) {
+              let backLay = this.market.runners.filter(
+                (item: any) => item.backOdds == 0 && item.layOdds == 0
               );
+              if (backLay && backLay.length > 0) {
+                faviourt = data.reduce((min: any, obj: any) =>
+                  obj['back'] > min['back'] ? obj : min
+                );
+              } else {
+                faviourt = data.reduce((min: any, obj: any) =>
+                  obj['back'] < min['back'] ? obj : min
+                );
+              }
             } else {
               faviourt = data.reduce((min: any, obj: any) =>
                 obj['back'] < min['back'] ? obj : min
               );
             }
-          } else {
-            faviourt = data.reduce((min: any, obj: any) =>
-              obj['back'] < min['back'] ? obj : min
-            );
-          }
 
-          let positionA = 0;
-          let positionB = 0;
-          data.forEach((element: any) => {
-            if (element.runnerid == faviourt.runnerid) {
-              element.isFav = 1;
-              positionA = element.position;
-            } else {
-              positionB = element.position;
-            }
-          });
-
-          if (positionA == positionB) {
-            this.market.betslip = null;
-          }
-          if (positionB > positionA) {
-            faviourt.side = 'back';
-            this.minimumBetSize = Math.round(
-              Math.abs(
-                (positionB * (faviourt.back - 1) + positionA) / faviourt.back -
-                positionB
-              )
-            );
-            faviourt.stake =
-              this.minimumBetSize === Infinity ? 0 : this.minimumBetSize;
-            this.market.betslip.bType = faviourt.side;
-            this.market.betslip.size = faviourt.stake;
-            this.market.betslip.price = faviourt.back;
-            this.market.betslip.selectionid = faviourt.runnerid;
-          } else {
-            data.forEach((x: any) => {
-              if (x.position == positionB) {
-                this.minimumBetSize = Math.round(
-                  Math.abs(
-                    (x.position * (faviourt.lay - 1) + positionA) /
-                    faviourt.lay -
-                    x.position
-                  )
-                );
-                faviourt.side = 'lay';
-                faviourt.stake =
-                  this.minimumBetSize === Infinity ? 0 : this.minimumBetSize;
-                this.market.betslip.bType = faviourt.side;
-                this.market.betslip.size = faviourt.stake;
-                this.market.betslip.price = faviourt.lay;
-                this.market.betslip.selectionid = faviourt.runnerid;
+            let positionA = 0;
+            let positionB = 0;
+            data.forEach((element: any) => {
+              if (element.runnerid == faviourt.runnerid) {
+                element.isFav = 1;
+                positionA = element.position;
+              } else {
+                positionB = element.position;
               }
             });
+
+            if (positionA == positionB) {
+              this.market.betslip = null;
+            }
+            if (positionB > positionA) {
+              faviourt.side = 'back';
+              this.minimumBetSize = Math.round(
+                Math.abs(
+                  (positionB * (faviourt.back - 1) + positionA) / faviourt.back -
+                  positionB
+                )
+              );
+              faviourt.stake =
+                this.minimumBetSize === Infinity ? 0 : this.minimumBetSize;
+              this.market.betslip.bType = faviourt.side;
+              this.market.betslip.size = faviourt.stake;
+              this.market.betslip.price = faviourt.back;
+              this.market.betslip.selectionid = faviourt.runnerid;
+            } else {
+              data.forEach((x: any) => {
+                if (x.position == positionB) {
+                  this.minimumBetSize = Math.round(
+                    Math.abs(
+                      (x.position * (faviourt.lay - 1) + positionA) /
+                      faviourt.lay -
+                      x.position
+                    )
+                  );
+                  faviourt.side = 'lay';
+                  faviourt.stake =
+                    this.minimumBetSize === Infinity ? 0 : this.minimumBetSize;
+                  this.market.betslip.bType = faviourt.side;
+                  this.market.betslip.size = faviourt.stake;
+                  this.market.betslip.price = faviourt.lay;
+                  this.market.betslip.selectionid = faviourt.runnerid;
+                }
+              });
+            }
           }
-        }
 
-        let price = this.market.betslip.price.toString()
-        if (price.includes('.')) {
-          const [integerPart, decimalPart] = price.split('.');
-          // Limit decimal part to 2 digits
-          if (decimalPart.length > 2) {
-            this.market.betslip.price = + `${integerPart}.${decimalPart.substring(0, 2)}`;
+          let price = this.market.betslip.price.toString()
+          if (price.includes('.')) {
+            const [integerPart, decimalPart] = price.split('.');
+            // Limit decimal part to 2 digits
+            if (decimalPart.length > 2) {
+              this.market.betslip.price = + `${integerPart}.${decimalPart.substring(0, 2)}`;
+            }
           }
+
+
+
+        } else {
+          this.market.betslip = null;
         }
-
-
-
       } else {
         this.market.betslip = null;
       }
-    } else {
-      this.market.betslip = null;
+      //
+      if (this.r?.stakeButtons?.currencyCode == 'INR') {
+        this.minimumBetSize = _window().minimumBetSize;
+      }
+      this.pl = 0.0;
+      this.calcPL('');
+      this.isReadOnly =
+        this.market.betslip?.bettingOn == 'fn' ||
+        this.market.betslip?.bettingOn == 'bm' ||
+        this.lineOddsDisable;
     }
-    //
-    if (this.r?.stakeButtons?.currencyCode == 'INR') {
-      this.minimumBetSize = _window().minimumBetSize;
-    }
-    this.pl = 0.0;
-    this.calcPL('');
-    this.isReadOnly =
-      this.market.betslip?.bettingOn == 'fn' ||
-      this.market.betslip?.bettingOn == 'bm' ||
-      this.lineOddsDisable;
-
   }
 
   setKeepAlive() {

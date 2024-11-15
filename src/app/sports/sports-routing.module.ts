@@ -50,26 +50,26 @@ const routes: Routes = [
       // { path: 'olympics/:id', component: EventmarketsComponent },
       // { path: 'rugby-league/:id', component: EventmarketsComponent },
       // { path: 'snooker/:id', component: EventmarketsComponent },
-      // { path: 'american-football/:name', component: MarketDetailsComponent },
-      // //old route
-      // { path: 'raceschedule/:id1/:id2', component: RacemarketComponent },
-      // // new route
-      // { path: 'horse-racing/:id1', component: RaceScheduleComponent },
-      // { path: 'grey-hound-racing/:id1', component: RaceScheduleComponent },
+      { path: 'american-football/:name', component: MarketDetailsComponent },
+      //old route
+      { path: 'raceschedule/:id1/:id2', component: RacemarketComponent },
+      // new route
+      { path: 'horse-racing/:id1', component: RaceScheduleComponent },
+      { path: 'grey-hound-racing/:id1', component: RaceScheduleComponent },
 
-      // // old route
-      // // { path: 'racemarket/:id', component: RacemarketComponent },
-      // // new route
-      // { path: 'horse-racing/:day/:id', component: RacemarketComponent },
-      // { path: 'grey-hound-racing/:day/:id', component: RacemarketComponent },
-      // // { path: 'eventsbydatemarkets/:id', component: EventsByDateMarketsComponent },
-      // { path: 'bookmaker/:id/:eventid', component: BookmakerComponent },
-      // { path: ':sport/:id/:name', component: MarketDetailsComponent },
-      // { path: 'marketdetail/:id/:name', component: MarketDetailsComponent },
-      // { path: 'tournament/:id', component: CompetitionMarketsComponent },
-      // { path: 'livestream', component: LivestreamComponent },
+      // old route
+      // { path: 'racemarket/:id', component: RacemarketComponent },
+      // new route
+      { path: 'horse-racing/:day/:id', component: RacemarketComponent },
+      { path: 'grey-hound-racing/:day/:id', component: RacemarketComponent },
+      // { path: 'eventsbydatemarkets/:id', component: EventsByDateMarketsComponent },
+      { path: 'bookmaker/:id/:eventid', component: BookmakerComponent },
+      { path: ':sport/:id/:name', component: MarketDetailsComponent },
+      { path: 'marketdetail/:id/:name', component: MarketDetailsComponent },
+      { path: 'tournament/:id', component: CompetitionMarketsComponent },
+      { path: 'livestream', component: LivestreamComponent },
 
-      // { path: '**', component: NotfoundComponent }
+      { path: '**', component: NotfoundComponent }
     ],
   },
 ];

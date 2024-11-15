@@ -2,6 +2,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { RecentMarketsService } from "../../services/recent-markets.service";
+import { PlatformService } from '../../services/platform.service';
 
 
 @Component({
@@ -16,11 +17,15 @@ export class RecentMarketsComponent implements OnInit {
   constructor(
     private bottomSheet: MatBottomSheet,
     private router: Router,
-    private recentMarkets: RecentMarketsService
+    private recentMarkets: RecentMarketsService,
+    private platformService: PlatformService
   ) { }
 
   ngOnInit() {
-    this.data = this.recentMarkets.getRecentMarkets()
+    if (this.platformService.isBrowser()) {
+
+      this.data = this.recentMarkets.getRecentMarkets()
+    }
   }
 
   closeModal() {

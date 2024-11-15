@@ -7,7 +7,7 @@ export const environment = {
 
   // apiurl: 'http://stageapi.live247bets.com',
   // apiurl: 'https://stage.ssfun.in',
-  apiurl: 'https://magicwin.games',
+  apiurl: 'https://indiexch.com',
   // apiurl: 'https://testdabba.ssfun.in',
   // apiurl: 'https://mstest.ssplaywin.club',
   // apiurl: 'https://playfair777.com',

@@ -16,6 +16,7 @@ import { UtillsService } from '../../services/utills.service';
 import { minLengthNumberValidator } from '../../validators/minLengthValidator';
 import { patternValidator } from '../../validators/patternValidators';
 import { pinMatchValidator } from '../../validators/pin-matchValidators';
+import { PlatformService } from '../../services/platform.service';
 
 @Component({
   selector: 'app-changepinmodal',
@@ -33,10 +34,14 @@ export class ChangepinmodalComponent
     private recaptchaV3Service: ReCaptchaV3Service,
     private toasterService: ToastService,
     private utillServices: UtillsService,
-    private dialogRef: MatDialog
+    private dialogRef: MatDialog,
+    private platformService: PlatformService
   ) {
-    if (_window().siteLoader) {
-      this.siteLoader = _window().siteLoader;
+    if (this.platformService.isBrowser()) {
+
+      if (_window().siteLoader) {
+        this.siteLoader = _window().siteLoader;
+      }
     }
   }
   isPin: boolean = true;
@@ -80,9 +85,12 @@ export class ChangepinmodalComponent
   }
   clientPhone: any = ''
   ngOnInit(): void {
-    this.utillServices.configData.subscribe(() => {
-      this.clientPhone = this.utillServices.clientPhone;
-    })
+    if (this.platformService.isBrowser()) {
+
+      this.utillServices.configData.subscribe(() => {
+        this.clientPhone = this.utillServices.clientPhone;
+      })
+    }
   }
   onInputChange(event: Event): void {
     const inputElement = event.target as HTMLInputElement;
@@ -101,7 +109,10 @@ export class ChangepinmodalComponent
     }
   }
   ngAfterViewInit() {
-    this.resetOtpInputs();
+    if (this.platformService.isBrowser()) {
+
+      this.resetOtpInputs();
+    }
   }
 
   ngOnDestroy(): void {

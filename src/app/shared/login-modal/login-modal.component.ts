@@ -36,6 +36,7 @@ import { CheckAuthService } from '../../services/check-auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { LoginTermsConditionComponent } from '../reuse/login-terms-condition';
 import { GoogleAnalyticsService } from '../../services/google-analytics.service';
+import { PlatformService } from '../../services/platform.service';
 @Component({
   selector: 'app-login-modal',
   templateUrl: './login-modal.component.html',
@@ -73,24 +74,28 @@ export class LoginModalComponent implements OnInit {
     private utillsService: UtillsService,
     private checkAuthService: CheckAuthService,
     private fb: FormBuilder,
-    private dialogRef: MatDialog
+    private dialogRef: MatDialog,
+    private platformService: PlatformService
   ) {
-    this.siteLogo = _window().siteLogoLoginModal;
-    if (_window().cdnImagesUrl) {
-      this.cdnUrl = _window().cdnImagesUrl;
-    }
-    if (_window().cdnImagesUrl) {
-      this.sitename = _window().sitename;
-    }
-    let demoUser = _window().demoUsername;
-    let demoPass = _window().demoPassword;
-    if (demoUser && demoPass) {
-      this.showDemoIdBtn = true;
-    } else {
-      this.showDemoIdBtn = false;
-    }
-    if (_window().isHideDemoOnApp) {
-      this.isHideDemoOnApp = _window().isHideDemoOnApp;
+    if (this.platformService.isBrowser()) {
+
+      this.siteLogo = _window().siteLogoLoginModal;
+      if (_window().cdnImagesUrl) {
+        this.cdnUrl = _window().cdnImagesUrl;
+      }
+      if (_window().cdnImagesUrl) {
+        this.sitename = _window().sitename;
+      }
+      let demoUser = _window().demoUsername;
+      let demoPass = _window().demoPassword;
+      if (demoUser && demoPass) {
+        this.showDemoIdBtn = true;
+      } else {
+        this.showDemoIdBtn = false;
+      }
+      if (_window().isHideDemoOnApp) {
+        this.isHideDemoOnApp = _window().isHideDemoOnApp;
+      }
     }
   }
 
@@ -193,34 +198,37 @@ export class LoginModalComponent implements OnInit {
   isHideDemoOnApp: boolean = false;
   hideDemoButton: boolean = false;
   ngOnInit(): void {
-    this.initForm();
-    this.createOnline().subscribe((isOnline) => {
-      this.onlineStatus = isOnline;
-      if (this.onlineStatus) {
-        this.isConnected();
-      } else {
-        this.noInternet = true;
+    if (this.platformService.isBrowser()) {
+
+      this.initForm();
+      this.createOnline().subscribe((isOnline) => {
+        this.onlineStatus = isOnline;
+        if (this.onlineStatus) {
+          this.isConnected();
+        } else {
+          this.noInternet = true;
+        }
+      });
+      // this.isConnected();
+      this.isLogin = this.checkAuthService.IsLogin();
+      if (!this.isLogin && this.isHideDemoOnApp) {
+        this.hideDemoButton = this.utillsService.checkUserAgent();
       }
-    });
-    // this.isConnected();
-    this.isLogin = this.checkAuthService.IsLogin();
-    if (!this.isLogin && this.isHideDemoOnApp) {
-      this.hideDemoButton = this.utillsService.checkUserAgent();
+      this.lsItem = this.storageService
+        .getItem('theme')
+        ?.toString();
+      this.storageService.removeItem('token');
+      this.storageService.removeItem('stakes');
+      this.storageService.removeItem('client');
+      this.scoreCardTimerService.clearTimer();
+      this.myTimer.clearTimer();
+      this.scoreTimerService.clearTimer();
+      this.fancyTimer.clearTimer();
+      this.nextRaceTimer.clearTimer();
+      this.markettimer.clearTimer();
+      this.newstimer.clearTimer();
+      this.remainingtimer.clearTimer();
     }
-    this.lsItem = this.storageService
-      .getItem('theme')
-      ?.toString();
-    this.storageService.removeItem('token');
-    this.storageService.removeItem('stakes');
-    this.storageService.removeItem('client');
-    this.scoreCardTimerService.clearTimer();
-    this.myTimer.clearTimer();
-    this.scoreTimerService.clearTimer();
-    this.fancyTimer.clearTimer();
-    this.nextRaceTimer.clearTimer();
-    this.markettimer.clearTimer();
-    this.newstimer.clearTimer();
-    this.remainingtimer.clearTimer();
   }
 
   get username() {

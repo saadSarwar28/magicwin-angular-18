@@ -7,6 +7,7 @@ import { StorageService } from '../../services/storage.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { MomentModule } from 'ngx-moment';
+import { PlatformService } from '../../services/platform.service';
 @Component({
   selector: 'app-next-races',
   templateUrl: './next-races.component.html',
@@ -29,20 +30,27 @@ export class NextRacesComponent implements OnInit {
     private storageService: StorageService,
     private sportsService: BackendService,
     private router: Router,
-    private nextRaceTimer: NextRaceTimerService
+    private nextRaceTimer: NextRaceTimerService,
+    private platformService: PlatformService
   ) {
-    this.isLocal = false;
-    if (_window().nextracetimer) {
-      this.interval = _window().nextracetimer;
+    if (this.platformService.isBrowser()) {
+
+      this.isLocal = false;
+      if (_window().nextracetimer) {
+        this.interval = _window().nextracetimer;
+      }
     }
   }
 
   ngOnInit(): void {
-    this.LoadNextRaceData();
-    if (_window().nextracetimer) {
-      this.nextRaceTimer.SetTimer(setInterval(() => {
-        this.LoadNextRaceData();
-      }, this.interval));
+    if (this.platformService.isBrowser()) {
+
+      this.LoadNextRaceData();
+      if (_window().nextracetimer) {
+        this.nextRaceTimer.SetTimer(setInterval(() => {
+          this.LoadNextRaceData();
+        }, this.interval));
+      }
     }
   }
   ngOnDestroy(): void {

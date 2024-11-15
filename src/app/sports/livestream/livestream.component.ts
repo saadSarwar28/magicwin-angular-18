@@ -9,6 +9,7 @@ import { StorageService } from '../../services/storage.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { SafePipe } from '../../pipes/safe.pipe';
+import { PlatformService } from '../../services/platform.service';
 declare function iFrameResize(): any;
 @Component({
   selector: 'app-livestream',
@@ -25,9 +26,12 @@ declare function iFrameResize(): any;
 })
 export class LivestreamComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
-    setTimeout(() => {
-      iFrameResize();
-    }, 5000);
+    if (this.platformService.isBrowser()) {
+
+      setTimeout(() => {
+        iFrameResize();
+      }, 5000);
+    }
   }
   data: any;
   ip: string = '';
@@ -41,14 +45,21 @@ export class LivestreamComponent implements OnInit, AfterViewInit {
     private sportsService: BackendService,
     private storageService: StorageService,
     private timerService: TimerService,
+    private platformService: PlatformService
   ) {
-    if (_window().livestreamtimer) {
-      this.interval = _window().livestreamtimer;
+    if (this.platformService.isBrowser()) {
+
+      if (_window().livestreamtimer) {
+        this.interval = _window().livestreamtimer;
+      }
     }
   }
 
   ngOnInit(): void {
-    this.getLiveStream();
+    if (this.platformService.isBrowser()) {
+
+      this.getLiveStream();
+    }
   }
 
   ngOnDestroy(): void {

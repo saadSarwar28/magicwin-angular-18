@@ -5,6 +5,7 @@ import { StorageService } from '../../services/storage.service';
 import { UtillsService } from '../../services/utills.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
+import { PlatformService } from '../../services/platform.service';
 @Component({
   selector: 'app-one-click-bet',
   templateUrl: './one-click-bet.component.html',
@@ -23,41 +24,45 @@ export class OneClickBetComponent implements OnInit {
   constructor(
     private checkauthservice: CheckAuthService,
     private storageService: StorageService,
-    private utilsService: UtillsService
+    private utilsService: UtillsService,
+    private platformService: PlatformService
   ) {
-    this.ocbButonsArray = this.checkauthservice.getstaks();
-    //
-    this.OCBEnabled =
-      this.storageService.getItem('OCB') == null
-        ? false
-        : this.storageService.getItem('OCB');
-    if (this.storageService.getItem('OCBSelectedVal') === null) {
-      this.storageService.setItem(
-        'OCBSelectedVal',
-        this.ocbButonsArray.stakeVal1
-      );
-    }
-    this.selectedOCBValue =
-      this.storageService.getItem('OCBSelectedVal');
-    let valueExist = false;
-    for (let key in this.ocbButonsArray) {
-      if (key.startsWith('stakeVal')) {
-        if (this.selectedOCBValue == this.ocbButonsArray[key]) {
-          valueExist = true;
-          break;
-        }
+    if (this.platformService.isBrowser()) {
+
+      this.ocbButonsArray = this.checkauthservice.getstaks();
+      //
+      this.OCBEnabled =
+        this.storageService.getItem('OCB') == null
+          ? false
+          : this.storageService.getItem('OCB');
+      if (this.storageService.getItem('OCBSelectedVal') === null) {
+        this.storageService.setItem(
+          'OCBSelectedVal',
+          this.ocbButonsArray.stakeVal1
+        );
       }
-    }
-    if (!valueExist) {
-      this.storageService.setItem(
-        'OCBSelectedVal',
-        this.ocbButonsArray.stakeVal1
-      );
       this.selectedOCBValue =
         this.storageService.getItem('OCBSelectedVal');
-    }
+      let valueExist = false;
+      for (let key in this.ocbButonsArray) {
+        if (key.startsWith('stakeVal')) {
+          if (this.selectedOCBValue == this.ocbButonsArray[key]) {
+            valueExist = true;
+            break;
+          }
+        }
+      }
+      if (!valueExist) {
+        this.storageService.setItem(
+          'OCBSelectedVal',
+          this.ocbButonsArray.stakeVal1
+        );
+        this.selectedOCBValue =
+          this.storageService.getItem('OCBSelectedVal');
+      }
 
-    this.utilsService.OCBEnabled.next(this.OCBEnabled);
+      this.utilsService.OCBEnabled.next(this.OCBEnabled);
+    }
   }
 
   ngOnInit(): void { }

@@ -3,6 +3,7 @@ import { _window } from '../../services/backend.service';
 import { RemainingTimerService } from '../../services/timer.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
+import { PlatformService } from '../../services/platform.service';
 
 
 @Component({
@@ -27,19 +28,23 @@ export class TimeremainingComponent implements OnDestroy {
     private zone: NgZone,
     private renderer: Renderer2,
     private elementRef: ElementRef,
-    private remainingTimer: RemainingTimerService
+    private remainingTimer: RemainingTimerService,
+    private platformService: PlatformService
 
   ) {
-    if (_window().timeremaining) {
-      this.interval = _window().timeremaining;
-    }
-    this.zone.runOutsideAngular(() => {
-      this.remainingTimer.SetTimer(setInterval(() => {
-        this.renderer.setProperty(this.myCounter.nativeElement, 'textContent', this.caclulatedifference());
-        this.renderer.setStyle(this.myCounter.nativeElement, 'color', this.cssClassName);
+    if (this.platformService.isBrowser()) {
 
-      }, this.interval));
-    });
+      if (_window().timeremaining) {
+        this.interval = _window().timeremaining;
+      }
+      this.zone.runOutsideAngular(() => {
+        this.remainingTimer.SetTimer(setInterval(() => {
+          this.renderer.setProperty(this.myCounter.nativeElement, 'textContent', this.caclulatedifference());
+          this.renderer.setStyle(this.myCounter.nativeElement, 'color', this.cssClassName);
+
+        }, this.interval));
+      });
+    }
   }
   ngOnDestroy(): void {
     this.remainingTimer.clearTimer()
