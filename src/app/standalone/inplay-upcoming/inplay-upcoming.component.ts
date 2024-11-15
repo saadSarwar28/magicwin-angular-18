@@ -10,11 +10,13 @@ import { GenericService } from '../../services/generic.service';
 import { WalletService } from '../../services/wallet.service';
 import { SportsIdMapperService } from '../../services/sportsIdMapper.service';
 import { CommonModule } from '@angular/common';
+import { InplayUpcomingMatchesComponent } from '../inplay-upcoming-matches/inplay-upcoming-matches.component';
+import { VirtualCricketComponent } from '../virtual-cricket/virtual-cricket.component';
 
 @Component({
   selector: 'app-inplay-upcoming',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, InplayUpcomingMatchesComponent, VirtualCricketComponent],
   templateUrl: './inplay-upcoming.component.html',
   styleUrl: './inplay-upcoming.component.scss'
 })

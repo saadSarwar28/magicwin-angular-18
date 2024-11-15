@@ -23,7 +23,7 @@ import { SkeltonLoaderComponent } from '../../shared/skelton-loader/skelton-load
 import { MatchStartTimeComponent } from '../../shared/reuse/matchStartTime.component';
 import { MomentModule } from 'ngx-moment';
 import { GroupByPipe } from '../../pipes/group-by.pipe';
-import { VirtualCricketComponent } from '../virtual-cricket/virtual-cricket.component';
+import { VirtualCricketComponent } from '../../standalone/virtual-cricket/virtual-cricket.component';
 import { OrderbyPipe } from '../../pipes/orderby.pipe';
 import { MarketNamePipe } from '../../pipes/marketnameVs.pipe';
 @Component({

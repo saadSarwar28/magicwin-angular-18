@@ -1,3 +1,4 @@
+import { BrowserService } from './../../services/browser.service';
 import {
   Component,
   ElementRef,
@@ -8,30 +9,31 @@ import {
   Output,
 } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { _window, BackendService } from '../../../services/backend.service';
+import { _window, BackendService } from '../../services/backend.service';
 import {
   SetAmount,
   shortenLargeNumber,
-} from '../../../services/shortenLargeNumber';
-import { CheckAuthService } from '../../../services/check-auth.service';
-import { ToastService } from '../../../services/toast.service';
-import { UtillsService } from '../../../services/utills.service';
-import { GenericService } from '../../../services/generic.service';
-import { WalletService } from '../../../services/wallet.service';
-import { StorageService } from '../../../services/storage.service';
-import { ScoreTimerService, TimerService } from '../../../services/timer.service';
-import { SportsIdMapperService } from '../../../services/sportsIdMapper.service';
-import { MarketCatalogueSS, MarketRunners } from '../../../models/models';
+} from '../../services/shortenLargeNumber';
+import { CheckAuthService } from '../../services/check-auth.service';
+import { ToastService } from '../../services/toast.service';
+import { UtillsService } from '../../services/utills.service';
+import { GenericService } from '../../services/generic.service';
+import { WalletService } from '../../services/wallet.service';
+import { StorageService } from '../../services/storage.service';
+import { ScoreTimerService, TimerService } from '../../services/timer.service';
+import { SportsIdMapperService } from '../../services/sportsIdMapper.service';
+import { MarketCatalogueSS, MarketRunners } from '../../models/models';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { MomentModule } from 'ngx-moment';
-import { TeamsScoreComponent } from '../../../shared/reuse/teams-score.component';
-import { MatchStartTimeComponent } from '../../../shared/reuse/matchStartTime.component';
-import { MarketNamePipe } from '../../../pipes/marketnameVs.pipe';
-import { OddsbuttonComponent } from '../../../shared/reuse/oddsbutton.component';
-import { OrderbyPipe } from '../../../pipes/orderby.pipe';
-import { PartialBetslipComponent } from '../../../shared/partial-betslip/partial-betslip.component';
-import { SkeltonLoaderComponent } from '../../../shared/skelton-loader/skelton-loader.component';
+import { TeamsScoreComponent } from '../../shared/reuse/teams-score.component';
+import { MatchStartTimeComponent } from '../../shared/reuse/matchStartTime.component';
+import { MarketNamePipe } from '../../pipes/marketnameVs.pipe';
+import { OddsbuttonComponent } from '../../shared/reuse/oddsbutton.component';
+import { OrderbyPipe } from '../../pipes/orderby.pipe';
+import { PartialBetslipComponent } from '../../shared/partial-betslip/partial-betslip.component';
+import { SkeltonLoaderComponent } from '../../shared/skelton-loader/skelton-loader.component';
+import { PlatformService } from '../../services/platform.service';
 
 @Component({
   selector: 'app-inplay-upcoming-matches',
@@ -133,45 +135,48 @@ export class InplayUpcomingMatchesComponent implements OnInit {
     private toasterService: ToastService,
     public utillsService: UtillsService,
     private genericService: GenericService,
-    private walletService: WalletService
-
+    private walletService: WalletService,
+    private platformService: PlatformService,
+    private browserService: BrowserService
   ) {
+    if (this.platformService.isBrowser()) {
+      if (_window().sitename) {
+        this.sitename = _window().sitename;
+      }
 
-    if (_window().sitename) {
-      this.sitename = _window().sitename;
-    }
+      this.isMagicwin = _window().isMagicwin;
+      if (_window().sportsbyidtimer) {
+        this.interval = _window().sportsbyidtimer;
+      }
 
-    this.isMagicwin = _window().isMagicwin;
-    if (_window().sportsbyidtimer) {
-      this.interval = _window().sportsbyidtimer;
-    }
+      if (_window().scoretimer) {
+        this.sInterval = _window().scoretimer;
+      }
+      if (_window().hideOCBonComp) {
+        this.isOneClickBetGlobal = true;
+      }
+      if (this.checkauthservice.IsLogin()) {
+        this.isLoggedIn = true;
+      }
 
-    if (_window().scoretimer) {
-      this.sInterval = _window().scoretimer;
-    }
-    if (_window().hideOCBonComp) {
-      this.isOneClickBetGlobal = true;
-    }
-    if (this.checkauthservice.IsLogin()) {
-      this.isLoggedIn = true;
-    }
+      if (this.checkauthservice.IsLogin()) {
+        this.isLoggedIn = true;
+      }
+      if (_window().siteLoader) {
+        this.siteLoader = _window().siteLoader;
+      }
 
-    if (this.checkauthservice.IsLogin()) {
-      this.isLoggedIn = true;
-    }
-    if (_window().siteLoader) {
-      this.siteLoader = _window().siteLoader;
-    }
-
-    if (_window().hideOCBonComp) {
-      this.isOneClickBetGlobal = true;
-    }
-    if (this.checkauthservice.HaveStakes()) {
-      this.cBuyRate = this.checkauthservice.cBuyRate;
-      this.cTotalShare = this.checkauthservice.cTotalShare;
-      this.currencyCode = this.checkauthservice.currencyCode;
+      if (_window().hideOCBonComp) {
+        this.isOneClickBetGlobal = true;
+      }
+      if (this.checkauthservice.HaveStakes()) {
+        this.cBuyRate = this.checkauthservice.cBuyRate;
+        this.cTotalShare = this.checkauthservice.cTotalShare;
+        this.currencyCode = this.checkauthservice.currencyCode;
+      }
     }
   }
+
   setLink(id: any, isVirtual: Boolean = false) {
     if (isVirtual) {
       this.router.navigate([`/sports/tournament/virtual-cricket-70707070`]);
@@ -202,14 +207,16 @@ export class InplayUpcomingMatchesComponent implements OnInit {
   defaultImage: string = ''
 
   ngOnInit(): void {
-    sessionStorage.clear();
-    this.cdnSportsLanding = _window().bannercdnLanding;
-    this.selectPopularById(this.selectedId);
-    this.utillsService.bannerData.subscribe((d: any) => {
-      if (d) {
-        this.providerBannerData = this.utillsService.returnFormatedData(d, 'banner1')
-      }
-    });
+    if (this.platformService.isBrowser()) {
+      this.browserService.getSessionStorage().clear();
+      this.cdnSportsLanding = _window().bannercdnLanding;
+      this.selectPopularById(this.selectedId);
+      this.utillsService.bannerData.subscribe((d: any) => {
+        if (d) {
+          this.providerBannerData = this.utillsService.returnFormatedData(d, 'banner1')
+        }
+      });
+    }
   }
 
   routeToMarket(link: any) {

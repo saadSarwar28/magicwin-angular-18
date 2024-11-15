@@ -41,7 +41,7 @@ import { RoundoffPipe } from '../../pipes/roundoff.pipe';
 import { OddsbuttonComponent } from '../../shared/reuse/oddsbutton.component';
 import { OrderbyPipe } from '../../pipes/orderby.pipe';
 import { PartialBetslipComponent } from '../../shared/partial-betslip/partial-betslip.component';
-import { VirtualCricketComponent } from '../virtual-cricket/virtual-cricket.component';
+import { VirtualCricketComponent } from '../../standalone/virtual-cricket/virtual-cricket.component';
 
 @Component({
   selector: 'app-sportsbyid',
