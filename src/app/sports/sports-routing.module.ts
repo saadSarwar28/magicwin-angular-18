@@ -35,7 +35,7 @@ const routes: Routes = [
 
       // },
       { path: ':id', component: SportsbyidComponent },
-      // { path: 'cricket/:id', component: CricketComponent },
+      { path: 'cricket/:id', component: CricketComponent },
       // { path: 'soccer/:id', component: EventmarketsComponent },
       // { path: 'tennis/:id', component: EventmarketsComponent },
       // { path: 'golf/:id', component: EventmarketsComponent },
@@ -78,4 +78,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class SportsRoutingModule {}
+export class SportsRoutingModule { }

@@ -142,6 +142,7 @@ export class SportsbyidComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   routeToMarket(link: any) {
+    debugger
     link ? this.router.navigate([link]) : {};
   }
 
