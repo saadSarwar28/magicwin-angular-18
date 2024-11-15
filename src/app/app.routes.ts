@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { LandingPageComponent } from './standalone/landing-page/landing-page.component';
+import { ClientOnlyGuard } from './guards/client-only.guard';
 
 export const routes: Routes = [
   {
@@ -9,5 +10,6 @@ export const routes: Routes = [
     path: 'sports',
     loadChildren: () =>
       import('./sports/sports.module').then((m) => m.SportsModule),
+    canLoad: [ClientOnlyGuard]
   },
 ];

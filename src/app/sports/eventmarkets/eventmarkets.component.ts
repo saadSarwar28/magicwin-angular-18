@@ -1300,7 +1300,7 @@ export class EventmarketsComponent implements OnInit, OnDestroy, AfterViewInit {
           // this.sportsBooks = data;
           data.forEach((market: SportsBookMarkets) => {
             if (market.marketId) {
-              this.sportsBookMarketsMap.set(market.marketId, market)
+              // this.sportsBookMarketsMap.set(market.marketId, market)
               this.sportsBooks.push(market)
             }
           })
@@ -1351,13 +1351,13 @@ export class EventmarketsComponent implements OnInit, OnDestroy, AfterViewInit {
           if (data && data.length > 0) {
             data.forEach((market: SportsBookMarkets) => {
               if (market.marketId) {
-                const previousMarket = this.sportsBookMarketsMap.get(market.marketId)
-                if (previousMarket) {
-                  previousMarket.update(market)
-                } else {
-                  this.sportsBookMarketsMap.set(market.marketId, market)
-                  this.sportsBooks.push(market)
-                }
+                // const previousMarket = this.sportsBookMarketsMap.get(market.marketId)
+                // if (previousMarket) {
+                //   previousMarket.update(market)
+                // } else {
+                //   this.sportsBookMarketsMap.set(market.marketId, market)
+                //   this.sportsBooks.push(market)
+                // }
               }
             })
             // marking those markets as inactive which do not appear in new data
@@ -1392,7 +1392,7 @@ export class EventmarketsComponent implements OnInit, OnDestroy, AfterViewInit {
                 resp.forEach((x: any) => {
                   // @ts-ignore
                   // for sports book
-                  this.sportsBookMarketsMap.get(x.marketId)?.liability = x.libility;
+                  // this.sportsBookMarketsMap.get(x.marketId)?.liability = x.libility;
                   // let market = this.sportsBookMarketsMap.get(x.marketId)
                   // market ? market.liability = x.libility : {}
 
