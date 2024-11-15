@@ -18,4 +18,8 @@ export class BrowserService {
   getNavigator(): any | null {
     return this.isBrowser ? navigator : null;
   }
+
+  getSessionStorage(): any | null {
+    return this.isBrowser ? sessionStorage : null;
+  }
 }

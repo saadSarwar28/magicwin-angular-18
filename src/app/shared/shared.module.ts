@@ -38,7 +38,6 @@ import { TruncPipe } from '../pipes/trunc.pipe';
 import { ReverseTimePipe } from '../pipes/reverse-time.pipe';
 import { RemoveUnderscorePipe } from '../pipes/removeUnderscore.pipe';
 import { MarketNamePipe } from '../pipes/marketnameVs.pipe';
-import { VirtualCricketComponent } from '../sports/virtual-cricket/virtual-cricket.component';
 import { VirtualScorePipe } from '../pipes/virtualScore.pipe';
 // import { MatDialogModule } from '@angular/material/dialog';
 import { StreamComponent } from './stream.component';

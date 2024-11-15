@@ -1,8 +1,8 @@
 <div class="upcoming-compo">
-  <!-- <app-inplay-upcoming-matches [items]="isMagicwin ? allItems : inplayTomorrowItems" [selectedId]="'4'"
+  <app-inplay-upcoming-matches [items]="isMagicwin ? allItems : inplayTomorrowItems" [selectedId]="'4'"
     [setPageNumber]="0" (dataEmitter)="setIdForVirtual($event)"></app-inplay-upcoming-matches>
   <app-virtual-cricket [selectedId]="selectedId" [landing]="true" [virtual]="virtual"
-    [scoreData]="scoreData"></app-virtual-cricket> -->
+    [scoreData]="scoreData"></app-virtual-cricket>
   <ng-container *ngIf="!isMagicwin">
     <ng-container *ngIf="(providerBannerData && providerBannerData.length>0)">
       <div class="providerBanners scrollable-list mb-2 d-flex align-items-center">
@@ -17,6 +17,6 @@
       </div>
     </ng-container>
   </ng-container>
-  <!-- <app-inplay-upcoming-matches [items]="upcomingItems" *ngIf="!isMagicwin" [setPageNumber]="2"
-    [selectedId]="'4'"></app-inplay-upcoming-matches> -->
+  <app-inplay-upcoming-matches [items]="upcomingItems" *ngIf="!isMagicwin" [setPageNumber]="2"
+    [selectedId]="'4'"></app-inplay-upcoming-matches>
 </div>
