@@ -17,6 +17,7 @@ import { PremiumRacePipe } from '../../pipes/premium-race.pipe';
 import { SortByDatePipe } from '../../pipes/sortByDate.pipe';
 import { PartialBetslipComponent } from '../../shared/partial-betslip/partial-betslip.component';
 import { FilterBets } from '../../pipes/filterbets.pipe';
+import { PlatformService } from '../../services/platform.service';
 
 
 @Component({
@@ -88,52 +89,56 @@ export class OtherracesComponent implements OnInit, OnDestroy {
     private storageService: StorageService,
     private toasterService: ToastService,
     private utillsService: UtillsService,
-    private walletService: WalletService
+    private walletService: WalletService,
+    private platformService: PlatformService
 
 
 
   ) {
-    if (_window().siteLoader) {
-      this.siteLoader = _window().siteLoader;
-    }
-    this.isOneClickBetClient = this.storageService.getItem('OCB');
-    if (_window().hideOCBonComp) {
-      this.isOneClickBetGlobal = true;
-    }
-    sessionStorage.clear()
-    console.clear();
-    if (_window().premiumRacesUrl) {
-      this.premiumRacesUrl = _window().premiumRacesUrl;
-    }
+    if (this.platformService.isBrowser()) {
 
-    if (_window().minBKFncy) {
-      this.minBKFncy = _window().minBKFncy;
-    }
-    this.markets = [];
-    this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(this.premiumRacesUrl, { transport: signalR.HttpTransportType.WebSockets, skipNegotiation: true })
-      .configureLogging(signalR.LogLevel.Information)
-      .withAutomaticReconnect()
-      .build();
-    this.hubConnection
-      .start().then(() => {
-        this.isLoading = false
-        this.LoadCurrentBets();
-      })
-      .catch((err: any) => console.error('Error while starting SignalR connection:', err));
-    this.hubConnection.on("ReceiveData", (data: any) => {
-      this.populateRates(JSON.parse(data));
-      this.GetClientParameters();
-      this.isLoading = false
-      if (!this.isLoadMarkets) {
-        this.GetMarketPosition();
-        this.isLoadMarkets = true
+      if (_window().siteLoader) {
+        this.siteLoader = _window().siteLoader;
+      }
+      this.isOneClickBetClient = this.storageService.getItem('OCB');
+      if (_window().hideOCBonComp) {
+        this.isOneClickBetGlobal = true;
+      }
+      sessionStorage.clear()
+      console.clear();
+      if (_window().premiumRacesUrl) {
+        this.premiumRacesUrl = _window().premiumRacesUrl;
       }
 
+      if (_window().minBKFncy) {
+        this.minBKFncy = _window().minBKFncy;
+      }
+      this.markets = [];
+      this.hubConnection = new signalR.HubConnectionBuilder()
+        .withUrl(this.premiumRacesUrl, { transport: signalR.HttpTransportType.WebSockets, skipNegotiation: true })
+        .configureLogging(signalR.LogLevel.Information)
+        .withAutomaticReconnect()
+        .build();
+      this.hubConnection
+        .start().then(() => {
+          this.isLoading = false
+          this.LoadCurrentBets();
+        })
+        .catch((err: any) => console.error('Error while starting SignalR connection:', err));
+      this.hubConnection.on("ReceiveData", (data: any) => {
+        this.populateRates(JSON.parse(data));
+        this.GetClientParameters();
+        this.isLoading = false
+        if (!this.isLoadMarkets) {
+          this.GetMarketPosition();
+          this.isLoadMarkets = true
+        }
 
-    });
-    this.hubConnection.on("ChangeStatus", (data: any) => this.changeMarketStatus(JSON.parse(data)));
-    this.hubConnection.on("ChangeData", (data: any) => this.UpdateSelectionRate(JSON.parse(data)));
+
+      });
+      this.hubConnection.on("ChangeStatus", (data: any) => this.changeMarketStatus(JSON.parse(data)));
+      this.hubConnection.on("ChangeData", (data: any) => this.UpdateSelectionRate(JSON.parse(data)));
+    }
   }
   changeMarketStatus(d: any) {
 

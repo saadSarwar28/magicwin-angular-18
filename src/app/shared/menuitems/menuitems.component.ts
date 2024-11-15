@@ -17,6 +17,7 @@ import { WalletService } from '../../services/wallet.service';
 import { SettingsComponent } from '../../settings/settings.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
+import { PlatformService } from '../../services/platform.service';
 
 @Component({
   selector: 'app-menuitems',
@@ -58,34 +59,38 @@ export class MenuitemsComponent implements OnInit {
     private meta: Meta,
     private genericService: GenericService,
     private utillsService: UtillsService,
-    private walletService: WalletService
+    private walletService: WalletService,
+    private platformService: PlatformService
   ) {
-    this.sportservice.gameUrl = undefined;
-    if (_window().showMenuBanner) {
-      this.showMenuBanner = _window().showMenuBanner;
-    }
-    if (_window().bannercdnLanding) {
-      this.bannercdnLanding = _window().bannercdnLanding;
-    }
+    if (this.platformService.isBrowser()) {
 
-    if (_window().isShowDownlaodApp) {
-      this.isShowDownlaodApp = _window().isShowDownlaodApp;
-    }
-    if (_window().appLinkLive) {
-      this.appLinkLive = _window().appLinkLive;
-    }
-    if (_window().menuItemBackImg) {
-      this.menuItemBackImg = _window().menuItemBackImg;
-    }
-    if (_window().cdnImagesUrl) {
-      this.cdnUrl = _window().cdnImagesUrl;
-    }
-    if (_window().siteLogo) {
-      this.siteLogo = _window().siteLogo;
-    }
+      this.sportservice.gameUrl = undefined;
+      if (_window().showMenuBanner) {
+        this.showMenuBanner = _window().showMenuBanner;
+      }
+      if (_window().bannercdnLanding) {
+        this.bannercdnLanding = _window().bannercdnLanding;
+      }
 
-    if (_window().cdnImagesUrl) {
-      this.cdnUrl = _window().cdnImagesUrl;
+      if (_window().isShowDownlaodApp) {
+        this.isShowDownlaodApp = _window().isShowDownlaodApp;
+      }
+      if (_window().appLinkLive) {
+        this.appLinkLive = _window().appLinkLive;
+      }
+      if (_window().menuItemBackImg) {
+        this.menuItemBackImg = _window().menuItemBackImg;
+      }
+      if (_window().cdnImagesUrl) {
+        this.cdnUrl = _window().cdnImagesUrl;
+      }
+      if (_window().siteLogo) {
+        this.siteLogo = _window().siteLogo;
+      }
+
+      if (_window().cdnImagesUrl) {
+        this.cdnUrl = _window().cdnImagesUrl;
+      }
     }
   }
 
@@ -143,46 +148,49 @@ export class MenuitemsComponent implements OnInit {
   showMenu = true;
 
   ngOnInit(): void {
-    this.isLogin = this.checkauthservice.IsLogin();
-    if (this.isLogin) {
-      this.utillsService.configData.subscribe(() => {
-        this.depositLink = this.utillsService.depositLink;
-      });
-    }
-    this.utillsService.bannerData.subscribe((resp: any) => {
-      if (resp) {
-        this.Menuhome = this.utillsService.returnFormatedData(resp, 'Menuhome');
-        this.MenuCasino = this.utillsService.returnFormatedData(
-          resp,
-          'MenuCasino'
-        );
-        this.MenuMultiplayer = this.utillsService.returnFormatedData(
-          resp,
-          'MenuMultiplayer'
-        );
-        this.Menusports = this.utillsService.returnFormatedData(
-          resp,
-          'Menusports'
-        );
-        this.MenuEsports = this.utillsService.returnFormatedData(
-          resp,
-          'MenuEsports'
-        );
-        this.MenuProvider = this.utillsService.returnFormatedData(
-          resp,
-          'MenuProvider'
-        );
-        this.MenuPopularGames = this.utillsService.returnFormatedData(
-          resp,
-          'MenuPopularGames'
-        );
-        this.MenuAccessibility = this.utillsService.returnFormatedData(
-          resp,
-          'MenuAccessibility'
-        );
+    if (this.platformService.isBrowser()) {
+
+      this.isLogin = this.checkauthservice.IsLogin();
+      if (this.isLogin) {
+        this.utillsService.configData.subscribe(() => {
+          this.depositLink = this.utillsService.depositLink;
+        });
       }
-    });
-    this.getPaymentDetail();
+      this.utillsService.bannerData.subscribe((resp: any) => {
+        if (resp) {
+          this.Menuhome = this.utillsService.returnFormatedData(resp, 'Menuhome');
+          this.MenuCasino = this.utillsService.returnFormatedData(
+            resp,
+            'MenuCasino'
+          );
+          this.MenuMultiplayer = this.utillsService.returnFormatedData(
+            resp,
+            'MenuMultiplayer'
+          );
+          this.Menusports = this.utillsService.returnFormatedData(
+            resp,
+            'Menusports'
+          );
+          this.MenuEsports = this.utillsService.returnFormatedData(
+            resp,
+            'MenuEsports'
+          );
+          this.MenuProvider = this.utillsService.returnFormatedData(
+            resp,
+            'MenuProvider'
+          );
+          this.MenuPopularGames = this.utillsService.returnFormatedData(
+            resp,
+            'MenuPopularGames'
+          );
+          this.MenuAccessibility = this.utillsService.returnFormatedData(
+            resp,
+            'MenuAccessibility'
+          );
+        }
+      });
+      this.getPaymentDetail();
+    }
   }
 
   getPaymentDetail() {

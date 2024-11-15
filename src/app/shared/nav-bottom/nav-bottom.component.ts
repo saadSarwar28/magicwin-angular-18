@@ -11,6 +11,7 @@ import { MybetsModalComponent } from '../../mybets-modal/mybets-modal.component'
 import { UtillsService } from '../../services/utills.service';
 import { MatDialog, } from '@angular/material/dialog';
 import { WalletService } from '../../services/wallet.service';
+import { PlatformService } from '../../services/platform.service';
 
 @Component({
   selector: 'app-nav-bottom',
@@ -196,69 +197,73 @@ export class NavBottomComponent implements OnInit {
     private bottomSheet: MatBottomSheet,
     private utillsService: UtillsService,
     private dialog: MatDialog,
-    private walletService: WalletService
+    private walletService: WalletService,
+    private platformService: PlatformService
 
   ) {
-    this.getStatus.data$.subscribe((data) => {
-      this.display = data;
-    });
-    if (_window().cdnImagesUrl) {
-      this.cdnUrl = _window().cdnImagesUrl;
-    }
-    if (_window().closeBottomNav) {
-      this.closeBottomNav = _window().closeBottomNav;
-    }
-    if (_window().navBottomMyBets) {
-      this.navBottomMyBets = _window().navBottomMyBets;
-    }
-    if (_window().navBottomBack) {
-      this.navBottomBack = _window().navBottomBack;
-    }
-    if (_window().isIframe) {
-      this.isIframe = _window().isIframe;
-    }
-    if (_window().menuBottomNav) {
-      this.menuBottomNav = _window().menuBottomNav;
-    }
-    if (_window().navbottomIcon) {
-      this.navbottomIcon = _window().navbottomIcon;
+    if (this.platformService.isBrowser()) {
 
-    }
-    if (_window().walletTimer) {
-      this.walletTimer = _window().walletTimer;
-    }
-    if (_window().walletTimerGame) {
-      this.walletTimerGame = _window().walletTimerGame;
-    }
-    if (_window().showMyBets) {
-      this.showMyBets = _window().showMyBets;
-    }
-    this.router.events.subscribe((v) => {
-      if (v instanceof NavigationEnd) {
-        let sportsBookNew = typeof (_window().sportsbookParameter) == 'string' ? JSON.parse(_window().sportsbookParameter) : _window().sportsbookParameter
-        if (v.url.startsWith('/casino')) {
-          this.display = false;
-          this.bottomSheet.dismiss();
-        }
-        if (
-          v.urlAfterRedirects ==
-          `/casino/detail/${sportsBookNew.provider}/${sportsBookNew.gameid
-          }`
-        ) {
-          this.showLiability = true;
-          // return
-        } else if (
-          v.url.startsWith('/casino') &&
-          v.urlAfterRedirects !=
-          `/casino/detail/${sportsBookNew.provider}/${sportsBookNew.gameid
-          }`
-        ) {
-          this.showLiability = false;
-        } else {
-          this.showLiability = true;
-        }
+      this.getStatus.data$.subscribe((data) => {
+        this.display = data;
+      });
+      if (_window().cdnImagesUrl) {
+        this.cdnUrl = _window().cdnImagesUrl;
       }
-    });
+      if (_window().closeBottomNav) {
+        this.closeBottomNav = _window().closeBottomNav;
+      }
+      if (_window().navBottomMyBets) {
+        this.navBottomMyBets = _window().navBottomMyBets;
+      }
+      if (_window().navBottomBack) {
+        this.navBottomBack = _window().navBottomBack;
+      }
+      if (_window().isIframe) {
+        this.isIframe = _window().isIframe;
+      }
+      if (_window().menuBottomNav) {
+        this.menuBottomNav = _window().menuBottomNav;
+      }
+      if (_window().navbottomIcon) {
+        this.navbottomIcon = _window().navbottomIcon;
+
+      }
+      if (_window().walletTimer) {
+        this.walletTimer = _window().walletTimer;
+      }
+      if (_window().walletTimerGame) {
+        this.walletTimerGame = _window().walletTimerGame;
+      }
+      if (_window().showMyBets) {
+        this.showMyBets = _window().showMyBets;
+      }
+      this.router.events.subscribe((v) => {
+        if (v instanceof NavigationEnd) {
+          let sportsBookNew = typeof (_window().sportsbookParameter) == 'string' ? JSON.parse(_window().sportsbookParameter) : _window().sportsbookParameter
+          if (v.url.startsWith('/casino')) {
+            this.display = false;
+            this.bottomSheet.dismiss();
+          }
+          if (
+            v.urlAfterRedirects ==
+            `/casino/detail/${sportsBookNew.provider}/${sportsBookNew.gameid
+            }`
+          ) {
+            this.showLiability = true;
+            // return
+          } else if (
+            v.url.startsWith('/casino') &&
+            v.urlAfterRedirects !=
+            `/casino/detail/${sportsBookNew.provider}/${sportsBookNew.gameid
+            }`
+          ) {
+            this.showLiability = false;
+          } else {
+            this.showLiability = true;
+          }
+        }
+      });
+    }
   }
 
   openBetModal: boolean = true;
@@ -286,31 +291,34 @@ export class NavBottomComponent implements OnInit {
   homeObj: any = {};
   backObj: any = {};
   ngOnInit(): void {
-    this.isLogin = this.checkauthservice.IsLogin();
-    this.loadBalance();
-    this.utillsService.currentBets.subscribe((data: any) => {
-      if (data) {
-        this.currentBets = data.bets;
-      }
-    });
-    this.utillsService.bannerData.subscribe(((res: any) => {
-      if (res) {
-        let mobSiteFooterMenu = this.utillsService.returnFormatedData(res, 'mobSiteFooterMenu');
-        for (const element of mobSiteFooterMenu) {
+    if (this.platformService.isBrowser()) {
 
-          if (element.text.replace(/ /g, "") == 'Home2') {
-            this.homeObj = element
-          }
-          else if (element.text.replace(/ /g, "") == 'Menu2') {
-            this.menuObj = element
-          }
-          else if (element.text.replace(/ /g, "") == 'Back') {
-            this.backObj = element
-          }
-
+      this.isLogin = this.checkauthservice.IsLogin();
+      this.loadBalance();
+      this.utillsService.currentBets.subscribe((data: any) => {
+        if (data) {
+          this.currentBets = data.bets;
         }
-      }
-    }))
+      });
+      this.utillsService.bannerData.subscribe(((res: any) => {
+        if (res) {
+          let mobSiteFooterMenu = this.utillsService.returnFormatedData(res, 'mobSiteFooterMenu');
+          for (const element of mobSiteFooterMenu) {
+
+            if (element.text.replace(/ /g, "") == 'Home2') {
+              this.homeObj = element
+            }
+            else if (element.text.replace(/ /g, "") == 'Menu2') {
+              this.menuObj = element
+            }
+            else if (element.text.replace(/ /g, "") == 'Back') {
+              this.backObj = element
+            }
+
+          }
+        }
+      }))
+    }
 
   }
 

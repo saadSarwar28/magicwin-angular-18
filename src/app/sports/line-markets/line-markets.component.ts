@@ -14,6 +14,7 @@ import { RoundoffPipe } from '../../pipes/roundoff.pipe';
 import { GroupAndSortLineMarketsPipe } from '../../pipes/lineMarketPipe';
 import { OddsbuttonComponent } from '../../shared/reuse/oddsbutton.component';
 import { PartialBetslipComponent } from '../../shared/partial-betslip/partial-betslip.component';
+import { PlatformService } from '../../services/platform.service';
 
 @Component({
   selector: 'app-line-markets',
@@ -46,18 +47,22 @@ export class LineMarketsComponent implements OnInit {
     private storageService: StorageService,
     private toasterService: ToastService,
     private checkauthservice: CheckAuthService,
-    private dialogRef: MatDialog
+    private dialogRef: MatDialog,
+    private platformService: PlatformService
 
   ) {
 
   }
   otherLineMarkets: any[] = []
   ngOnInit(): void {
-    if (_window().siteLoader) {
-      this.siteLoader = _window().siteLoader;
-    }
-    if (_window().hideOCBonComp) {
-      this.isOneClickBetGlobal = true;
+    if (this.platformService.isBrowser()) {
+
+      if (_window().siteLoader) {
+        this.siteLoader = _window().siteLoader;
+      }
+      if (_window().hideOCBonComp) {
+        this.isOneClickBetGlobal = true;
+      }
     }
   }
 

@@ -9,6 +9,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { FilterBets } from "../../pipes/filterbets.pipe";
 import { RoundoffPipe } from "../../pipes/roundoff.pipe";
+import { PlatformService } from '../../services/platform.service';
 @Component({
   selector: 'app-mybets',
   templateUrl: './my-bets.component.html',
@@ -36,29 +37,36 @@ export class MybetsComponent implements OnInit, OnChanges {
     private bettingService: BettingService,
     private checkauthservice: CheckAuthService,
     private toasterService: ToastService,
-    private genericService: GenericService
+    private genericService: GenericService,
+    private platformService: PlatformService
 
   ) {
 
   }
   ngOnInit(): void {
-    if (_window().siteLoader) {
-      this.siteLoader = _window().siteLoader;
-    }
-    if (this.currentBets.some((x: any) => x.betStatus == 'Un-Matched Bets')) {
-      this.haveUnmatched = true;
-    } else {
-      this.haveUnmatched = false;
-    }
-  }
+    if (this.platformService.isBrowser()) {
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['currentBets']) {
+      if (_window().siteLoader) {
+        this.siteLoader = _window().siteLoader;
+      }
       if (this.currentBets.some((x: any) => x.betStatus == 'Un-Matched Bets')) {
         this.haveUnmatched = true;
       } else {
         this.haveUnmatched = false;
+      }
+    }
+  }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.platformService.isBrowser()) {
+
+      if (changes['currentBets']) {
+        if (this.currentBets.some((x: any) => x.betStatus == 'Un-Matched Bets')) {
+          this.haveUnmatched = true;
+        } else {
+          this.haveUnmatched = false;
+
+        }
       }
     }
   }

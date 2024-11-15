@@ -1,7 +1,7 @@
 
 import { RaceScheduleComponent } from './raceSchedule/raceSchedule.component';
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, APP_BASE_HREF } from '@angular/common';
 import { SportsRoutingModule } from './sports-routing.module';
 import { LivestreamComponent } from './livestream/livestream.component';
 import { EventmarketsComponent } from './eventmarkets/eventmarkets.component';
@@ -44,7 +44,6 @@ import { RoundoffPipe } from '../pipes/roundoff.pipe';
 
 
 
-
 @NgModule({
   declarations: [
 
@@ -74,10 +73,10 @@ import { RoundoffPipe } from '../pipes/roundoff.pipe';
 
   ],
   imports: [
-    TranslateModule,
-    FormsModule,
-    RoundoffPipe,
-    MymarketsComponent,
+    // TranslateModule,
+    // FormsModule,
+    // RoundoffPipe,
+    // MymarketsComponent,
     SportsRoutingModule
     // ReactiveFormsModule,
     // RouterModule,
@@ -89,6 +88,7 @@ import { RoundoffPipe } from '../pipes/roundoff.pipe';
     // CarouselModule,
     // DirectiveModule
   ],
+  providers: [{ provide: APP_BASE_HREF, useValue: '/' }],
 
   // exports: [Safe1Pipe, SoccerscorecardComponent, BasketballscorecardComponent, TennisscorecardComponent, DaysFormatPipePipe, MybetsComponent,],
 

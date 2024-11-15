@@ -5,6 +5,7 @@ import { StorageService } from '../../services/storage.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { DaysFormatPipePipe } from '../../pipes/days-format-pipe.pipe';
+import { PlatformService } from '../../services/platform.service';
 @Component({
   selector: 'app-raceschedule',
   templateUrl: './raceSchedule.component.html',
@@ -26,7 +27,12 @@ export class RaceScheduleComponent implements OnInit {
   racingSchedule: any;
   selectedIndex = 0;
   sportsType: string = "";
-  constructor(private storageService: StorageService, private route: ActivatedRoute, private router: Router, private backendService: BackendService) {
+  constructor(
+    private storageService: StorageService,
+    private route: ActivatedRoute, private router: Router,
+    private backendService: BackendService,
+    private platformService: PlatformService
+  ) {
 
   }
   activeIndex: any;
@@ -44,22 +50,25 @@ export class RaceScheduleComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.params.subscribe((p: any) => {
-      this.type = p.id1;
-      if (this.router.url.includes('horse-racing')) {
-        this.sportsType = "Horse Racing";
-        this.sportsId = '7';
-      } else {
-        this.sportsType = "Greyhound Racing";
-        this.sportsId = '4339';
-      }
-      if (this.type.toUpperCase() == "TODAY") {
-        this.sportsType += " Today's Card";
-      }
+    if (this.platformService.isBrowser()) {
 
-      this.checkPathandLoaddata();
+      this.route.params.subscribe((p: any) => {
+        this.type = p.id1;
+        if (this.router.url.includes('horse-racing')) {
+          this.sportsType = "Horse Racing";
+          this.sportsId = '7';
+        } else {
+          this.sportsType = "Greyhound Racing";
+          this.sportsId = '4339';
+        }
+        if (this.type.toUpperCase() == "TODAY") {
+          this.sportsType += " Today's Card";
+        }
 
-    });
+        this.checkPathandLoaddata();
+
+      });
+    }
   }
   changeIndex(d: string) {
     this.selectedIndex = this.racingSchedule.findIndex((x: any) => x.date == d);

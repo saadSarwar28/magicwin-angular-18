@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import videojs from 'video.js';
+import { PlatformService } from '../../services/platform.service';
 
 @Component({
   selector: 'app-video-player-tut',
@@ -31,6 +32,7 @@ export class VideoPlayerComponentTut implements OnInit, OnDestroy {
   //  videojs.Player | undefined;
   constructor(
     private elementRef: ElementRef,
+    private platformService: PlatformService
   ) { }
   ngOnDestroy(): void {
     if (this.player) {
@@ -39,9 +41,12 @@ export class VideoPlayerComponentTut implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.id = this.uid();
-    this.player = videojs(this.target.nativeElement, { ...this.options, autoplay: false }, () => {
-    });
+    if (this.platformService.isBrowser()) {
+
+      this.id = this.uid();
+      this.player = videojs(this.target.nativeElement, { ...this.options, autoplay: false }, () => {
+      });
+    }
   }
 
   uid() {

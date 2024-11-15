@@ -70,6 +70,8 @@ import { LineMarketsComponent } from '../line-markets/line-markets.component';
 import { LotterymarketComponent } from '../lotterymarket/lotterymarket.component';
 import { MybetsComponent } from '../my-bets/my-bets.component';
 import { SportsBookComponent } from '../sports-book/sports-book.component';
+import { PlatformService } from '../../services/platform.service';
+import { BrowserService } from '../../services/browser.service';
 declare function iFrameResize(): any;
 @Component({
   selector: 'app-cricket',
@@ -197,88 +199,91 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
     private genericService: GenericService,
     private utillsService: UtillsService,
     private lotterytimerService: LotterytimerService,
-    private walletService: WalletService
+    private walletService: WalletService,
+    private platformService: PlatformService,
   ) {
-    this.deviceInfo = this.deviceService.getDeviceInfo();
+    if (this.platformService.isBrowser()) {
+      this.deviceInfo = this.deviceService.getDeviceInfo();
 
-    this.isOneClickBetClient = this.storageService.getItem('OCB');
-    if (_window().hideOCBonComp) {
-      this.isOneClickBetGlobal = true;
-    }
-    if (_window().showLotteryMarkets) {
-      this.showLotteryMarkets = _window().showLotteryMarkets;
-    }
-    if (_window().isShowStreamMobile) {
-      this.isShowStreamMobile = _window().isShowStreamMobile;
-    }
-    if (_window().showLineOtherMarkets) {
-      this.showLineOtherMarkets = _window().showLineOtherMarkets;
-    }
-    if (_window().sportsBookIntervalTime) {
-      this.sportsBookIntervalTime = _window().sportsBookIntervalTime;
-    }
-
-    if (_window().byPassStreamScript) {
-      this.byPassStreamScript = _window().byPassStreamScript;
-    }
-    if (_window().showSportsBook) {
-      this.showSportsBook = _window().showSportsBook;
-    }
-    if (_window().minBalance) {
-      this.minBalance = _window().minBalance;
-    }
-
-    if (_window().minBKFncy) {
-      this.minBKFncy = _window().minBKFncy;
-    }
-    if (this.checkauthservice.IsLogin()) {
-      if (_window().isShowBalanceStream) {
-        this.isShowBalanceStream = _window().isShowBalanceStream;
+      this.isOneClickBetClient = this.storageService.getItem('OCB');
+      if (_window().hideOCBonComp) {
+        this.isOneClickBetGlobal = true;
       }
-      this.isLoggedIn = true;
-      if (this.isShowBalanceStream) {
-        this.getStatusService.balanceClient$.subscribe((balance) => {
-          this.showStreamOnBalance =
-            balance.balance < this.minBalance ? false : true;
-        });
+      if (_window().showLotteryMarkets) {
+        this.showLotteryMarkets = _window().showLotteryMarkets;
       }
-    }
+      if (_window().isShowStreamMobile) {
+        this.isShowStreamMobile = _window().isShowStreamMobile;
+      }
+      if (_window().showLineOtherMarkets) {
+        this.showLineOtherMarkets = _window().showLineOtherMarkets;
+      }
+      if (_window().sportsBookIntervalTime) {
+        this.sportsBookIntervalTime = _window().sportsBookIntervalTime;
+      }
 
-    if (_window().hideOCBonComp) {
-      this.isOneClickBetGlobal = true;
-    }
-    if (_window().siteLoader) {
-      this.siteLoader = _window().siteLoader;
-    }
-    if (_window().cdnImagesUrl) {
-      this.cdnUrl = _window().cdnImagesUrl;
-    }
+      if (_window().byPassStreamScript) {
+        this.byPassStreamScript = _window().byPassStreamScript;
+      }
+      if (_window().showSportsBook) {
+        this.showSportsBook = _window().showSportsBook;
+      }
+      if (_window().minBalance) {
+        this.minBalance = _window().minBalance;
+      }
 
-    if (_window().showCashout) {
-      this.showCashout = _window().showCashout;
-    }
-    if (!this.isLoggedIn) {
-      this.localMarketRate = _window().locMarketRates;
-      console.log('dsd', this.localMarketRate);
-    }
-    this.route.params.subscribe((p: any) => {
-      this.marketId = p.id.split('-')[p.id.split('-').length - 1];
-      this.clientMatchSize = null;
-      this.clientUnmatchSize = null;
-      this.checkPathandLoaddata();
-    });
+      if (_window().minBKFncy) {
+        this.minBKFncy = _window().minBKFncy;
+      }
+      if (this.checkauthservice.IsLogin()) {
+        if (_window().isShowBalanceStream) {
+          this.isShowBalanceStream = _window().isShowBalanceStream;
+        }
+        this.isLoggedIn = true;
+        if (this.isShowBalanceStream) {
+          this.getStatusService.balanceClient$.subscribe((balance) => {
+            this.showStreamOnBalance =
+              balance.balance < this.minBalance ? false : true;
+          });
+        }
+      }
 
-    if (_window().crickettimer) {
-      this.interval = _window().crickettimer;
-    }
-    if (_window().displaylmt) {
-      this.displayLMT = _window().displaylmt;
-    }
-    if (_window().fancytimer) {
-      this.fInterval = _window().fancytimer;
-    }
-    if (_window().fancyVersion) {
-      this.fancyVersion = _window().fancyVersion;
+      if (_window().hideOCBonComp) {
+        this.isOneClickBetGlobal = true;
+      }
+      if (_window().siteLoader) {
+        this.siteLoader = _window().siteLoader;
+      }
+      if (_window().cdnImagesUrl) {
+        this.cdnUrl = _window().cdnImagesUrl;
+      }
+
+      if (_window().showCashout) {
+        this.showCashout = _window().showCashout;
+      }
+      if (!this.isLoggedIn) {
+        this.localMarketRate = _window().locMarketRates;
+        console.log('dsd', this.localMarketRate);
+      }
+      this.route.params.subscribe((p: any) => {
+        this.marketId = p.id.split('-')[p.id.split('-').length - 1];
+        this.clientMatchSize = null;
+        this.clientUnmatchSize = null;
+        this.checkPathandLoaddata();
+      });
+
+      if (_window().crickettimer) {
+        this.interval = _window().crickettimer;
+      }
+      if (_window().displaylmt) {
+        this.displayLMT = _window().displaylmt;
+      }
+      if (_window().fancytimer) {
+        this.fInterval = _window().fancytimer;
+      }
+      if (_window().fancyVersion) {
+        this.fancyVersion = _window().fancyVersion;
+      }
     }
   }
 
@@ -443,30 +448,35 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
   getIPAddress: any = '';
 
   ngOnInit(): void {
-    if (_window().apiUrl) {
-      this.apiUrl = _window().apiUrl;
-    }
-    if (this.byPassStreamScript) {
-      this.showStreamAgent = true;
-    } else {
-      this.checkUserAgent();
-    }
-    this.utillsService.ipaddress.subscribe((data: any) => {
-      if (data) {
-        this.getIPAddress = data;
+    if (this.platformService.isBrowser()) {
+
+      if (_window().apiUrl) {
+        this.apiUrl = _window().apiUrl;
       }
-    });
-    if (this.checkauthservice.IsLogin()) {
-      this.isLoggedIn = true;
+      if (this.byPassStreamScript) {
+        this.showStreamAgent = true;
+      } else {
+        this.checkUserAgent();
+      }
+      this.utillsService.ipaddress.subscribe((data: any) => {
+        if (data) {
+          this.getIPAddress = data;
+        }
+      });
+      if (this.checkauthservice.IsLogin()) {
+        this.isLoggedIn = true;
+      }
+      this.marketId = this.route.snapshot.paramMap.get('id') || '';
+      sessionStorage.clear();
     }
-    this.marketId = this.route.snapshot.paramMap.get('id') || '';
-    sessionStorage.clear();
   }
 
   ngAfterViewInit() {
-    setTimeout(() => {
-      iFrameResize();
-    }, 5000);
+    if (this.platformService.isBrowser()) {
+      setTimeout(() => {
+        // iFrameResize();
+      }, 5000);
+    }
   }
 
   getMarketid(s: string) {
@@ -1750,7 +1760,7 @@ export class CricketComponent implements OnInit, AfterViewInit, OnDestroy {
         `Id=${id}&t=${themeMode == 'dark' ? 'd' : 'l'}`;
     }
 
-    iFrameResizer('stats');
+    // iFrameResizer('stats');
   }
 
 

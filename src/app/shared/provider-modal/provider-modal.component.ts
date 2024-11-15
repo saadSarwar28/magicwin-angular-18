@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { _window } from '../../services/backend.service';
 import { GenericService } from "../../services/generic.service";
+import { PlatformService } from '../../services/platform.service';
 
 @Component({
   selector: 'app-provider-modal',
@@ -53,12 +54,15 @@ export class ProviderModalComponent implements OnInit {
   onClose!: (result: boolean) => void;
 
   constructor(
-    private modalService: GenericService
+    private modalService: GenericService,
+    private platformService: PlatformService
   ) {
     // console.log("valueEmitted", this.valueEmitted);
+    if (this.platformService.isBrowser()) {
 
-    if (_window().qtcPoints) {
-      this.qtcImage = _window().qtcPoints;
+      if (_window().qtcPoints) {
+        this.qtcImage = _window().qtcPoints;
+      }
     }
   }
 

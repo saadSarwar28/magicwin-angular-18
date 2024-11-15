@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { ShortennumPipe } from '../../pipes/shortennum.pipe';
+import { PlatformService } from '../../services/platform.service';
 
 @Component({
   selector: 'app-oddsbutton',
@@ -27,12 +28,21 @@ export class OddsbuttonComponent implements OnInit {
   @Input() cssClass = "";
   @Input() fancy: boolean = false;
 
+  constructor(
+    private platformService: PlatformService
+  ) {
+
+  }
+
   ngOnInit(): void {
-    if (!this.price || Number.isNaN(this.price)) {
-      this.price = "";
-    }
-    if (!this.size || Number.isNaN(this.size)) {
-      this.size = "";
+    if (this.platformService.isBrowser()) {
+
+      if (!this.price || Number.isNaN(this.price)) {
+        this.price = "";
+      }
+      if (!this.size || Number.isNaN(this.size)) {
+        this.size = "";
+      }
     }
   }
 

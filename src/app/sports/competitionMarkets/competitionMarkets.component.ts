@@ -26,6 +26,7 @@ import { GroupByPipe } from '../../pipes/group-by.pipe';
 import { VirtualCricketComponent } from '../../standalone/virtual-cricket/virtual-cricket.component';
 import { OrderbyPipe } from '../../pipes/orderby.pipe';
 import { MarketNamePipe } from '../../pipes/marketnameVs.pipe';
+import { PlatformService } from '../../services/platform.service';
 @Component({
   selector: 'app-competitionMarkets',
   templateUrl: './competitionMarkets.component.html',
@@ -72,36 +73,41 @@ export class CompetitionMarketsComponent implements OnInit, OnDestroy {
     private utilsService: UtillsService,
     private genericService: GenericService,
     private walletService: WalletService,
-    private sportsMapperService: SportsIdMapperService
+    private sportsMapperService: SportsIdMapperService,
+    private platformService: PlatformService
+
   ) {
-    if (_window().siteLoader) {
-      this.siteLoader = _window().siteLoader;
-    }
-    if (_window().hideOCBonComp) {
-      this.isOneClickBetGlobal = true;
-    }
-    this.router.events.subscribe((event: any) => {
-      if (event instanceof NavigationStart) {
-        // had to refresh browser because angular not detecting route change when back button from browser is pressed on web
-        if (this.sportsMapperService.getSportByName(event.url.split('/')[event.url.split('/').length - 1].toLowerCase()) !== '') {
-          // check if the back button is pressed only then navigate
-          if (event.navigationTrigger == 'popstate') {
-            window.location = window.location
+
+    if (this.platformService.isBrowser()) {
+      if (_window().siteLoader) {
+        this.siteLoader = _window().siteLoader;
+      }
+      if (_window().hideOCBonComp) {
+        this.isOneClickBetGlobal = true;
+      }
+      this.router.events.subscribe((event: any) => {
+        if (event instanceof NavigationStart) {
+          // had to refresh browser because angular not detecting route change when back button from browser is pressed on web
+          if (this.sportsMapperService.getSportByName(event.url.split('/')[event.url.split('/').length - 1].toLowerCase()) !== '') {
+            // check if the back button is pressed only then navigate
+            if (event.navigationTrigger == 'popstate') {
+              window.location = window.location
+            }
           }
         }
+      })
+
+
+      this.route.params.subscribe((p: any) => {
+        this.sportsId = p.id;
+        this.sportsId = this.sportsId.split('-')[this.sportsId.split('-').length - 1]
+        this.checkPathandLoaddata();
+      });
+      if (this.checkauthservice.HaveStakes()) {
+        this.cBuyRate = this.checkauthservice.cBuyRate;
+        this.cTotalShare = this.checkauthservice.cTotalShare;
+        this.currencyCode = this.checkauthservice.currencyCode;
       }
-    })
-
-
-    this.route.params.subscribe((p: any) => {
-      this.sportsId = p.id;
-      this.sportsId = this.sportsId.split('-')[this.sportsId.split('-').length - 1]
-      this.checkPathandLoaddata();
-    });
-    if (this.checkauthservice.HaveStakes()) {
-      this.cBuyRate = this.checkauthservice.cBuyRate;
-      this.cTotalShare = this.checkauthservice.cTotalShare;
-      this.currencyCode = this.checkauthservice.currencyCode;
     }
   }
 
@@ -115,12 +121,16 @@ export class CompetitionMarketsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    sessionStorage.clear();
-    this.sportsId = this.route.snapshot.paramMap.get('id') || '';
-    this.route.params.subscribe((p: any) => {
-      this.sportsId = p.id;
-      // console.log(" p.id", p.id)
-    })
+
+
+    if (this.platformService.isBrowser()) {
+      sessionStorage.clear();
+      this.sportsId = this.route.snapshot.paramMap.get('id') || '';
+      this.route.params.subscribe((p: any) => {
+        this.sportsId = p.id;
+        // console.log(" p.id", p.id)
+      })
+    }
   }
 
 

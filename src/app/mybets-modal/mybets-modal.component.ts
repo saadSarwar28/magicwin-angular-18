@@ -12,6 +12,7 @@ import { SportsIdMapperService } from "../services/sportsIdMapper.service";
 import { GenericService } from '../services/generic.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { TranslateModule } from '@ngx-translate/core';
+import { PlatformService } from '../services/platform.service';
 
 @Component({
   selector: 'app-mybets-modal',
@@ -32,29 +33,35 @@ export class MybetsModalComponent implements OnInit {
   toggleMatcedBets: boolean = true;
   siteLoader
 
-  constructor(private storageService: StorageService, private bottomSheet: MatBottomSheet,
+  constructor(private storageService: StorageService, private bottomSheet: MatBottomSheet, private platformService: PlatformService,
     private sportService: BackendService, private genericService: GenericService, private toasterService: ToastService, private fancyTimerService: FancytimerService, private sportsIdMappser: SportsIdMapperService,
     private router: Router, private utillsService: UtillsService, private backendService: BackendService, private checkauthservice: CheckAuthService, private rendere: Renderer2, @Inject(DOCUMENT) private document: Document) {
-    if (_window().siteLoader) {
-      this.siteLoader = _window().siteLoader;
+    if (this.platformService.isBrowser()) {
+
+      if (_window().siteLoader) {
+        this.siteLoader = _window().siteLoader;
+      }
     }
   }
 
   ngOnInit(): void {
-    this.utillsService.currentBets.subscribe((data: any) => {
-      if (data) {
-        this.currentBets = data.bets;
-        this.eventId = data.eventId
-        this.haveUnmatched = false;
-        if (this.currentBets && this.currentBets.length > 0) {
-          this.matchedtBets = this.currentBets.filter((x) => x.betStatus == 'Matched Bets')
-          if (this.currentBets.some((x) => x.betStatus == 'Un-Matched Bets')) {
-            this.haveUnmatched = true;
+    if (this.platformService.isBrowser()) {
+
+      this.utillsService.currentBets.subscribe((data: any) => {
+        if (data) {
+          this.currentBets = data.bets;
+          this.eventId = data.eventId
+          this.haveUnmatched = false;
+          if (this.currentBets && this.currentBets.length > 0) {
+            this.matchedtBets = this.currentBets.filter((x) => x.betStatus == 'Matched Bets')
+            if (this.currentBets.some((x) => x.betStatus == 'Un-Matched Bets')) {
+              this.haveUnmatched = true;
+            }
           }
         }
-      }
-    })
-    this.LoadData()
+      })
+      this.LoadData()
+    }
   }
 
 

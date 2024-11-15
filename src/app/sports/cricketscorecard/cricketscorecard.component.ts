@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { StorageService } from '../../services/storage.service';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { PlatformService } from '../../services/platform.service';
 @Component({
   selector: 'app-cricketscorecard',
   templateUrl: './cricketscorecard.component.html',
@@ -34,9 +35,13 @@ export class CricketscorecardComponent implements OnInit {
     private router: Router,
     private betService: BackendService,
     private elementRef: ElementRef,
-    private scoreTimerService: ScoreCardTimerService,) {
-    if (_window().scoretimer) {
-      this.interval = _window().scoretimer;
+    private scoreTimerService: ScoreCardTimerService,
+    private platformService: PlatformService
+  ) {
+    if (this.platformService.isBrowser()) {
+      if (_window().scoretimer) {
+        this.interval = _window().scoretimer;
+      }
     }
   }
 
@@ -46,9 +51,11 @@ export class CricketscorecardComponent implements OnInit {
   matchType: string = "";
   data: any;
   ngOnInit() {
+    if (this.platformService.isBrowser()) {
 
-    this.loadTimeLine();
-    this.scoreTimerService.SetTimer(setInterval(() => { this.loadTimeLine(); }, this.interval));
+      this.loadTimeLine();
+      this.scoreTimerService.SetTimer(setInterval(() => { this.loadTimeLine(); }, this.interval));
+    }
   }
 
   result: any;

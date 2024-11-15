@@ -8,6 +8,7 @@ import { iFrameResizer } from '../../assets/lmtScore/sports-radar';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
+import { PlatformService } from '../services/platform.service';
 
 @Component({
   selector: 'app-modal-component',
@@ -47,12 +48,17 @@ export class ModalComponentComponent implements OnInit {
     private deviceService: DeviceDetectorService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialog,
+    private platformService: PlatformService
 
   ) {
-    setTimeout(() => {
-      this.loading = false;
-      iFrameResizer('state')
-    }, 1500);
+    if (this.platformService.isBrowser()) {
+
+      setTimeout(() => {
+
+        this.loading = false;
+        iFrameResizer('state')
+      }, 1500);
+    }
   }
   getPlatform() {
     var platform = ["Win32", "Android", "iOS"];
@@ -66,26 +72,28 @@ export class ModalComponentComponent implements OnInit {
     }
   }
   ngOnInit(): void {
-    if (this.data) {
+    if (this.platformService.isBrowser()) {
+
+      if (this.data) {
+        this.deviceInfo = this.deviceService.getDeviceInfo();
+        this.loadCasino(
+          this.data.provider,
+          this.data.gameId,
+          this.data.tableId
+        )
+      }
+      this.getPlatform()
       this.deviceInfo = this.deviceService.getDeviceInfo();
-      this.loadCasino(
-        this.data.provider,
-        this.data.gameId,
-        this.data.tableId
-      )
+      // alert(this.deviceInfo.browser);
+      this.currentPlatform = this.deviceInfo.browser;
+      this.PlatformOS = this.deviceInfo.os;
     }
-    this.getPlatform()
-    this.deviceInfo = this.deviceService.getDeviceInfo();
-    // alert(this.deviceInfo.browser);
-    this.currentPlatform = this.deviceInfo.browser;
-    this.PlatformOS = this.deviceInfo.os;
   }
 
 
 
 
   closeModal() {
-    console.log("ssssssssss")
     this.dialogRef.closeAll();
   }
 

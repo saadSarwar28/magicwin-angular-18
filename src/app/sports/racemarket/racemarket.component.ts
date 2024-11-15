@@ -49,6 +49,7 @@ import { RoundoffPipe } from '../../pipes/roundoff.pipe';
 import { MybetsComponent } from '../my-bets/my-bets.component';
 import { ExtractNumberPipe } from '../../pipes/safe.pipe';
 import { OrderbyrunnerPipe } from '../../pipes/orderbyrunner.pipe';
+import { PlatformService } from '../../services/platform.service';
 @Component({
   selector: 'app-racemarket',
   templateUrl: './racemarket.component.html',
@@ -147,51 +148,55 @@ export class RacemarketComponent implements OnInit, OnDestroy {
     private recentMarketsService: RecentMarketsService,
     private deviceService: DeviceDetectorService, private http: HttpClient,
     private genericService: GenericService,
-    private walletService: WalletService
+    private walletService: WalletService,
+    private platformService: PlatformService
   ) {
-    this.deviceInfo = this.deviceService.getDeviceInfo();
+    if (this.platformService.isBrowser()) {
 
-    this.isOneClickBetClient = this.storageService.getItem('OCB');
-    if (_window().hideOCBonComp) {
-      this.isOneClickBetGlobal = true;
-    }
-    if (_window().minBalance) {
-      this.minBalance = _window().minBalance;
-    }
-    if (_window().isShowStreamMobile) {
-      this.isShowStreamMobile = _window().isShowStreamMobile;
-    }
+      this.deviceInfo = this.deviceService.getDeviceInfo();
 
-    if (_window().byPassStreamScript) {
-      this.byPassStreamScript = _window().byPassStreamScript;
-    }
-    if (_window().siteLoader) {
-      this.siteLoader = _window().siteLoader;
-    }
-    if (_window().cdnImagesUrl) {
-      this.cdnUrl = _window().cdnImagesUrl;
-    }
-    if (_window().uniformUrl) {
-      this.uniformUrl = _window().uniformUrl;
-    }
-    this.route.params.subscribe((p: any) => {
-      this.data = null;
-      this.currentBets = [];
-      this.sportsId = this.marketId = p.id.split('-')[p.id.split('-').length - 1];
-      this.clientMatchSize = null;
-      this.clientUnmatchSize = null;
-      this.checkPathandLoaddata();
-    });
+      this.isOneClickBetClient = this.storageService.getItem('OCB');
+      if (_window().hideOCBonComp) {
+        this.isOneClickBetGlobal = true;
+      }
+      if (_window().minBalance) {
+        this.minBalance = _window().minBalance;
+      }
+      if (_window().isShowStreamMobile) {
+        this.isShowStreamMobile = _window().isShowStreamMobile;
+      }
 
-    if (_window().racemarkettimer) {
-      this.interval = _window().racemarkettimer;
-    }
+      if (_window().byPassStreamScript) {
+        this.byPassStreamScript = _window().byPassStreamScript;
+      }
+      if (_window().siteLoader) {
+        this.siteLoader = _window().siteLoader;
+      }
+      if (_window().cdnImagesUrl) {
+        this.cdnUrl = _window().cdnImagesUrl;
+      }
+      if (_window().uniformUrl) {
+        this.uniformUrl = _window().uniformUrl;
+      }
+      this.route.params.subscribe((p: any) => {
+        this.data = null;
+        this.currentBets = [];
+        this.sportsId = this.marketId = p.id.split('-')[p.id.split('-').length - 1];
+        this.clientMatchSize = null;
+        this.clientUnmatchSize = null;
+        this.checkPathandLoaddata();
+      });
 
-    if (this.checkauthservice.HaveStakes()) {
-      this.cBuyRate = this.checkauthservice.cBuyRate;
-      this.cTotalShare = this.checkauthservice.cTotalShare;
-      this.currencyCode = this.checkauthservice.currencyCode;
-      this.localMarketRate = this.checkauthservice.cLocalMarketRate;
+      if (_window().racemarkettimer) {
+        this.interval = _window().racemarkettimer;
+      }
+
+      if (this.checkauthservice.HaveStakes()) {
+        this.cBuyRate = this.checkauthservice.cBuyRate;
+        this.cTotalShare = this.checkauthservice.cTotalShare;
+        this.currencyCode = this.checkauthservice.currencyCode;
+        this.localMarketRate = this.checkauthservice.cLocalMarketRate;
+      }
     }
   }
   checkUserAgent() {
@@ -324,33 +329,36 @@ export class RacemarketComponent implements OnInit, OnDestroy {
 
   getIPAddress: any = '';
   ngOnInit(): void {
-    if (_window().apiUrl) {
-      this.apiUrl = _window().apiUrl;
-    }
-    if (this.byPassStreamScript) {
-      this.showStreamAgent = true;
-    }
-    else {
-      this.checkUserAgent();
-    }
-    this.utillsService.ipaddress.subscribe((data: any) => {
-      if (data) {
-        this.getIPAddress = data;
+    if (this.platformService.isBrowser()) {
+
+      if (_window().apiUrl) {
+        this.apiUrl = _window().apiUrl;
       }
-    });
-    sessionStorage.clear();
-    if (this.checkauthservice.IsLogin()) {
-      if (_window().isShowBalanceStream) {
-        this.isShowBalanceStream = _window().isShowBalanceStream;
+      if (this.byPassStreamScript) {
+        this.showStreamAgent = true;
       }
-      this.isLoggedIn = true;
-      if (this.isShowBalanceStream) {
-        this.getStatusService.balanceClient$.subscribe(balance => {
-          this.showStreamOnBalance = balance.balance < this.minBalance ? false : true;
-        });
+      else {
+        this.checkUserAgent();
       }
+      this.utillsService.ipaddress.subscribe((data: any) => {
+        if (data) {
+          this.getIPAddress = data;
+        }
+      });
+      sessionStorage.clear();
+      if (this.checkauthservice.IsLogin()) {
+        if (_window().isShowBalanceStream) {
+          this.isShowBalanceStream = _window().isShowBalanceStream;
+        }
+        this.isLoggedIn = true;
+        if (this.isShowBalanceStream) {
+          this.getStatusService.balanceClient$.subscribe(balance => {
+            this.showStreamOnBalance = balance.balance < this.minBalance ? false : true;
+          });
+        }
+      }
+      this.silkUrl = _window().racemarketsrc;
     }
-    this.silkUrl = _window().racemarketsrc;
   }
 
   ngAfterViewInit() { }

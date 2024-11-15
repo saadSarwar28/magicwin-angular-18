@@ -4,6 +4,7 @@ import { _window } from '../../services/backend.service';
 import { CheckAuthService } from '../../services/check-auth.service';
 import { GenericService } from '../../services/generic.service';
 import { UtillsService } from '../../services/utills.service';
+import { PlatformService } from '../../services/platform.service';
 
 @Component({
   selector: 'app-popular-banners',
@@ -21,21 +22,25 @@ export class PopularBannersComponent implements OnInit {
     private genericService: GenericService,
     private checkauthservice: CheckAuthService,
     public router: Router,
+    private platformService: PlatformService
 
   ) { }
 
   ngOnInit(): void {
-    this.cdnSportsLanding = _window().bannercdnLanding;
+    if (this.platformService.isBrowser()) {
 
-    this.isMagicwin = _window().isMagicwin;
-    if (_window().gameLoader) {
-      this.defaultImage = _window().gameLoader;
-    }
-    this.utillsService.bannerData.subscribe((d: any) => {
-      if (d) {
-        this.topPopularData = this.utillsService.returnFormatedData(d, 'TOP_Popular')
+      this.cdnSportsLanding = _window().bannercdnLanding;
+
+      this.isMagicwin = _window().isMagicwin;
+      if (_window().gameLoader) {
+        this.defaultImage = _window().gameLoader;
       }
-    });
+      this.utillsService.bannerData.subscribe((d: any) => {
+        if (d) {
+          this.topPopularData = this.utillsService.returnFormatedData(d, 'TOP_Popular')
+        }
+      });
+    }
   }
 
   routeToLink(item: any) {

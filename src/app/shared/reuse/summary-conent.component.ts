@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { _window } from '../../services/backend.service';
+import { PlatformService } from '../../services/platform.service';
 
 @Component({
   selector: 'app-summary-content',
@@ -360,13 +361,18 @@ export class SummaryContentComponent {
   showMoreContent: boolean = false;
   showLandingPageContent: boolean = false;
 
-  constructor() {
-    this.sitename = _window().sitename;
-    if (_window().showLandingPageContent) {
-      this.showLandingPageContent = _window().showLandingPageContent;
-    }
-    if (_window().showLandingPageContent) {
-      this.showLandingPageContent = _window().showLandingPageContent;
+  constructor(
+    private platformService: PlatformService
+  ) {
+    if (this.platformService.isBrowser()) {
+
+      this.sitename = _window().sitename;
+      if (_window().showLandingPageContent) {
+        this.showLandingPageContent = _window().showLandingPageContent;
+      }
+      if (_window().showLandingPageContent) {
+        this.showLandingPageContent = _window().showLandingPageContent;
+      }
     }
   }
 }

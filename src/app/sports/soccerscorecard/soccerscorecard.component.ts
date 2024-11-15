@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { StorageService } from '../../services/storage.service';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { PlatformService } from '../../services/platform.service';
 @Component({
   selector: 'app-soccerscorecard',
   templateUrl: './soccerscorecard.component.html',
@@ -27,7 +28,8 @@ export class SoccerscorecardComponent implements OnInit, OnDestroy {
     private router: Router,
     private betService: BackendService,
     private elementRef: ElementRef,
-    private scoreTimerService: ScoreCardTimerService
+    private scoreTimerService: ScoreCardTimerService,
+    private platformService: PlatformService
   ) {
   }
   @Input() evtid: string | undefined;
@@ -45,10 +47,12 @@ export class SoccerscorecardComponent implements OnInit, OnDestroy {
   data: any;
 
   ngOnInit() {
-    this.scoreTimerService.SetTimer(setInterval(() => {
-      this.loadTimeLine();
-    }, _window().scorecardtimer));
+    if (this.platformService.isBrowser()) {
 
+      this.scoreTimerService.SetTimer(setInterval(() => {
+        this.loadTimeLine();
+      }, _window().scorecardtimer));
+    }
   }
   result: string = "";
   commentry: string = "";

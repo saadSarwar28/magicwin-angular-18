@@ -8,6 +8,7 @@ import {
 } from '../../services/backend.service';
 import { CheckAuthService } from '../../services/check-auth.service';
 import { ToastService } from '../../services/toast.service';
+import { PlatformService } from '../../services/platform.service';
 
 
 @Component({
@@ -23,9 +24,13 @@ export class ProductsTabComponent implements OnInit {
     public router: Router,
     private toastService: ToastService,
     private checkauthservice: CheckAuthService,
-    private deviceService: DeviceDetectorService
+    private deviceService: DeviceDetectorService,
+    private platformService: PlatformService
   ) {
-    this.deviceInfo = this.deviceService.getDeviceInfo();
+    if (this.platformService.isBrowser()) {
+
+      this.deviceInfo = this.deviceService.getDeviceInfo();
+    }
   }
 
   ngOnInit(): void { }

@@ -15,6 +15,7 @@ import { UtillsService } from '../../services/utills.service';
 import { CommonModule } from '@angular/common';
 import { ShortennumPipe } from '../../pipes/shortennum.pipe';
 import { FormsModule } from '@angular/forms';
+import { PlatformService } from '../../services/platform.service';
 @Component({
   selector: 'app-partial-betslip',
   templateUrl: './partial-betslip.component.html',
@@ -41,21 +42,25 @@ export class PartialBetslipComponent
     private toasterService: ToastService,
     private storageService: StorageService,
     private utilsSerivce: UtillsService,
+    private platformService: PlatformService
   ) {
-    if (_window().cdnImagesUrl) {
-      this.cdnUrl = _window().cdnImagesUrl;
-    }
-    if (_window().addPlusMinusBetSlip) {
-      this.addPlusMinusBetSlip = _window().addPlusMinusBetSlip;
-    }
-    if (_window().showWhatIF) {
-      this.showWhatIF = _window().showWhatIF;
-    }
-    if (_window().minMaxBetSlip) {
-      this.minMaxBetSlip = _window().minMaxBetSlip;
-    }
-    if (_window().siteLoader) {
-      this.siteLoader = _window().siteLoader;
+    if (this.platformService.isBrowser()) {
+
+      if (_window().cdnImagesUrl) {
+        this.cdnUrl = _window().cdnImagesUrl;
+      }
+      if (_window().addPlusMinusBetSlip) {
+        this.addPlusMinusBetSlip = _window().addPlusMinusBetSlip;
+      }
+      if (_window().showWhatIF) {
+        this.showWhatIF = _window().showWhatIF;
+      }
+      if (_window().minMaxBetSlip) {
+        this.minMaxBetSlip = _window().minMaxBetSlip;
+      }
+      if (_window().siteLoader) {
+        this.siteLoader = _window().siteLoader;
+      }
     }
   }
   ngAfterViewInit(): void {
@@ -86,23 +91,26 @@ export class PartialBetslipComponent
   minimumBetSize: any = 1;
   looksabha: boolean = false;
   ngOnInit(): void {
-    this.looksabha = this.r?.looksabha ? true : false;
-    this.keepAlive =
-      this.storageService.getItem('keepAlive') == null
-        ? false
-        : this.storageService.getItem('keepAlive');
-    //
-    if (this.r?.stakeButtons?.currencyCode == 'INR') {
-      this.minimumBetSize = _window().minimumBetSize;
-    }
-    this.r ? this.r.size = _window().stakeSize : {}
-    this.isReadOnly =
-      this.r?.bettingOn == 'fn' ||
-      this.r?.bettingOn == 'bm' ||
-      this.lineOddsDisable || this.otherRace;
-    this.pl = 0.0;
-    if (this.r) {
-      this.calcPL(this.r.size);
+    if (this.platformService.isBrowser()) {
+
+      this.looksabha = this.r?.looksabha ? true : false;
+      this.keepAlive =
+        this.storageService.getItem('keepAlive') == null
+          ? false
+          : this.storageService.getItem('keepAlive');
+      //
+      if (this.r?.stakeButtons?.currencyCode == 'INR') {
+        this.minimumBetSize = _window().minimumBetSize;
+      }
+      this.r ? this.r.size = _window().stakeSize : {}
+      this.isReadOnly =
+        this.r?.bettingOn == 'fn' ||
+        this.r?.bettingOn == 'bm' ||
+        this.lineOddsDisable || this.otherRace;
+      this.pl = 0.0;
+      if (this.r) {
+        this.calcPL(this.r.size);
+      }
     }
   }
 
